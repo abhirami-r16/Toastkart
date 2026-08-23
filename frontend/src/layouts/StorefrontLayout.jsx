@@ -145,6 +145,9 @@ export default function StorefrontLayout({ storeData, categories = [], products 
                       <Link to={`${basePath}/wishlist`} className="eflyer-action-btn position-relative">
                         <Heart size={24} />
                       </Link>
+                      <Link to={`${basePath}/orders`} className="eflyer-action-btn position-relative" title="My Orders">
+                        <Package size={24} />
+                      </Link>
                       <Link to={`${basePath}/cart`} className="eflyer-action-btn position-relative">
                         <ShoppingCart size={24} />
                         {cartCount > 0 && (
