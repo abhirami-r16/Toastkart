@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import ToastKartLogo from "../components/ToastKartLogo";
 import {
   Sparkles, ArrowRight, ShieldCheck, Zap, Store, Package, ShoppingCart, DollarSign, 
   CheckCircle, Star, Rocket, Crown, Mail, Check, Menu, X
@@ -206,17 +207,14 @@ export default function Home() {
       <header className="fixed-top goslot-header py-3" style={{ zIndex: 1040 }}>
         <div className="container-xl d-flex align-items-center justify-content-between">
           <div className="d-flex align-items-center gap-2 cursor-pointer" onClick={() => navigate("/")}>
-            <div className="d-flex align-items-center justify-content-center rounded-3" style={{ background: "#2E7D32", width: 36, height: 36 }}>
-              <span className="text-white fw-bold fs-5">A</span>
-            </div>
-            <span className="fs-4 fw-bolder text-dark" style={{ letterSpacing: "-1px" }}>AUREUM</span>
+            <ToastKartLogo />
           </div>
 
           <nav className="d-none d-lg-flex align-items-center gap-4">
             <a href="#hero" className="goslot-nav-link">Home</a>
             <a href="#features" className="goslot-nav-link">Features</a>
+            <a href="#about" className="goslot-nav-link">About</a>
             <a href="#stores" className="goslot-nav-link">Stores</a>
-            <a href="#products" className="goslot-nav-link">Catalog</a>
             <a href="#pricing" className="goslot-nav-link">Pricing</a>
           </nav>
 
@@ -240,8 +238,8 @@ export default function Home() {
             <nav className="d-flex flex-column p-4 gap-3 text-center">
               <a href="#hero" className="goslot-nav-link fs-5" onClick={() => setIsMobileMenuOpen(false)}>Home</a>
               <a href="#features" className="goslot-nav-link fs-5" onClick={() => setIsMobileMenuOpen(false)}>Features</a>
+              <a href="#about" className="goslot-nav-link fs-5" onClick={() => setIsMobileMenuOpen(false)}>About</a>
               <a href="#stores" className="goslot-nav-link fs-5" onClick={() => setIsMobileMenuOpen(false)}>Stores</a>
-              <a href="#products" className="goslot-nav-link fs-5" onClick={() => setIsMobileMenuOpen(false)}>Catalog</a>
               <a href="#pricing" className="goslot-nav-link fs-5" onClick={() => setIsMobileMenuOpen(false)}>Pricing</a>
             </nav>
           </div>
@@ -260,7 +258,7 @@ export default function Home() {
             <span style={{ color: "var(--primary)" }}>Multi-Merchant Marketplace</span>
           </h1>
           <p className="fs-5 mx-auto mb-5" style={{ maxWidth: 680 }}>
-            Aureum is the all-in-one platform for vendors to launch their stores and buyers to shop seamlessly. Manage orders, payouts, and catalogs from a central dashboard.
+            ToastKart is the all-in-one platform for vendors to launch their stores and buyers to shop seamlessly. Manage orders, payouts, and catalogs from a central dashboard.
           </p>
           <div className="d-flex flex-wrap align-items-center justify-content-center gap-3 mb-5">
             <button onClick={() => navigate("/login")} className="goslot-btn goslot-btn-primary fs-6 px-5 py-3">
@@ -307,6 +305,36 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ABOUT */}
+      <section id="about" className="py-5 bg-white">
+        <div className="container-xl" style={{ maxWidth: 900 }}>
+          <div className="text-center mb-5">
+            <div className="goslot-eyebrow">About ToastKart</div>
+            <h2 className="display-6 fw-bolder mb-4">Build. Sell. Grow.</h2>
+            
+            <p className="fs-5 text-muted mb-4">
+              ToastKart is a simple and powerful e-commerce platform designed to help businesses create, manage, and grow their online stores without the complexity.
+            </p>
+            <p className="fs-6 text-muted mb-4">
+              Whether you're starting your first online business or expanding an existing brand, ToastKart gives you the tools you need to build a professional online store, showcase your products, manage orders, and reach your customers—all in one place.
+            </p>
+            <p className="fs-6 text-muted mb-5">
+              We believe creating an online store should be <strong className="text-dark">simple, affordable, and accessible to everyone</strong>. That's why ToastKart is built with an easy-to-use interface and practical features that let you focus on what matters most: <strong className="text-dark">growing your business</strong>.
+            </p>
+          </div>
+
+          <div className="p-5 rounded-4 text-center mt-4" style={{ background: "linear-gradient(135deg, rgba(46,125,50,0.08), rgba(46,125,50,0.02))", border: "1px solid rgba(46,125,50,0.15)" }}>
+            <h3 className="fs-4 fw-bold mb-3" style={{ color: "var(--primary)" }}>Our Mission</h3>
+            <p className="fs-5 mb-4 text-dark mx-auto" style={{ maxWidth: 700, lineHeight: 1.6 }}>
+              Our mission is to empower entrepreneurs and businesses with simple technology that makes selling online easier.
+            </p>
+            <div className="fw-bolder fs-5" style={{ color: "var(--primary)" }}>
+              Your business. Your store. Your growth. Powered by ToastKart.
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* STORES */}
       <section id="stores" className="py-5" style={{ background: "rgba(46,125,50,0.02)" }}>
         <div className="container-xl">
@@ -344,103 +372,66 @@ export default function Home() {
         </div>
       </section>
 
-      {/* PRODUCTS */}
-      <section id="products" className="py-5">
-        <div className="container-xl">
-          <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
-            <div>
-              <div className="goslot-eyebrow">Catalog</div>
-              <h2 className="fs-3 mb-0">Trending Products</h2>
-            </div>
-          </div>
-          
-          {(() => {
-            const saved = localStorage.getItem("aureum_owner_products");
-            let ownerProducts = [];
-            if (saved) {
-              try { ownerProducts = JSON.parse(saved); } catch (e) {}
-            }
-            if (!Array.isArray(ownerProducts)) ownerProducts = [];
 
-            if (ownerProducts.length === 0) {
-              return (
-                <div className="goslot-card text-center py-5 my-3">
-                  <Package size={40} className="text-muted mb-3 mx-auto" />
-                  <h3 className="fs-4 mb-2">No Products Listed Yet</h3>
-                  <p className="fs-7 text-muted max-w-md mx-auto mb-4">Start your merchant journey by creating a store and listing your first product.</p>
-                  <button onClick={() => navigate("/login")} className="goslot-btn goslot-btn-primary">
-                    Start Selling Today
-                  </button>
-                </div>
-              );
-            }
-
-            return (
-              <div className="row g-4">
-                {ownerProducts.map((prod) => (
-                  <div key={prod.id} className="col-12 col-sm-6 col-lg-3">
-                    <div className="goslot-card p-3 h-100 cursor-pointer d-flex flex-column" onClick={() => setQuickViewProduct(prod)}>
-                      <img src={prod.image || "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=400"} alt={prod.name} className="w-100 rounded-3 mb-3 object-cover" style={{ height: 180 }} />
-                      <div className="fw-bolder fs-7 text-dark mb-1">{prod.name}</div>
-                      <div className="fs-8 text-muted mb-2">{prod.category || "General"}</div>
-                      <div className="mt-auto d-flex align-items-center justify-content-between">
-                        <span className="fw-bolder fs-5 text-dark">{prod.price}</span>
-                        <button onClick={(e) => handleAddToCart(e, prod)} className="btn btn-sm btn-success rounded-pill px-3 fw-bold fs-8">+ Add</button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            );
-          })()}
-        </div>
-      </section>
 
       {/* PRICING */}
       <section id="pricing" className="py-5" style={{ background: "rgba(46,125,50,0.02)" }}>
         <div className="container-xl">
           <div className="text-center mb-5">
-            <div className="goslot-eyebrow">Pricing Plans</div>
+            <div className="goslot-eyebrow">ToastKart Pricing</div>
             <h2 className="fs-2 mb-2">Simple, transparent pricing</h2>
-            <p>Start for free, upgrade when you need more power.</p>
+            <p>Free Trial: 14 Days</p>
           </div>
           <div className="row g-4 justify-content-center max-w-5xl mx-auto">
+            {/* Basic Plan */}
             <div className="col-12 col-md-4">
               <div className="goslot-card h-100">
-                <h3 className="fs-5 mb-1">Starter</h3>
+                <h3 className="fs-5 mb-1">Basic</h3>
                 <p className="fs-8 text-muted mb-3">For new merchants</p>
-                <div className="fs-2 fw-bolder mb-4">$29<span className="fs-7 text-muted fw-normal">/mo</span></div>
+                <div className="fs-2 fw-bolder mb-1">₹499<span className="fs-7 text-muted fw-normal">/month</span></div>
+                <div className="fs-7 text-success fw-semibold mb-4">₹4,999<span className="fs-8 text-muted fw-normal">/year</span></div>
                 <ul className="list-unstyled fs-7 text-muted space-y-3 mb-4">
-                  <li><Check size={16} className="text-success me-2" /> 5 Storefronts</li>
-                  <li><Check size={16} className="text-success me-2" /> 500 Products</li>
-                  <li><Check size={16} className="text-success me-2" /> Standard Support</li>
+                  <li><Check size={16} className="text-success me-2" /> Online Store</li>
+                  <li><Check size={16} className="text-success me-2" /> ToastKart Subdomain</li>
+                  <li><Check size={16} className="text-success me-2" /> Up to 50 Products</li>
+                  <li><Check size={16} className="text-success me-2" /> Order Management</li>
+                  <li><Check size={16} className="text-success me-2" /> Payment Integration</li>
+                  <li><Check size={16} className="text-success me-2" /> WhatsApp Integration</li>
+                  <li><Check size={16} className="text-success me-2" /> Email Support</li>
                 </ul>
                 <button onClick={() => setShowRoleModal(true)} className="goslot-btn goslot-btn-outline w-100">Get Started</button>
               </div>
             </div>
+            {/* Growth Plan */}
             <div className="col-12 col-md-4">
               <div className="goslot-card h-100 border-success position-relative" style={{ borderWidth: 2, transform: "scale(1.02)" }}>
-                <span className="position-absolute top-0 start-50 translate-middle badge bg-success rounded-pill px-3 py-1">POPULAR</span>
-                <h3 className="fs-5 mb-1 text-success">Professional</h3>
+                <span className="position-absolute top-0 start-50 translate-middle badge bg-success rounded-pill px-3 py-1">⭐ POPULAR</span>
+                <h3 className="fs-5 mb-1 text-success">Growth</h3>
                 <p className="fs-8 text-muted mb-3">For growing networks</p>
-                <div className="fs-2 fw-bolder mb-4">$79<span className="fs-7 text-muted fw-normal">/mo</span></div>
+                <div className="fs-2 fw-bolder mb-1">₹999<span className="fs-7 text-muted fw-normal">/month</span></div>
+                <div className="fs-7 text-success fw-semibold mb-4">₹9,999<span className="fs-8 text-muted fw-normal">/year</span></div>
                 <ul className="list-unstyled fs-7 text-muted space-y-3 mb-4">
-                  <li><Check size={16} className="text-success me-2" /> 25 Storefronts</li>
-                  <li><Check size={16} className="text-success me-2" /> Unlimited Products</li>
-                  <li><Check size={16} className="text-success me-2" /> Automated Payouts</li>
+                  <li><Check size={16} className="text-success me-2" /> Everything in Basic</li>
+                  <li><Check size={16} className="text-success me-2" /> Custom Domain</li>
+                  <li><Check size={16} className="text-success me-2" /> Up to 500 Products</li>
+                  <li><Check size={16} className="text-success me-2" /> Advanced Analytics</li>
+                  <li><Check size={16} className="text-success me-2" /> Priority Support</li>
                 </ul>
                 <button onClick={() => setShowRoleModal(true)} className="goslot-btn goslot-btn-primary w-100">Start Free Trial</button>
               </div>
             </div>
+            {/* Pro Plan */}
             <div className="col-12 col-md-4">
               <div className="goslot-card h-100">
-                <h3 className="fs-5 mb-1">Enterprise</h3>
+                <h3 className="fs-5 mb-1">Pro</h3>
                 <p className="fs-8 text-muted mb-3">For massive scale</p>
-                <div className="fs-2 fw-bolder mb-4">$199<span className="fs-7 text-muted fw-normal">/mo</span></div>
+                <div className="fs-2 fw-bolder mb-1">₹1,999<span className="fs-7 text-muted fw-normal">/month</span></div>
+                <div className="fs-7 text-success fw-semibold mb-4">₹19,999<span className="fs-8 text-muted fw-normal">/year</span></div>
                 <ul className="list-unstyled fs-7 text-muted space-y-3 mb-4">
-                  <li><Check size={16} className="text-success me-2" /> Unlimited Everything</li>
-                  <li><Check size={16} className="text-success me-2" /> Custom Domains</li>
-                  <li><Check size={16} className="text-success me-2" /> Dedicated Manager</li>
+                  <li><Check size={16} className="text-success me-2" /> Everything in Growth</li>
+                  <li><Check size={16} className="text-success me-2" /> Unlimited Products</li>
+                  <li><Check size={16} className="text-success me-2" /> Advanced Analytics</li>
+                  <li><Check size={16} className="text-success me-2" /> Priority Support</li>
                 </ul>
                 <button onClick={() => setShowRoleModal(true)} className="goslot-btn goslot-btn-outline w-100">Contact Sales</button>
               </div>
@@ -453,7 +444,7 @@ export default function Home() {
       <footer className="py-4 mt-5 bg-white border-top">
         <div className="container-xl d-flex flex-column flex-sm-row align-items-center justify-content-between gap-3 fs-8 text-muted">
           <div>
-            <span className="fw-bolder text-dark me-2">AUREUM SaaS</span>
+            <span className="fw-bolder text-dark me-2">ToastKart SaaS</span>
             <span>© 2026. All rights reserved.</span>
           </div>
           <div className="d-flex gap-4">
@@ -518,7 +509,7 @@ export default function Home() {
               </div>
               <div className="col-12 col-sm-7 d-flex flex-column justify-between mt-3 mt-sm-0">
                 <div>
-                  <div className="fs-9 text-success fw-bolder mb-1">{quickViewProduct.store_name || "Aureum Merchant"}</div>
+                  <div className="fs-9 text-success fw-bolder mb-1">{quickViewProduct.store_name || "ToastKart Merchant"}</div>
                   <div className="fs-5 fw-bolder text-dark mb-2">{quickViewProduct.price}</div>
                   <p className="fs-8 text-muted mb-0">High-quality product available directly from the store owner.</p>
                 </div>

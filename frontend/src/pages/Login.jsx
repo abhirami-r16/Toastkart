@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import useSEO from '../hooks/useSEO';
-import { ShoppingBag } from 'lucide-react';
+import ToastKartSquareLogo from '../components/ToastKartSquareLogo';
 
 const goslotLoginStyles = `
   .goslot-login-bg {
@@ -199,8 +199,7 @@ export default function Login() {
       {/* Top Navigation */}
       <nav className="goslot-nav container-xl mx-auto">
         <div className="d-flex align-items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-          <ShoppingBag size={24} style={{ color: '#2E7D32', fill: '#2E7D32' }} />
-          <span className="fs-5 fw-bold text-dark" style={{ letterSpacing: '-0.5px' }}>AUREUM</span>
+          <ToastKartSquareLogo width={80} height={80} />
         </div>
         
         <div className="goslot-nav-links">
@@ -211,7 +210,7 @@ export default function Login() {
       <div className="d-flex align-items-center justify-content-center px-3">
         <div className="goslot-login-card">
           <div className="text-center mb-4 pb-2">
-            <h1 className="fw-bold text-dark mb-2 fs-3" style={{ letterSpacing: '-0.5px' }}>Log in to AUREUM</h1>
+            <h1 className="fw-bold text-dark mb-2 fs-3" style={{ letterSpacing: '-0.5px' }}>Log in to ToastKart</h1>
             <p className="text-muted fs-6 mb-0">Access your centralized merchant dashboard</p>
           </div>
 

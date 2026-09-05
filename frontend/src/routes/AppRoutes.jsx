@@ -23,6 +23,8 @@ import OrdersPage from '../pages/Orders';
 import SettingsPage from '../pages/Settings';
 
 import StorefrontApp from '../pages/Storefront/StorefrontApp';
+import PortfolioBuilder from '../pages/PortfolioBuilder';
+import PortfolioView from '../pages/PortfolioView';
 
 const getSubdomain = () => {
   const host = window.location.hostname;
@@ -102,6 +104,10 @@ function AppRoutes() {
               {/* Storefront Pages */}
               <Route path="/storefront/*" element={<StorefrontWrapper />} />
               <Route path="/store/:slug/*" element={<StorefrontWrapper />} />
+              
+              {/* Portfolio Pages */}
+              <Route path="/portfolio-builder" element={<PortfolioBuilder />} />
+              <Route path="/portfolio/:slug" element={<PortfolioView />} />
 
               {/* Auth Routes */}
               <Route path="/login" element={<Login />} />
