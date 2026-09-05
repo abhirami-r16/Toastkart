@@ -245,7 +245,7 @@ export default function StorefrontLayout({ storeData, categories = [], products 
               <div className="storefront-logo" onClick={() => navigate(basePath)}>
                 <span className="storefront-logo-text" style={{ cursor: 'pointer' }}>
                   {storeData.name}
-                  {activeTheme === 'theme-home' && <span className="furni-dot">.</span>}
+                  {theme === 'theme-home' && <span className="furni-dot">.</span>}
                 </span>
                 <div className="storefront-logo-sub">Explore <span className="plus-icon">Plus</span></div>
               </div>
