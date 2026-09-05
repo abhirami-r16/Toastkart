@@ -364,7 +364,7 @@ export default function Home() {
                   <div className="fs-8 text-muted mb-3 d-flex align-items-center gap-1">
                     <CheckCircle size={14} className="text-success" /> Verified Owner: {store.owner}
                   </div>
-                  <button onClick={() => navigate("/login")} className="btn btn-sm btn-light w-100 fs-8 fw-semibold border">Visit Store</button>
+                 <button onClick={() => navigate("/storefront")} className="btn btn-sm btn-light w-100 fs-8 fw-semibold border">Visit Store</button>
                 </div>
               </div>
             ))}
