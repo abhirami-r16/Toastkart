@@ -63,10 +63,7 @@ const ownerLinks = [
   { key: "products", label: "Products", icon: Package },
   { key: "orders", label: "Orders", icon: ShoppingCart },
   { key: "customers", label: "Customers", icon: Users },
-  { key: "bundles", label: "Bundles", icon: Boxes },
-  { key: "analytics", label: "Analytics", icon: TrendingUp },
   { key: "discounts", label: "Discounts", icon: Percent },
-  { key: "domain", label: "Domain Connection", icon: Globe },
   { key: "payment", label: "Payment Gateway", icon: CreditCard },
   { key: "settings", label: "Settings", icon: Settings },
 ];
@@ -216,6 +213,7 @@ export default function StoreOwnerDashboard() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   const [active, setActive] = useState("dashboard");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [chartFilter, setChartFilter] = useState("daily");
   const currentUserId = user?.id ?? null;
   const currentOwnerEmail = String(user?.email || "").trim().toLowerCase();
@@ -1257,9 +1255,76 @@ export default function StoreOwnerDashboard() {
 
   return (
     <div style={{ background: "#f1f2f4", color: "#202223", minHeight: "100vh" }} className="d-flex w-100">
+      <style>{`
+        .mobile-menu-btn {
+          display: none !important;
+        }
+        @media (max-width: 991px) {
+          .mobile-menu-btn {
+            display: flex !important;
+          }
+          /* OVERRIDE INDEX.CSS BOTTOM NAV */
+          .store-sidebar {
+            position: fixed !important;
+            left: -280px !important;
+            top: 0 !important;
+            bottom: 0 !important;
+            width: 250px !important;
+            height: 100vh !important;
+            flex-direction: column !important;
+            z-index: 1050 !important;
+            transition: left 0.3s ease;
+            box-shadow: 2px 0 15px rgba(0,0,0,0.2) !important;
+            border-top: none !important;
+            overflow-y: auto !important;
+          }
+          .store-sidebar.open {
+            left: 0 !important;
+          }
+          .store-sidebar-brand {
+            display: flex !important;
+          }
+          .store-sidebar > div {
+            display: block !important;
+            width: auto !important;
+            height: auto !important;
+          }
+          .store-sidebar > div > div:not(nav) {
+            display: block !important;
+          }
+          .store-sidebar nav {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            overflow-x: hidden !important;
+          }
+          .sidebar-link {
+            flex-direction: row !important;
+            justify-content: flex-start !important;
+            padding: 0.6rem !important;
+            font-size: 1rem !important;
+            text-align: left !important;
+          }
+          .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1040;
+          }
+          .sidebar-overlay.open {
+            display: block;
+          }
+        }
+      `}</style>
+
+      {/* SIDEBAR OVERLAY */}
+      <div className={`sidebar-overlay ${sidebarOpen ? 'open' : ''}`} onClick={() => setSidebarOpen(false)}></div>
 
       {/* 1. SIDEBAR NAVIGATION */}
-      <aside className="store-sidebar d-flex flex-column justify-between p-3" style={{ width: 250, minWidth: 250, background: "#ebebeb", borderRight: "1px solid #dfe3e8", minHeight: "100vh" }}>
+      <aside className={`store-sidebar d-flex flex-column justify-between p-3 ${sidebarOpen ? 'open' : ''}`} style={{ width: 250, minWidth: 250, background: "#ebebeb", borderRight: "1px solid #dfe3e8", minHeight: "100vh" }}>
         <div>
           {/* Brand Header */}
           <div className="d-flex align-items-center gap-2 p-2 mb-3 border-bottom" style={{ borderColor: "#dfe3e8" }}>
@@ -1342,9 +1407,14 @@ export default function StoreOwnerDashboard() {
 
         {/* TOPBAR HEADER */}
         <header className="store-topbar d-flex align-items-center justify-content-between px-4 py-3" style={{ background: "#ffffff", borderBottom: "1px solid #dfe3e8" }}>
-          <div>
-            <div className="fs-8 text-uppercase tracking-wider font-bold" style={{ color: "#6d7175" }}>{storeSettings.name}</div>
-            <h1 className="fs-5 font-bold mb-0" style={{ color: "#202223" }}>Merchant Dashboard</h1>
+          <div className="d-flex align-items-center gap-3">
+            <button className="mobile-menu-btn btn btn-sm btn-light border p-1" onClick={() => setSidebarOpen(true)}>
+              <Menu size={20} />
+            </button>
+            <div>
+              <div className="fs-8 text-uppercase tracking-wider font-bold" style={{ color: "#6d7175" }}>{storeSettings.name}</div>
+              <h1 className="fs-5 font-bold mb-0" style={{ color: "#202223" }}>Merchant Dashboard</h1>
+            </div>
           </div>
           <div className="d-flex align-items-center gap-3">
             <a
@@ -2251,7 +2321,7 @@ export default function StoreOwnerDashboard() {
                                     ID&nbsp;#{activeStore.id}
                                   </span>
                                 </div>
-                                <a href={`${window.location.protocol}//${window.location.host}/store/${activeStore.slug || activeStore.subdomain}`} target="_blank" rel="noopener noreferrer" className="fs-8 fw-semibold text-decoration-none" style={{ color: "#007f5f" }}>
+                                <a href={`${window.location.protocol}//${window.location.host}/store/${activeStore.slug || activeStore.subdomain}`} target="_blank" rel="noopener noreferrer" className="fs-8 fw-semibold text-decoration-none d-block text-break" style={{ color: "#007f5f", wordBreak: "break-all" }}>
                                   {`${window.location.protocol}//${window.location.host}/store/${activeStore.slug || activeStore.subdomain}`}
                                 </a>
                               </div>
@@ -2294,28 +2364,28 @@ export default function StoreOwnerDashboard() {
                           </div>
                           <div className="col-6 col-md-3">
                             <span className="fs-8 d-block mb-1" style={{ color: "#6d7175" }}>Support Contact</span>
-                            <strong className="fs-7" style={{ color: "#202223" }}>{activeStore.email || "support@merchant.local"}</strong>
+                            <strong className="fs-7 d-block text-break" style={{ color: "#202223", wordBreak: "break-all" }}>{activeStore.email || "support@merchant.local"}</strong>
                           </div>
                         </div>
 
                         {/* Metrics Bar */}
-                        <div className="row g-3 pt-2">
+                        <div className="row g-2 pt-2">
                           <div className="col-4">
-                            <div className="p-3 rounded-3 text-center" style={{ background: "#f1f2f4", border: "1px solid #dfe3e8" }}>
+                            <div className="p-2 rounded-3 text-center h-100 d-flex flex-column justify-content-center" style={{ background: "#f1f2f4", border: "1px solid #dfe3e8", overflow: "hidden" }}>
                               <div className="fs-5 font-bold" style={{ color: "#202223" }}>{categoriesList.length}</div>
-                              <div className="fs-8" style={{ color: "#6d7175" }}>Collections</div>
+                              <div className="fs-8 text-truncate" style={{ color: "#6d7175", fontSize: "0.75rem" }}>Collections</div>
                             </div>
                           </div>
                           <div className="col-4">
-                            <div className="p-3 rounded-3 text-center" style={{ background: "#f1f2f4", border: "1px solid #dfe3e8" }}>
+                            <div className="p-2 rounded-3 text-center h-100 d-flex flex-column justify-content-center" style={{ background: "#f1f2f4", border: "1px solid #dfe3e8", overflow: "hidden" }}>
                               <div className="fs-5 font-bold" style={{ color: "#202223" }}>{productsList.length}</div>
-                              <div className="fs-8" style={{ color: "#6d7175" }}>Products</div>
+                              <div className="fs-8 text-truncate" style={{ color: "#6d7175", fontSize: "0.75rem" }}>Products</div>
                             </div>
                           </div>
                           <div className="col-4">
-                            <div className="p-3 rounded-3 text-center" style={{ background: "#f1f2f4", border: "1px solid #dfe3e8" }}>
+                            <div className="p-2 rounded-3 text-center h-100 d-flex flex-column justify-content-center" style={{ background: "#f1f2f4", border: "1px solid #dfe3e8", overflow: "hidden" }}>
                               <div className="fs-5 font-bold" style={{ color: "#202223" }}>{realOrders.length}</div>
-                              <div className="fs-8" style={{ color: "#6d7175" }}>Orders</div>
+                              <div className="fs-8 text-truncate" style={{ color: "#6d7175", fontSize: "0.75rem" }}>Orders</div>
                             </div>
                           </div>
                         </div>
@@ -2354,8 +2424,8 @@ export default function StoreOwnerDashboard() {
 
                   {/* ── COLLECTIONS PANEL ── */}
                   <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", overflow: "hidden", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
-                    <div className="d-flex align-items-center justify-content-between px-4 py-3" style={{ borderBottom: "1px solid #f1f2f4" }}>
-                      <div className="d-flex align-items-center gap-2">
+                    <div className="d-flex align-items-center justify-content-between px-3 px-sm-4 py-3 flex-wrap gap-2" style={{ borderBottom: "1px solid #f1f2f4" }}>
+                      <div className="d-flex align-items-center gap-2 flex-wrap">
                         <Tag size={16} style={{ color: "#007f5f" }} />
                         <h4 className="fs-6 font-bold mb-0" style={{ color: "#202223" }}>Collections</h4>
                         <span style={{ background: "#f1f2f4", color: "#6d7175", padding: "1px 8px", borderRadius: "10px", fontSize: "0.72rem", fontWeight: 700 }}>
@@ -2365,10 +2435,11 @@ export default function StoreOwnerDashboard() {
                       </div>
                       <button
                         onClick={() => setActive("categories")}
-                        className="btn btn-sm d-flex align-items-center gap-1 fw-bold"
-                        style={{ background: "#1c2226", color: "#fff", borderRadius: "6px", fontSize: "0.78rem" }}
+                        className="btn btn-sm d-flex align-items-center justify-content-center gap-1 fw-bold flex-shrink-0 px-2 px-sm-3"
+                        style={{ background: "#1c2226", color: "#fff", borderRadius: "6px", fontSize: "0.75rem" }}
                       >
-                        <Plus size={14} /> Add Collection
+                        <Plus size={14} /> 
+                        Add Collection
                       </button>
                     </div>
 
@@ -2599,29 +2670,7 @@ export default function StoreOwnerDashboard() {
             </div>
           )}
 
-          {/* MODULE: DOMAIN CONNECTION (DUMMY) */}
-          {active === "domain" && (
-            <div className="d-flex flex-column gap-3">
-              <div className="d-flex align-items-center justify-content-between">
-                <div>
-                  <h2 className="fs-4 font-bold mb-0" style={{ color: "#202223" }}>Domain Connection</h2>
-                  <p className="fs-8 mb-0" style={{ color: "#6d7175" }}>Connect a custom domain to your store.</p>
-                </div>
-              </div>
-              <div style={{ background: "#ffffff", border: "1px dashed #dfe3e8", borderRadius: "8px", padding: "40px", textAlign: "center", margin: "16px 0", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
-                <div className="w-16 h-16 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style={{ background: "rgba(0,127,95,0.1)", color: "#007f5f" }}>
-                  <Globe size={34} />
-                </div>
-                <h2 className="fs-3 font-bold mb-2" style={{ color: "#202223" }}>Custom Domain Coming Soon</h2>
-                <p className="fs-7 max-w-md mx-auto mb-4" style={{ color: "#6d7175", maxWidth: 480, lineHeight: 1.6 }}>
-                  You will soon be able to connect your own custom domain (e.g., www.yourstore.com) directly to your Aureum storefront.
-                </p>
-                <button className="btn py-2.5 px-4 font-bold fs-7 d-inline-flex align-items-center gap-2 text-white" style={{ background: "#1c2226", borderRadius: "8px" }} disabled>
-                  Connect Domain
-                </button>
-              </div>
-            </div>
-          )}
+
 
           {/* MODULE: PAYMENT GATEWAY (DUMMY) */}
           {active === "payment" && (
@@ -2647,47 +2696,7 @@ export default function StoreOwnerDashboard() {
             </div>
           )}
 
-          {/* MODULE: BUNDLES (DUMMY) */}
-          {active === "bundles" && (
-            <div className="d-flex flex-column gap-3">
-              <div className="d-flex align-items-center justify-content-between">
-                <div>
-                  <h2 className="fs-4 font-bold mb-0" style={{ color: "#202223" }}>Product Bundles</h2>
-                  <p className="fs-8 mb-0" style={{ color: "#6d7175" }}>Create bundled offers for your customers.</p>
-                </div>
-              </div>
-              <div style={{ background: "#ffffff", border: "1px dashed #dfe3e8", borderRadius: "8px", padding: "40px", textAlign: "center", margin: "16px 0", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
-                <div className="w-16 h-16 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style={{ background: "rgba(0,127,95,0.1)", color: "#007f5f" }}>
-                  <Boxes size={34} />
-                </div>
-                <h2 className="fs-3 font-bold mb-2" style={{ color: "#202223" }}>Bundles Coming Soon</h2>
-                <p className="fs-7 max-w-md mx-auto mb-4" style={{ color: "#6d7175", maxWidth: 480, lineHeight: 1.6 }}>
-                  Combine multiple products into discounted bundles to increase your average order value.
-                </p>
-              </div>
-            </div>
-          )}
 
-          {/* MODULE: ANALYTICS (DUMMY) */}
-          {active === "analytics" && (
-            <div className="d-flex flex-column gap-3">
-              <div className="d-flex align-items-center justify-content-between">
-                <div>
-                  <h2 className="fs-4 font-bold mb-0" style={{ color: "#202223" }}>Analytics</h2>
-                  <p className="fs-8 mb-0" style={{ color: "#6d7175" }}>View store performance and visitor metrics.</p>
-                </div>
-              </div>
-              <div style={{ background: "#ffffff", border: "1px dashed #dfe3e8", borderRadius: "8px", padding: "40px", textAlign: "center", margin: "16px 0", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
-                <div className="w-16 h-16 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style={{ background: "rgba(0,127,95,0.1)", color: "#007f5f" }}>
-                  <TrendingUp size={34} />
-                </div>
-                <h2 className="fs-3 font-bold mb-2" style={{ color: "#202223" }}>Analytics Dashboard</h2>
-                <p className="fs-7 max-w-md mx-auto mb-4" style={{ color: "#6d7175", maxWidth: 480, lineHeight: 1.6 }}>
-                  Detailed store analytics, conversion rates, and traffic sources are being aggregated.
-                </p>
-              </div>
-            </div>
-          )}
 
           {/* MODULE: DISCOUNTS (DUMMY) */}
           {active === "discounts" && (

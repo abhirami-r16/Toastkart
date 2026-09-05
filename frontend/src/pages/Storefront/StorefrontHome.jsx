@@ -12,11 +12,13 @@ export default function StorefrontHome({ storeData, products, categories = [] })
   const searchQuery = new URLSearchParams(location.search).get('search')?.toLowerCase() || '';
   const [eflyerSlide, setEflyerSlide] = useState(0);
   const [aranozSlide, setAranozSlide] = useState(0);
+  const [jewelrySlide, setJewelrySlide] = useState(0);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setAranozSlide((prev) => (prev + 1) % 3);
-    }, 5000);
+      setJewelrySlide((prev) => (prev + 1) % 8);
+    }, 4000);
     return () => clearInterval(timer);
   }, []);
 
@@ -112,6 +114,11 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                 />
               </div>
               <div className="storefront-product-details pb-5">
+                {theme === 'theme-jewelry' && (
+                  <span className="storefront-product-category">
+                    {product.category?.name || product.category || 'Luxury'}
+                  </span>
+                )}
                 <div className="storefront-product-title">{product.name}</div>
                 <div className="storefront-product-rating">
                   <span className="rating-badge">
@@ -241,14 +248,34 @@ export default function StorefrontHome({ storeData, products, categories = [] })
               </div>
             );
           case 'theme-jewelry':
+            const jewelryBgs = [
+              "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=1600&h=800&fit=crop", // Pearl
+              "https://images.unsplash.com/photo-1605100804763-247f67b2548e?w=1600&h=800&fit=crop", // Diamond Ring
+              "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=1600&h=800&fit=crop", // Bracelets
+              "https://images.unsplash.com/photo-1599643478514-4a4e03d3ce6b?w=1600&h=800&fit=crop", // Gold ring
+              "https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?w=1600&h=800&fit=crop", // Diamond necklace
+              "https://images.unsplash.com/photo-1573408301145-b98c4af3066e?w=1600&h=800&fit=crop", // Elegant necklace display
+              "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=1600&h=800&fit=crop", // Gold jewelry macro
+              "https://images.unsplash.com/photo-1622398925373-3f91b1e275f5?w=1600&h=800&fit=crop"  // Luxury display
+            ];
+            
             return (
               <div className="jewelry-hero-section">
-                <div className="jewelry-hero-overlay"></div>
-                <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=1600&h=600&fit=crop" className="jewelry-hero-bg" alt="Jewelry" />
-                <div className="jewelry-hero-content">
-                  <h1 className="jewelry-hero-title">Timeless Elegance</h1>
-                  <p className="jewelry-hero-subtitle">Discover handcrafted luxury pieces that define sophistication.</p>
-                  <button className="jewelry-btn">Explore Collection</button>
+                {jewelryBgs.map((bg, idx) => (
+                  <div 
+                    key={idx}
+                    className={`jewelry-hero-bg ${idx === jewelrySlide ? 'active' : ''}`}
+                    style={{ backgroundImage: `url(${bg})` }}
+                  />
+                ))}
+                <div className="jewelry-hero-content-wrapper">
+                  <div className="jewelry-hero-text-block">
+                    <h1 className="jewelry-hero-title">Timeless Beauty<br/><span>Crafted with Love</span></h1>
+                    <button className="jewelry-btn" onClick={() => {
+                        const el = document.getElementById('products') || document.querySelector('.storefront-section');
+                        if (el) el.scrollIntoView({ behavior: 'smooth' });
+                    }}>Purchase Now</button>
+                  </div>
                 </div>
               </div>
             );

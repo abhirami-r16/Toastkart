@@ -1,148 +1,341 @@
 /* ==========================================================================
-   Theme: Jewelry (Luxury)
+   Theme: Jewelry (Aro Luxury Aesthetic)
    ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap');
+
 .theme-jewelry.storefront-body {
-  background-color: #0a0a0a !important; /* Deep Midnight Black */
-  font-family: 'Playfair Display', serif !important;
-  color: #fff;
+  background-color: #FAF7F2 !important; /* Soft off-white paper texture feel */
+  font-family: 'Jost', sans-serif !important;
+  color: #111111;
 }
 
-/* Jewelry Hero Section */
+/* Typography Overrides */
+.theme-jewelry h1, .theme-jewelry h2, .theme-jewelry h3, .theme-jewelry h4, .theme-jewelry h5, .theme-jewelry h6 {
+  font-family: 'Cormorant Garamond', serif !important;
+  font-weight: 500;
+  color: #111111;
+}
+
+/* Jewelry Hero Section - Splash Page Parallax */
 .theme-jewelry .jewelry-hero-section {
   position: relative;
-  width: 100%;
-  height: 80vh;
-  min-height: 600px;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  height: 90vh;
+  min-height: 800px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
-  margin-bottom: 50px;
+  margin-bottom: 80px;
+  /* Soft background color based on pearl image */
+  background-color: #E6DFD4;
 }
 
+/* Live Background Images */
 .theme-jewelry .jewelry-hero-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  animation: liveBreathe 30s infinite ease-in-out;
-}
-
-.theme-jewelry .jewelry-hero-overlay {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: linear-gradient(to right, rgba(10,10,10,0.8) 0%, rgba(10,10,10,0.2) 100%);
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transform: scale(1.1);
+  transition: opacity 2s ease-in-out, transform 10s ease-out;
   z-index: 1;
 }
 
-.theme-jewelry .jewelry-hero-content {
-  position: absolute;
-  top: 50%;
-  left: 10%;
-  transform: translateY(-50%);
-  z-index: 2;
-  max-width: 600px;
+.theme-jewelry .jewelry-hero-bg.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.theme-jewelry .jewelry-hero-content-wrapper {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+}
+
+.theme-jewelry .jewelry-hero-tag {
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 6px;
+  color: #111111;
+  margin-bottom: 20px;
+  display: block;
+  font-weight: 500;
 }
 
 .theme-jewelry .jewelry-hero-title {
-  font-size: 56px;
+  font-size: 80px;
   font-weight: 400;
-  color: #fff;
-  letter-spacing: 2px;
-  margin-bottom: 20px;
-  animation: fadeUp 1s ease-out forwards;
+  color: #333333;
+  line-height: 1.1;
+  margin-bottom: 30px;
+  font-family: 'Cormorant Garamond', serif;
+  text-shadow: 2px 2px 10px rgba(255,255,255,0.5);
 }
 
-.theme-jewelry .jewelry-hero-subtitle {
-  font-size: 18px;
-  color: #d4af37; /* Gold */
-  margin-bottom: 40px;
+.theme-jewelry .jewelry-hero-title span {
   font-style: italic;
-  animation: fadeUp 1.2s ease-out forwards;
 }
 
 .theme-jewelry .jewelry-btn {
-  background: transparent;
-  color: #d4af37;
-  border: 1px solid #d4af37;
-  padding: 15px 40px;
-  font-size: 14px;
+  background: #222222;
+  color: #ffffff;
+  border: none;
+  padding: 16px 45px;
+  font-size: 13px;
   text-transform: uppercase;
-  letter-spacing: 3px;
+  letter-spacing: 2px;
+  font-weight: 500;
   transition: all 0.4s ease;
+  display: inline-block;
+  cursor: pointer;
 }
 
 .theme-jewelry .jewelry-btn:hover {
-  background: #d4af37;
-  color: #0a0a0a;
+  background: #C5A47E;
+  color: #ffffff;
+}
+
+/* Jewelry Slider */
+.theme-jewelry .jewelry-hero-content-wrapper {
+  display: flex;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 5%;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  position: relative; /* Ensure it stays above absolute backgrounds */
+}
+
+.theme-jewelry .jewelry-hero-text-block {
+  text-align: center;
+  max-width: 600px;
 }
 
 /* Jewelry Product Cards */
+.theme-jewelry .storefront-product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 40px 20px;
+  padding: 20px 0;
+}
+
 .theme-jewelry .storefront-product-card {
-  background: #111;
-  border: 1px solid #222;
+  background: transparent;
+  border: none;
   border-radius: 0;
+  text-align: center;
   transition: all 0.4s ease;
+  padding-bottom: 15px;
 }
 
 .theme-jewelry .storefront-product-card:hover {
-  border-color: #d4af37;
-  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.1);
+  box-shadow: none;
   transform: translateY(-5px);
 }
 
+.theme-jewelry .storefront-product-image-container {
+  overflow: hidden;
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+  position: relative;
+}
+
+.theme-jewelry .storefront-product-image {
+  transition: transform 0.8s ease;
+}
+
+.theme-jewelry .storefront-product-card:hover .storefront-product-image {
+  transform: scale(1.05);
+}
+
+.theme-jewelry .storefront-product-details {
+  padding: 0 10px;
+}
+
+.theme-jewelry .storefront-product-category {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #C5A47E;
+  margin-bottom: 8px;
+  display: block;
+}
+
 .theme-jewelry .storefront-product-title {
-  color: #fff;
-  font-size: 18px;
-  font-weight: 300;
-  letter-spacing: 1px;
+  color: #111111;
+  font-size: 22px;
+  font-weight: 400;
+  font-family: 'Cormorant Garamond', serif;
+  margin-bottom: 8px;
+}
+
+.theme-jewelry .storefront-product-price-row {
+  justify-content: center;
+}
+
+.theme-jewelry .storefront-product-original-price {
+  color: #999999 !important;
+  text-decoration: line-through;
+  font-size: 15px !important;
 }
 
 .theme-jewelry .storefront-product-price {
-  color: #d4af37;
-  font-size: 16px;
+  color: #111111 !important;
+  font-size: 17px !important;
+  font-weight: 500 !important;
 }
 
-/* Add to Cart */
+.theme-jewelry .storefront-product-discount {
+  display: none; /* Hide flashy discount tags for luxury feel */
+}
+
+/* Hover Actions (Cart & Wishlist) */
+.theme-jewelry .add-to-cart-wrapper {
+  position: absolute;
+  bottom: -50px; /* Hide initially */
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  transition: all 0.4s ease;
+  z-index: 10;
+}
+
+.theme-jewelry .storefront-product-card:hover .add-to-cart-wrapper {
+  bottom: 0;
+  opacity: 1;
+}
+
 .theme-jewelry .theme-cart-btn {
-  background: #d4af37 !important;
-  color: #0a0a0a !important;
+  background: #111111 !important;
+  color: #fff !important;
   border-radius: 0;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
+  font-size: 12px;
+  padding: 15px 0;
+  border: none;
   transition: all 0.3s ease;
 }
 
 .theme-jewelry .theme-cart-btn:hover {
-  background: #f1c40f !important;
+  background: #C5A47E !important;
+}
+
+.theme-jewelry button[class*="rounded-circle"] {
+  background: #ffffff !important;
+  border: 1px solid #eeeeee !important;
+  color: #111111 !important;
+  opacity: 0;
+  transform: translateX(10px);
+  transition: all 0.4s ease;
+}
+
+.theme-jewelry .storefront-product-card:hover button[class*="rounded-circle"] {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.theme-jewelry button[class*="rounded-circle"]:hover {
+  background: #111111 !important;
+}
+
+.theme-jewelry button[class*="rounded-circle"]:hover svg {
+  stroke: #ffffff;
 }
 
 /* Headers */
+.theme-jewelry .storefront-section-header {
+  text-align: center;
+  margin-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .theme-jewelry .storefront-section-header h3 {
-  color: #d4af37 !important;
-  border-bottom: 1px solid #333;
-  padding-bottom: 10px;
+  color: #111111 !important;
+  font-size: 42px;
+  font-family: 'Cormorant Garamond', serif;
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 15px;
+}
+
+.theme-jewelry .storefront-section-header::after {
+  content: '';
+  width: 60px;
+  height: 1px;
+  background-color: #C5A47E;
+  display: block;
+  margin: 0 auto;
+}
+
+.theme-jewelry .storefront-view-all-btn {
+  display: none; /* Often luxury themes just use a 'View Collection' link instead of typical right-aligned view all */
+}
+
+/* ==========================================================================
+   Header & Layout Overrides for Jewelry Theme
+   ========================================================================== */
+.theme-jewelry.storefront-body .storefront-main-content {
+  margin-top: 0 !important;
+}
+
+.theme-jewelry.storefront-body .hexashop-header {
+  background-color: #FAF7F2;
+  border-bottom: 1px solid #E6DFD4;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
 }
 
 /* ==========================================================================
    Responsive Design (Mobile & Tablet)
    ========================================================================== */
 @media (max-width: 991px) {
-  .theme-jewelry .jewelry-hero-title {
-    font-size: 40px;
-  }
-  .theme-jewelry .jewelry-hero-content {
-    left: 5%;
-    right: 5%;
+  .theme-jewelry .jewelry-hero-content-wrapper {
+    flex-direction: column;
     text-align: center;
+    padding-top: 60px;
+  }
+  .theme-jewelry .jewelry-hero-text-block {
+    padding-right: 0;
+    margin-bottom: 50px;
+  }
+  .theme-jewelry .jewelry-hero-image-block {
+    justify-content: center;
+    width: 100%;
+  }
+  .theme-jewelry .jewelry-hero-img-main {
+    border-radius: 150px 150px 0 0;
   }
 }
 
 @media (max-width: 768px) {
+  .theme-jewelry .jewelry-hero-title {
+    font-size: 48px;
+  }
+  .theme-jewelry .jewelry-hero-section {
+    min-height: 500px;
+    height: 70vh;
+  }
+}
+
+@media (max-width: 575px) {
+  .theme-jewelry .jewelry-hero-title {
+    font-size: 36px;
+  }
   .theme-jewelry .jewelry-hero-section {
     min-height: 400px;
     height: 60vh;
-  }
-  .theme-jewelry .jewelry-hero-title {
-    font-size: 32px;
-  }
-  .theme-jewelry .jewelry-hero-subtitle {
-    font-size: 16px;
+    margin-bottom: 40px;
   }
 }
+

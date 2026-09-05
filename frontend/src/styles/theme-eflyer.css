@@ -466,3 +466,77 @@
     gap: 6px;
   }
 }
+
+@media (max-width: 575px) {
+  .theme-eflyer .eflyer-header {
+    position: relative;
+  }
+  
+  .theme-eflyer .eflyer-hero {
+    padding-top: 30px;
+    padding-bottom: 60px;
+    background: transparent; /* Rely on wrapper background */
+  }
+  
+  .theme-eflyer .eflyer-bottom-bar-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding: 0 15px;
+  }
+  
+  .theme-eflyer .eflyer-category-dropdown {
+    width: 100%;
+    order: 1;
+  }
+  
+  .theme-eflyer .eflyer-cat-btn {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .theme-eflyer .eflyer-search-container {
+    width: 100%;
+    order: 2;
+  }
+  
+  .theme-eflyer .eflyer-actions {
+    width: 100%;
+    justify-content: center;
+    margin-left: 0;
+    gap: 25px;
+    order: 3;
+    flex-wrap: wrap;
+  }
+  
+  .theme-eflyer .eflyer-logo {
+    font-size: 32px;
+  }
+  
+  .theme-eflyer .eflyer-hero-title {
+    font-size: 26px;
+    margin-bottom: 25px;
+    margin-top: 15px;
+  }
+  
+  .theme-eflyer .eflyer-slider-btn {
+    width: 35px;
+    height: 35px;
+    top: 50%;
+  }
+  
+  .theme-eflyer .storefront-section-header h3 {
+    font-size: 24px;
+  }
+  
+  .theme-eflyer .eflyer-search-input {
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+  
+  .theme-eflyer .eflyer-search-btn {
+    padding: 0 15px;
+    font-size: 14px;
+  }
+}

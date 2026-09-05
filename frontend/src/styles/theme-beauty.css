@@ -150,3 +150,38 @@
     margin-bottom: 25px;
   }
 }
+
+@media (max-width: 575px) {
+  .theme-beauty .beauty-hero-section {
+    margin: 10px 5px;
+    border-radius: 12px;
+  }
+  .theme-beauty .beauty-hero-text {
+    padding: 25px 15px;
+  }
+  .theme-beauty .beauty-title {
+    font-size: 24px;
+    margin-bottom: 12px;
+  }
+  .theme-beauty .beauty-subtitle {
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+  .theme-beauty .beauty-hero-image-container {
+    height: 250px;
+  }
+  .theme-beauty .beauty-hero-img {
+    border-radius: 12px 12px 0 0;
+  }
+  
+  /* Product Detail Mobile Overrides */
+  .theme-beauty .product-info-details h1 {
+    font-size: 28px !important;
+  }
+  .theme-beauty .product-info-details .fs-2 {
+    font-size: 24px !important;
+  }
+  .theme-beauty .product-image-container {
+    padding: 15px !important;
+  }
+}

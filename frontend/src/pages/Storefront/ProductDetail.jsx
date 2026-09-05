@@ -325,7 +325,7 @@ export default function ProductDetail({ storeData, products }) {
             )}
 
             <div className="d-flex flex-column gap-3 mb-5">
-              <div className="d-flex gap-3">
+              <div className="d-flex flex-column flex-sm-row gap-3">
                 <button 
                   className="btn btn-lg fw-bold d-flex align-items-center justify-content-center gap-2 flex-grow-1 py-3"
                   style={{ backgroundColor: '#ff9f00', color: '#fff', border: 'none', borderRadius: '8px' }}
