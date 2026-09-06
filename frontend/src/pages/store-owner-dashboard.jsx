@@ -373,25 +373,24 @@ export default function StoreOwnerDashboard() {
     const filtered = storesList.filter((s) => s.user_id === currentUserId || (!s.user_id && currentUserId === 1));
     if (filtered.length > 0) return filtered;
 
-    const fallbackStore = {
-      id: 999999,
-      user_id: currentUserId || 0,
-      name: user?.stores?.[0]?.name || `${user?.name || 'Owner'} Store`,
-      slug: user?.stores?.[0]?.slug || 'owner-store',
-      subdomain: user?.stores?.[0]?.subdomain || 'owner-store',
-      category: 'General Merchandise',
-      currency: 'USD ($)',
-      status: 'Active',
-      email: user?.email || 'owner@store.local',
-      phone: '+1 (555) 000-0000',
-      description: 'Welcome to your store dashboard. Create a new store to begin managing inventory, products, and orders.',
-      logo: '',
-      banner: '',
-      products_count: 0,
-      orders_count: 0,
-      total_revenue: '$0.00'
-    };
-
+ const fallbackStore = {
+  id: user?.stores?.[0]?.id || currentUserId || 0,
+  user_id: user?.id || currentUserId || 0,
+  name: user?.stores?.[0]?.name || `${user?.name || 'Owner'} Store`,
+  slug: user?.stores?.[0]?.slug || 'owner-store',
+  subdomain: user?.stores?.[0]?.subdomain || 'owner-store',
+  category: user?.stores?.[0]?.category || 'General Merchandise',
+  currency: user?.stores?.[0]?.currency || 'USD',
+  status: user?.stores?.[0]?.status || 'Active',
+  email: user?.email || '',
+  phone: '',
+  description: user?.stores?.[0]?.description || '',
+  logo: user?.stores?.[0]?.logo || '',
+  banner: '',
+  products_count: 0,
+  orders_count: 0,
+  total_revenue: '$0.00'
+};
     return [fallbackStore];
   }, [storesList, currentUserId, user]);
 
