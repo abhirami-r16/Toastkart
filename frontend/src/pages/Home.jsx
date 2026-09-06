@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ToastKartLogo from "../components/ToastKartLogo";
 import {
-  Sparkles, ArrowRight, ShieldCheck, Zap, Store, Package, ShoppingCart, DollarSign, 
+  Sparkles, ArrowRight, ShieldCheck, Zap, Store, Package, ShoppingCart, DollarSign,
   CheckCircle, Star, Rocket, Crown, Mail, Check, Menu, X
 } from "lucide-react";
 
@@ -225,7 +225,7 @@ export default function Home() {
             <button onClick={() => navigate("/login")} className="goslot-btn goslot-btn-primary py-1.5 px-3 fs-8">
               <Rocket size={14} className="d-none d-sm-block" /> Start Selling
             </button>
-            
+
             <button className="d-lg-none btn btn-light border-0 p-1 bg-transparent text-dark shadow-none" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -250,7 +250,7 @@ export default function Home() {
       <section id="hero" className="goslot-hero">
         <div className="hero-blob blob-1"></div>
         <div className="hero-blob blob-2"></div>
-        
+
         <div className="container-xl position-relative z-10 text-center max-w-4xl mx-auto">
           <div className="goslot-eyebrow">The Multi-Vendor SaaS Platform</div>
           <h1 className="display-4 fw-bolder mb-4">
@@ -268,7 +268,7 @@ export default function Home() {
               Become a Merchant
             </button>
           </div>
-          
+
           <div className="d-flex flex-wrap align-items-center justify-content-center gap-4 gap-md-5 fs-8 text-muted fw-semibold">
             <div className="d-flex align-items-center gap-2"><ShieldCheck size={18} style={{ color: "var(--primary)" }} /> 100% Verified Vendors</div>
             <div className="d-flex align-items-center gap-2"><Zap size={18} style={{ color: "var(--primary)" }} /> Instant Payouts</div>
@@ -311,7 +311,7 @@ export default function Home() {
           <div className="text-center mb-5">
             <div className="goslot-eyebrow">About ToastKart</div>
             <h2 className="display-6 fw-bolder mb-4">Build. Sell. Grow.</h2>
-            
+
             <p className="fs-5 text-muted mb-4">
               ToastKart is a simple and powerful e-commerce platform designed to help businesses create, manage, and grow their online stores without the complexity.
             </p>
@@ -364,7 +364,7 @@ export default function Home() {
                   <div className="fs-8 text-muted mb-3 d-flex align-items-center gap-1">
                     <CheckCircle size={14} className="text-success" /> Verified Owner: {store.owner}
                   </div>
-                 <button onClick={() => navigate("/storefront")} className="btn btn-sm btn-light w-100 fs-8 fw-semibold border">Visit Store</button>
+                  <button onClick={() => navigate("/storefront")} className="btn btn-sm btn-light w-100 fs-8 fw-semibold border">Visit Store</button>
                 </div>
               </div>
             ))}
@@ -494,7 +494,7 @@ export default function Home() {
           </div>
         </div>
       )}
-      
+
       {/* QUICK VIEW MODAL */}
       {quickViewProduct && (
         <div className="position-fixed top-0 bottom-0 start-0 end-0 bg-dark bg-opacity-50 d-flex align-items-center justify-content-center p-3" style={{ zIndex: 1050, backdropFilter: "blur(4px)" }}>

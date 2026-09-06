@@ -32,9 +32,9 @@ const getSubdomain = () => {
   
   // Define your main platform domains here (where the Aureum landing page should show)
   const mainDomains = [
-    'localhost',
-    'palegreen-heron-317581.hostingersite.com',
-    'www.palegreen-heron-317581.hostingersite.com'
+  'localhost',
+  'toastkart.com',
+  'www.toastkart.com'
   ];
 
   if (isIp || mainDomains.includes(host)) {

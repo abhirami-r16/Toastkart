@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react'; // Syncing file to fix syntax error
 import { Routes, Route, Navigate, useParams } from 'react-router-dom';
 import api from '../../api/axios';
 import { useAuth } from '../../context/AuthContext';
@@ -85,6 +85,8 @@ export default function StorefrontApp({ subdomain }) {
 
       // 5️⃣ Set store data (or dummy if not found)
       if (foundStore) {
+        console.log('FOUND STORE:', foundStore);
+        console.log('STORE CATEGORY:', foundStore.category);
         setStoreData(foundStore);
       } else {
         const generatedName =
