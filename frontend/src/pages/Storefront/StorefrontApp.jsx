@@ -19,7 +19,8 @@ export default function StorefrontApp({ subdomain }) {
   const [storeProducts, setStoreProducts] = useState([]);
   const [storeCategories, setStoreCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { tenantId } = useParams();
+  const { slug } = useParams();
+const tenantId = slug;
   const { user } = useAuth();
 
   // Fetch all required data (store, products, categories)
