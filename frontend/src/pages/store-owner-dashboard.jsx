@@ -3233,7 +3233,7 @@ export default function StoreOwnerDashboard() {
                       style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
                     >
                       <option value="Fashion & Apparel">Fashion & Apparel</option>
-                      <option value="Jewelry & Watches">Jewelry & Watches</option>
+                      <option value="Jewellery">Jewellery</option>
                       <option value="Beauty & Cosmetics">Beauty & Cosmetics</option>
                       <option value="Home & Living">Home & Living</option>
                       <option value="Electronics">Electronics</option>
@@ -3355,7 +3355,7 @@ export default function StoreOwnerDashboard() {
                       style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
                     >
                       <option value="Fashion & Apparel">Fashion & Apparel</option>
-                      <option value="Jewelry & Watches">Jewelry & Watches</option>
+                      <option value="Jewellery">Jewellery</option>
                       <option value="Beauty & Cosmetics">Beauty & Cosmetics</option>
                       <option value="Home & Living">Home & Living</option>
                       <option value="Electronics">Electronics</option>
