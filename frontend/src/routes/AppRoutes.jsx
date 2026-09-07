@@ -29,27 +29,30 @@ import PortfolioView from '../pages/PortfolioView';
 const getSubdomain = () => {
   const host = window.location.hostname;
   const isIp = /^(\d{1,3}\.){3}\d{1,3}$/.test(host);
-  
-  // Define your main platform domains here (where the Aureum landing page should show)
+
+  // Main platform domains
   const mainDomains = [
-  'localhost',
-  'toastkart.com',
-  'www.toastkart.com'
+    'localhost',
+    'toastkart.com',
+    'www.toastkart.com',
   ];
 
   if (isIp || mainDomains.includes(host)) {
-    return null; // Not a store subdomain, show the main landing page
+    return null;
   }
 
   const parts = host.split('.');
+
   if (parts.length >= 2 && parts[0] !== 'www') {
-    return parts[0]; // Extract 'mystore' from 'mystore.domain.com'
+    return parts[0];
   }
+
   return null;
 };
 
 const StorefrontWrapper = () => {
   const { slug } = useParams();
+
   return <StorefrontApp subdomain={slug || 'demo'} />;
 };
 
@@ -60,19 +63,38 @@ function AppRoutes() {
   React.useEffect(() => {
     try {
       const saved = localStorage.getItem('aureum_owner_products');
+
       if (saved) {
         let products = JSON.parse(saved);
         let changed = false;
-        products = products.map(p => {
-          if (p.image && typeof p.image === 'string' && p.image.startsWith('data:image/') && p.image.length > 50000) {
+
+        products = products.map((p) => {
+          if (
+            p.image &&
+            typeof p.image === 'string' &&
+            p.image.startsWith('data:image/') &&
+            p.image.length > 50000
+          ) {
             changed = true;
-            return { ...p, image: '' };
+
+            return {
+              ...p,
+              image: '',
+            };
           }
+
           return p;
         });
+
         if (changed) {
-          localStorage.setItem('aureum_owner_products', JSON.stringify(products));
-          console.log('Cleaned up massive base64 images from local storage to free quota.');
+          localStorage.setItem(
+            'aureum_owner_products',
+            JSON.stringify(products)
+          );
+
+          console.log(
+            'Cleaned up massive base64 images from local storage to free quota.'
+          );
         }
       }
     } catch (e) {
@@ -80,6 +102,7 @@ function AppRoutes() {
     }
   }, []);
 
+  // Store subdomain / storefront
   if (subdomain) {
     return (
       <BrowserRouter>
@@ -90,61 +113,164 @@ function AppRoutes() {
     );
   }
 
+  // Main application
+  // AuthProvider must be ABOVE StoreProvider because
+  // StoreContext uses useAuth().
   return (
     <BrowserRouter>
-      <StoreProvider>
-        <CartProvider>
-          <AuthProvider>
+      <AuthProvider>
+        <StoreProvider>
+          <CartProvider>
             <Routes>
-              {/* Portal Landing Page (Aureum) as Main Root "/" */}
+              {/* Portal Landing Page */}
               <Route path="/" element={<Home />} />
               <Route path="/portal" element={<Home />} />
               <Route path="/landing" element={<Home />} />
 
               {/* Storefront Pages */}
-              <Route path="/storefront/*" element={<StorefrontWrapper />} />
-              <Route path="/store/:slug/*" element={<StorefrontWrapper />} />
-              
-              {/* Portfolio Pages */}
-              <Route path="/portfolio-builder" element={<PortfolioBuilder />} />
-              <Route path="/portfolio/:slug" element={<PortfolioView />} />
+              <Route
+                path="/storefront/*"
+                element={<StorefrontWrapper />}
+              />
 
-              {/* Auth Routes */}
+              <Route
+                path="/store/:slug/*"
+                element={<StorefrontWrapper />}
+              />
+
+              {/* Portfolio Pages */}
+              <Route
+                path="/portfolio-builder"
+                element={<PortfolioBuilder />}
+              />
+
+              <Route
+                path="/portfolio/:slug"
+                element={<PortfolioView />}
+              />
+
+              {/* Authentication Routes */}
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
 
-              {/* Standalone Dashboard Routes */}
-              <Route path="/dashboard" element={<StoreOwnerDashboard />} />
-              <Route path="/owner" element={<Navigate to="/owner/dashboard" replace />} />
-              <Route path="/owner/dashboard" element={<StoreOwnerDashboard />} />
-              <Route path="/owner/dashboard/*" element={<StoreOwnerDashboard />} />
-              <Route path="/store-owner" element={<StoreOwnerDashboard />} />
-              <Route path="/store-owner-dashboard" element={<StoreOwnerDashboard />} />
-              <Route path="/merchant/dashboard" element={<StoreOwnerDashboard />} />
-              <Route path="/admin/dashboard" element={<AdminDashboard />} />
-              <Route path="/customer-dashboard" element={<CustomerDashboard />} />
-              <Route path="/customer/dashboard" element={<CustomerDashboard />} />
+              {/* Dashboard Routes */}
+              <Route
+                path="/dashboard"
+                element={<StoreOwnerDashboard />}
+              />
+
+              <Route
+                path="/owner"
+                element={
+                  <Navigate
+                    to="/owner/dashboard"
+                    replace
+                  />
+                }
+              />
+
+              <Route
+                path="/owner/dashboard"
+                element={<StoreOwnerDashboard />}
+              />
+
+              <Route
+                path="/owner/dashboard/*"
+                element={<StoreOwnerDashboard />}
+              />
+
+              <Route
+                path="/store-owner"
+                element={<StoreOwnerDashboard />}
+              />
+
+              <Route
+                path="/store-owner-dashboard"
+                element={<StoreOwnerDashboard />}
+              />
+
+              <Route
+                path="/merchant/dashboard"
+                element={<StoreOwnerDashboard />}
+              />
+
+              <Route
+                path="/admin/dashboard"
+                element={<AdminDashboard />}
+              />
+
+              <Route
+                path="/customer-dashboard"
+                element={<CustomerDashboard />}
+              />
+
+              <Route
+                path="/customer/dashboard"
+                element={<CustomerDashboard />}
+              />
 
               {/* Merchant Admin Sub-pages */}
               <Route element={<AdminLayout />}>
-                <Route path="/stores" element={<StoresPage />} />
-                <Route path="/owner/stores" element={<StoresPage />} />
-                <Route path="/categories" element={<CategoriesPage />} />
-                <Route path="/products" element={<ProductsPage />} />
-                <Route path="/products/:id" element={<ProductDetailPage />} />
-                <Route path="/inventory" element={<InventoryPage />} />
-                <Route path="/customers" element={<CustomersPage />} />
-                <Route path="/cart" element={<CartPage />} />
-                <Route path="/orders" element={<OrdersPage />} />
-                <Route path="/settings" element={<SettingsPage />} />
+                <Route
+                  path="/stores"
+                  element={<StoresPage />}
+                />
+
+                <Route
+                  path="/owner/stores"
+                  element={<StoresPage />}
+                />
+
+                <Route
+                  path="/categories"
+                  element={<CategoriesPage />}
+                />
+
+                <Route
+                  path="/products"
+                  element={<ProductsPage />}
+                />
+
+                <Route
+                  path="/products/:id"
+                  element={<ProductDetailPage />}
+                />
+
+                <Route
+                  path="/inventory"
+                  element={<InventoryPage />}
+                />
+
+                <Route
+                  path="/customers"
+                  element={<CustomersPage />}
+                />
+
+                <Route
+                  path="/cart"
+                  element={<CartPage />}
+                />
+
+                <Route
+                  path="/orders"
+                  element={<OrdersPage />}
+                />
+
+                <Route
+                  path="/settings"
+                  element={<SettingsPage />}
+                />
               </Route>
 
               {/* Fallback */}
-              <Route path="*" element={<Navigate to="/" replace />} />
+              <Route
+                path="*"
+                element={<Navigate to="/" replace />}
+              />
             </Routes>
-          </AuthProvider>
-        </CartProvider>
-      </StoreProvider>
+          </CartProvider>
+        </StoreProvider>
+      </AuthProvider>
     </BrowserRouter>
   );
 }
