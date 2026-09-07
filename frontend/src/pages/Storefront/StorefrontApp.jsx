@@ -54,35 +54,71 @@ const tenantId = slug;
         }
       }
 
-      // 3️⃣ LocalStorage fallback for stores
-      if (allStores.length === 0) {
-        const saved = localStorage.getItem('aureum_owner_stores');
-        if (saved) {
-          try { allStores = JSON.parse(saved) || []; } catch (e) {}
-        }
-      }
+     // 3️⃣ Find the requested store in backend stores
+const findMatchingStore = (stores) => {
+  if (!Array.isArray(stores)) return null;
 
-      // 4️⃣ Find the store that matches tenantId or subdomain
-      if (allStores.length > 0) {
-        if (tenantId) {
-          foundStore = allStores.find(s => String(s.id) === String(tenantId));
-        }
-        if (!foundStore) {
-          const cleanSub = subdomain.toLowerCase().replace(/[^a-z0-9]/g, '');
-          foundStore = allStores.find(s => {
-            const sSub = (s.subdomain || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-            const sSlug = (s.slug || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-            const sName = (s.name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-            return (
-              sSub === cleanSub ||
-              sSlug === cleanSub ||
-              sName === cleanSub ||
-              (sName && cleanSub && (sName.includes(cleanSub) || cleanSub.includes(sName))) ||
-              (sSub && cleanSub && (sSub.includes(cleanSub) || cleanSub.includes(sSub)))
-            );
-          });
-        }
+  const cleanSub = String(subdomain || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '');
+
+  if (tenantId) {
+    const byId = stores.find(
+      s => String(s.id) === String(tenantId)
+    );
+
+    if (byId) return byId;
+  }
+
+  return stores.find(s => {
+    const sSub = String(s.subdomain || '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, '');
+
+    const sSlug = String(s.slug || '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, '');
+
+    const sName = String(s.name || '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, '');
+
+    return (
+      sSub === cleanSub ||
+      sSlug === cleanSub ||
+      sName === cleanSub ||
+      (sName && cleanSub && (
+        sName.includes(cleanSub) || cleanSub.includes(sName)
+      )) ||
+      (sSub && cleanSub && (
+        sSub.includes(cleanSub) || cleanSub.includes(sSub)
+      ))
+    );
+  }) || null;
+};
+
+// 4️⃣ Try backend stores first
+foundStore = findMatchingStore(allStores);
+
+// 5️⃣ If backend does not contain this store, check localStorage
+if (!foundStore) {
+  const saved = localStorage.getItem('aureum_owner_stores');
+
+  if (saved) {
+    try {
+      const localStores = JSON.parse(saved) || [];
+      const localStore = findMatchingStore(localStores);
+
+      if (localStore) {
+        foundStore = localStore;
+        console.log('FOUND LOCAL STORE:', localStore);
+        console.log('LOCAL STORE CATEGORY:', localStore.category);
       }
+    } catch (e) {
+      console.debug('Failed to read local owner stores', e);
+    }
+  }
+}
 
       // 5️⃣ Set store data (or dummy if not found)
       if (foundStore) {
