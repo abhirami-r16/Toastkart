@@ -155,6 +155,27 @@ const goslotRegisterStyles = `
     height: 100%;
     transition: all 0.3s ease;
   }
+
+  /* Mobile Responsiveness */
+  @media (max-width: 575px) {
+    .goslot-login-card {
+      padding: 2rem 1.5rem;
+      margin: 1rem auto;
+      border-radius: 16px;
+    }
+    .goslot-nav {
+      padding: 1rem;
+    }
+    .goslot-login-bg h1 {
+      font-size: 1.5rem !important;
+    }
+    .goslot-input {
+      padding: 0.75rem 1rem;
+    }
+    .goslot-btn-green, .goslot-btn-google {
+      padding: 0.75rem;
+    }
+  }
 `;
 
 export default function Register() {
@@ -218,8 +239,8 @@ export default function Register() {
           <a href="/#about" className="text-decoration-none text-dark">About</a>
         </div>
         
-        <button className="goslot-btn-green" style={{ width: 'auto', padding: '0.5rem 1.5rem' }}>
-          Get Started
+        <button onClick={() => navigate('/login')} className="d-none d-sm-block goslot-btn-green" style={{ width: 'auto', padding: '0.5rem 1.5rem' }}>
+          Login
         </button>
       </nav>
 

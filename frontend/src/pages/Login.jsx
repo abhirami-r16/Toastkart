@@ -215,7 +215,7 @@ export default function Login() {
           <a href="/#about" className="text-decoration-none text-dark">About</a>
         </div>
         
-        <button onClick={() => navigate('/register')} className="goslot-btn-green" style={{ width: 'auto', padding: '0.5rem 1.5rem' }}>
+        <button onClick={() => navigate('/register')} className="d-none d-sm-block goslot-btn-green" style={{ width: 'auto', padding: '0.5rem 1.5rem' }}>
           Get Started
         </button>
       </nav>

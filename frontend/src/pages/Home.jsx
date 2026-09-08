@@ -220,11 +220,11 @@ export default function Home() {
           </nav>
 
           <div className="d-flex align-items-center gap-3">
-            <button onClick={() => navigate("/login")} className="goslot-btn goslot-btn-primary py-1.5 px-3 fs-8">
+            <button onClick={() => navigate("/login")} className="d-none d-md-flex goslot-btn goslot-btn-primary py-1.5 px-3 fs-8">
               Login
             </button>
-            <button onClick={() => navigate("/login")} className="goslot-btn goslot-btn-primary py-1.5 px-3 fs-8">
-              <Rocket size={14} className="d-none d-sm-block" /> Start Selling
+            <button onClick={() => navigate("/login")} className="d-none d-md-flex goslot-btn goslot-btn-primary py-1.5 px-3 fs-8">
+              <Rocket size={14} /> Start Selling
             </button>
 
             <button className="d-lg-none btn btn-light border-0 p-1 bg-transparent text-dark shadow-none" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
@@ -240,6 +240,9 @@ export default function Home() {
               <a href="#hero" className="goslot-nav-link fs-5" onClick={() => setIsMobileMenuOpen(false)}>Home</a>
               <a href="#features" className="goslot-nav-link fs-5" onClick={() => setIsMobileMenuOpen(false)}>Features</a>
               <a href="#about" className="goslot-nav-link fs-5" onClick={() => setIsMobileMenuOpen(false)}>About</a>
+              <div className="border-top my-2"></div>
+              <a href="/login" className="goslot-nav-link fs-5 text-primary" onClick={() => setIsMobileMenuOpen(false)}>Login</a>
+              <a href="/register" className="goslot-nav-link fs-5 text-primary fw-bold" onClick={() => setIsMobileMenuOpen(false)}>Start Selling</a>
             </nav>
           </div>
         )}
