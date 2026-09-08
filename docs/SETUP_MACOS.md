@@ -1,4 +1,4 @@
-# ShopNest Backend — macOS Setup & Run Guide
+# ToastKart Backend — macOS Setup & Run Guide
 
 ## Table of Contents
 1. [Tech Stack Overview](#tech-stack-overview)
@@ -135,7 +135,7 @@ php artisan key:generate --ansi
 Open [.env](file:///Applications/XAMPP/xamppfiles/htdocs/github/bin/abhirami-ecom/backend/.env) and ensure the following values are set:
 
 ```env
-APP_NAME=ShopNest
+APP_NAME=ToastKart
 APP_ENV=local
 APP_DEBUG=true
 APP_URL=http://localhost:8000
@@ -223,7 +223,7 @@ The server runs at: **http://localhost:8000**
 
 ```bash
 curl http://localhost:8000/api/health
-# Expected: {"status":"ok","app":"ShopNest API"}
+# Expected: {"status":"ok","app":"ToastKart API"}
 ```
 
 Or open in browser: http://localhost:8000/api/health
@@ -252,7 +252,7 @@ Defined in [composer.json](file:///Applications/XAMPP/xamppfiles/htdocs/github/b
 The frontend React app lives in the sibling [frontend](file:///Applications/XAMPP/xamppfiles/htdocs/github/bin/abhirami-ecom/frontend) directory. The backend sends/expects these HTTP headers from the frontend:
 
 ```
-Authorization: Bearer <shopnest_token>
+Authorization: Bearer <toastkart_token>
 X-Store-Id: <active_store_id>
 Content-Type: application/json
 Accept: application/json

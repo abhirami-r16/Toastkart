@@ -119,7 +119,7 @@ php artisan key:generate --ansi
 Edit `.env` and update these values for local development:
 
 ```env
-APP_NAME=ShopNest
+APP_NAME=ToastKart
 APP_ENV=local
 APP_DEBUG=true
 APP_URL=http://localhost:8000
@@ -178,7 +178,7 @@ php artisan serve
 ```
 
 Health check: `curl http://localhost:8000/api/health`
-Expected response: `{"status":"ok","app":"ShopNest API"}`
+Expected response: `{"status":"ok","app":"ToastKart API"}`
 
 ## API Routes Summary
 
@@ -221,7 +221,7 @@ All routes are prefixed with `/api`.
 
 **Headers sent by frontend:**
 ```
-Authorization: Bearer <shopnest_token>
+Authorization: Bearer <toastkart_token>
 X-Store-Id: <active_store_id>
 Content-Type: application/json
 Accept: application/json

@@ -1,4 +1,4 @@
-# Deployment Guide: ShopNest on Hostinger
+# Deployment Guide: ToastKart on Hostinger
 
 This guide explains how to deploy the split Laravel (backend) and React/Vite (frontend) architecture to a shared hosting environment like Hostinger Premium using Git.
 

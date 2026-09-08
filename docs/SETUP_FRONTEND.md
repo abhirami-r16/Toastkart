@@ -109,8 +109,8 @@ Vite default port is 5173. If occupied, Vite will auto-increment to 5174, etc.
 ## Token Storage
 
 Tokens are stored in `localStorage` under these keys:
-- `shopnest_token` — Bearer token for API auth
-- `shopnest_active_store_id` — Active store ID sent as `X-Store-Id` header
+- `toastkart_token` — Bearer token for API auth
+- `toastkart_active_store_id` — Active store ID sent as `X-Store-Id` header
 
 ## CORS Notes
 
