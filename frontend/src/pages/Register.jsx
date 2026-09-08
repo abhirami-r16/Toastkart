@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import useSEO from '../hooks/useSEO';
-import { ShoppingBag, Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
+import ToastKartLogo from '../components/ToastKartLogo';
 
 const goslotRegisterStyles = `
   .goslot-login-bg {
-    background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+    background: #ffffff;
     min-height: 100vh;
     font-family: system-ui, -apple-system, sans-serif;
   }
@@ -24,23 +25,24 @@ const goslotRegisterStyles = `
       display: flex;
       gap: 2rem;
       font-weight: 500;
-      color: #1f2937;
+      color: #1a1a1a;
     }
   }
   .goslot-login-card {
-    background: white;
+    background: #ffffff;
     border-radius: 24px;
     padding: 3rem;
     width: 100%;
     max-width: 480px;
-    box-shadow: 0 20px 40px -15px rgba(0,0,0,0.05);
+    box-shadow: 0 20px 40px -15px rgba(0,0,0,0.08);
+    border: 1px solid #f0f0f0;
     margin: 2rem auto;
   }
   .goslot-label {
     display: block;
     font-size: 0.75rem;
     font-weight: 700;
-    color: #374151;
+    color: #1a1a1a;
     margin-bottom: 0.5rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -48,22 +50,25 @@ const goslotRegisterStyles = `
   .goslot-input {
     width: 100%;
     padding: 0.875rem 1rem;
-    border: 1px solid #d1d5db;
+    border: 1px solid #e0e0e0;
     border-radius: 8px;
     font-size: 1rem;
-    color: #1f2937;
+    color: #1a1a1a;
     transition: all 0.2s;
-    background: white;
+    background: #ffffff;
   }
   .goslot-input:focus {
     outline: none;
-    border-color: #2E7D32;
-    background: white;
-    box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+    border-color: #FF5722;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(255, 87, 34, 0.15);
+  }
+  .goslot-input::placeholder {
+    color: #999;
   }
   .goslot-btn-green {
     width: 100%;
-    background: #2E7D32;
+    background: linear-gradient(135deg, #FF5722 0%, #FF8A65 100%);
     color: white;
     font-weight: 600;
     padding: 0.875rem;
@@ -72,21 +77,21 @@ const goslotRegisterStyles = `
     cursor: pointer;
     transition: all 0.2s;
     font-size: 1rem;
-    box-shadow: 0 4px 6px -1px rgba(46, 125, 50, 0.2);
+    box-shadow: 0 4px 15px rgba(255, 87, 34, 0.3);
   }
   .goslot-btn-green:hover {
-    background: #1B5E20;
+    background: linear-gradient(135deg, #E64A19 0%, #FF5722 100%);
     transform: translateY(-1px);
-    box-shadow: 0 6px 8px -1px rgba(46, 125, 50, 0.3);
+    box-shadow: 0 6px 20px rgba(255, 87, 34, 0.4);
   }
   .goslot-btn-google {
     width: 100%;
-    background: white;
-    color: #374151;
+    background: #ffffff;
+    color: #1a1a1a;
     font-weight: 600;
     padding: 0.875rem;
     border-radius: 9999px;
-    border: 1px solid #e5e7eb;
+    border: 1px solid #e0e0e0;
     cursor: pointer;
     transition: all 0.2s;
     font-size: 1rem;
@@ -96,14 +101,14 @@ const goslotRegisterStyles = `
     gap: 0.5rem;
   }
   .goslot-btn-google:hover {
-    background: #f9fafb;
-    border-color: #d1d5db;
+    background: #f9f9f9;
+    border-color: #ccc;
   }
   .goslot-divider {
     display: flex;
     align-items: center;
     text-align: center;
-    color: #6b7280;
+    color: #999;
     font-size: 0.75rem;
     font-weight: 600;
     margin: 1.5rem 0;
@@ -111,7 +116,7 @@ const goslotRegisterStyles = `
   .goslot-divider::before, .goslot-divider::after {
     content: '';
     flex: 1;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e0e0e0;
   }
   .goslot-divider::before {
     margin-right: 1em;
@@ -120,18 +125,21 @@ const goslotRegisterStyles = `
     margin-left: 1em;
   }
   
-  /* Overrides for global white text in index.css */
+  /* Overrides for white login theme */
   .goslot-login-bg h1, .goslot-login-bg h2, .goslot-login-bg h3, .goslot-login-bg h4 {
-    color: #1f2937 !important;
+    color: #1a1a1a !important;
   }
   .goslot-login-bg p, .goslot-login-bg span, .goslot-login-bg div, .goslot-login-bg label, .goslot-login-bg a {
-    color: #1f2937 !important;
+    color: #1a1a1a !important;
   }
   .goslot-login-bg .text-muted, .goslot-login-bg p.text-muted {
-    color: #6b7280 !important;
+    color: #777777 !important;
   }
   .goslot-login-bg .text-dark {
-    color: #1f2937 !important;
+    color: #1a1a1a !important;
+  }
+  .goslot-login-bg .border-top {
+    border-color: #e0e0e0 !important;
   }
   
   /* Strength bar styles for register page */
@@ -160,7 +168,7 @@ export default function Register() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  useSEO({ title: 'Create Account - AUREUM', description: 'Join the Aureum Ecosystem' });
+  useSEO({ title: 'Create Account - ToastKart', description: 'Join the ToastKart Ecosystem' });
 
   // Calculate password strength
   const getPasswordStrength = (pass) => {
@@ -175,7 +183,7 @@ export default function Register() {
     if (score <= 2) return { score: 25, label: 'Weak', color: '#ef4444' };
     if (score === 3) return { score: 55, label: 'Moderate', color: '#f59e0b' };
     if (score === 4) return { score: 80, label: 'Strong', color: '#10b981' };
-    return { score: 100, label: 'Exceptional', color: '#2E7D32' };
+    return { score: 100, label: 'Exceptional', color: '#FF5722' };
   };
 
   const strength = getPasswordStrength(password);
@@ -201,16 +209,13 @@ export default function Register() {
       {/* Top Navigation */}
       <nav className="goslot-nav container-xl mx-auto">
         <div className="d-flex align-items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-          <ShoppingBag size={24} style={{ color: '#2E7D32', fill: '#2E7D32' }} />
-          <span className="fs-5 fw-bold text-dark" style={{ letterSpacing: '-0.5px' }}>AUREUM</span>
+          <ToastKartLogo width={160} />
         </div>
         
         <div className="goslot-nav-links">
-          <a href="#" className="text-decoration-none text-dark">Home</a>
-          <a href="#" className="text-decoration-none text-dark">Features</a>
-          <a href="#" className="text-decoration-none text-dark">Pricing</a>
-          <a href="#" className="text-decoration-none text-dark">Themes</a>
-          <a href="#" className="text-decoration-none text-dark">Contact</a>
+          <a href="/" className="text-decoration-none text-dark">Home</a>
+          <a href="/#features" className="text-decoration-none text-dark">Features</a>
+          <a href="/#about" className="text-decoration-none text-dark">About</a>
         </div>
         
         <button className="goslot-btn-green" style={{ width: 'auto', padding: '0.5rem 1.5rem' }}>
@@ -222,7 +227,7 @@ export default function Register() {
         <div className="goslot-login-card">
           <div className="text-center mb-4 pb-2">
             <h1 className="fw-bold text-dark mb-2 fs-3" style={{ letterSpacing: '-0.5px' }}>Create Your Account</h1>
-            <p className="text-muted fs-6 mb-0">Join the AUREUM Ecosystem</p>
+            <p className="text-muted fs-6 mb-0">Join the ToastKart Ecosystem</p>
           </div>
 
           {error && (
@@ -320,7 +325,7 @@ export default function Register() {
 
             <div className="text-center mt-4 pt-3 border-top">
               <span className="text-muted fs-7">Already have an account? </span>
-              <NavLink to="/login" className="text-decoration-none fw-bold" style={{ color: '#2E7D32' }}>
+              <NavLink to="/login" className="text-decoration-none fw-bold" style={{ color: '#FF5722' }}>
                 Sign In Here
               </NavLink>
             </div>

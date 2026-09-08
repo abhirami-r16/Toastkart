@@ -91,6 +91,9 @@ const goslotStyles = `
     padding-bottom: 100px;
     position: relative;
     overflow: hidden;
+    width: 100vw;
+    left: 50%;
+    transform: translateX(-50%);
   }
   .hero-blob {
     position: absolute;
@@ -128,7 +131,7 @@ const goslotStyles = `
     box-shadow: 0 12px 32px rgba(31, 41, 55, 0.1);
   }
   .goslot-header {
-    background: rgba(248, 250, 247, 0.85);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--line);
   }

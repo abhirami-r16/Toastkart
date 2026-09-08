@@ -2464,8 +2464,24 @@ export default function StoreOwnerDashboard() {
                             <strong className="fs-7" style={{ color: "#202223" }}>{activeStore.currency || "USD ($)"}</strong>
                           </div>
                           <div className="col-6 col-md-3">
-                            <span className="fs-8 d-block mb-1" style={{ color: "#6d7175" }}>Support Contact</span>
-                            <strong className="fs-7 d-block text-break" style={{ color: "#202223", wordBreak: "break-all" }}>{activeStore.email || "Not Provided"}</strong>
+                            <span className="fs-8 d-block mb-1" style={{ color: "#6d7175" }}>Support Email</span>
+                            <strong className="fs-7 d-block text-break" style={{ color: "#202223", wordBreak: "break-all" }}>
+                              {(() => {
+                                const storeEmail = activeStore?.email;
+                                if (storeEmail && storeEmail !== "null" && storeEmail !== "") return storeEmail;
+                                
+                                const userEmail = user?.email || user?.user?.email;
+                                if (userEmail && userEmail !== "null" && userEmail !== "") return userEmail;
+                                
+                                try {
+                                  const lsUser = JSON.parse(localStorage.getItem('toastkart_user') || '{}');
+                                  if (lsUser?.email && lsUser.email !== "null" && lsUser.email !== "") return lsUser.email;
+                                  if (lsUser?.user?.email && lsUser.user.email !== "null" && lsUser.user.email !== "") return lsUser.user.email;
+                                } catch(e) {}
+                                
+                                return "Not Provided";
+                              })()}
+                            </strong>
                           </div>
                         </div>
 

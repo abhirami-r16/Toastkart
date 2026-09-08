@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 $usage = <<<EOF
-ShopNest — Password Reset Utility
+ToastKart — Password Reset Utility
 Usage:
   php reset_password.php <EMAIL> [NEW_PASSWORD]
   php reset_password.php --list

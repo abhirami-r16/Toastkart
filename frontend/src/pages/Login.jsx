@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import useSEO from '../hooks/useSEO';
-import ToastKartSquareLogo from '../components/ToastKartSquareLogo';
+import ToastKartLogo from '../components/ToastKartLogo';
 
 const goslotLoginStyles = `
   .goslot-login-bg {
@@ -206,12 +206,18 @@ export default function Login() {
       {/* Top Navigation */}
       <nav className="goslot-nav container-xl mx-auto">
         <div className="d-flex align-items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-          <ToastKartSquareLogo width={80} height={80} />
+          <ToastKartLogo width={160} />
         </div>
         
         <div className="goslot-nav-links">
-          {/* Nav links removed as requested */}
+          <a href="/" className="text-decoration-none text-dark">Home</a>
+          <a href="/#features" className="text-decoration-none text-dark">Features</a>
+          <a href="/#about" className="text-decoration-none text-dark">About</a>
         </div>
+        
+        <button onClick={() => navigate('/register')} className="goslot-btn-green" style={{ width: 'auto', padding: '0.5rem 1.5rem' }}>
+          Get Started
+        </button>
       </nav>
 
       <div className="d-flex align-items-center justify-content-center px-3">
