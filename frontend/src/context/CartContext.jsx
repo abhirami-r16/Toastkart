@@ -8,7 +8,7 @@ export const CartProvider = ({ children }) => {
   const { activeStore } = useStore();
   const [cartItems, setCartItems] = useState(() => {
     try {
-      const saved = localStorage.getItem('shopnest_cart_items');
+      const saved = localStorage.getItem('toastkart_cart_items');
       if (!saved) return [];
       const parsed = JSON.parse(saved);
       if (!Array.isArray(parsed)) return [];
@@ -32,7 +32,7 @@ export const CartProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem('shopnest_cart_items', JSON.stringify(cartItems));
+    localStorage.setItem('toastkart_cart_items', JSON.stringify(cartItems));
   }, [cartItems]);
 
   const addToCart = (product, quantity = 1) => {

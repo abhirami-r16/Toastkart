@@ -2,11 +2,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&display=swap');
 
 :root {
-  --shopify-primary: #008060;
-  --shopify-primary-hover: #006e52;
-  --shopify-primary-dark: #004d3a;
-  --shopify-primary-light: #f0fdf4;
-  --shopify-accent: #10b981;
+  --shopify-primary: #FF5722;
+  --shopify-primary-hover: #E64A19;
+  --shopify-primary-dark: #BF360C;
+  --shopify-primary-light: #FBE9E7;
+  --shopify-accent: #FF8A65;
   --shopify-dark: #0f172a;
   --shopify-slate: #1e293b;
   --shopify-bg: #f4f6f8;
@@ -56,27 +56,27 @@ body {
 
 /* AUREUM Black & Gold Theme Utilities */
 .gold-gradient-text {
-  background: linear-gradient(135deg, #f3d675 0%, #d4af37 50%, #b8860b 100%);
+  background: linear-gradient(135deg, #FF8A65 0%, #FF5722 50%, #E64A19 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .home-nav-link {
-  color: #f3d675 !important;
+  color: #FF8A65 !important;
   font-weight: 600 !important;
   text-decoration: none !important;
   transition: all 0.2s ease !important;
 }
 
 .home-nav-link:hover {
-  color: #d4af37 !important;
+  color: #FF5722 !important;
   text-shadow: 0 0 10px rgba(243, 214, 117, 0.3) !important;
 }
 
 .text-warning,
 .gold-text,
 .text-gold {
-  color: #f3d675 !important;
+  color: #FF8A65 !important;
 }
 
 .border-gold-subtle {
@@ -84,10 +84,10 @@ body {
 }
 
 .btn-gold-primary {
-  background: linear-gradient(135deg, #f3d675 0%, #d4af37 50%, #b8860b 100%) !important;
+  background: linear-gradient(135deg, #FF8A65 0%, #FF5722 50%, #E64A19 100%) !important;
   color: #050505 !important;
   font-weight: 700 !important;
-  border: 1px solid #f3d675 !important;
+  border: 1px solid #FF8A65 !important;
   box-shadow: 0 0 20px rgba(212, 175, 55, 0.4) !important;
 }
 
@@ -114,7 +114,7 @@ body {
 
 .gold-badge-emerald {
   background: rgba(16, 185, 129, 0.15) !important;
-  color: #10b981 !important;
+  color: #FF8A65 !important;
   border-radius: 50px !important;
   padding: 0.25rem 0.65rem !important;
   font-size: 0.75rem !important;
@@ -150,7 +150,7 @@ body {
 
 /* Home Page Luxury Styling */
 .home-announcement-bar {
-  background: linear-gradient(90deg, #8a6d1f 0%, #d4af37 50%, #8a6d1f 100%) !important;
+  background: linear-gradient(90deg, #BF360C 0%, #FF5722 50%, #BF360C 100%) !important;
   color: #050505 !important;
   font-size: 0.75rem !important;
   font-weight: 700 !important;
@@ -159,7 +159,7 @@ body {
 }
 
 .home-nav-link {
-  color: #c8bf9e !important;
+  color: #FFCCBC !important;
   text-decoration: none !important;
   font-size: 0.88rem !important;
   font-weight: 500 !important;
@@ -167,15 +167,15 @@ body {
 }
 
 .home-nav-link:hover {
-  color: #f3d675 !important;
+  color: #FF8A65 !important;
 }
 
 .btn-gold-pill {
-  background: linear-gradient(135deg, #f3d675 0%, #d4af37 50%, #b8860b 100%) !important;
+  background: linear-gradient(135deg, #FF8A65 0%, #FF5722 50%, #E64A19 100%) !important;
   color: #050505 !important;
   font-weight: 700 !important;
   border-radius: 50px !important;
-  border: 1px solid #f3d675 !important;
+  border: 1px solid #FF8A65 !important;
   padding: 0.6rem 1.4rem !important;
   box-shadow: 0 0 20px rgba(212, 175, 55, 0.4) !important;
   transition: all 0.2s ease !important;
@@ -206,8 +206,8 @@ body {
 
 .btn-outline-gold-pill:hover {
   background: rgba(212, 175, 55, 0.15) !important;
-  border-color: #d4af37 !important;
-  color: #f3d675 !important;
+  border-color: #FF5722 !important;
+  color: #FF8A65 !important;
 }
 
 .home-card-gold {
@@ -219,7 +219,7 @@ body {
 }
 
 .home-card-gold:hover {
-  border-color: #d4af37 !important;
+  border-color: #FF5722 !important;
   box-shadow: 0 0 25px rgba(212, 175, 55, 0.2) !important;
   transform: translateY(-3px) !important;
 }
@@ -345,9 +345,9 @@ body {
 }
 
 .merchant-tab-pill.active {
-  background: linear-gradient(135deg, #008060 0%, #005a43 100%);
+  background: linear-gradient(135deg, #FF5722 0%, #005a43 100%);
   color: #ffffff !important;
-  border-color: #004d3a;
+  border-color: #BF360C;
   box-shadow: 0 4px 14px rgba(0, 128, 96, 0.35);
 }
 
@@ -400,7 +400,7 @@ body {
 
 /* Buttons */
 .btn-shopify {
-  background: linear-gradient(180deg, #008060 0%, #007054 100%);
+  background: linear-gradient(180deg, #FF5722 0%, #007054 100%);
   color: #ffffff !important;
   font-weight: 600;
   font-size: 0.88rem;
@@ -417,7 +417,7 @@ body {
 }
 
 .btn-shopify:hover, .btn-shopify:focus {
-  background: linear-gradient(180deg, #006e52 0%, #005a43 100%);
+  background: linear-gradient(180deg, #E64A19 0%, #005a43 100%);
   transform: translateY(-1px);
   box-shadow: 0 6px 16px rgba(0, 128, 96, 0.35);
 }
@@ -704,7 +704,7 @@ body {
   width: 220px;
   min-width: 220px;
   background: #050505;
-  color: #8a7a4d;
+  color: #FFAB91;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -727,19 +727,19 @@ body {
   width: 34px;
   height: 34px;
   background: #0f0e0c;
-  border: 1px solid #d4af37;
+  border: 1px solid #FF5722;
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #d4af37;
+  color: #FF5722;
   font-weight: 800;
   font-size: 1rem;
   box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
 }
 
 .brand-title {
-  color: #f3d675;
+  color: #FF8A65;
   font-weight: 800;
   font-size: 0.95rem;
   letter-spacing: 0.15em;
@@ -760,7 +760,7 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 0.7rem 0.9rem;
-  color: #d4af37;
+  color: #FF5722;
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 600;
@@ -775,26 +775,26 @@ body {
 }
 
 .sidebar-link:hover {
-  color: #f3d675;
+  color: #FF8A65;
   background-color: rgba(212, 175, 55, 0.12);
 }
 
 .sidebar-link:hover svg {
-  color: #f3d675 !important;
-  stroke: #f3d675 !important;
+  color: #FF8A65 !important;
+  stroke: #FF8A65 !important;
 }
 
 .sidebar-link.active {
   background-color: rgba(212, 175, 55, 0.18);
-  color: #f3d675;
+  color: #FF8A65;
   font-weight: 700;
-  border-left: 3px solid #f3d675;
+  border-left: 3px solid #FF8A65;
 }
 
 .sidebar-link.active .sidebar-icon,
 .sidebar-link.active svg {
-  color: #f3d675 !important;
-  stroke: #f3d675 !important;
+  color: #FF8A65 !important;
+  stroke: #FF8A65 !important;
 }
 
 .sidebar-link-content {
@@ -809,7 +809,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #d4af37;
+  color: #FF5722;
 }
 
 .sidebar-submenu {
@@ -822,7 +822,7 @@ body {
 }
 
 .submenu-link {
-  color: #8a7a4d;
+  color: #FFAB91;
   text-decoration: none;
   font-size: 0.84rem;
   padding: 0.4rem 0.6rem;
@@ -832,7 +832,7 @@ body {
 }
 
 .submenu-link:hover, .submenu-link.active {
-  color: #f3d675;
+  color: #FF8A65;
   background-color: rgba(212, 175, 55, 0.1);
 }
 
@@ -1656,7 +1656,7 @@ body {
 
 .auth-role-card.active {
   background: linear-gradient(135deg, rgba(35, 29, 17, 0.95) 0%, rgba(22, 19, 13, 0.95) 100%);
-  border-color: #f3d675;
+  border-color: #FF8A65;
   box-shadow: 0 0 20px rgba(212, 175, 55, 0.25), inset 0 0 15px rgba(243, 214, 117, 0.1);
   transform: translateY(-2px);
 }
@@ -1669,12 +1669,12 @@ body {
   align-items: center;
   justify-content: center;
   background: rgba(212, 175, 55, 0.12);
-  color: #f3d675;
+  color: #FF8A65;
   transition: all 0.25s ease;
 }
 
 .auth-role-card.active .role-icon-box {
-  background: linear-gradient(135deg, #f3d675 0%, #d4af37 100%);
+  background: linear-gradient(135deg, #FF8A65 0%, #FF5722 100%);
   color: #050505;
   box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
 }
@@ -1691,8 +1691,8 @@ body {
 }
 
 .auth-role-card.active .auth-role-check {
-  background: #f3d675;
-  border-color: #f3d675;
+  background: #FF8A65;
+  border-color: #FF8A65;
   color: #050505;
 }
 
@@ -1706,7 +1706,7 @@ body {
 .auth-input-icon {
   position: absolute;
   left: 14px;
-  color: #d4af37;
+  color: #FF5722;
   pointer-events: none;
   transition: color 0.2s ease;
   z-index: 5;
@@ -1725,13 +1725,13 @@ body {
 
 .auth-input:focus {
   background: rgba(22, 19, 14, 0.95) !important;
-  border-color: #f3d675 !important;
+  border-color: #FF8A65 !important;
   box-shadow: 0 0 18px rgba(212, 175, 55, 0.25) !important;
   outline: none !important;
 }
 
 .auth-input-wrapper:focus-within .auth-input-icon {
-  color: #f3d675;
+  color: #FF8A65;
   filter: drop-shadow(0 0 6px rgba(243, 214, 117, 0.6));
 }
 
@@ -1751,7 +1751,7 @@ body {
 }
 
 .auth-input-toggle:hover {
-  color: #f3d675;
+  color: #FF8A65;
 }
 
 /* Password Strength Indicator */
@@ -1780,7 +1780,7 @@ body {
 .auth-feature-badge {
   background: rgba(212, 175, 55, 0.1);
   border: 1px solid rgba(212, 175, 55, 0.3);
-  color: #f3d675;
+  color: #FF8A65;
   padding: 0.4rem 1rem;
   border-radius: 50px;
   font-size: 0.8rem;
@@ -1814,12 +1814,12 @@ body {
 }
 
 .gold-shimmer-btn {
-  background: linear-gradient(135deg, #f3d675 0%, #d4af37 40%, #f6e69f 60%, #b8860b 100%) !important;
+  background: linear-gradient(135deg, #FF8A65 0%, #FF5722 40%, #f6e69f 60%, #E64A19 100%) !important;
   background-size: 200% 100% !important;
   color: #040404 !important;
   font-weight: 800 !important;
   border-radius: 14px !important;
-  border: 1px solid #f3d675 !important;
+  border: 1px solid #FF8A65 !important;
   box-shadow: 0 10px 25px rgba(212, 175, 55, 0.35) !important;
   transition: all 0.3s ease !important;
 }
@@ -1941,3 +1941,16 @@ body {
   }
 }
 
+@keyframes pan-image {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(-5%, -5%) scale(1.05);
+  }
+}
+
+.force-white-text {
+  color: #ffffff !important;
+  text-shadow: none !important;
+}

@@ -15,7 +15,7 @@ use App\Http\Controllers\UserController;
 
 // Public Health Check
 Route::get('/health', function () {
-    return response()->json(['status' => 'ok', 'app' => 'ShopNest API']);
+    return response()->json(['status' => 'ok', 'app' => 'ToastKart API']);
 });
 
 // Authentication Routes

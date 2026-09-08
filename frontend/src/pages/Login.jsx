@@ -6,7 +6,7 @@ import ToastKartSquareLogo from '../components/ToastKartSquareLogo';
 
 const goslotLoginStyles = `
   .goslot-login-bg {
-    background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+    background: #ffffff;
     min-height: 100vh;
     font-family: system-ui, -apple-system, sans-serif;
   }
@@ -24,23 +24,24 @@ const goslotLoginStyles = `
       display: flex;
       gap: 2rem;
       font-weight: 500;
-      color: #1f2937;
+      color: #1a1a1a;
     }
   }
   .goslot-login-card {
-    background: white;
+    background: #ffffff;
     border-radius: 24px;
     padding: 3rem;
     width: 100%;
     max-width: 480px;
-    box-shadow: 0 20px 40px -15px rgba(0,0,0,0.05);
+    box-shadow: 0 20px 40px -15px rgba(0,0,0,0.08);
+    border: 1px solid #f0f0f0;
     margin: 2rem auto;
   }
   .goslot-label {
     display: block;
     font-size: 0.75rem;
     font-weight: 700;
-    color: #374151;
+    color: #1a1a1a;
     margin-bottom: 0.5rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -48,22 +49,25 @@ const goslotLoginStyles = `
   .goslot-input {
     width: 100%;
     padding: 0.875rem 1rem;
-    border: 1px solid #d1d5db;
+    border: 1px solid #e0e0e0;
     border-radius: 8px;
     font-size: 1rem;
-    color: #1f2937;
+    color: #1a1a1a;
     transition: all 0.2s;
-    background: white;
+    background: #ffffff;
   }
   .goslot-input:focus {
     outline: none;
-    border-color: #2E7D32;
-    background: white;
-    box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+    border-color: #FF5722;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(255, 87, 34, 0.15);
+  }
+  .goslot-input::placeholder {
+    color: #999;
   }
   .goslot-btn-green {
     width: 100%;
-    background: #2E7D32;
+    background: linear-gradient(135deg, #FF5722 0%, #FF8A65 100%);
     color: white;
     font-weight: 600;
     padding: 0.875rem;
@@ -72,21 +76,21 @@ const goslotLoginStyles = `
     cursor: pointer;
     transition: all 0.2s;
     font-size: 1rem;
-    box-shadow: 0 4px 6px -1px rgba(46, 125, 50, 0.2);
+    box-shadow: 0 4px 15px rgba(255, 87, 34, 0.3);
   }
   .goslot-btn-green:hover {
-    background: #1B5E20;
+    background: linear-gradient(135deg, #E64A19 0%, #FF5722 100%);
     transform: translateY(-1px);
-    box-shadow: 0 6px 8px -1px rgba(46, 125, 50, 0.3);
+    box-shadow: 0 6px 20px rgba(255, 87, 34, 0.4);
   }
   .goslot-btn-google {
     width: 100%;
-    background: white;
-    color: #374151;
+    background: #ffffff;
+    color: #1a1a1a;
     font-weight: 600;
     padding: 0.875rem;
     border-radius: 9999px;
-    border: 1px solid #e5e7eb;
+    border: 1px solid #e0e0e0;
     cursor: pointer;
     transition: all 0.2s;
     font-size: 1rem;
@@ -96,14 +100,14 @@ const goslotLoginStyles = `
     gap: 0.5rem;
   }
   .goslot-btn-google:hover {
-    background: #f9fafb;
-    border-color: #d1d5db;
+    background: #f9f9f9;
+    border-color: #ccc;
   }
   .goslot-divider {
     display: flex;
     align-items: center;
     text-align: center;
-    color: #6b7280;
+    color: #999;
     font-size: 0.75rem;
     font-weight: 600;
     margin: 1.5rem 0;
@@ -111,7 +115,7 @@ const goslotLoginStyles = `
   .goslot-divider::before, .goslot-divider::after {
     content: '';
     flex: 1;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e0e0e0;
   }
   .goslot-divider::before {
     margin-right: 1em;
@@ -120,18 +124,21 @@ const goslotLoginStyles = `
     margin-left: 1em;
   }
   
-  /* Overrides for global white text in index.css */
+  /* Overrides for white login theme */
   .goslot-login-bg h1, .goslot-login-bg h2, .goslot-login-bg h3, .goslot-login-bg h4 {
-    color: #1f2937 !important;
+    color: #1a1a1a !important;
   }
   .goslot-login-bg p, .goslot-login-bg span, .goslot-login-bg div, .goslot-login-bg label, .goslot-login-bg a {
-    color: #1f2937 !important;
+    color: #1a1a1a !important;
   }
   .goslot-login-bg .text-muted, .goslot-login-bg p.text-muted {
-    color: #6b7280 !important;
+    color: #777777 !important;
   }
   .goslot-login-bg .text-dark {
-    color: #1f2937 !important;
+    color: #1a1a1a !important;
+  }
+  .goslot-login-bg .border-top {
+    border-color: #e0e0e0 !important;
   }
   
   /* Mobile Responsiveness */
@@ -247,10 +254,10 @@ export default function Login() {
 
             <div className="d-flex align-items-center justify-content-between mb-4">
               <label className="d-flex align-items-center gap-2 cursor-pointer text-muted fs-7">
-                <input type="checkbox" className="form-check-input mt-0" style={{ cursor: 'pointer', accentColor: '#2E7D32' }} />
+                <input type="checkbox" className="form-check-input mt-0" style={{ cursor: 'pointer', accentColor: '#FF5722' }} />
                 <span>Keep me logged in</span>
               </label>
-              <a href="#" className="text-decoration-none fs-7 fw-semibold" style={{ color: '#2E7D32' }}>
+              <a href="#" className="text-decoration-none fs-7 fw-semibold" style={{ color: '#FF5722' }}>
                 Forgot password?
               </a>
             </div>
@@ -277,7 +284,7 @@ export default function Login() {
             
             <div className="text-center mt-4 pt-3 border-top">
               <span className="text-muted fs-7">Don't have an account? </span>
-              <NavLink to="/register" className="text-decoration-none fw-bold" style={{ color: '#2E7D32' }}>
+              <NavLink to="/register" className="text-decoration-none fw-bold" style={{ color: '#FF5722' }}>
                 Register here
               </NavLink>
             </div>

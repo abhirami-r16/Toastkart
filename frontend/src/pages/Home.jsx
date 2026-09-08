@@ -8,16 +8,16 @@ import {
 
 const goslotStyles = `
   .goslot-theme {
-    --primary: #2E7D32;
-    --primary-dark: #1B5E20;
-    --secondary: #43A047;
-    --accent: #FFB300;
-    --bg: #F8FAF7;
-    --dark: #1F2937;
+    --primary: #FF5722;
+    --primary-dark: #E64A19;
+    --secondary: #FF8A65;
+    --accent: #1C2841;
+    --bg: #FAFAFA;
+    --dark: #1C2841;
     --white: #FFFFFF;
-    --ink: #16241A;
-    --muted: #5B6B60;
-    --line: rgba(31, 41, 55, 0.08);
+    --ink: #111827;
+    --muted: #4B5563;
+    --line: rgba(28, 40, 65, 0.08);
     background: var(--bg);
     color: var(--ink);
     font-family: system-ui, -apple-system, sans-serif;
@@ -57,11 +57,11 @@ const goslotStyles = `
   .goslot-btn-primary {
     background: linear-gradient(135deg, var(--primary), var(--secondary));
     color: var(--white);
-    box-shadow: 0 8px 24px rgba(46, 125, 50, 0.28);
+    box-shadow: 0 8px 24px rgba(255, 87, 34, 0.28);
   }
   .goslot-btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 14px 32px rgba(46, 125, 50, 0.36);
+    box-shadow: 0 14px 32px rgba(255, 87, 34, 0.36);
     color: white;
   }
   .goslot-btn-outline {
@@ -81,7 +81,7 @@ const goslotStyles = `
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--primary);
-    background: rgba(46, 125, 50, 0.08);
+    background: rgba(255, 87, 34, 0.08);
     padding: 6px 14px;
     border-radius: 999px;
     margin-bottom: 16px;
@@ -214,8 +214,6 @@ export default function Home() {
             <a href="#hero" className="goslot-nav-link">Home</a>
             <a href="#features" className="goslot-nav-link">Features</a>
             <a href="#about" className="goslot-nav-link">About</a>
-            <a href="#stores" className="goslot-nav-link">Stores</a>
-            <a href="#pricing" className="goslot-nav-link">Pricing</a>
           </nav>
 
           <div className="d-flex align-items-center gap-3">
@@ -239,40 +237,108 @@ export default function Home() {
               <a href="#hero" className="goslot-nav-link fs-5" onClick={() => setIsMobileMenuOpen(false)}>Home</a>
               <a href="#features" className="goslot-nav-link fs-5" onClick={() => setIsMobileMenuOpen(false)}>Features</a>
               <a href="#about" className="goslot-nav-link fs-5" onClick={() => setIsMobileMenuOpen(false)}>About</a>
-              <a href="#stores" className="goslot-nav-link fs-5" onClick={() => setIsMobileMenuOpen(false)}>Stores</a>
-              <a href="#pricing" className="goslot-nav-link fs-5" onClick={() => setIsMobileMenuOpen(false)}>Pricing</a>
             </nav>
           </div>
         )}
       </header>
 
       {/* HERO */}
-      <section id="hero" className="goslot-hero">
+      <section id="hero" className="goslot-hero position-relative">
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: 0,
+          opacity: 1,
+          pointerEvents: 'none',
+          overflow: 'hidden'
+        }}>
+          <iframe
+            src="https://www.youtube.com/embed/01BZVNowenQ?autoplay=1&mute=1&loop=1&playlist=01BZVNowenQ&controls=0&showinfo=0&vq=hd1080"
+            style={{
+              width: '100vw',
+              height: '56.25vw',
+              minHeight: '100%',
+              minWidth: '177.77vh',
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              pointerEvents: 'none',
+              border: 'none'
+            }}
+            allow="autoplay; encrypted-media"
+            title="Background Video"
+          ></iframe>
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0,0,0,0.3)'
+          }}></div>
+        </div>
         <div className="hero-blob blob-1"></div>
         <div className="hero-blob blob-2"></div>
 
         <div className="container-xl position-relative z-10 text-center max-w-4xl mx-auto">
-          <div className="goslot-eyebrow">The Multi-Vendor SaaS Platform</div>
-          <h1 className="display-4 fw-bolder mb-4">
-            Build, Manage, and Scale Your <br />
-            <span style={{ color: "var(--primary)" }}>Multi-Merchant Marketplace</span>
+          <h1 className="display-4 fw-bolder mb-4 force-white-text">
+            Build Your Ecommerce Store <br />
+            With In 24 Hours
           </h1>
-          <p className="fs-5 mx-auto mb-5" style={{ maxWidth: 680 }}>
+          <p className="fs-5 mx-auto mb-5 force-white-text" style={{ maxWidth: 680 }}>
             ToastKart is the all-in-one platform for vendors to launch their stores and buyers to shop seamlessly. Manage orders, payouts, and catalogs from a central dashboard.
           </p>
-          <div className="d-flex flex-wrap align-items-center justify-content-center gap-3 mb-5">
-            <button onClick={() => navigate("/login")} className="goslot-btn goslot-btn-primary fs-6 px-5 py-3">
-              Explore Marketplace <ArrowRight size={18} />
-            </button>
-            <button onClick={() => navigate("/login")} className="goslot-btn goslot-btn-outline fs-6 px-5 py-3">
-              Become a Merchant
-            </button>
-          </div>
 
-          <div className="d-flex flex-wrap align-items-center justify-content-center gap-4 gap-md-5 fs-8 text-muted fw-semibold">
-            <div className="d-flex align-items-center gap-2"><ShieldCheck size={18} style={{ color: "var(--primary)" }} /> 100% Verified Vendors</div>
-            <div className="d-flex align-items-center gap-2"><Zap size={18} style={{ color: "var(--primary)" }} /> Instant Payouts</div>
-            <div className="d-flex align-items-center gap-2"><Store size={18} style={{ color: "var(--primary)" }} /> Custom Subdomains</div>
+        </div>
+      </section>
+
+      {/* FEATURES */}
+      {/* TEMPLATES */}
+      <section id="templates" className="py-5" style={{ backgroundColor: '#f8f9fc' }}>
+        <div className="container-xl">
+          <div className="text-center mb-5">
+            <div className="goslot-eyebrow">Stunning Templates</div>
+            <h2 className="fs-2 mb-3">Launch With Beautiful Themes</h2>
+            <p className="fs-6 text-muted mx-auto" style={{ maxWidth: 600 }}>Choose from our collection of premium, conversion-optimized themes tailored specifically for your industry.</p>
+          </div>
+          <div className="d-flex flex-column pt-4">
+            {[
+              { title: "Fashion Theme", url: "https://themewagon.github.io/eflyer/", img: null, desc: "Vibrant and modern aesthetic for apparel and boutiques." },
+              { title: "Beauty & Cosmetics", url: null, img: "/beauty-template.png", desc: "Elegant and clean layouts for skincare and makeup brands." },
+              { title: "Home & Living", url: "https://themewagon.github.io/aranoz/", img: null, desc: "Warm and inviting design for furniture and home decor stores." },
+              { title: "Jewelry & Luxury", url: null, img: "/jewelry-template.png", desc: "Premium, luxurious aesthetic for fine jewelry and accessories." }
+            ].map((t, i) => (
+              <div key={i} className={`row align-items-center mb-5 pb-4`}>
+                <div className={`col-12 col-lg-7 ${i % 2 !== 0 ? 'order-lg-2' : ''}`}>
+                  <div className="rounded-4 overflow-hidden shadow-lg border bg-white position-relative" style={{ height: '450px' }}>
+                    {t.url ? (
+                      <iframe
+                        src={t.url}
+                        title={t.title}
+                        style={{
+                          width: '1440px',
+                          height: '900px',
+                          transform: 'scale(0.5)',
+                          transformOrigin: 'top left',
+                          border: 'none',
+                          pointerEvents: 'none'
+                        }}
+                      />
+                    ) : (
+                      <img src={t.img} alt={t.title} className="w-100 h-100" style={{ objectFit: 'cover' }} />
+                    )}
+                  </div>
+                </div>
+                <div className={`col-12 col-lg-5 mt-4 mt-lg-0 ${i % 2 !== 0 ? 'order-lg-1 pe-lg-5' : 'ps-lg-5'}`}>
+                  <h3 className="display-5 fw-bold mb-3">{t.title}</h3>
+                  <p className="fs-5 text-muted mb-4">{t.desc}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -293,7 +359,7 @@ export default function Home() {
             ].map((f, i) => (
               <div key={i} className="col-12 col-md-6 col-lg-3">
                 <div className="goslot-card h-100 d-flex flex-column">
-                  <div className="d-inline-flex align-items-center justify-content-center rounded-3 mb-3" style={{ width: 48, height: 48, background: "rgba(46,125,50,0.1)", color: "var(--primary)" }}>
+                  <div className="d-inline-flex align-items-center justify-content-center rounded-3 mb-3" style={{ width: 48, height: 48, background: "rgba(255,87,34,0.1)", color: "var(--primary)" }}>
                     <f.icon size={24} />
                   </div>
                   <h3 className="fs-5 mb-2">{f.title}</h3>
@@ -323,7 +389,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="p-5 rounded-4 text-center mt-4" style={{ background: "linear-gradient(135deg, rgba(46,125,50,0.08), rgba(46,125,50,0.02))", border: "1px solid rgba(46,125,50,0.15)" }}>
+          <div className="p-5 rounded-4 text-center mt-4" style={{ background: "linear-gradient(135deg, rgba(255,87,34,0.08), rgba(255,87,34,0.02))", border: "1px solid rgba(255,87,34,0.15)" }}>
             <h3 className="fs-4 fw-bold mb-3" style={{ color: "var(--primary)" }}>Our Mission</h3>
             <p className="fs-5 mb-4 text-dark mx-auto" style={{ maxWidth: 700, lineHeight: 1.6 }}>
               Our mission is to empower entrepreneurs and businesses with simple technology that makes selling online easier.
@@ -335,110 +401,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* STORES */}
-      <section id="stores" className="py-5" style={{ background: "rgba(46,125,50,0.02)" }}>
-        <div className="container-xl">
-          <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
-            <div>
-              <div className="goslot-eyebrow">Featured Sellers</div>
-              <h2 className="fs-3 mb-0">Discover Top Merchant Stores</h2>
-            </div>
-            <button onClick={() => navigate("/login")} className="goslot-btn goslot-btn-outline py-2 px-4 fs-8">View All Stores →</button>
-          </div>
-          <div className="row g-4">
-            {[
-              { name: "Coastal Threads Store", owner: "Sarah Jenkins", category: "Fashion & Apparel", img: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=300" },
-              { name: "Aureum Boutique", owner: "Elena Rostova", category: "Watches & Jewelry", img: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=300" },
-              { name: "Margas Store", owner: "Marcus Vance", category: "Bespoke Outerwear", img: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=300" },
-              { name: "Sheikh Home Decor", owner: "Fatima Sheikh", category: "Luxury Furniture", img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=300" }
-            ].map((store, i) => (
-              <div key={i} className="col-12 col-md-6 col-lg-3">
-                <div className="goslot-card h-100 p-3">
-                  <div className="d-flex align-items-center gap-3 mb-3">
-                    <img src={store.img} alt={store.name} className="rounded-circle object-cover shadow-sm border" style={{ width: 56, height: 56 }} />
-                    <div>
-                      <div className="fw-bolder text-dark fs-7 lh-sm">{store.name}</div>
-                      <div className="fs-8 text-muted">{store.category}</div>
-                    </div>
-                  </div>
-                  <div className="fs-8 text-muted mb-3 d-flex align-items-center gap-1">
-                    <CheckCircle size={14} className="text-success" /> Verified Owner: {store.owner}
-                  </div>
-                  <button onClick={() => navigate("/storefront")} className="btn btn-sm btn-light w-100 fs-8 fw-semibold border">Visit Store</button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
 
 
-      {/* PRICING */}
-      <section id="pricing" className="py-5" style={{ background: "rgba(46,125,50,0.02)" }}>
-        <div className="container-xl">
-          <div className="text-center mb-5">
-            <div className="goslot-eyebrow">ToastKart Pricing</div>
-            <h2 className="fs-2 mb-2">Simple, transparent pricing</h2>
-            <p>Free Trial: 14 Days</p>
-          </div>
-          <div className="row g-4 justify-content-center max-w-5xl mx-auto">
-            {/* Basic Plan */}
-            <div className="col-12 col-md-4">
-              <div className="goslot-card h-100">
-                <h3 className="fs-5 mb-1">Basic</h3>
-                <p className="fs-8 text-muted mb-3">For new merchants</p>
-                <div className="fs-2 fw-bolder mb-1">₹499<span className="fs-7 text-muted fw-normal">/month</span></div>
-                <div className="fs-7 text-success fw-semibold mb-4">₹4,999<span className="fs-8 text-muted fw-normal">/year</span></div>
-                <ul className="list-unstyled fs-7 text-muted space-y-3 mb-4">
-                  <li><Check size={16} className="text-success me-2" /> Online Store</li>
-                  <li><Check size={16} className="text-success me-2" /> ToastKart Subdomain</li>
-                  <li><Check size={16} className="text-success me-2" /> Up to 50 Products</li>
-                  <li><Check size={16} className="text-success me-2" /> Order Management</li>
-                  <li><Check size={16} className="text-success me-2" /> Payment Integration</li>
-                  <li><Check size={16} className="text-success me-2" /> WhatsApp Integration</li>
-                  <li><Check size={16} className="text-success me-2" /> Email Support</li>
-                </ul>
-                <button onClick={() => setShowRoleModal(true)} className="goslot-btn goslot-btn-outline w-100">Get Started</button>
-              </div>
-            </div>
-            {/* Growth Plan */}
-            <div className="col-12 col-md-4">
-              <div className="goslot-card h-100 border-success position-relative" style={{ borderWidth: 2, transform: "scale(1.02)" }}>
-                <span className="position-absolute top-0 start-50 translate-middle badge bg-success rounded-pill px-3 py-1">⭐ POPULAR</span>
-                <h3 className="fs-5 mb-1 text-success">Growth</h3>
-                <p className="fs-8 text-muted mb-3">For growing networks</p>
-                <div className="fs-2 fw-bolder mb-1">₹999<span className="fs-7 text-muted fw-normal">/month</span></div>
-                <div className="fs-7 text-success fw-semibold mb-4">₹9,999<span className="fs-8 text-muted fw-normal">/year</span></div>
-                <ul className="list-unstyled fs-7 text-muted space-y-3 mb-4">
-                  <li><Check size={16} className="text-success me-2" /> Everything in Basic</li>
-                  <li><Check size={16} className="text-success me-2" /> Custom Domain</li>
-                  <li><Check size={16} className="text-success me-2" /> Up to 500 Products</li>
-                  <li><Check size={16} className="text-success me-2" /> Advanced Analytics</li>
-                  <li><Check size={16} className="text-success me-2" /> Priority Support</li>
-                </ul>
-                <button onClick={() => setShowRoleModal(true)} className="goslot-btn goslot-btn-primary w-100">Start Free Trial</button>
-              </div>
-            </div>
-            {/* Pro Plan */}
-            <div className="col-12 col-md-4">
-              <div className="goslot-card h-100">
-                <h3 className="fs-5 mb-1">Pro</h3>
-                <p className="fs-8 text-muted mb-3">For massive scale</p>
-                <div className="fs-2 fw-bolder mb-1">₹1,999<span className="fs-7 text-muted fw-normal">/month</span></div>
-                <div className="fs-7 text-success fw-semibold mb-4">₹19,999<span className="fs-8 text-muted fw-normal">/year</span></div>
-                <ul className="list-unstyled fs-7 text-muted space-y-3 mb-4">
-                  <li><Check size={16} className="text-success me-2" /> Everything in Growth</li>
-                  <li><Check size={16} className="text-success me-2" /> Unlimited Products</li>
-                  <li><Check size={16} className="text-success me-2" /> Advanced Analytics</li>
-                  <li><Check size={16} className="text-success me-2" /> Priority Support</li>
-                </ul>
-                <button onClick={() => setShowRoleModal(true)} className="goslot-btn goslot-btn-outline w-100">Contact Sales</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+
 
       {/* FOOTER */}
       <footer className="py-4 mt-5 bg-white border-top">

@@ -12,10 +12,11 @@ import {
   CheckCircle2, Clock, Tag, Percent, RefreshCw, ShieldCheck, Heart, Printer,
   PlusCircle, Edit3, Globe, Copy, ExternalLink, CreditCard
 } from "lucide-react";
+import ToastKartLogo from "../components/ToastKartLogo";
 
-const GOLD = "#d4af37";
-const GOLD_LIGHT = "#f3d675";
-const GOLD_DEEP = "#8a6d1f";
+const GOLD = "#FF5722";
+const GOLD_LIGHT = "#FF8A65";
+const GOLD_DEEP = "#BF360C";
 
 const initialStoresData = [
   {
@@ -212,14 +213,15 @@ const emptyProductForm = { name: "", sku: "", price: "", compare_price: "", disc
 export default function StoreOwnerDashboard() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
+  
   const [active, setActive] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [chartFilter, setChartFilter] = useState("daily");
-  const currentUserId = user?.id ?? null;
+  const currentUserId = user?.id || parseInt(localStorage.getItem('toastkart_last_user_id')) || null;
   const currentOwnerEmail = String(user?.email || "").trim().toLowerCase();
 
   const matchesOwnerScope = (item, ownerId = currentUserId, ownerEmail = currentOwnerEmail, storeId = activeStore?.id) => {
-    const itemUserId = item?.user_id ?? item?.owner_id ?? item?.ownerId ?? null;
+    const itemUserId = item?.user_id || item?.owner_id || item?.ownerId || null;
     const itemOwnerEmail = String(item?.owner_email || item?.user_email || item?.email || "").trim().toLowerCase();
     const matchesUser = !ownerId || !itemUserId || String(itemUserId) === String(ownerId);
     const matchesEmail = !ownerEmail || !itemOwnerEmail || itemOwnerEmail === ownerEmail;
@@ -279,7 +281,7 @@ export default function StoreOwnerDashboard() {
       try {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) {
-          return parsed.filter((s) => s.user_id === currentUserId || (!s.user_id && currentUserId === 1));
+          return parsed;
         }
       } catch (e) { }
     }
@@ -302,6 +304,11 @@ export default function StoreOwnerDashboard() {
       localStorage.setItem("aureum_owner_stores", JSON.stringify(stores));
     }
   };
+
+  useEffect(() => {
+    persistOwnerStores(storesList);
+  }, [storesList]);
+
 
   const loadPersistedOwnerStores = () => {
     try {
@@ -336,7 +343,7 @@ export default function StoreOwnerDashboard() {
         // Let's ensure selectedStoreId updates to the real ID if it was pointing to the timestamp.
         if (String(selectedStoreId) === String(localStore.id)) {
            setSelectedStoreId(matchedBackendStore.id);
-           localStorage.setItem('shopnest_active_store_id', String(matchedBackendStore.id));
+           localStorage.setItem('toastkart_active_store_id', String(matchedBackendStore.id));
         }
       }
     });
@@ -396,6 +403,10 @@ export default function StoreOwnerDashboard() {
 
   const activeStore = ownerStores.find((s) => String(s.id) === String(selectedStoreId)) || ownerStores[0];
   const currencySymbol = activeStore?.currency ? (activeStore.currency.match(/\((.*?)\)/)?.[1] || '$') : '$';
+
+  const hasRealStore = useMemo(() => {
+    return storesList.some((s) => s.user_id === currentUserId || (!s.user_id && currentUserId === 1));
+  }, [storesList, currentUserId]);
 
   const ownerMeta = useMemo(() => ({
     user_id: currentUserId ?? null,
@@ -471,10 +482,10 @@ export default function StoreOwnerDashboard() {
     persistOwnerStores(storesList);
   }, [storesList, currentUserId]);
 
-  // Keep shopnest_active_store_id in sync so axios interceptor sends X-Store-Id header
+  // Keep toastkart_active_store_id in sync so axios interceptor sends X-Store-Id header
   useEffect(() => {
     if (activeStore?.id) {
-      localStorage.setItem('shopnest_active_store_id', String(activeStore.id));
+      localStorage.setItem('toastkart_active_store_id', String(activeStore.id));
     }
   }, [activeStore?.id]);
 
@@ -514,7 +525,7 @@ export default function StoreOwnerDashboard() {
             if (!selectedStoreId) {
               setSelectedStoreId(merged[0].id);
               // Persist the real DB store id for axios interceptor
-              localStorage.setItem('shopnest_active_store_id', String(merged[0].id));
+              localStorage.setItem('toastkart_active_store_id', String(merged[0].id));
             }
           }
         }
@@ -670,6 +681,9 @@ export default function StoreOwnerDashboard() {
   const [invoiceModalOrder, setInvoiceModalOrder] = useState(null);
   const [selectedCustomerModal, setSelectedCustomerModal] = useState(null);
 
+    // Inline Empty State Forms
+  const [showInlineCategoryForm, setShowInlineCategoryForm] = useState(false);
+  const [showInlineProductForm, setShowInlineProductForm] = useState(false);
   // Store Modals State & Forms
   const [showCreateStoreModal, setShowCreateStoreModal] = useState(false);
   const [showEditStoreModal, setShowEditStoreModal] = useState(false);
@@ -702,7 +716,7 @@ export default function StoreOwnerDashboard() {
     email: "support@mybrand.local",
     currency: "USD ($)",
     shippingFee: "$10.00",
-    seoDescription: "Multi-vendor store workspace on Aureum platform.",
+    seoDescription: "Multi-vendor store workspace on ToastKart platform.",
   });
   const [settingsSaved, setSettingsSaved] = useState(false);
 
@@ -777,7 +791,7 @@ export default function StoreOwnerDashboard() {
           _unsynced: false,
         };
         // Persist real store id so axios interceptor sends correct X-Store-Id
-        localStorage.setItem('shopnest_active_store_id', String(res.data.id));
+        localStorage.setItem('toastkart_active_store_id', String(res.data.id));
         savedToDb = true;
       }
     } catch (err) {
@@ -1327,10 +1341,7 @@ export default function StoreOwnerDashboard() {
         <div>
           {/* Brand Header */}
           <div className="d-flex align-items-center gap-2 p-2 mb-3 border-bottom" style={{ borderColor: "#dfe3e8" }}>
-            <div className="brand-icon-box d-flex align-items-center justify-content-center rounded-3" style={{ width: 34, height: 34, background: "#ffffff", color: "#202223", border: "1px solid #dfe3e8", fontWeight: 700, fontSize: 18 }}>
-              A
-            </div>
-            <span className="brand-title" style={{ color: "#202223", fontWeight: 800, fontSize: "0.95rem", letterSpacing: "0.15em" }}>AUREUM</span>
+            <ToastKartLogo width={160} height={32} />
           </div>
 
           {/* Role Title */}
@@ -1348,7 +1359,7 @@ export default function StoreOwnerDashboard() {
                   openCreateStoreModal();
                 } else {
                   setSelectedStoreId(e.target.value);
-                  localStorage.setItem('shopnest_active_store_id', e.target.value);
+                  localStorage.setItem('toastkart_active_store_id', e.target.value);
                 }
               }}
               className="form-select form-select-sm fw-bold fs-7 shadow-sm py-2"
@@ -1356,7 +1367,7 @@ export default function StoreOwnerDashboard() {
             >
               {ownerStores.map(store => (
                 <option key={store.id} value={store.id}>
-                  {store.name} (ID #{store.id})
+                  {store.name}
                 </option>
               ))}
               <option disabled>──────────</option>
@@ -1378,15 +1389,15 @@ export default function StoreOwnerDashboard() {
                   onClick={handleClick}
                   className={`sidebar-link d-flex align-items-center gap-3 p-2.5 rounded-3 border-0 transition-all ${isActive ? "active" : ""}`}
                   style={{
-                    background: isActive ? "rgba(0,127,95,0.1)" : "transparent",
-                    color: isActive ? "#007f5f" : "#454f5b",
+                    background: isActive ? "rgba(255,87,34,0.1)" : "transparent",
+                    color: isActive ? "#FF5722" : "#454f5b",
                     fontWeight: isActive ? "bold" : "600",
-                    borderLeft: isActive ? "3px solid #007f5f" : "3px solid transparent",
+                    borderLeft: isActive ? "3px solid #FF5722" : "3px solid transparent",
                     textAlign: "left"
                   }}
                 >
-                  <Icon size={18} style={{ color: isActive ? "#007f5f" : "#6d7175" }} />
-                  <span style={{ color: isActive ? "#007f5f" : "#454f5b" }}>{item.label}</span>
+                  <Icon size={18} style={{ color: isActive ? "#FF5722" : "#6d7175" }} />
+                  <span style={{ color: isActive ? "#FF5722" : "#454f5b" }}>{item.label}</span>
                 </button>
               );
             })}
@@ -1421,7 +1432,7 @@ export default function StoreOwnerDashboard() {
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-sm d-flex align-items-center gap-2 px-3 py-1.5 rounded-pill border fw-bold"
-              style={{ background: 'rgba(0,127,95,0.05)', borderColor: 'rgba(0,127,95,0.2)', color: '#007f5f', fontSize: '0.8rem' }}
+              style={{ background: 'rgba(255,87,34,0.05)', borderColor: 'rgba(255,87,34,0.2)', color: '#FF5722', fontSize: '0.8rem' }}
             >
               <ExternalLink size={14} /> View Store
             </a>
@@ -1457,28 +1468,28 @@ export default function StoreOwnerDashboard() {
                   <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", padding: "16px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
                     <div className="fs-8 mb-1" style={{ color: "#6d7175" }}>Total Revenue</div>
                     <div className="fs-5 font-bold" style={{ color: "#202223" }}>{totalRevenue}</div>
-                    <div className="fs-8 font-semibold mt-1" style={{ color: "#007f5f" }}>+12.4%</div>
+                    <div className="fs-8 font-semibold mt-1" style={{ color: "#FF5722" }}>+12.4%</div>
                   </div>
                 </div>
                 <div className="col-6 col-md-3 col-lg-2">
                   <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", padding: "16px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
                     <div className="fs-8 mb-1" style={{ color: "#6d7175" }}>Orders</div>
                     <div className="fs-5 font-bold" style={{ color: "#202223" }}>{totalOrdersCount}</div>
-                    <div className="fs-8 font-semibold mt-1" style={{ color: "#007f5f" }}>+6.1%</div>
+                    <div className="fs-8 font-semibold mt-1" style={{ color: "#FF5722" }}>+6.1%</div>
                   </div>
                 </div>
                 <div className="col-6 col-md-3 col-lg-2">
                   <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", padding: "16px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
                     <div className="fs-8 mb-1" style={{ color: "#6d7175" }}>Customers</div>
                     <div className="fs-5 font-bold" style={{ color: "#202223" }}>890</div>
-                    <div className="fs-8 font-semibold mt-1" style={{ color: "#007f5f" }}>+8.2%</div>
+                    <div className="fs-8 font-semibold mt-1" style={{ color: "#FF5722" }}>+8.2%</div>
                   </div>
                 </div>
                 <div className="col-6 col-md-3 col-lg-2">
                   <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", padding: "16px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
                     <div className="fs-8 mb-1" style={{ color: "#6d7175" }}>Products</div>
                     <div className="fs-5 font-bold" style={{ color: "#202223" }}>{productsList.length}</div>
-                    <div className="fs-8 font-semibold mt-1" style={{ color: "#007f5f" }}>Active</div>
+                    <div className="fs-8 font-semibold mt-1" style={{ color: "#FF5722" }}>Active</div>
                   </div>
                 </div>
                 <div className="col-6 col-md-3 col-lg-2">
@@ -1512,15 +1523,15 @@ export default function StoreOwnerDashboard() {
                       <AreaChart data={chartFilter === "daily" ? salesTrendDaily : salesTrendMonthly}>
                         <defs>
                           <linearGradient id="salesGrad" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="#008060" stopOpacity={0.2} />
-                            <stop offset="100%" stopColor="#008060" stopOpacity={0.0} />
+                            <stop offset="0%" stopColor="#FF5722" stopOpacity={0.2} />
+                            <stop offset="100%" stopColor="#FF5722" stopOpacity={0.0} />
                           </linearGradient>
                         </defs>
                         <CartesianGrid strokeDasharray="3 3" stroke="#e1e3e5" vertical={false} />
                         <XAxis dataKey="d" tick={{ fontSize: 11, fill: "#6d7175" }} axisLine={false} tickLine={false} />
                         <YAxis tick={{ fontSize: 11, fill: "#6d7175" }} axisLine={false} tickLine={false} />
                         <Tooltip contentStyle={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: 8, fontSize: 12, color: "#202223" }} />
-                        <Area type="monotone" dataKey="v" stroke="#008060" strokeWidth={2.5} fill="url(#salesGrad)" />
+                        <Area type="monotone" dataKey="v" stroke="#FF5722" strokeWidth={2.5} fill="url(#salesGrad)" />
                       </AreaChart>
                     </ResponsiveContainer>
                   </div>
@@ -1534,7 +1545,7 @@ export default function StoreOwnerDashboard() {
                         <XAxis type="number" hide />
                         <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fill: "#6d7175" }} axisLine={false} tickLine={false} width={90} />
                         <Tooltip contentStyle={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: 8, fontSize: 12, color: "#202223" }} />
-                        <Bar dataKey="stock" fill="#008060" radius={[0, 4, 4, 0]} barSize={14} />
+                        <Bar dataKey="stock" fill="#FF5722" radius={[0, 4, 4, 0]} barSize={14} />
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
@@ -1545,7 +1556,7 @@ export default function StoreOwnerDashboard() {
               <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", padding: "20px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
                 <div className="d-flex align-items-center justify-content-between mb-3">
                   <h3 className="fs-6 font-bold mb-0" style={{ color: "#202223" }}>Recent Orders</h3>
-                  <button className="btn btn-link fs-8 p-0 text-decoration-none fw-semibold" style={{ color: "#007f5f" }} onClick={() => setActive("orders")}>View All</button>
+                  <button className="btn btn-link fs-8 p-0 text-decoration-none fw-semibold" style={{ color: "#FF5722" }} onClick={() => setActive("orders")}>View All</button>
                 </div>
                 <div className="table-responsive">
                   <table className="table table-hover mb-0 align-middle border-0">
@@ -1575,8 +1586,8 @@ export default function StoreOwnerDashboard() {
                             <td className="border-0 fw-semibold" style={{ color: "#202223" }}>{o.total}</td>
                             <td className="border-0">
                               <span style={{
-                                background: o.status === "Delivered" ? "#aee9d1" : (o.status === "Shipped" ? "#b4e1fa" : "#fef08a"),
-                                color: o.status === "Delivered" ? "#007f5f" : (o.status === "Shipped" ? "#006c9c" : "#854d0e"),
+                                background: o.status === "Delivered" ? "#FFE0D0" : (o.status === "Shipped" ? "#b4e1fa" : "#fef08a"),
+                                color: o.status === "Delivered" ? "#FF5722" : (o.status === "Shipped" ? "#006c9c" : "#854d0e"),
                                 padding: "2px 8px",
                                 borderRadius: "12px",
                                 fontSize: "0.75rem",
@@ -1630,10 +1641,7 @@ export default function StoreOwnerDashboard() {
                     <table className="table table-hover mb-0 align-middle border-0">
                       <thead>
                         <tr className="fs-8 fw-semibold" style={{ color: "#6d7175", borderBottom: "1px solid #dfe3e8" }}>
-                          <th className="border-0 ps-4 py-3" style={{ width: 40 }}>
-                            <input type="checkbox" className="form-check-input" />
-                          </th>
-                          <th className="border-0 py-3">Product</th>
+                          <th className="border-0 ps-4 py-3">Product</th>
                           <th className="border-0 py-3">Color</th>
                           <th className="border-0 py-3">Size</th>
                           <th className="border-0 py-3">Price</th>
@@ -1646,10 +1654,7 @@ export default function StoreOwnerDashboard() {
                       <tbody>
                         {productsList.map((p) => (
                           <tr key={p.id} style={{ borderBottom: "1px solid #f1f2f4" }}>
-                            <td className="border-0 ps-4">
-                              <input type="checkbox" className="form-check-input" />
-                            </td>
-                            <td className="border-0 py-2">
+                            <td className="border-0 ps-4 py-2">
                               <div className="d-flex align-items-center gap-3">
                                 <div className="rounded overflow-hidden d-inline-block" style={{ width: 40, height: 40, border: "1px solid #dfe3e8", background: "#f1f2f4" }}>
                                   <img
@@ -1698,8 +1703,8 @@ export default function StoreOwnerDashboard() {
                             </td>
                             <td className="border-0">
                               <span style={{
-                                background: p.status === "In Stock" ? "#aee9d1" : "#e1e3e5",
-                                color: p.status === "In Stock" ? "#007f5f" : "#202223",
+                                background: p.status === "In Stock" ? "#FFE0D0" : "#e1e3e5",
+                                color: p.status === "In Stock" ? "#FF5722" : "#202223",
                                 padding: "2px 8px",
                                 borderRadius: "12px",
                                 fontSize: "0.75rem",
@@ -1741,8 +1746,8 @@ export default function StoreOwnerDashboard() {
             <div className="d-flex flex-column gap-3">
               <div className="d-flex align-items-center justify-content-between">
                 <div>
-                  <h2 className="fs-4 font-bold mb-0" style={{ color: "#f3d675" }}>Inventory Management</h2>
-                  <p className="fs-8 mb-0" style={{ color: "#d4af37" }}>Real-time stock maintenance and inventory tracking for store catalog items</p>
+                  <h2 className="fs-4 font-bold mb-0" style={{ color: "#FF8A65" }}>Inventory Management</h2>
+                  <p className="fs-8 mb-0" style={{ color: "#FF5722" }}>Real-time stock maintenance and inventory tracking for store catalog items</p>
                 </div>
                 <button onClick={openAddProductModal} className="btn btn-gold-primary btn-sm px-3 py-2 d-flex align-items-center gap-1">
                   <Plus size={16} /> Add Product
@@ -1791,7 +1796,7 @@ export default function StoreOwnerDashboard() {
                                 />
                               </div>
                             </td>
-                            <td className="fw-bold fs-7" style={{ color: "#f3d675" }}>
+                            <td className="fw-bold fs-7" style={{ color: "#FF8A65" }}>
                               {p.name}
                             </td>
                             <td className="fw-bold fs-7 text-warning">{p.price}</td>
@@ -1843,7 +1848,7 @@ export default function StoreOwnerDashboard() {
 
               {realOrders.length === 0 ? (
                 <div style={{ background: "#ffffff", border: "1px dashed #dfe3e8", borderRadius: "8px", padding: "40px", textAlign: "center", margin: "16px 0", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
-                  <div className="w-16 h-16 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style={{ background: "rgba(0,127,95,0.1)", color: "#007f5f" }}>
+                  <div className="w-16 h-16 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style={{ background: "rgba(255,87,34,0.1)", color: "#FF5722" }}>
                     <ShoppingCart size={34} />
                   </div>
                   <h2 className="fs-3 font-bold mb-2" style={{ color: "#202223" }}>No Store Orders Received Yet</h2>
@@ -1929,7 +1934,7 @@ export default function StoreOwnerDashboard() {
 
               {derivedCustomers.length === 0 ? (
                 <div style={{ background: "#ffffff", border: "1px dashed #dfe3e8", borderRadius: "8px", padding: "40px", textAlign: "center", margin: "16px 0", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
-                  <div className="w-16 h-16 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style={{ background: "rgba(0,127,95,0.1)", color: "#007f5f" }}>
+                  <div className="w-16 h-16 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style={{ background: "rgba(255,87,34,0.1)", color: "#FF5722" }}>
                     <Users size={34} />
                   </div>
                   <h2 className="fs-3 font-bold mb-2" style={{ color: "#202223" }}>No Customer Orders Yet</h2>
@@ -1945,14 +1950,14 @@ export default function StoreOwnerDashboard() {
                       <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", padding: "16px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
                         <div className="fs-8 mb-1" style={{ color: "#6d7175" }}>Total Store Customers</div>
                         <div className="fs-4 font-bold" style={{ color: "#202223" }}>{derivedCustomers.length}</div>
-                        <div className="fs-8 font-semibold mt-1" style={{ color: "#007f5f" }}>Purchasing Shoppers</div>
+                        <div className="fs-8 font-semibold mt-1" style={{ color: "#FF5722" }}>Purchasing Shoppers</div>
                       </div>
                     </div>
                     <div className="col-12 col-md-4">
                       <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", padding: "16px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
                         <div className="fs-8 mb-1" style={{ color: "#6d7175" }}>VIP Customers</div>
                         <div className="fs-4 font-bold" style={{ color: "#202223" }}>{derivedCustomers.filter(c => c.tier === "VIP").length}</div>
-                        <div className="fs-8 font-semibold mt-1" style={{ color: "#007f5f" }}>High Value</div>
+                        <div className="fs-8 font-semibold mt-1" style={{ color: "#FF5722" }}>High Value</div>
                       </div>
                     </div>
                     <div className="col-12 col-md-4">
@@ -2065,7 +2070,7 @@ export default function StoreOwnerDashboard() {
             <div className="d-flex flex-column gap-3">
               <h2 className="fs-4 font-bold mb-0" style={{ color: "#202223" }}>Store Settings</h2>
               {settingsSaved && (
-                <div className="alert alert-success fs-7" style={{ background: "#aee9d1", color: "#007f5f", border: "1px solid #007f5f" }}>
+                <div className="alert alert-success fs-7" style={{ background: "#FFE0D0", color: "#FF5722", border: "1px solid #FF5722" }}>
                   Store settings updated successfully!
                 </div>
               )}
@@ -2087,7 +2092,7 @@ export default function StoreOwnerDashboard() {
                       <option value="EUR (€)">EUR (€)</option>
                     </select>
                   </div>
-                  <button type="submit" className="btn py-2 mt-2 text-white fw-bold" style={{ background: "#008060", borderRadius: "8px" }}>Save Settings</button>
+                  <button type="submit" className="btn py-2 mt-2 text-white fw-bold" style={{ background: "#FF5722", borderRadius: "8px" }}>Save Settings</button>
                 </form>
               </div>
             </div>
@@ -2121,14 +2126,14 @@ export default function StoreOwnerDashboard() {
 
               {/* Toast alert */}
               {categoryToast && (
-                <div className="alert alert-success fs-7 d-flex align-items-center gap-2 mb-0 py-2" style={{ background: "#aee9d1", color: "#007f5f", border: "1px solid #007f5f" }}>
+                <div className="alert alert-success fs-7 d-flex align-items-center gap-2 mb-0 py-2" style={{ background: "#FFE0D0", color: "#FF5722", border: "1px solid #FF5722" }}>
                   <CheckCircle2 size={16} /> {categoryToast}
                 </div>
               )}
 
               {categoriesList.length === 0 ? (
                 <div style={{ background: "#ffffff", border: "1px dashed #dfe3e8", borderRadius: "8px", padding: "40px", textAlign: "center", margin: "16px 0", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
-                  <div className="w-16 h-16 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style={{ background: "rgba(0,127,95,0.1)", color: "#007f5f" }}>
+                  <div className="w-16 h-16 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style={{ background: "rgba(255,87,34,0.1)", color: "#FF5722" }}>
                     <Tag size={34} />
                   </div>
                   <h2 className="fs-3 font-bold mb-2" style={{ color: "#202223" }}>No Collections Created Yet</h2>
@@ -2141,31 +2146,6 @@ export default function StoreOwnerDashboard() {
                 </div>
               ) : (
                 <div className="d-flex flex-column gap-3">
-                  {/* Stat Summary Cards */}
-                  <div className="row g-3">
-                    <div className="col-12 col-md-4">
-                      <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", padding: "16px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
-                        <div className="fs-8 mb-1" style={{ color: "#6d7175" }}>Total Collections</div>
-                        <div className="fs-4 font-bold" style={{ color: "#202223" }}>{categoriesList.length}</div>
-                        <div className="fs-8 font-semibold mt-1" style={{ color: "#007f5f" }}>Active Catalog</div>
-                      </div>
-                    </div>
-                    <div className="col-12 col-md-4">
-                      <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", padding: "16px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
-                        <div className="fs-8 mb-1" style={{ color: "#6d7175" }}>Featured Collections</div>
-                        <div className="fs-4 font-bold" style={{ color: "#202223" }}>{categoriesList.filter(c => c.featured).length}</div>
-                        <div className="fs-8 font-semibold mt-1" style={{ color: "#007f5f" }}>Promoted on Storefront</div>
-                      </div>
-                    </div>
-                    <div className="col-12 col-md-4">
-                      <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", padding: "16px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
-                        <div className="fs-8 mb-1" style={{ color: "#6d7175" }}>Categorized Products</div>
-                        <div className="fs-4 font-bold" style={{ color: "#202223" }}>{categoriesList.reduce((acc, c) => acc + (Number(c.products_count) || 0), 0)}</div>
-                        <div className="fs-8 font-semibold mt-1" style={{ color: "#6d7175" }}>Assigned Items</div>
-                      </div>
-                    </div>
-                  </div>
-
                   {/* Data Table */}
                   <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", overflow: "hidden" }}>
                     <div className="table-responsive">
@@ -2246,27 +2226,70 @@ export default function StoreOwnerDashboard() {
           {/* MODULE 8: MY STORE MANAGEMENT */}
           {active === "stores" && (
             <div className="d-flex flex-column gap-4">
-              {!activeStore ? (
-                <div style={{ background: "#ffffff", border: "1px dashed #dfe3e8", borderRadius: "8px", padding: "40px", textAlign: "center", margin: "16px 0", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
-                  <div className="w-16 h-16 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style={{ background: "rgba(0,127,95,0.1)", color: "#007f5f" }}>
-                    <StoreIcon size={34} />
+              {!hasRealStore ? (
+                  <div className="bg-white w-100 rounded-3 shadow-sm border p-4" style={{ maxWidth: 800, borderColor: "#dfe3e8", margin: "0 auto" }}>
+                    <div className="d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom" style={{ borderColor: "#dfe3e8" }}>
+                      <h3 className="fs-5 font-bold mb-0 d-flex align-items-center gap-2" style={{ color: "#202223" }}>
+                        <PlusCircle size={18} /> Create New Store
+                      </h3>
+                    </div>
+                    <form onSubmit={handleCreateStoreSubmit} className="d-flex flex-column gap-3 fs-7">
+                      <div>
+                        <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Store Name *</label>
+                        <input required value={storeForm.name} onChange={(e) => setStoreForm({ ...storeForm, name: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="e.g. ToastKart Luxury Living" />
+                      </div>
+                      <div className="row g-2">
+                        <div className="col-6">
+                          <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Category</label>
+                          <select value={storeForm.category} onChange={(e) => setStoreForm({ ...storeForm, category: e.target.value })} className="form-select" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}>
+                            <option value="Fashion & Apparel">Fashion & Apparel</option>
+                            <option value="Jewellery">Jewellery</option>
+                            <option value="Beauty & Cosmetics">Beauty & Cosmetics</option>
+                            <option value="Home & Living">Home & Living</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Footwear">Footwear</option>
+                            <option value="Grocery & Food">Grocery & Food</option>
+                            <option value="Gift Store">Gift Store</option>
+                            <option value="General Retail">General Retail</option>
+                          </select>
+                        </div>
+                        <div className="col-6">
+                          <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Currency</label>
+                          <select value={storeForm.currency} onChange={(e) => setStoreForm({ ...storeForm, currency: e.target.value })} className="form-select" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}>
+                            <option value="USD ($)">USD ($)</option>
+                            <option value="EUR (€)">EUR (€)</option>
+                            <option value="INR (₹)">INR (₹)</option>
+                            <option value="GBP (£)">GBP (£)</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="row g-2">
+                        <div className="col-6">
+                          <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Support Email</label>
+                          <input type="email" value={storeForm.email} onChange={(e) => setStoreForm({ ...storeForm, email: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="support@mybrand.com" />
+                        </div>
+                        <div className="col-6">
+                          <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Owner Name</label>
+                          <input value={storeForm.ownerName} onChange={(e) => setStoreForm({ ...storeForm, ownerName: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="Owner Name" />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Store Description</label>
+                        <textarea rows="3" value={storeForm.description} onChange={(e) => setStoreForm({ ...storeForm, description: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="Describe store collection & brand story..." />
+                      </div>
+                      <div className="d-flex align-items-center justify-content-end gap-2 pt-3 border-top mt-1" style={{ borderColor: "#dfe3e8" }}>
+                        <button type="submit" className="btn btn-dark btn-sm px-4 py-2" style={{ backgroundColor: "#202223", color: "#ffffff", border: "none" }}>Create Store</button>
+                      </div>
+                    </form>
                   </div>
-                  <h2 className="fs-3 font-bold mb-2" style={{ color: "#202223" }}>Create Your Store Workspace</h2>
-                  <p className="fs-7 max-w-md mx-auto mb-4" style={{ color: "#6d7175", maxWidth: 480, lineHeight: 1.6 }}>
-                    Welcome to Aureum! You haven't created any store workspace yet. Click the button below to launch your store, configure subdomains, and start listing products.
-                  </p>
-                  <button onClick={openCreateStoreModal} className="btn py-2.5 px-4 font-bold fs-7 d-inline-flex align-items-center gap-2 text-white" style={{ background: "#1c2226", borderRadius: "8px" }}>
-                    <PlusCircle size={18} /> + Create Your Store Now
-                  </button>
-                </div>
               ) : (
                 <>
                   {/* Executive Store Banner */}
                   <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", padding: "16px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
                     <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2">
                       <div>
-                        <div className="mb-2 d-inline-flex align-items-center gap-1" style={{ background: "#fef08a", color: "#854d0e", padding: "2px 8px", borderRadius: "12px", fontSize: "0.75rem", fontWeight: "600" }}>
-                          <Sparkles size={13} /> AUREUM STORE MANAGEMENT SUITE
+                        <div className="d-flex align-items-center gap-2 mb-2 text-warning fw-bold fs-7 tracking-wider">
+                          <Sparkles size={13} /> TOASTKART STORE MANAGEMENT SUITE
                         </div>
                         <h2 className="fs-4 font-bold mb-1" style={{ color: "#202223" }}>{activeStore.name}</h2>
                         <p className="fs-9 mb-0" style={{ color: "#6d7175" }}>
@@ -2287,7 +2310,86 @@ export default function StoreOwnerDashboard() {
                     </div>
                   </div>
 
-                  {/* Store Details Card */}
+                  {/* Inline Form for Edit / Create (when activeStore exists) */}
+                  {(showCreateStoreModal || showEditStoreModal) ? (
+                    <div className="bg-white w-100 rounded-3 shadow-sm border p-4 mb-4" style={{ borderColor: "#dfe3e8" }}>
+                      <div className="d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom" style={{ borderColor: "#dfe3e8" }}>
+                        <h3 className="fs-5 font-bold mb-0 d-flex align-items-center gap-2" style={{ color: "#202223" }}>
+                          {showCreateStoreModal ? <PlusCircle size={18} /> : <Edit3 size={18} />}
+                          {showCreateStoreModal ? "Create New Store" : "Edit Store"}
+                        </h3>
+                        <button onClick={() => { setShowCreateStoreModal(false); setShowEditStoreModal(false); }} className="btn btn-sm p-0 border-0 bg-transparent" style={{ color: "#6d7175" }}>✕</button>
+                      </div>
+                      <form onSubmit={showCreateStoreModal ? handleCreateStoreSubmit : handleEditStoreSubmit} className="d-flex flex-column gap-3 fs-7">
+                        <div>
+                          <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Store Name *</label>
+                          <input required value={storeForm.name} onChange={(e) => setStoreForm({ ...storeForm, name: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="e.g. ToastKart Luxury Living" />
+                        </div>
+                        {/* Subdomain field removed as requested */}
+                        <div className="row g-2">
+                          <div className="col-6">
+                            <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Category</label>
+                            <select value={storeForm.category} onChange={(e) => setStoreForm({ ...storeForm, category: e.target.value })} className="form-select" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}>
+                              <option value="Fashion & Apparel">Fashion & Apparel</option>
+                              <option value="Jewellery">Jewellery</option>
+                              <option value="Beauty & Cosmetics">Beauty & Cosmetics</option>
+                              <option value="Home & Living">Home & Living</option>
+                              <option value="Electronics">Electronics</option>
+                              <option value="Footwear">Footwear</option>
+                              <option value="Grocery & Food">Grocery & Food</option>
+                              <option value="Gift Store">Gift Store</option>
+                              <option value="General Retail">General Retail</option>
+                            </select>
+                          </div>
+                          {showCreateStoreModal ? (
+                            <div className="col-6">
+                              <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Currency</label>
+                              <select value={storeForm.currency} onChange={(e) => setStoreForm({ ...storeForm, currency: e.target.value })} className="form-select" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}>
+                                <option value="USD ($)">USD ($)</option>
+                                <option value="EUR (€)">EUR (€)</option>
+                                <option value="INR (₹)">INR (₹)</option>
+                                <option value="GBP (£)">GBP (£)</option>
+                              </select>
+                            </div>
+                          ) : (
+                            <div className="col-6">
+                              <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Store Status</label>
+                              <select value={storeForm.status} onChange={(e) => setStoreForm({ ...storeForm, status: e.target.value })} className="form-select" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}>
+                                <option value="Active">🟢 Active (Open for Orders)</option>
+                                <option value="Maintenance">🟡 Maintenance Mode</option>
+                                <option value="Draft">🔴 Draft (Private)</option>
+                              </select>
+                            </div>
+                          )}
+                        </div>
+                        <div className="row g-2">
+                          <div className="col-6">
+                            <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Support Email</label>
+                            <input type="email" value={storeForm.email} onChange={(e) => setStoreForm({ ...storeForm, email: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="support@mybrand.com" />
+                          </div>
+                          {showCreateStoreModal ? (
+                            <div className="col-6">
+                              <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Owner Name</label>
+                              <input value={storeForm.ownerName} onChange={(e) => setStoreForm({ ...storeForm, ownerName: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="Owner Name" />
+                            </div>
+                          ) : (
+                            <div className="col-6">
+                              <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Support Phone</label>
+                              <input value={storeForm.phone} onChange={(e) => setStoreForm({ ...storeForm, phone: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="Support Phone" />
+                            </div>
+                          )}
+                        </div>
+                        <div>
+                          <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Store Description</label>
+                          <textarea rows="3" value={storeForm.description} onChange={(e) => setStoreForm({ ...storeForm, description: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="Describe store collection & brand story..." />
+                        </div>
+                        <div className="d-flex align-items-center justify-content-end gap-2 pt-3 border-top mt-1" style={{ borderColor: "#dfe3e8" }}>
+                          <button type="button" onClick={() => { setShowCreateStoreModal(false); setShowEditStoreModal(false); }} className="btn btn-sm btn-light border px-3 py-2" style={{ color: "#202223", backgroundColor: "#ffffff" }}>Cancel</button>
+                          <button type="submit" className="btn btn-dark btn-sm px-4 py-2" style={{ backgroundColor: "#202223", color: "#ffffff", border: "none" }}>{showCreateStoreModal ? "Create Store" : "Save Changes"}</button>
+                        </div>
+                      </form>
+                    </div>
+                  ) : (
                   <div className="row g-3">
                     <div className="col-12">
                       <div className="d-flex flex-column gap-4" style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", padding: "24px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
@@ -2320,15 +2422,15 @@ export default function StoreOwnerDashboard() {
                                     ID&nbsp;#{activeStore.id}
                                   </span>
                                 </div>
-                                <a href={`${window.location.protocol}//${window.location.host}/store/${activeStore.slug || activeStore.subdomain}`} target="_blank" rel="noopener noreferrer" className="fs-8 fw-semibold text-decoration-none d-block text-break" style={{ color: "#007f5f", wordBreak: "break-all" }}>
+                                <a href={`${window.location.protocol}//${window.location.host}/store/${activeStore.slug || activeStore.subdomain}`} target="_blank" rel="noopener noreferrer" className="fs-8 fw-semibold text-decoration-none d-block text-break" style={{ color: "#FF5722", wordBreak: "break-all" }}>
                                   {`${window.location.protocol}//${window.location.host}/store/${activeStore.slug || activeStore.subdomain}`}
                                 </a>
                               </div>
-                              <span style={{ background: "#aee9d1", color: "#007f5f", padding: "2px 8px", borderRadius: "12px", fontSize: "0.75rem", fontWeight: "600" }}>🟢 {activeStore.status || "Active"}</span>
+                              <span style={{ background: "#FFE0D0", color: "#FF5722", padding: "2px 8px", borderRadius: "12px", fontSize: "0.75rem", fontWeight: "600" }}>🟢 {activeStore.status || "Active"}</span>
                             </div>
-                            <p className="fs-8 mt-2 mb-0" style={{ color: "#6d7175", lineHeight: 1.5 }}>
-                              {activeStore.description || "Multi-vendor merchant store workspace on Aureum platform."}
-                            </p>
+                            <div className="text-muted fs-7 mb-2 line-clamp-2" style={{ minHeight: '40px' }}>
+                              {activeStore.description || "Multi-vendor merchant store workspace on ToastKart platform."}
+                            </div>
                           </div>
                         </div>
 
@@ -2339,8 +2441,8 @@ export default function StoreOwnerDashboard() {
                             <strong className="fs-7 d-flex align-items-center gap-1" style={{ color: "#202223", fontFamily: "monospace" }}>
                               <span
                                 style={{
-                                  background: "#e3f5f1",
-                                  color: "#007f5f",
+                                  background: "#FFF3E0",
+                                  color: "#FF5722",
                                   border: "1px solid #c3e9df",
                                   padding: "2px 10px",
                                   borderRadius: "6px",
@@ -2363,7 +2465,7 @@ export default function StoreOwnerDashboard() {
                           </div>
                           <div className="col-6 col-md-3">
                             <span className="fs-8 d-block mb-1" style={{ color: "#6d7175" }}>Support Contact</span>
-                            <strong className="fs-7 d-block text-break" style={{ color: "#202223", wordBreak: "break-all" }}>{activeStore.email || "support@merchant.local"}</strong>
+                            <strong className="fs-7 d-block text-break" style={{ color: "#202223", wordBreak: "break-all" }}>{activeStore.email || "Not Provided"}</strong>
                           </div>
                         </div>
 
@@ -2389,43 +2491,17 @@ export default function StoreOwnerDashboard() {
                           </div>
                         </div>
 
-                        {/* Storefront Link Banner */}
-                        <div className="p-3 rounded-3 d-flex align-items-center justify-content-between flex-wrap gap-2" style={{ background: "#f1f2f4", border: "1px solid #dfe3e8" }}>
-                          <div className="d-flex align-items-center gap-2">
-                            <Globe size={16} style={{ color: "#007f5f" }} />
-                            <span className="fs-8 font-mono fw-semibold" style={{ color: "#202223" }}>
-                              https://{activeStore.subdomain || activeStore.slug}.storemanager.app
-                            </span>
-                          </div>
-                          <div className="d-flex gap-2">
-                            <button
-                              onClick={() => {
-                                navigator.clipboard.writeText(`https://${activeStore.subdomain || activeStore.slug}.storemanager.app`);
-                                showToast("Store URL copied to clipboard!");
-                              }}
-                              className="btn btn-sm btn-light border fs-8 py-1 px-2 d-flex align-items-center gap-1" style={{ color: "#6d7175", fontWeight: "600" }}
-                            >
-                              <Copy size={13} /> Copy URL
-                            </button>
-                            <a
-                              href={`https://${activeStore.subdomain || activeStore.slug}.storemanager.app`}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="btn btn-sm text-white fs-8 py-1 px-2 d-flex align-items-center gap-1" style={{ background: "#1c2226", borderRadius: "4px", fontWeight: "600" }}
-                            >
-                              <ExternalLink size={13} /> View Storefront
-                            </a>
-                          </div>
-                        </div>
+                        {/* Storefront Link Banner Removed */}
+                      </div>
                       </div>
                     </div>
-                  </div>
+                  )}
 
                   {/* ── COLLECTIONS PANEL ── */}
                   <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", overflow: "hidden", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
                     <div className="d-flex align-items-center justify-content-between px-3 px-sm-4 py-3 flex-wrap gap-2" style={{ borderBottom: "1px solid #f1f2f4" }}>
                       <div className="d-flex align-items-center gap-2 flex-wrap">
-                        <Tag size={16} style={{ color: "#007f5f" }} />
+                        <Tag size={16} style={{ color: "#FF5722" }} />
                         <h4 className="fs-6 font-bold mb-0" style={{ color: "#202223" }}>Collections</h4>
                         <span style={{ background: "#f1f2f4", color: "#6d7175", padding: "1px 8px", borderRadius: "10px", fontSize: "0.72rem", fontWeight: 700 }}>
                           {categoriesList.length}
@@ -2443,17 +2519,77 @@ export default function StoreOwnerDashboard() {
                     </div>
 
                     {categoriesList.length === 0 ? (
-                      <div className="text-center py-5 px-4">
-                        <Tag size={32} style={{ color: "#c9cccf", marginBottom: 10 }} />
-                        <p className="fs-8 mb-2" style={{ color: "#6d7175" }}>No collections found for Store ID #{activeStore.id}</p>
-                        <button
-                          onClick={() => setActive("categories")}
-                          className="btn btn-sm fw-bold"
-                          style={{ background: "#007f5f", color: "#fff", borderRadius: "6px" }}
-                        >
-                          Create First Collection
-                        </button>
-                      </div>
+                      showInlineCategoryForm ? (
+                        <div className="bg-white p-4" style={{ borderRadius: "8px", border: "1px solid #dfe3e8" }}>
+                          <h4 className="fs-6 font-bold mb-3" style={{ color: "#202223" }}>Create First Collection</h4>
+                          <form onSubmit={(e) => { handleCategorySubmit(e); setShowInlineCategoryForm(false); }} className="d-flex flex-column gap-3 fs-7">
+                            
+              <div>
+                <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Category Name *</label>
+                <input
+                  required
+                  value={categoryForm.name}
+                  onChange={(e) => setCategoryForm({ ...categoryForm, name: e.target.value })}
+                  className="form-control"
+                  style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
+                  placeholder="e.g. Luxury Handbags"
+                />
+                {categoryForm.name && (
+                  <div className="fs-9 mt-1 fw-medium" style={{ color: "#6d7175" }}>
+                    Slug URL preview: <span style={{ color: "#FF5722" }}>/{categoryForm.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}</span>
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Description</label>
+                <textarea
+                  rows="3"
+                  value={categoryForm.description}
+                  onChange={(e) => setCategoryForm({ ...categoryForm, description: e.target.value })}
+                  className="form-control"
+                  style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
+                  placeholder="Summary of products in this category..."
+                />
+              </div>
+
+              <div className="form-check">
+                <input
+                  type="checkbox"
+                  id="categoryFeaturedCheck"
+                  checked={categoryForm.featured}
+                  onChange={(e) => setCategoryForm({ ...categoryForm, featured: e.target.checked })}
+                  className="form-check-input"
+                />
+                <label htmlFor="categoryFeaturedCheck" className="form-check-label fs-7 cursor-pointer" style={{ color: "#202223" }}>
+                  Feature this category on store homepage & navigation
+                </label>
+              </div>
+
+              <div className="d-flex align-items-center justify-content-end gap-2 mt-2 pt-3 border-top" style={{ borderColor: "#dfe3e8" }}>
+                <button type="button" onClick={() => setShowInlineCategoryForm(false)} className="btn btn-sm px-3 py-2" style={{ background: "#f1f2f4", color: "#454f5b", border: "1px solid #dfe3e8", borderRadius: "6px", fontWeight: "600" }}>
+                  Cancel
+                </button>
+                <button type="submit" className="btn btn-sm px-4 py-2 text-white fw-bold" style={{ background: "#1c2226", borderRadius: "6px" }}>
+                  {editingCategory ? "Save Changes" : "Create Category"}
+                </button>
+              </div>
+            
+                          </form>
+                        </div>
+                      ) : (
+                        <div className="text-center py-5 px-4">
+                          <Tag size={32} style={{ color: "#c9cccf", marginBottom: 10 }} />
+                          <p className="fs-8 mb-2" style={{ color: "#6d7175" }}>No collections found for Store ID #{activeStore.id}</p>
+                          <button
+                            onClick={() => { setShowInlineCategoryForm(true); setEditingCategory(null); setCategoryForm({ name: "", description: "", featured: false }); }}
+                            className="btn btn-sm fw-bold"
+                            style={{ background: "#FF5722", color: "#fff", borderRadius: "6px" }}
+                          >
+                            Create First Collection
+                          </button>
+                        </div>
+                      )
                     ) : (
                       <div className="table-responsive">
                         <table className="table table-hover mb-0 align-middle border-0">
@@ -2462,7 +2598,6 @@ export default function StoreOwnerDashboard() {
                               <th className="border-0 ps-4 py-2">Collection Name</th>
                               <th className="border-0 py-2">Slug</th>
                               <th className="border-0 py-2">Products</th>
-                              <th className="border-0 py-2">Featured</th>
                               <th className="border-0 text-end pe-4 py-2">Actions</th>
                             </tr>
                           </thead>
@@ -2473,7 +2608,7 @@ export default function StoreOwnerDashboard() {
                                   <div className="d-flex align-items-center gap-2">
                                     <div
                                       className="rounded-2 d-flex align-items-center justify-content-center flex-shrink-0 fw-bold"
-                                      style={{ width: 30, height: 30, background: "#e3f5f1", color: "#007f5f", fontSize: "0.75rem", border: "1px solid #c3e9df" }}
+                                      style={{ width: 30, height: 30, background: "#FFF3E0", color: "#FF5722", fontSize: "0.75rem", border: "1px solid #c3e9df" }}
                                     >
                                       {(cat.name || "C").charAt(0).toUpperCase()}
                                     </div>
@@ -2491,13 +2626,6 @@ export default function StoreOwnerDashboard() {
                                   </code>
                                 </td>
                                 <td className="border-0 py-2 fw-bold fs-7" style={{ color: "#202223" }}>{cat.products_count ?? 0}</td>
-                                <td className="border-0 py-2">
-                                  {cat.featured ? (
-                                    <span style={{ background: "#fef08a", color: "#854d0e", padding: "2px 8px", borderRadius: "10px", fontSize: "0.7rem", fontWeight: 700 }}>⭐ Featured</span>
-                                  ) : (
-                                    <span style={{ color: "#c9cccf", fontSize: "0.75rem" }}>—</span>
-                                  )}
-                                </td>
                                 <td className="border-0 text-end pe-4 py-2">
                                   <div className="d-flex justify-content-end gap-1">
                                     <button
@@ -2530,7 +2658,7 @@ export default function StoreOwnerDashboard() {
                   <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", overflow: "hidden", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
                     <div className="d-flex align-items-center justify-content-between px-4 py-3" style={{ borderBottom: "1px solid #f1f2f4" }}>
                       <div className="d-flex align-items-center gap-2">
-                        <Package size={16} style={{ color: "#007f5f" }} />
+                        <Package size={16} style={{ color: "#FF5722" }} />
                         <h4 className="fs-6 font-bold mb-0" style={{ color: "#202223" }}>Products</h4>
                         <span style={{ background: "#f1f2f4", color: "#6d7175", padding: "1px 8px", borderRadius: "10px", fontSize: "0.72rem", fontWeight: 700 }}>
                           {productsList.length}
@@ -2547,17 +2675,245 @@ export default function StoreOwnerDashboard() {
                     </div>
 
                     {productsList.length === 0 ? (
-                      <div className="text-center py-5 px-4">
-                        <Package size={32} style={{ color: "#c9cccf", marginBottom: 10 }} />
-                        <p className="fs-8 mb-2" style={{ color: "#6d7175" }}>No products found for Store ID #{activeStore.id}</p>
-                        <button
-                          onClick={() => openAddProductModal()}
-                          className="btn btn-sm fw-bold"
-                          style={{ background: "#007f5f", color: "#fff", borderRadius: "6px" }}
-                        >
-                          Add First Product
-                        </button>
+                      showInlineProductForm ? (
+                        <div className="bg-white p-4" style={{ borderRadius: "8px", border: "1px solid #dfe3e8" }}>
+                          <div className="d-flex justify-content-between align-items-center mb-3">
+                            <h4 className="fs-6 font-bold mb-0" style={{ color: "#202223" }}>Add First Product</h4>
+                            <button type="button" onClick={() => setShowInlineProductForm(false)} className="btn btn-sm btn-light border py-1">Cancel</button>
+                          </div>
+                          <form onSubmit={(e) => { handleAddProductSubmit(e); setShowInlineProductForm(false); }} className="d-flex flex-column gap-2 fs-7">
+                            
+              <div>
+                <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Product Name *</label>
+                <input required value={newProd.name} onChange={(e) => setNewProd({ ...newProd, name: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="e.g. Silk Scarf" />
+              </div>
+              <div className="row g-2">
+                <div className="col-4">
+                  <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Price *</label>
+                  <input required value={newProd.price} onChange={(e) => setNewProd({ ...newProd, price: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder={`${currencySymbol}34.00`} />
+                </div>
+                <div className="col-4">
+                  <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Original Price</label>
+                  <input value={newProd.compare_price || ''} onChange={(e) => setNewProd({ ...newProd, compare_price: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder={`${currencySymbol}50.00`} />
+                </div>
+                <div className="col-4">
+                  <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Discount %</label>
+                  <input type="number" min="0" max="100" value={newProd.discount_percentage || ''} onChange={(e) => {
+                    const discount = e.target.value;
+                    const cp = parseFloat(String(newProd.compare_price).replace(/[^0-9.]/g, ""));
+                    let newPrice = newProd.price;
+                    if (cp && discount) {
+                      newPrice = (cp - (cp * (parseFloat(discount) / 100))).toFixed(2);
+                    }
+                    setNewProd({ ...newProd, discount_percentage: discount, price: newPrice });
+                  }} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="e.g. 20" />
+                </div>
+              </div>
+              <div className="row g-2">
+                <div className="col-4">
+                  <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Stock</label>
+                  <input type="number" min="0" value={newProd.stock} onChange={(e) => setNewProd({ ...newProd, stock: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="10" />
+                </div>
+                <div className="col-8">
+                  <div className="row g-2">
+                    <div className="col-12">
+                      <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Colors</label>
+                      <div className="d-flex flex-wrap gap-1">
+                        {['Red', 'Blue', 'Green', 'Black', 'White', 'Grey', 'Pink', 'Yellow', 'Brown', 'Purple'].map(c => {
+                          const currentColors = newProd.color ? newProd.color.split(',').map(s=>s.trim()).filter(Boolean) : [];
+                          const isSelected = currentColors.includes(c);
+                          return (
+                            <button
+                              key={c}
+                              type="button"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                if (isSelected) setNewProd({...newProd, color: currentColors.filter(x => x !== c).join(', ')});
+                                else setNewProd({...newProd, color: [...currentColors, c].join(', ')});
+                              }}
+                              className="btn btn-sm"
+                              style={{ 
+                                borderRadius: '12px', padding: '2px 8px', fontSize: '11px',
+                                background: isSelected ? '#1c2226' : '#fff',
+                                color: isSelected ? '#fff' : '#454f5b',
+                                border: `1px solid ${isSelected ? '#1c2226' : '#dfe3e8'}`
+                              }}
+                            >
+                              {c}
+                            </button>
+                          );
+                        })}
                       </div>
+                    </div>
+                    <div className="col-12 mt-2">
+                      <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Sizes</label>
+                      <div className="d-flex flex-wrap gap-1">
+                        {['XS', 'S', 'M', 'L', 'XL', 'XXL', 'Free Size'].map(s => {
+                          const currentSizes = newProd.size ? newProd.size.split(',').map(x=>x.trim()).filter(Boolean) : [];
+                          const isSelected = currentSizes.includes(s);
+                          return (
+                            <button
+                              key={s}
+                              type="button"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                if (isSelected) setNewProd({...newProd, size: currentSizes.filter(x => x !== s).join(', ')});
+                                else setNewProd({...newProd, size: [...currentSizes, s].join(', ')});
+                              }}
+                              className="btn btn-sm fw-bold"
+                              style={{ 
+                                borderRadius: '6px', padding: '2px 8px', fontSize: '11px', minWidth: '32px',
+                                background: isSelected ? '#1c2226' : '#fff',
+                                color: isSelected ? '#fff' : '#454f5b',
+                                border: `1px solid ${isSelected ? '#1c2226' : '#dfe3e8'}`
+                              }}
+                            >
+                              {s}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Description</label>
+                <textarea
+                  value={newProd.description || ''}
+                  onChange={(e) => setNewProd({ ...newProd, description: e.target.value })}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      setNewProd({ ...newProd, description: (newProd.description || '') + '\n• ' });
+                    }
+                  }}
+                  onFocus={(e) => {
+                    if (!newProd.description) {
+                      setNewProd({ ...newProd, description: '• ' });
+                    }
+                  }}
+                  rows="3"
+                  className="form-control"
+                  style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
+                  placeholder="• Enter product description (press Enter for new bullet point)"
+                />
+              </div>
+              <div>
+                <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Category</label>
+                <select
+                  value={newProd.category}
+                  onChange={(e) => setNewProd({ ...newProd, category: e.target.value })}
+                  className="form-select"
+                  style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
+                  required
+                >
+                  <option value="">Select a Collection</option>
+                  {categoriesList && categoriesList.map(cat => (
+                    <option key={cat.id || cat.name} value={cat.name}>
+                      {cat.name}
+                    </option>
+                  ))}
+                  <option value="Uncategorized">Uncategorized</option>
+                </select>
+              </div>
+              <div>
+                <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Product Images Upload (Multiple)</label>
+                <div className="mb-3">
+                  <label 
+                    className="position-relative d-flex flex-column align-items-center justify-content-center cursor-pointer w-100" 
+                    style={{ height: 120, background: "#f8f9fa", border: "2px dashed #FF5722", borderRadius: "12px", transition: "all 0.2s" }}
+                    onMouseEnter={(e) => { e.currentTarget.style.background = "#e6f4ea"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.background = "#f8f9fa"; }}
+                  >
+                    <div className="d-flex align-items-center justify-content-center mb-2" style={{ width: 40, height: 40, borderRadius: "50%", background: "#e6f4ea" }}>
+                      <Plus size={24} style={{ color: "#FF5722" }} />
+                    </div>
+                    <span className="fs-8 fw-semibold" style={{ color: "#FF5722" }}>Click here to upload images</span>
+                    <span className="fs-9 mt-1" style={{ color: "#6c757d" }}>Supports JPG, PNG, WEBP files</span>
+                    <input
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      onChange={async (e) => {
+                        const files = Array.from(e.target.files);
+                        if (!files.length) return;
+                        const readers = files.map(file => new Promise((resolve) => {
+                          const reader = new FileReader();
+                          reader.onloadend = () => resolve(reader.result);
+                          reader.readAsDataURL(file);
+                        }));
+                        const results = await Promise.all(readers);
+                        const currentImages = newProd.images?.length > 0 ? newProd.images : (newProd.image ? [{ url: newProd.image, color: '' }] : []);
+                        const newImages = [...currentImages, ...results.map(url => ({ url, color: '' }))];
+                        setNewProd({ ...newProd, images: newImages, image: newImages[0]?.url || '' });
+                        e.target.value = null;
+                      }}
+                      className="d-none"
+                    />
+                  </label>
+                </div>
+                
+                <div className="d-flex flex-wrap gap-3 mt-3">
+                  {(newProd.images?.length > 0 ? newProd.images : (newProd.image ? [{ url: newProd.image, color: '' }] : [])).map((imgObj, idx) => (
+                    <div key={idx} className="position-relative p-2 rounded d-flex flex-column align-items-center" style={{ background: "#f9fafb", border: "1px dashed #dfe3e8" }}>
+                      <img
+                        src={normalizeProductImage(imgObj.url, newProd.name)}
+                        alt={`Preview ${idx}`}
+                        className="rounded object-cover mb-2"
+                        style={{ width: 80, height: 80, border: "1px solid #dfe3e8" }}
+                        onError={(e) => { e.target.src = getFallbackImageByName(newProd.name); }}
+                      />
+                      {newProd.color && (
+                        <select 
+                          className="form-select form-select-sm" 
+                          style={{ fontSize: '0.75rem', padding: '0.1rem 1rem 0.1rem 0.4rem', minWidth: '80px' }}
+                          value={imgObj.color || ''}
+                          onChange={(e) => {
+                            const updatedImages = [...newProd.images];
+                            updatedImages[idx] = { ...updatedImages[idx], color: e.target.value };
+                            setNewProd({ ...newProd, images: updatedImages });
+                          }}
+                        >
+                          <option value="">No Color</option>
+                          {newProd.color.split(',').map(c => c.trim()).filter(Boolean).map(c => (
+                            <option key={c} value={c}>{c}</option>
+                          ))}
+                        </select>
+                      )}
+                      <button 
+                        type="button" 
+                        onClick={() => {
+                           const currentImages = newProd.images?.length > 0 ? newProd.images : (newProd.image ? [{ url: newProd.image, color: '' }] : []);
+                           const updated = currentImages.filter((_, i) => i !== idx);
+                           setNewProd({ ...newProd, images: updated, image: updated[0]?.url || '' });
+                        }}
+                        className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border-0" 
+                        style={{ padding: '0.2rem 0.4rem', cursor: 'pointer' }}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <button type="submit" className="btn text-white w-100 mt-3 py-2 fw-bold" style={{ background: "#1c2226", borderRadius: "8px" }}>{editingProduct ? "Save Changes" : "Add Product"}</button>
+            
+                          </form>
+                        </div>
+                      ) : (
+                        <div className="text-center py-5 px-4">
+                          <Package size={32} style={{ color: "#c9cccf", marginBottom: 10 }} />
+                          <p className="fs-8 mb-2" style={{ color: "#6d7175" }}>No products found for Store ID #{activeStore.id}</p>
+                          <button
+                            onClick={() => { setShowInlineProductForm(true); resetProductForm(); }}
+                            className="btn btn-sm fw-bold"
+                            style={{ background: "#FF5722", color: "#fff", borderRadius: "6px" }}
+                          >
+                            Add First Product
+                          </button>
+                        </div>
+                      )
                     ) : (
                       <div className="table-responsive">
                         <table className="table table-hover mb-0 align-middle border-0">
@@ -2629,8 +2985,8 @@ export default function StoreOwnerDashboard() {
                                 <td className="border-0 py-2 fw-bold fs-7" style={{ color: "#202223" }}>{p.stock}</td>
                                 <td className="border-0 py-2">
                                   <span style={{
-                                    background: p.status === "In Stock" ? "#aee9d1" : p.status === "Low Stock" ? "#fef08a" : "#ffd2cc",
-                                    color: p.status === "In Stock" ? "#007f5f" : p.status === "Low Stock" ? "#854d0e" : "#d82c0d",
+                                    background: p.status === "In Stock" ? "#FFE0D0" : p.status === "Low Stock" ? "#fef08a" : "#ffd2cc",
+                                    color: p.status === "In Stock" ? "#FF5722" : p.status === "Low Stock" ? "#854d0e" : "#d82c0d",
                                     padding: "2px 8px", borderRadius: "10px", fontSize: "0.7rem", fontWeight: 700
                                   }}>
                                     {p.status}
@@ -2681,7 +3037,7 @@ export default function StoreOwnerDashboard() {
                 </div>
               </div>
               <div style={{ background: "#ffffff", border: "1px dashed #dfe3e8", borderRadius: "8px", padding: "40px", textAlign: "center", margin: "16px 0", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
-                <div className="w-16 h-16 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style={{ background: "rgba(0,127,95,0.1)", color: "#007f5f" }}>
+                <div className="w-16 h-16 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style={{ background: "rgba(255,87,34,0.1)", color: "#FF5722" }}>
                   <CreditCard size={34} />
                 </div>
                 <h2 className="fs-3 font-bold mb-2" style={{ color: "#202223" }}>Payment Configuration</h2>
@@ -2720,7 +3076,7 @@ export default function StoreOwnerDashboard() {
 
                 return discountedProducts.length === 0 ? (
                   <div style={{ background: "#ffffff", border: "1px dashed #dfe3e8", borderRadius: "8px", padding: "40px", textAlign: "center", margin: "16px 0", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
-                    <div className="w-16 h-16 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style={{ background: "rgba(0,127,95,0.1)", color: "#007f5f" }}>
+                    <div className="w-16 h-16 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style={{ background: "rgba(255,87,34,0.1)", color: "#FF5722" }}>
                       <Percent size={34} />
                     </div>
                     <h2 className="fs-3 font-bold mb-2" style={{ color: "#202223" }}>No active discounts</h2>
@@ -2775,7 +3131,7 @@ export default function StoreOwnerDashboard() {
                                   </span>
                                 </td>
                                 <td className="border-0 text-end pe-4 py-3">
-                                  <span className="badge" style={{ background: "#e3f1df", color: "#007f5f", borderRadius: 4, fontWeight: 600 }}>Active</span>
+                                  <span className="badge" style={{ background: "#FFF3E0", color: "#FF5722", borderRadius: 4, fontWeight: 600 }}>Active</span>
                                 </td>
                               </tr>
                             );
@@ -2936,26 +3292,40 @@ export default function StoreOwnerDashboard() {
               </div>
               <div>
                 <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Product Images Upload (Multiple)</label>
-                <input
-                  type="file"
-                  multiple
-                  accept="image/*"
-                  onChange={async (e) => {
-                    const files = Array.from(e.target.files);
-                    if (!files.length) return;
-                    const readers = files.map(file => new Promise((resolve) => {
-                      const reader = new FileReader();
-                      reader.onloadend = () => resolve(reader.result);
-                      reader.readAsDataURL(file);
-                    }));
-                    const results = await Promise.all(readers);
-                    const currentImages = newProd.images?.length > 0 ? newProd.images : (newProd.image ? [{ url: newProd.image, color: '' }] : []);
-                    const newImages = [...currentImages, ...results.map(url => ({ url, color: '' }))];
-                    setNewProd({ ...newProd, images: newImages, image: newImages[0]?.url || '' });
-                  }}
-                  className="form-control"
-                  style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
-                />
+                <div className="mb-3">
+                  <label 
+                    className="position-relative d-flex flex-column align-items-center justify-content-center cursor-pointer w-100" 
+                    style={{ height: 120, background: "#f8f9fa", border: "2px dashed #FF5722", borderRadius: "12px", transition: "all 0.2s" }}
+                    onMouseEnter={(e) => { e.currentTarget.style.background = "#e6f4ea"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.background = "#f8f9fa"; }}
+                  >
+                    <div className="d-flex align-items-center justify-content-center mb-2" style={{ width: 40, height: 40, borderRadius: "50%", background: "#e6f4ea" }}>
+                      <Plus size={24} style={{ color: "#FF5722" }} />
+                    </div>
+                    <span className="fs-8 fw-semibold" style={{ color: "#FF5722" }}>Click here to upload images</span>
+                    <span className="fs-9 mt-1" style={{ color: "#6c757d" }}>Supports JPG, PNG, WEBP files</span>
+                    <input
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      onChange={async (e) => {
+                        const files = Array.from(e.target.files);
+                        if (!files.length) return;
+                        const readers = files.map(file => new Promise((resolve) => {
+                          const reader = new FileReader();
+                          reader.onloadend = () => resolve(reader.result);
+                          reader.readAsDataURL(file);
+                        }));
+                        const results = await Promise.all(readers);
+                        const currentImages = newProd.images?.length > 0 ? newProd.images : (newProd.image ? [{ url: newProd.image, color: '' }] : []);
+                        const newImages = [...currentImages, ...results.map(url => ({ url, color: '' }))];
+                        setNewProd({ ...newProd, images: newImages, image: newImages[0]?.url || '' });
+                        e.target.value = null;
+                      }}
+                      className="d-none"
+                    />
+                  </label>
+                </div>
                 
                 <div className="d-flex flex-wrap gap-3 mt-3">
                   {(newProd.images?.length > 0 ? newProd.images : (newProd.image ? [{ url: newProd.image, color: '' }] : [])).map((imgObj, idx) => (
@@ -3020,7 +3390,7 @@ export default function StoreOwnerDashboard() {
               <div className="d-flex justify-content-between"><span style={{ color: "#6d7175" }}>Items:</span> <strong style={{ color: "#202223" }}>{invoiceModalOrder.items}</strong></div>
               <div className="d-flex justify-content-between border-top pt-3 mt-1" style={{ borderColor: "#dfe3e8" }}>
                 <span className="fw-bold" style={{ color: "#454f5b" }}>Total:</span> 
-                <span className="fw-bold fs-6" style={{ color: "#007f5f" }}>{invoiceModalOrder.total}</span>
+                <span className="fw-bold fs-6" style={{ color: "#FF5722" }}>{invoiceModalOrder.total}</span>
               </div>
             </div>
             <button onClick={() => { alert(`Printing invoice for ${invoiceModalOrder.id}...`); setInvoiceModalOrder(null); }} className="btn text-white w-100 py-2 fw-bold" style={{ background: "#1c2226", borderRadius: "8px" }}>
@@ -3051,7 +3421,7 @@ export default function StoreOwnerDashboard() {
                 />
                 {categoryForm.name && (
                   <div className="fs-9 mt-1 fw-medium" style={{ color: "#6d7175" }}>
-                    Slug URL preview: <span style={{ color: "#007f5f" }}>/{categoryForm.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}</span>
+                    Slug URL preview: <span style={{ color: "#FF5722" }}>/{categoryForm.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}</span>
                   </div>
                 )}
               </div>
@@ -3199,233 +3569,7 @@ export default function StoreOwnerDashboard() {
         </div>
       )}
 
-      {/* CREATE STORE MODAL */}
-      {showCreateStoreModal && (
-        <div className="position-fixed top-0 bottom-0 start-0 end-0 bg-dark bg-opacity-75 d-flex align-items-center justify-content-center p-3" style={{ zIndex: 1060 }}>
-          <div className="bg-white w-100 rounded-3 shadow-sm border" style={{ maxWidth: 520, borderColor: "#dfe3e8" }}>
-            <div className="d-flex align-items-center justify-content-between p-3 border-bottom" style={{ borderColor: "#dfe3e8" }}>
-              <h3 className="fs-5 font-bold mb-0 d-flex align-items-center gap-2" style={{ color: "#202223" }}>
-                <PlusCircle size={18} /> Create New Store
-              </h3>
-              <button onClick={() => setShowCreateStoreModal(false)} className="btn btn-sm p-0 border-0 bg-transparent" style={{ color: "#6d7175" }}>✕</button>
-            </div>
-            <div className="p-3">
-              <form onSubmit={handleCreateStoreSubmit} className="d-flex flex-column gap-3 fs-7">
-                <div>
-                  <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Store Name *</label>
-                  <input
-                    required
-                    value={storeForm.name}
-                    onChange={(e) => setStoreForm({ ...storeForm, name: e.target.value })}
-                    className="form-control"
-                    style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
-                    placeholder="e.g. Aureum Luxury Living"
-                  />
-                </div>
 
-                <div className="row g-2">
-                  <div className="col-6">
-                    <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Category</label>
-                    <select
-                      value={storeForm.category}
-                      onChange={(e) => setStoreForm({ ...storeForm, category: e.target.value })}
-                      className="form-select"
-                      style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
-                    >
-                      <option value="Fashion & Apparel">Fashion & Apparel</option>
-                      <option value="Jewellery">Jewellery</option>
-                      <option value="Beauty & Cosmetics">Beauty & Cosmetics</option>
-                      <option value="Home & Living">Home & Living</option>
-                      <option value="Electronics">Electronics</option>
-                      <option value="Footwear">Footwear</option>
-                      <option value="Grocery & Food">Grocery & Food</option>
-                      <option value="Gift Store">Gift Store</option>
-                      <option value="General Retail">General Retail</option>
-                    </select>
-                  </div>
-                  <div className="col-6">
-                    <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Currency</label>
-                    <select
-                      value={storeForm.currency}
-                      onChange={(e) => setStoreForm({ ...storeForm, currency: e.target.value })}
-                      className="form-select"
-                      style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
-                    >
-                      <option value="USD ($)">USD ($)</option>
-                      <option value="EUR (€)">EUR (€)</option>
-                      <option value="INR (₹)">INR (₹)</option>
-                      <option value="GBP (£)">GBP (£)</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="row g-2">
-                  <div className="col-6">
-                    <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Support Email</label>
-                    <input
-                      type="email"
-                      value={storeForm.email}
-                      onChange={(e) => setStoreForm({ ...storeForm, email: e.target.value })}
-                      className="form-control"
-                      style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
-                      placeholder="support@mybrand.com"
-                    />
-                  </div>
-                  <div className="col-6">
-                    <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Owner Name</label>
-                    <input
-                      value={storeForm.ownerName}
-                      onChange={(e) => setStoreForm({ ...storeForm, ownerName: e.target.value })}
-                      className="form-control"
-                      style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
-                      placeholder="Owner Name"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Store Description</label>
-                  <textarea
-                    rows="3"
-                    value={storeForm.description}
-                    onChange={(e) => setStoreForm({ ...storeForm, description: e.target.value })}
-                    className="form-control"
-                    style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
-                    placeholder="Describe store collection & brand story..."
-                  />
-                </div>
-
-                <div className="d-flex align-items-center justify-content-end gap-2 pt-3 border-top mt-1" style={{ borderColor: "#dfe3e8" }}>
-                  <button type="button" onClick={() => setShowCreateStoreModal(false)} className="btn btn-sm btn-light border px-3 py-2" style={{ color: "#202223", backgroundColor: "#ffffff" }}>
-                    Cancel
-                  </button>
-                  <button type="submit" className="btn btn-dark btn-sm px-4 py-2" style={{ backgroundColor: "#202223", color: "#ffffff", border: "none" }}>
-                    Create Store
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* EDIT STORE DETAILS MODAL */}
-      {showEditStoreModal && (
-        <div className="position-fixed top-0 bottom-0 start-0 end-0 bg-dark bg-opacity-75 d-flex align-items-center justify-content-center p-3" style={{ zIndex: 1060 }}>
-          <div className="bg-white w-100 rounded-3 shadow-sm border" style={{ maxWidth: 520, borderColor: "#dfe3e8" }}>
-            <div className="d-flex align-items-center justify-content-between p-3 border-bottom" style={{ borderColor: "#dfe3e8" }}>
-              <h3 className="fs-5 font-bold mb-0 d-flex align-items-center gap-2" style={{ color: "#202223" }}>
-                <Edit3 size={18} /> Edit Store Details
-              </h3>
-              <button onClick={() => setShowEditStoreModal(false)} className="btn btn-sm p-0 border-0 bg-transparent" style={{ color: "#6d7175" }}>✕</button>
-            </div>
-            <div className="p-3">
-              <form onSubmit={handleEditStoreSubmit} className="d-flex flex-column gap-3 fs-7">
-                <div>
-                  <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Store Name *</label>
-                  <input
-                    required
-                    value={storeForm.name}
-                    onChange={(e) => setStoreForm({ ...storeForm, name: e.target.value })}
-                    className="form-control"
-                    style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
-                  />
-                </div>
-
-                <div>
-                  <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Subdomain Handle</label>
-                  <div className="input-group">
-                    <input
-                      value={storeForm.subdomain}
-                      onChange={(e) => setStoreForm({ ...storeForm, subdomain: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "") })}
-                      className="form-control"
-                      style={{ border: "1px solid #dfe3e8", borderRight: "none", color: "#202223", backgroundColor: "#fafbfc" }}
-                    />
-                    <span className="input-group-text fs-8" style={{ backgroundColor: "#f1f2f4", border: "1px solid #dfe3e8", color: "#6d7175" }}>.storemanager.app</span>
-                  </div>
-                </div>
-
-                <div className="row g-2">
-                  <div className="col-6">
-                    <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Category</label>
-                    <select
-                      value={storeForm.category}
-                      onChange={(e) => setStoreForm({ ...storeForm, category: e.target.value })}
-                      className="form-select"
-                      style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
-                    >
-                      <option value="Fashion & Apparel">Fashion & Apparel</option>
-                      <option value="Jewellery">Jewellery</option>
-                      <option value="Beauty & Cosmetics">Beauty & Cosmetics</option>
-                      <option value="Home & Living">Home & Living</option>
-                      <option value="Electronics">Electronics</option>
-                      <option value="Footwear">Footwear</option>
-                      <option value="Grocery & Food">Grocery & Food</option>
-                      <option value="Gift Store">Gift Store</option>
-                      <option value="General Retail">General Retail</option>
-                    </select>
-                  </div>
-                  <div className="col-6">
-                    <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Store Status</label>
-                    <select
-                      value={storeForm.status}
-                      onChange={(e) => setStoreForm({ ...storeForm, status: e.target.value })}
-                      className="form-select"
-                      style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
-                    >
-                      <option value="Active">🟢 Active (Open for Orders)</option>
-                      <option value="Maintenance">🟡 Maintenance Mode</option>
-                      <option value="Draft">🔴 Draft (Private)</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="row g-2">
-                  <div className="col-6">
-                    <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Contact Email</label>
-                    <input
-                      type="email"
-                      value={storeForm.email}
-                      onChange={(e) => setStoreForm({ ...storeForm, email: e.target.value })}
-                      className="form-control"
-                      style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
-                    />
-                  </div>
-                  <div className="col-6">
-                    <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Support Phone</label>
-                    <input
-                      value={storeForm.phone}
-                      onChange={(e) => setStoreForm({ ...storeForm, phone: e.target.value })}
-                      className="form-control"
-                      style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Store Description & Mission</label>
-                  <textarea
-                    rows="3"
-                    value={storeForm.description}
-                    onChange={(e) => setStoreForm({ ...storeForm, description: e.target.value })}
-                    className="form-control"
-                    style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
-                  />
-                </div>
-
-                <div className="d-flex align-items-center justify-content-end gap-2 pt-3 border-top mt-1" style={{ borderColor: "#dfe3e8" }}>
-                  <button type="button" onClick={() => setShowEditStoreModal(false)} className="btn btn-sm btn-light border px-3 py-2" style={{ color: "#202223", backgroundColor: "#ffffff" }}>
-                    Cancel
-                  </button>
-                  <button type="submit" className="btn btn-dark btn-sm px-4 py-2" style={{ backgroundColor: "#202223", color: "#ffffff", border: "none" }}>
-                    Save Changes
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* DELETE STORE CONFIRMATION MODAL */}
       {showDeleteStoreModal && (
@@ -3459,3 +3603,4 @@ export default function StoreOwnerDashboard() {
     </div>
   );
 }
+

@@ -35,7 +35,7 @@ export const StoreProvider = ({ children }) => {
   // Get current user id safely from localStorage or default to 1
   const getUserId = () => {
     try {
-      const saved = localStorage.getItem('shopnest_user');
+      const saved = localStorage.getItem('toastkart_user');
       if (saved) {
         const u = JSON.parse(saved);
         return u.id || 1;

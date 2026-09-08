@@ -11,10 +11,13 @@ export function resolveStoreTheme(storeData) {
     'jewellery': 'theme-jewelry',
     'home & living': 'theme-home',
     'beauty': 'theme-beauty',
+    'beauty & cosmetics': 'theme-beauty',
     'electronics': 'theme-electronics',
     'footwear': 'theme-footwear',
     'grocery': 'theme-grocery',
+    'grocery & food': 'theme-grocery',
     'gift': 'theme-gift',
+    'gift store': 'theme-gift',
   };
 
   return themeMap[category] || 'theme-default';

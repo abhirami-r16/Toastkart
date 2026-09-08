@@ -5,8 +5,8 @@ const StorefrontCartContext = createContext();
 export const useStorefrontCart = () => useContext(StorefrontCartContext);
 
 export const StorefrontCartProvider = ({ children, storeId }) => {
-  const cartKey = `shopnest_cart_${storeId || 'default'}`;
-  const wishlistKey = `shopnest_wishlist_${storeId || 'default'}`;
+  const cartKey = `toastkart_cart_${storeId || 'default'}`;
+  const wishlistKey = `toastkart_wishlist_${storeId || 'default'}`;
 
   const [cartItems, setCartItems] = useState([]);
   const [wishlistItems, setWishlistItems] = useState([]);

@@ -11,11 +11,11 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('shopnest_token');
+  const token = localStorage.getItem('toastkart_token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
-  const activeStoreId = localStorage.getItem('shopnest_active_store_id');
+  const activeStoreId = localStorage.getItem('toastkart_active_store_id');
   if (activeStoreId) {
     config.headers['X-Store-Id'] = activeStoreId;
   }

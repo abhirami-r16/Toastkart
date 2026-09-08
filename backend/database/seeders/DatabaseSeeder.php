@@ -20,21 +20,21 @@ class DatabaseSeeder extends Seeder
         // 1. Three System Users (Admin, Store Owner, Customer)
         $admin = User::create([
             'name' => 'Platform Admin',
-            'email' => 'admin@shopnest.local',
+            'email' => 'admin@toastkart.local',
             'password' => Hash::make('password123'),
             'role' => 'admin',
         ]);
 
         $owner = User::create([
             'name' => 'Store Merchant Owner',
-            'email' => 'owner@shopnest.local',
+            'email' => 'owner@toastkart.local',
             'password' => Hash::make('password123'),
             'role' => 'merchant',
         ]);
 
         $customerUser = User::create([
             'name' => 'Sara Ahmed (Customer)',
-            'email' => 'customer@shopnest.local',
+            'email' => 'customer@toastkart.local',
             'password' => Hash::make('password123'),
             'role' => 'customer',
         ]);

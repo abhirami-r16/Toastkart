@@ -6,7 +6,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
     try {
-      const saved = localStorage.getItem('shopnest_user');
+      const saved = localStorage.getItem('toastkart_user');
       return saved ? JSON.parse(saved) : null;
     } catch (error) {
       console.error('Failed to load saved user:', error);
@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
   // Check authentication when the application starts
   useEffect(() => {
     const checkAuth = async () => {
-      const token = localStorage.getItem('shopnest_token');
+      const token = localStorage.getItem('toastkart_token');
 
       if (!token) {
         setUser(null);
@@ -31,12 +31,13 @@ export const AuthProvider = ({ children }) => {
         const res = await api.get('/me');
 
         setUser(res.data);
-        localStorage.setItem('shopnest_user', JSON.stringify(res.data));
+        localStorage.setItem('toastkart_user', JSON.stringify(res.data));
+        localStorage.setItem('toastkart_last_user_id', res.data.id);
       } catch (err) {
         console.error('Authentication check failed:', err);
 
-        localStorage.removeItem('shopnest_token');
-        localStorage.removeItem('shopnest_user');
+        localStorage.removeItem('toastkart_token');
+        localStorage.removeItem('toastkart_user');
         setUser(null);
       } finally {
         setLoading(false);
@@ -63,8 +64,9 @@ export const AuthProvider = ({ children }) => {
         };
       }
 
-      localStorage.setItem('shopnest_token', token);
-      localStorage.setItem('shopnest_user', JSON.stringify(user));
+      localStorage.setItem('toastkart_token', token);
+      localStorage.setItem('toastkart_user', JSON.stringify(user));
+      localStorage.setItem('toastkart_last_user_id', user.id);
 
       setUser(user);
 
@@ -112,10 +114,11 @@ export const AuthProvider = ({ children }) => {
       const { user, token } = res.data;
 
       if (token) {
-        localStorage.setItem('shopnest_token', token);
+        localStorage.setItem('toastkart_token', token);
       }
 
-      localStorage.setItem('shopnest_user', JSON.stringify(user));
+      localStorage.setItem('toastkart_user', JSON.stringify(user));
+      localStorage.setItem('toastkart_last_user_id', user.id);
 
       setUser(user);
 
@@ -142,7 +145,7 @@ export const AuthProvider = ({ children }) => {
   // Logout
   const logout = async () => {
     try {
-      const token = localStorage.getItem('shopnest_token');
+      const token = localStorage.getItem('toastkart_token');
 
       if (token) {
         await api.post('/logout');
@@ -150,8 +153,8 @@ export const AuthProvider = ({ children }) => {
     } catch (err) {
       console.error('Logout request failed:', err);
     } finally {
-      localStorage.removeItem('shopnest_token');
-      localStorage.removeItem('shopnest_user');
+      localStorage.removeItem('toastkart_token');
+      localStorage.removeItem('toastkart_user');
       setUser(null);
     }
   };

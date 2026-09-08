@@ -1,6 +1,9 @@
 import React from 'react';
 
-export default function ToastKartLogo({ className = "", style = {}, width = 240, height = 48, ...rest }) {
+export default function ToastKartLogo({ className = "", style = {}, width = 240, height = 48, theme = "light", ...rest }) {
+  const textColor = theme === "dark" ? "#FFFFFF" : "#1C2841";
+  const wheelColor = theme === "dark" ? "#FFFFFF" : "#1C2841";
+
   return (
     <svg 
       xmlns="http://www.w3.org/2000/svg" 
@@ -23,13 +26,13 @@ export default function ToastKartLogo({ className = "", style = {}, width = 240,
         />
         
         {/* Wheels */}
-        <circle cx="60" cy="100" r="11" fill="#1C2841" />
-        <circle cx="110" cy="100" r="11" fill="#1C2841" />
+        <circle cx="60" cy="100" r="11" fill={wheelColor} />
+        <circle cx="110" cy="100" r="11" fill={wheelColor} />
       </g>
       
       {/* Text "ToastKart" */}
       <text x="160" y="80" fontFamily="system-ui, -apple-system, sans-serif" fontWeight="900" fontSize="72" textAnchor="start" letterSpacing="-1.5">
-        <tspan fill="#1C2841">Toast</tspan>
+        <tspan fill={textColor}>Toast</tspan>
         <tspan fill="#FF5722">Kart</tspan>
       </text>
     </svg>
