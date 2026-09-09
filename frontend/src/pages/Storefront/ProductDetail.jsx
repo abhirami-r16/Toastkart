@@ -162,7 +162,7 @@ export default function ProductDetail({ storeData, products }) {
   };
 
   return (
-    <div className="storefront-container py-5">
+    <div className="storefront-container py-5 px-3 px-md-4">
       <button 
         className="btn btn-link text-decoration-none text-secondary mb-4 d-flex align-items-center gap-2 p-0"
         onClick={() => navigate(basePath)}
@@ -232,9 +232,9 @@ export default function ProductDetail({ storeData, products }) {
                 {categoryName}
               </span>
             )}
-            <h1 className="display-6 fw-bold mb-3">{product.name}</h1>
+            <h1 className="fs-2 fs-md-1 fw-bold mb-3 lh-sm">{product.name}</h1>
             
-            <div className="d-flex align-items-baseline gap-2 mb-4">
+            <div className="d-flex align-items-baseline flex-wrap gap-2 mb-4">
               {product.compare_price && Number(product.compare_price) > Number(product.price) ? (
                 <>
                   <span className="fs-4 text-muted text-decoration-line-through">
@@ -243,7 +243,7 @@ export default function ProductDetail({ storeData, products }) {
                   <span className="fs-2 fw-bold text-dark">
                     ₹{Number(product.price).toLocaleString('en-IN')}
                   </span>
-                  <span className="fs-5 fw-bold" style={{ color: '#388e3c' }}>
+                  <span className="fs-5 fw-bold ms-auto ms-sm-0" style={{ color: '#388e3c' }}>
                     — {Math.round(((Number(product.compare_price) - Number(product.price)) / Number(product.compare_price)) * 100)}% OFF
                   </span>
                 </>
