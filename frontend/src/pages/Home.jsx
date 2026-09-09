@@ -107,7 +107,7 @@ const goslotStyles = `
     border: 1px solid var(--line);
   }
   .template-iframe {
-    width: 1440px;
+    width: 200%;
     height: 900px;
     transform: scale(0.5);
     transform-origin: top left;
@@ -197,18 +197,22 @@ const goslotStyles = `
       gap: 0.5rem !important;
     }
     .template-iframe-container {
-      height: 220px !important;
+      height: 250px !important;
     }
     .template-iframe {
-      transform: scale(0.24) !important;
+      width: 400% !important;
+      height: 1000px !important;
+      transform: scale(0.25) !important;
     }
   }
   @media (min-width: 768px) and (max-width: 991px) {
     .template-iframe-container {
-      height: 320px !important;
+      height: 350px !important;
     }
     .template-iframe {
-      transform: scale(0.35) !important;
+      width: 200% !important;
+      height: 700px !important;
+      transform: scale(0.5) !important;
     }
   }
 `;
