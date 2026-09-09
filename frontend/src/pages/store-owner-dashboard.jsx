@@ -2841,7 +2841,25 @@ export default function StoreOwnerDashboard() {
                         if (!files.length) return;
                         const readers = files.map(file => new Promise((resolve) => {
                           const reader = new FileReader();
-                          reader.onloadend = () => resolve(reader.result);
+                          reader.onload = (e) => {
+                            const img = new Image();
+                            img.onload = () => {
+                              const canvas = document.createElement('canvas');
+                              let width = img.width;
+                              let height = img.height;
+                              const maxW = 1024;
+                              if (width > maxW) {
+                                height = Math.round((height * maxW) / width);
+                                width = maxW;
+                              }
+                              canvas.width = width;
+                              canvas.height = height;
+                              const ctx = canvas.getContext('2d');
+                              ctx.drawImage(img, 0, 0, width, height);
+                              resolve(canvas.toDataURL('image/jpeg', 0.7));
+                            };
+                            img.src = e.target.result;
+                          };
                           reader.readAsDataURL(file);
                         }));
                         const results = await Promise.all(readers);
@@ -3314,7 +3332,25 @@ export default function StoreOwnerDashboard() {
                         if (!files.length) return;
                         const readers = files.map(file => new Promise((resolve) => {
                           const reader = new FileReader();
-                          reader.onloadend = () => resolve(reader.result);
+                          reader.onload = (e) => {
+                            const img = new Image();
+                            img.onload = () => {
+                              const canvas = document.createElement('canvas');
+                              let width = img.width;
+                              let height = img.height;
+                              const maxW = 1024;
+                              if (width > maxW) {
+                                height = Math.round((height * maxW) / width);
+                                width = maxW;
+                              }
+                              canvas.width = width;
+                              canvas.height = height;
+                              const ctx = canvas.getContext('2d');
+                              ctx.drawImage(img, 0, 0, width, height);
+                              resolve(canvas.toDataURL('image/jpeg', 0.7));
+                            };
+                            img.src = e.target.result;
+                          };
                           reader.readAsDataURL(file);
                         }));
                         const results = await Promise.all(readers);
