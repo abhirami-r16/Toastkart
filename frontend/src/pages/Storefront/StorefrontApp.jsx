@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react'; // Syncing file to fix syntax error
 import { Routes, Route, Navigate, useParams } from 'react-router-dom';
 import api from '../../api/axios';
-import { useAuth } from '../../context/AuthContext';
+import { useStorefrontAuth } from '../../context/StorefrontAuthContext';
 import { StorefrontCartProvider } from '../../context/StorefrontCartContext';
 import { StorefrontAuthProvider } from '../../context/StorefrontAuthContext';
 import StorefrontLayout from '../../layouts/StorefrontLayout';
@@ -21,7 +21,6 @@ export default function StorefrontApp({ subdomain }) {
   const [loading, setLoading] = useState(true);
   const { slug } = useParams();
 const tenantId = slug;
-  const { user } = useAuth();
 
   // Fetch all required data (store, products, categories)
   const fetchStoreData = useCallback(async () => {

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStorefrontCart } from '../../context/StorefrontCartContext';
-import { useAuth } from '../../context/AuthContext';
+import { useStorefrontAuth } from '../../context/StorefrontAuthContext';
 import { normalizeProductImage } from '../../utils/imageUtils';
 
 export default function Checkout() {
   const navigate = useNavigate();
   const { cartItems, cartTotal, clearCart, storeId } = useStorefrontCart();
-  const { user } = useAuth();
+  const { user } = useStorefrontAuth();
 
   const [formData, setFormData] = useState({
     firstName: '',

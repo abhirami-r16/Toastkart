@@ -49,8 +49,12 @@ export default function MyOrders() {
         let localOrders = [];
         try {
           const saved = JSON.parse(localStorage.getItem('aureum_owner_orders') || '[]');
-          // Attempt to match user email if present
-          localOrders = saved.filter(o => !o.email || o.email === user.email);
+          // Attempt to match user email if present and MUST match storeId
+          localOrders = saved.filter(o => {
+            const emailMatch = !o.email || o.email.toLowerCase() === user.email.toLowerCase() || !o.customer_email || o.customer_email.toLowerCase() === user.email.toLowerCase();
+            const storeMatch = !storeId || String(o.store_id) === String(storeId) || !o.store_id;
+            return emailMatch && storeMatch;
+          });
         } catch (e) {}
         
         // Combine, ensuring no duplicates by ID
@@ -66,7 +70,11 @@ export default function MyOrders() {
         // Fallback to local storage only
         try {
           const saved = JSON.parse(localStorage.getItem('aureum_owner_orders') || '[]');
-          const localOrders = saved.filter(o => !o.email || o.email === user.email);
+          const localOrders = saved.filter(o => {
+            const emailMatch = !o.email || o.email.toLowerCase() === user.email.toLowerCase() || !o.customer_email || o.customer_email.toLowerCase() === user.email.toLowerCase();
+            const storeMatch = !storeId || String(o.store_id) === String(storeId) || !o.store_id;
+            return emailMatch && storeMatch;
+          });
           setOrders(localOrders);
         } catch (e) {}
       } finally {

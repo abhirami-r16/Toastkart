@@ -492,11 +492,13 @@
 
 @media (max-width: 575px) {
   .theme-eflyer .eflyer-header {
-    position: relative;
+    position: absolute;
+    width: 100%;
+    z-index: 100;
   }
   
   .theme-eflyer .eflyer-hero {
-    padding-top: 30px;
+    padding-top: 180px;
     padding-bottom: 60px;
     background: transparent; /* Rely on wrapper background */
   }

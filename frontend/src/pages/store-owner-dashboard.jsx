@@ -582,10 +582,11 @@ export default function StoreOwnerDashboard() {
   useEffect(() => {
     if (!activeStore?.id) return;
     const loadStoreOrders = async () => {
+      let combinedOrders = [];
       try {
         const res = await api.get(`/orders?store_id=${activeStore.id}`);
         if (Array.isArray(res.data) && res.data.length > 0) {
-          const backendOrders = res.data.map(o => ({
+          combinedOrders = res.data.map(o => ({
             id: o.id,
             store_id: o.store_id,
             order_number: o.order_number || o.id,
@@ -597,13 +598,34 @@ export default function StoreOwnerDashboard() {
             date: o.created_at || new Date().toISOString(),
             items: o.items || []
           }));
-          setOrdersList(backendOrders);
-        } else {
-          setOrdersList([]);
         }
       } catch (err) {
         console.debug("Failed to load store orders from backend", err);
       }
+      
+      try {
+        const localOrders = JSON.parse(localStorage.getItem('aureum_owner_orders') || '[]');
+        if (localOrders && localOrders.length > 0) {
+          const existingIds = new Set(combinedOrders.map(o => String(o.id)));
+          const formattedLocal = localOrders
+            .filter(o => !existingIds.has(String(o.id)))
+            .map(o => ({
+              id: o.id,
+              store_id: o.store_id,
+              order_number: o.id,
+              customer: o.customer_name || 'Customer',
+              email: o.customer_email || '',
+              total: typeof o.total_amount === 'number' ? `$${o.total_amount.toFixed(2)}` : (o.total_amount ? `$${Number(o.total_amount).toFixed(2)}` : ''),
+              status: o.status || 'Pending',
+              pay: 'Paid',
+              date: o.created_at || new Date().toISOString(),
+              items: o.items || []
+            }));
+          combinedOrders = [...combinedOrders, ...formattedLocal];
+        }
+      } catch (err) {}
+
+      setOrdersList(combinedOrders);
     };
     loadStoreOrders();
   }, [activeStore?.id]);
@@ -1214,6 +1236,13 @@ export default function StoreOwnerDashboard() {
     // Optimistic UI update
     setOrdersList(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
     
+    // Also update local storage so storefront sees it instantly if it's a mock order
+    try {
+      const saved = JSON.parse(localStorage.getItem('aureum_owner_orders') || '[]');
+      const updated = saved.map(o => String(o.id) === String(orderId) ? { ...o, status: newStatus } : o);
+      localStorage.setItem('aureum_owner_orders', JSON.stringify(updated));
+    } catch (e) {}
+
     // Check if orderId is a real backend ID (not a local dummy one starting with #)
     if (typeof orderId === 'number' || (typeof orderId === 'string' && !orderId.startsWith('#'))) {
       try {
@@ -1972,7 +2001,6 @@ export default function StoreOwnerDashboard() {
                         <thead>
                           <tr className="fs-8 fw-semibold" style={{ color: "#6d7175", borderBottom: "1px solid #dfe3e8" }}>
                             <th className="border-0 ps-4 py-3">Customer Name</th>
-                            <th className="border-0 py-3">Email Address</th>
                             <th className="border-0 py-3">Ordered Products</th>
                             <th className="border-0 py-3">Total Orders</th>
                             <th className="border-0 py-3">Total Spent</th>
@@ -1987,7 +2015,7 @@ export default function StoreOwnerDashboard() {
                             (c.orderedProducts && c.orderedProducts.some(p => p.toLowerCase().includes(customerSearchQuery.toLowerCase())))
                           ).length === 0 ? (
                             <tr>
-                              <td colSpan="7" className="text-center py-4 fs-7" style={{ color: "#6d7175" }}>
+                              <td colSpan="6" className="text-center py-4 fs-7" style={{ color: "#6d7175" }}>
                                 No customer found matching "{customerSearchQuery}".
                               </td>
                             </tr>
@@ -2011,7 +2039,6 @@ export default function StoreOwnerDashboard() {
                                       </div>
                                     </div>
                                   </td>
-                                  <td className="border-0 fs-8 fw-semibold" style={{ color: "#6d7175" }}>{c.email}</td>
                                   <td className="border-0" style={{ maxWidth: 300 }}>
                                     <div className="d-flex flex-wrap gap-1">
                                       {c.orderedProducts && c.orderedProducts.length > 0 ? (

@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useStorefrontCart } from '../../context/StorefrontCartContext';
-import { useAuth } from '../../context/AuthContext';
+import { useStorefrontAuth } from '../../context/StorefrontAuthContext';
 import { normalizeProductImage } from '../../utils/imageUtils';
 
 export default function PaymentGateway() {
   const navigate = useNavigate();
   const location = useLocation();
   const { cartItems, cartTotal, clearCart, storeId } = useStorefrontCart();
-  const { user } = useAuth();
+  const { user } = useStorefrontAuth();
   
   const [paymentMethod, setPaymentMethod] = useState('upi');
   const [isSubmitting, setIsSubmitting] = useState(false);
