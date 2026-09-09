@@ -102,13 +102,25 @@ export default function StorefrontHome({ storeData, products, categories = [] })
   };
 
   const renderProductGrid = (items) => {
-    // Duplicate items to create a seamless infinite marquee scrolling effect
-    const marqueeItems = items && items.length > 0 ? [...items, ...items, ...items, ...items] : [];
+    // Only enable marquee if there are more than 4 products
+    const enableMarquee = items && items.length > 4;
+    let displayItems = [];
+
+    if (enableMarquee) {
+      // Duplicate items to create a seamless infinite marquee scrolling effect
+      let baseItems = [...items];
+      while (baseItems.length < 8) {
+        baseItems = [...baseItems, ...items];
+      }
+      displayItems = [...baseItems, ...baseItems];
+    } else {
+      displayItems = items && items.length > 0 ? items : [];
+    }
     
-    return marqueeItems.length > 0 ? (
-      <div className="storefront-product-grid-wrapper" style={{ overflow: 'hidden' }}>
-        <div className="storefront-product-grid">
-          {marqueeItems.map((product, idx) => (
+    return displayItems.length > 0 ? (
+      <div className={`storefront-product-grid-wrapper ${enableMarquee ? 'marquee-enabled' : 'marquee-disabled'}`} style={{ overflow: 'hidden' }}>
+        <div className={`storefront-product-grid ${enableMarquee ? 'marquee-active' : ''}`}>
+          {displayItems.map((product, idx) => (
             <div key={`${product.id}-${idx}`} className="storefront-product-card position-relative">
               <Link to={`${basePath}/product/${product.id}`} className="text-decoration-none text-dark d-block">
                 <div className="storefront-product-image-container">

@@ -725,6 +725,7 @@ export default function StoreOwnerDashboard() {
       ownerName: ""
     });
     setShowCreateStoreModal(true);
+    setActive("stores");
   };
 
   const handleCreateStoreSubmit = async (e) => {

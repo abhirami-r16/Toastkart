@@ -328,10 +328,12 @@
   -webkit-overflow-scrolling: touch;
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+.theme-eflyer .storefront-product-grid.marquee-active {
   width: max-content;
   animation: scrollMarquee 15s linear infinite;
 }
-.theme-eflyer .storefront-product-grid:hover {
+.theme-eflyer .storefront-product-grid.marquee-active:hover {
   animation-play-state: paused;
 }
 @keyframes scrollMarquee {
