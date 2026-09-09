@@ -66,7 +66,6 @@ const ownerLinks = [
   { key: "customers", label: "Customers", icon: Users },
   { key: "discounts", label: "Discounts", icon: Percent },
   { key: "payment", label: "Payment Gateway", icon: CreditCard },
-  { key: "settings", label: "Settings", icon: Settings },
 ];
 
 const salesTrendDaily = [
@@ -214,7 +213,18 @@ export default function StoreOwnerDashboard() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   
-  const [active, setActive] = useState("dashboard");
+  const [active, setActive] = useState(() => {
+    try {
+      const saved = localStorage.getItem("aureum_owner_stores");
+      const currentUserId = parseInt(localStorage.getItem('toastkart_last_user_id')) || 1;
+      if (!saved) return "stores";
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && !parsed.some(s => s.user_id === currentUserId || (!s.user_id && currentUserId === 1))) {
+        return "stores";
+      }
+    } catch(e) {}
+    return "dashboard";
+  });
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [chartFilter, setChartFilter] = useState("daily");
   const currentUserId = user?.id || parseInt(localStorage.getItem('toastkart_last_user_id')) || null;
@@ -378,27 +388,7 @@ export default function StoreOwnerDashboard() {
   const isOwner = user?.role === 'owner';
   const ownerStores = useMemo(() => {
     const filtered = storesList.filter((s) => s.user_id === currentUserId || (!s.user_id && currentUserId === 1));
-    if (filtered.length > 0) return filtered;
-
- const fallbackStore = {
-  id: user?.stores?.[0]?.id || currentUserId || 0,
-  user_id: user?.id || currentUserId || 0,
-  name: user?.stores?.[0]?.name || `${user?.name || 'Owner'} Store`,
-  slug: user?.stores?.[0]?.slug || 'owner-store',
-  subdomain: user?.stores?.[0]?.subdomain || 'owner-store',
-  category: user?.stores?.[0]?.category || 'General Merchandise',
-  currency: user?.stores?.[0]?.currency || 'USD',
-  status: user?.stores?.[0]?.status || 'Active',
-  email: user?.email || '',
-  phone: '',
-  description: user?.stores?.[0]?.description || '',
-  logo: user?.stores?.[0]?.logo || '',
-  banner: '',
-  products_count: 0,
-  orders_count: 0,
-  total_revenue: '$0.00'
-};
-    return [fallbackStore];
+    return filtered;
   }, [storesList, currentUserId, user]);
 
   const activeStore = ownerStores.find((s) => String(s.id) === String(selectedStoreId)) || ownerStores[0];
@@ -696,7 +686,8 @@ export default function StoreOwnerDashboard() {
     email: "",
     phone: "",
     description: "",
-    status: "Active"
+    status: "Active",
+    ownerName: ""
   });
 
   // Category State & Modals
@@ -730,7 +721,8 @@ export default function StoreOwnerDashboard() {
       email: "support@mybrand.com",
       phone: "+1 (555) 000-0000",
       description: "",
-      status: "Active"
+      status: "Active",
+      ownerName: ""
     });
     setShowCreateStoreModal(true);
   };
@@ -818,7 +810,8 @@ export default function StoreOwnerDashboard() {
       email: activeStore.email || "",
       phone: activeStore.phone || "",
       description: activeStore.description || "",
-      status: activeStore.status || "Active"
+      status: activeStore.status || "Active",
+      ownerName: activeStore.owner_name || ""
     });
     setShowEditStoreModal(true);
   };
@@ -2246,11 +2239,6 @@ export default function StoreOwnerDashboard() {
                             <option value="Jewellery">Jewellery</option>
                             <option value="Beauty & Cosmetics">Beauty & Cosmetics</option>
                             <option value="Home & Living">Home & Living</option>
-                            <option value="Electronics">Electronics</option>
-                            <option value="Footwear">Footwear</option>
-                            <option value="Grocery & Food">Grocery & Food</option>
-                            <option value="Gift Store">Gift Store</option>
-                            <option value="General Retail">General Retail</option>
                           </select>
                         </div>
                         <div className="col-6">
@@ -2264,13 +2252,9 @@ export default function StoreOwnerDashboard() {
                         </div>
                       </div>
                       <div className="row g-2">
-                        <div className="col-6">
-                          <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Support Email</label>
-                          <input type="email" value={storeForm.email} onChange={(e) => setStoreForm({ ...storeForm, email: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="support@mybrand.com" />
-                        </div>
-                        <div className="col-6">
+                        <div className="col-12">
                           <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Owner Name</label>
-                          <input value={storeForm.ownerName} onChange={(e) => setStoreForm({ ...storeForm, ownerName: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="Owner Name" />
+                          <input autoComplete="off" name="ownerName_field" value={storeForm.ownerName} onChange={(e) => setStoreForm({ ...storeForm, ownerName: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="Owner Name" />
                         </div>
                       </div>
                       <div>
@@ -2334,50 +2318,37 @@ export default function StoreOwnerDashboard() {
                               <option value="Jewellery">Jewellery</option>
                               <option value="Beauty & Cosmetics">Beauty & Cosmetics</option>
                               <option value="Home & Living">Home & Living</option>
-                              <option value="Electronics">Electronics</option>
-                              <option value="Footwear">Footwear</option>
-                              <option value="Grocery & Food">Grocery & Food</option>
-                              <option value="Gift Store">Gift Store</option>
-                              <option value="General Retail">General Retail</option>
                             </select>
                           </div>
-                          {showCreateStoreModal ? (
-                            <div className="col-6">
-                              <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Currency</label>
-                              <select value={storeForm.currency} onChange={(e) => setStoreForm({ ...storeForm, currency: e.target.value })} className="form-select" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}>
-                                <option value="USD ($)">USD ($)</option>
-                                <option value="EUR (€)">EUR (€)</option>
-                                <option value="INR (₹)">INR (₹)</option>
-                                <option value="GBP (£)">GBP (£)</option>
-                              </select>
-                            </div>
-                          ) : (
-                            <div className="col-6">
-                              <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Store Status</label>
-                              <select value={storeForm.status} onChange={(e) => setStoreForm({ ...storeForm, status: e.target.value })} className="form-select" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}>
-                                <option value="Active">🟢 Active (Open for Orders)</option>
-                                <option value="Maintenance">🟡 Maintenance Mode</option>
-                                <option value="Draft">🔴 Draft (Private)</option>
-                              </select>
-                            </div>
-                          )}
+                          <div className="col-6">
+                            <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Currency</label>
+                            <select value={storeForm.currency} onChange={(e) => setStoreForm({ ...storeForm, currency: e.target.value })} className="form-select" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}>
+                              <option value="USD ($)">USD ($)</option>
+                              <option value="EUR (€)">EUR (€)</option>
+                              <option value="INR (₹)">INR (₹)</option>
+                              <option value="GBP (£)">GBP (£)</option>
+                            </select>
+                          </div>
                         </div>
                         <div className="row g-2">
                           <div className="col-6">
-                            <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Support Email</label>
-                            <input type="email" value={storeForm.email} onChange={(e) => setStoreForm({ ...storeForm, email: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="support@mybrand.com" />
+                            <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Owner Name</label>
+                            <input autoComplete="off" name="ownerName_modal" value={storeForm.ownerName} onChange={(e) => setStoreForm({ ...storeForm, ownerName: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="Owner Name" />
                           </div>
-                          {showCreateStoreModal ? (
-                            <div className="col-6">
-                              <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Owner Name</label>
-                              <input value={storeForm.ownerName} onChange={(e) => setStoreForm({ ...storeForm, ownerName: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="Owner Name" />
-                            </div>
-                          ) : (
-                            <div className="col-6">
-                              <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Support Phone</label>
-                              <input value={storeForm.phone} onChange={(e) => setStoreForm({ ...storeForm, phone: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="Support Phone" />
-                            </div>
-                          )}
+                          <div className="col-6">
+                            <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Support Phone</label>
+                            <input value={storeForm.phone} onChange={(e) => setStoreForm({ ...storeForm, phone: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="Support Phone" />
+                          </div>
+                        </div>
+                        <div className="row g-2">
+                          <div className="col-12">
+                            <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Store Status</label>
+                            <select value={storeForm.status} onChange={(e) => setStoreForm({ ...storeForm, status: e.target.value })} className="form-select" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}>
+                              <option value="Active">🟢 Active (Open for Orders)</option>
+                              <option value="Maintenance">🟡 Maintenance Mode</option>
+                              <option value="Draft">🔴 Draft (Private)</option>
+                            </select>
+                          </div>
                         </div>
                         <div>
                           <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Store Description</label>
@@ -2464,23 +2435,9 @@ export default function StoreOwnerDashboard() {
                             <strong className="fs-7" style={{ color: "#202223" }}>{activeStore.currency || "USD ($)"}</strong>
                           </div>
                           <div className="col-6 col-md-3">
-                            <span className="fs-8 d-block mb-1" style={{ color: "#6d7175" }}>Support Email</span>
+                            <span className="fs-8 d-block mb-1" style={{ color: "#6d7175" }}>Owner Name</span>
                             <strong className="fs-7 d-block text-break" style={{ color: "#202223", wordBreak: "break-all" }}>
-                              {(() => {
-                                const storeEmail = activeStore?.email;
-                                if (storeEmail && storeEmail !== "null" && storeEmail !== "") return storeEmail;
-                                
-                                const userEmail = user?.email || user?.user?.email;
-                                if (userEmail && userEmail !== "null" && userEmail !== "") return userEmail;
-                                
-                                try {
-                                  const lsUser = JSON.parse(localStorage.getItem('toastkart_user') || '{}');
-                                  if (lsUser?.email && lsUser.email !== "null" && lsUser.email !== "") return lsUser.email;
-                                  if (lsUser?.user?.email && lsUser.user.email !== "null" && lsUser.user.email !== "") return lsUser.user.email;
-                                } catch(e) {}
-                                
-                                return "Not Provided";
-                              })()}
+                              {activeStore.owner_name || activeStore.ownerName || user?.name || user?.owner_name || "Not Provided"}
                             </strong>
                           </div>
                         </div>

@@ -91,9 +91,28 @@ const goslotStyles = `
     padding-bottom: 100px;
     position: relative;
     overflow: hidden;
-    width: 100vw;
-    left: 50%;
-    transform: translateX(-50%);
+    width: 100%;
+  }
+  .force-white-text {
+    color: #ffffff !important;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5) !important;
+  }
+  .template-iframe-container {
+    height: 450px;
+    position: relative;
+    border-radius: 1rem;
+    overflow: hidden;
+    background-color: white;
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.175);
+    border: 1px solid var(--line);
+  }
+  .template-iframe {
+    width: 1440px;
+    height: 900px;
+    transform: scale(0.5);
+    transform-origin: top left;
+    border: none;
+    pointer-events: none;
   }
   .hero-blob {
     position: absolute;
@@ -176,6 +195,20 @@ const goslotStyles = `
     }
     .goslot-header .gap-3 {
       gap: 0.5rem !important;
+    }
+    .template-iframe-container {
+      height: 220px !important;
+    }
+    .template-iframe {
+      transform: scale(0.24) !important;
+    }
+  }
+  @media (min-width: 768px) and (max-width: 991px) {
+    .template-iframe-container {
+      height: 320px !important;
+    }
+    .template-iframe {
+      transform: scale(0.35) !important;
     }
   }
 `;
@@ -320,19 +353,12 @@ export default function Home() {
             ].map((t, i) => (
               <div key={i} className={`row align-items-center mb-5 pb-4`}>
                 <div className={`col-12 col-lg-7 ${i % 2 !== 0 ? 'order-lg-2' : ''}`}>
-                  <div className="rounded-4 overflow-hidden shadow-lg border bg-white position-relative" style={{ height: '450px' }}>
+                  <div className="template-iframe-container">
                     {t.url ? (
                       <iframe
                         src={t.url}
                         title={t.title}
-                        style={{
-                          width: '1440px',
-                          height: '900px',
-                          transform: 'scale(0.5)',
-                          transformOrigin: 'top left',
-                          border: 'none',
-                          pointerEvents: 'none'
-                        }}
+                        className="template-iframe"
                       />
                     ) : (
                       <img src={t.img} alt={t.title} className="w-100 h-100" style={{ objectFit: 'cover' }} />

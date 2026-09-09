@@ -29,8 +29,8 @@ class AuthController extends Controller
             'role' => $role,
         ]);
 
-        if ($role === 'owner') {
-            $storeName = $fields['store_name'] ?? $user->name . "'s Store";
+        if ($role === 'owner' && !empty($fields['store_name'])) {
+            $storeName = $fields['store_name'];
             $slug = Str::slug($storeName);
             $originalSlug = $slug;
             $count = 1;
