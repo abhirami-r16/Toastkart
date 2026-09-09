@@ -13,12 +13,16 @@
 
 /* Header Wrapper - ensures the orange background covers the whole header area */
 .theme-eflyer .eflyer-banner-wrapper {
-  background-image: url('https://themewagon.github.io/eflyer/images/banner-bg.png'); /* Or a similar vibrant yellow/orange gradient image */
-  background-color: #eab41f; /* Fallback */
+  background-image: url('https://themewagon.github.io/eflyer/images/banner-bg.png');
+  background-color: #eab41f;
   background-size: cover;
   background-position: center;
   position: relative;
   z-index: 10;
+}
+
+.theme-eflyer.is-home .eflyer-banner-wrapper {
+  background: transparent;
 }
 
 /* Let's actually put the background on the eflyer-hero and pull it up under the header */
@@ -317,9 +321,22 @@
 }
 
 .theme-eflyer .storefront-product-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  display: flex;
+  overflow-x: hidden;
   gap: 30px;
+  padding-bottom: 20px;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  width: max-content;
+  animation: scrollMarquee 15s linear infinite;
+}
+.theme-eflyer .storefront-product-grid:hover {
+  animation-play-state: paused;
+}
+@keyframes scrollMarquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 .theme-eflyer .storefront-product-card {
@@ -332,6 +349,10 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  min-width: 280px;
+  max-width: 280px;
+  flex: 0 0 auto;
+  scroll-snap-align: start;
 }
 
 .theme-eflyer .storefront-product-card:hover {
@@ -506,7 +527,7 @@
     justify-content: center;
     margin-left: 0;
     gap: 25px;
-    order: 3;
+    order: 1;
     flex-wrap: wrap;
   }
   

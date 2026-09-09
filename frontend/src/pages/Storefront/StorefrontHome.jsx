@@ -16,6 +16,7 @@ export default function StorefrontHome({ storeData, products, categories = [] })
 
   useEffect(() => {
     const timer = setInterval(() => {
+      setEflyerSlide((prev) => (prev + 1) % 3);
       setAranozSlide((prev) => (prev + 1) % 3);
       setJewelrySlide((prev) => (prev + 1) % 8);
     }, 4000);
@@ -100,91 +101,96 @@ export default function StorefrontHome({ storeData, products, categories = [] })
     return colors.length > 0 ? colors[0] : null;
   };
 
-  const renderProductGrid = (items) => (
-    items && items.length > 0 ? (
-      <div className="storefront-product-grid">
-        {items.map(product => (
-          <div key={product.id} className="storefront-product-card position-relative">
-            <Link to={`${basePath}/product/${product.id}`} className="text-decoration-none text-dark d-block">
-              <div className="storefront-product-image-container">
-                <img 
-                  src={normalizeProductImage(product.image || product.image_url, product.name)} 
-                  alt={product.name} 
-                  className="storefront-product-image"
-                />
-              </div>
-              <div className="storefront-product-details pb-5">
-                {theme === 'theme-jewelry' && (
-                  <span className="storefront-product-category">
-                    {product.category?.name || product.category || 'Luxury'}
-                  </span>
-                )}
-                <div className="storefront-product-title">{product.name}</div>
-                <div className="storefront-product-rating">
-                  <span className="rating-badge">
-                    {product.rating || "4.5"} ★
-                  </span>
+  const renderProductGrid = (items) => {
+    // Duplicate items to create a seamless infinite marquee scrolling effect
+    const marqueeItems = items && items.length > 0 ? [...items, ...items, ...items, ...items] : [];
+    
+    return marqueeItems.length > 0 ? (
+      <div className="storefront-product-grid-wrapper" style={{ overflow: 'hidden' }}>
+        <div className="storefront-product-grid">
+          {marqueeItems.map((product, idx) => (
+            <div key={`${product.id}-${idx}`} className="storefront-product-card position-relative">
+              <Link to={`${basePath}/product/${product.id}`} className="text-decoration-none text-dark d-block">
+                <div className="storefront-product-image-container">
+                  <img 
+                    src={normalizeProductImage(product.image || product.image_url, product.name)} 
+                    alt={product.name} 
+                    className="storefront-product-image"
+                  />
                 </div>
-                <div className="storefront-product-price-row" style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
-                  {product.compare_price && Number(product.compare_price) > Number(product.price) ? (
-                    <>
-                      <span className="storefront-product-original-price" style={{ textDecoration: 'line-through', color: '#878787', fontSize: '14px' }}>
-                        ₹{Number(product.compare_price).toLocaleString('en-IN')}
-                      </span>
+                <div className="storefront-product-details pb-5">
+                  {theme === 'theme-jewelry' && (
+                    <span className="storefront-product-category">
+                      {product.category?.name || product.category || 'Luxury'}
+                    </span>
+                  )}
+                  <div className="storefront-product-title">{product.name}</div>
+                  <div className="storefront-product-rating">
+                    <span className="rating-badge">
+                      {product.rating || "4.5"} ★
+                    </span>
+                  </div>
+                  <div className="storefront-product-price-row" style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+                    {product.compare_price && Number(product.compare_price) > Number(product.price) ? (
+                      <>
+                        <span className="storefront-product-original-price" style={{ textDecoration: 'line-through', color: '#878787', fontSize: '14px' }}>
+                          ₹{Number(product.compare_price).toLocaleString('en-IN')}
+                        </span>
+                        <span className="storefront-product-price" style={{ color: '#212121', fontSize: '16px', fontWeight: '500' }}>
+                          ₹{Number(product.price).toLocaleString('en-IN')}
+                        </span>
+                        <span className="storefront-product-discount" style={{ color: '#388e3c', fontSize: '13px', fontWeight: '500' }}>
+                          — {Math.round(((Number(product.compare_price) - Number(product.price)) / Number(product.compare_price)) * 100)}% OFF
+                        </span>
+                      </>
+                    ) : (
                       <span className="storefront-product-price" style={{ color: '#212121', fontSize: '16px', fontWeight: '500' }}>
                         ₹{Number(product.price).toLocaleString('en-IN')}
                       </span>
-                      <span className="storefront-product-discount" style={{ color: '#388e3c', fontSize: '13px', fontWeight: '500' }}>
-                        — {Math.round(((Number(product.compare_price) - Number(product.price)) / Number(product.compare_price)) * 100)}% OFF
-                      </span>
-                    </>
-                  ) : (
-                    <span className="storefront-product-price" style={{ color: '#212121', fontSize: '16px', fontWeight: '500' }}>
-                      ₹{Number(product.price).toLocaleString('en-IN')}
-                    </span>
-                  )}
+                    )}
+                  </div>
+                  <div className="storefront-product-delivery">Free delivery</div>
                 </div>
-                <div className="storefront-product-delivery">Free delivery</div>
-              </div>
-            </Link>
-            
-            {/* Wishlist Button (absolute top right) */}
-            <button 
-              className="btn position-absolute top-0 end-0 m-2 rounded-circle shadow-sm bg-white"
-              style={{ width: '32px', height: '32px', padding: '0', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2 }}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                requireAuth(() => toggleWishlist(product));
-              }}
-            >
-              <Heart size={16} fill={isInWishlist(product.id) ? '#ff4757' : 'none'} color={isInWishlist(product.id) ? '#ff4757' : '#ced4da'} />
-            </button>
-
-            {/* Add to Cart Button */}
-            <div className={`add-to-cart-wrapper ${theme !== 'theme-default' ? 'theme-cart-wrapper' : 'position-absolute bottom-0 start-0 w-100 p-2'}`} style={{ zIndex: 2 }}>
+              </Link>
+              
+              {/* Wishlist Button (absolute top right) */}
               <button 
-                className={`btn w-100 fw-bold d-flex align-items-center justify-content-center gap-2 add-to-cart-btn ${theme !== 'theme-default' ? 'theme-cart-btn' : ''}`}
-                style={theme !== 'theme-default' ? {} : { backgroundColor: '#ff9f00', color: '#fff', border: 'none', fontSize: '0.85rem', padding: '8px' }}
+                className="btn position-absolute top-0 end-0 m-2 rounded-circle shadow-sm bg-white"
+                style={{ width: '32px', height: '32px', padding: '0', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2 }}
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  requireAuth(() => addToCart({ ...product, selectedSize: getFirstAvailableSize(product), selectedColor: getFirstAvailableColor(product) }, 1));
+                  requireAuth(() => toggleWishlist(product));
                 }}
               >
-                <ShoppingCart size={16} /> Add to Cart
+                <Heart size={16} fill={isInWishlist(product.id) ? '#ff4757' : 'none'} color={isInWishlist(product.id) ? '#ff4757' : '#ced4da'} />
               </button>
-            </div>
 
-          </div>
-        ))}
+              {/* Add to Cart Button */}
+              <div className={`add-to-cart-wrapper ${theme !== 'theme-default' ? 'theme-cart-wrapper' : 'position-absolute bottom-0 start-0 w-100 p-2'}`} style={{ zIndex: 2 }}>
+                <button 
+                  className={`btn w-100 fw-bold d-flex align-items-center justify-content-center gap-2 add-to-cart-btn ${theme !== 'theme-default' ? 'theme-cart-btn' : ''}`}
+                  style={theme !== 'theme-default' ? {} : { backgroundColor: '#ff9f00', color: '#fff', border: 'none', fontSize: '0.85rem', padding: '8px' }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    requireAuth(() => addToCart({ ...product, selectedSize: getFirstAvailableSize(product), selectedColor: getFirstAvailableColor(product) }, 1));
+                  }}
+                >
+                  <ShoppingCart size={16} /> Add to Cart
+                </button>
+              </div>
+
+            </div>
+          ))}
+        </div>
       </div>
     ) : (
       <div className="storefront-empty-state">
         <p>No products found in this category.</p>
       </div>
-    )
-  );
+    );
+  };
 
   return (
     <div className="storefront-home">
@@ -213,17 +219,26 @@ export default function StorefrontHome({ storeData, products, categories = [] })
             const prevSlide = () => setEflyerSlide((prev) => (prev - 1 + eflyerSlides.length) % eflyerSlides.length);
 
             return (
-              <div className="eflyer-hero" style={{ backgroundImage: `url(${slide.bg})` }}>
-                <button className="eflyer-slider-btn left" onClick={prevSlide}>
-                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                </button>
-                <div className="eflyer-hero-content" key={eflyerSlide}>
+              <div className="eflyer-hero position-relative overflow-hidden" style={{ background: 'transparent' }}>
+                {eflyerSlides.map((s, idx) => (
+                  <div 
+                    key={`bg-${idx}`} 
+                    className="position-absolute top-0 start-0 w-100 h-100" 
+                    style={{ 
+                      backgroundImage: `url(${s.bg})`, 
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      opacity: eflyerSlide === idx ? 1 : 0, 
+                      transition: 'opacity 1s ease-in-out',
+                      zIndex: 1
+                    }} 
+                  />
+                ))}
+                
+                <div className="eflyer-hero-content position-relative" key={`content-${eflyerSlide}`} style={{ zIndex: 2 }}>
                   <h1 className="eflyer-hero-title" dangerouslySetInnerHTML={{ __html: slide.title }}></h1>
                   <button className="eflyer-hero-btn">{slide.btn}</button>
                 </div>
-                <button className="eflyer-slider-btn right" onClick={nextSlide}>
-                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </button>
               </div>
             );
           case 'theme-hexashop':

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, Heart, Trash2 } from 'lucide-react';
+import { ArrowLeft, ShoppingCart, Heart, Trash2 } from 'lucide-react';
 import { useStorefrontCart } from '../../context/StorefrontCartContext';
 import { useStorefrontAuth } from '../../context/StorefrontAuthContext';
 import { normalizeProductImage } from '../../utils/imageUtils';
@@ -19,7 +19,12 @@ export default function Wishlist() {
 
   return (
     <div className="storefront-container py-5 min-vh-100">
-      <h1 className="fs-2 font-bold mb-4">My Wishlist</h1>
+      <div className="d-flex align-items-center mb-4">
+        <button onClick={() => navigate(basePath)} className="btn btn-link text-dark p-0 me-3 d-flex align-items-center justify-content-center">
+          <ArrowLeft size={28} />
+        </button>
+        <h1 className="fs-2 font-bold m-0">My Wishlist</h1>
+      </div>
 
       {wishlistItems && wishlistItems.length > 0 ? (
         <div className="storefront-product-grid">

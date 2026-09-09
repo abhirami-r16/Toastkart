@@ -92,37 +92,6 @@ export default function StorefrontLayout({ storeData, categories = [], products 
                 <div className="eflyer-bottom-bar">
                   <div className="eflyer-bottom-bar-content">
                     
-                    <div className="dropdown eflyer-category-dropdown" style={{ position: 'relative' }}>
-                      <button 
-                        className="eflyer-cat-btn" 
-                        type="button" 
-                        onClick={() => setIsCategoryOpen(!isCategoryOpen)}
-                      >
-                        {selectedCategory} <ChevronDown size={14} />
-                      </button>
-                      {isCategoryOpen && (
-                        <ul className="dropdown-menu show" style={{ position: 'absolute', top: '100%', left: 0, zIndex: 1000 }}>
-                          <li>
-                            <button className="dropdown-item" onClick={() => { setSelectedCategory('All Category'); setIsCategoryOpen(false); }}>All Category</button>
-                          </li>
-                          {activeCategories && activeCategories.map(cat => (
-                            <li key={cat.id || cat.name}>
-                              <button 
-                                className="dropdown-item" 
-                                onClick={(e) => {
-                                  setSelectedCategory(cat.name);
-                                  setIsCategoryOpen(false);
-                                  scrollToSection(e, cat.slug);
-                                }}
-                              >
-                                {cat.name}
-                              </button>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-
                     <div className="eflyer-search-container">
                       <input
                         type="text"

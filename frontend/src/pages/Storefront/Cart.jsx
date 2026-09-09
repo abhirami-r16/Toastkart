@@ -38,7 +38,12 @@ export default function Cart() {
 
   return (
     <div className="storefront-container py-5">
-      <h1 className="fs-2 font-bold mb-4">Shopping Cart</h1>
+      <div className="d-flex align-items-center mb-4">
+        <button onClick={() => navigate(basePath)} className="btn btn-link text-dark p-0 me-3 d-flex align-items-center justify-content-center">
+          <ArrowLeft size={28} />
+        </button>
+        <h1 className="fs-2 font-bold m-0">Shopping Cart</h1>
+      </div>
 
       <div className="row g-4">
         <div className="col-lg-8">

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Package, Clock, CheckCircle, Truck, Info } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
+import { Package, Clock, CheckCircle, Truck, Info, ArrowLeft } from 'lucide-react';
+import { useStorefrontAuth } from '../../context/StorefrontAuthContext';
 import { useStorefrontCart } from '../../context/StorefrontCartContext';
 import api from '../../api/axios';
 
 export default function MyOrders() {
-  const { user } = useAuth();
+  const { user } = useStorefrontAuth();
   const { storeId } = useStorefrontCart();
   const navigate = useNavigate();
   
@@ -106,11 +106,16 @@ export default function MyOrders() {
     });
   };
 
-  if (!user) return null; // Handled by useEffect redirect
+
 
   return (
     <div className="storefront-container py-5 min-vh-100">
-      <h1 className="fs-2 font-bold mb-4">My Orders</h1>
+      <div className="d-flex align-items-center mb-4">
+        <button onClick={() => navigate(basePath)} className="btn btn-link text-dark p-0 me-3 d-flex align-items-center justify-content-center">
+          <ArrowLeft size={28} />
+        </button>
+        <h1 className="fs-2 font-bold m-0">My Orders</h1>
+      </div>
 
       {!user ? (
         <div className="text-center py-5">
