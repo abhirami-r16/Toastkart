@@ -93,9 +93,11 @@ const goslotStyles = `
     overflow: hidden;
     width: 100%;
   }
-  .force-white-text {
+  .goslot-theme .force-white-text,
+  .goslot-theme h1.force-white-text,
+  .goslot-theme p.force-white-text {
     color: #ffffff !important;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5) !important;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.8) !important;
   }
   .template-iframe-container {
     height: 450px;
@@ -260,9 +262,6 @@ export default function Home() {
             <button onClick={() => navigate("/login")} className="d-none d-md-flex goslot-btn goslot-btn-primary py-1.5 px-3 fs-8">
               Login
             </button>
-            <button onClick={() => navigate("/login")} className="d-none d-md-flex goslot-btn goslot-btn-primary py-1.5 px-3 fs-8">
-              <Rocket size={14} /> Start Selling
-            </button>
 
             <button className="d-lg-none btn btn-light border-0 p-1 bg-transparent text-dark shadow-none" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -279,7 +278,6 @@ export default function Home() {
               <a href="#about" className="goslot-nav-link fs-5" onClick={() => setIsMobileMenuOpen(false)}>About</a>
               <div className="border-top my-2"></div>
               <a href="/login" className="goslot-nav-link fs-5 text-primary" onClick={() => setIsMobileMenuOpen(false)}>Login</a>
-              <a href="/register" className="goslot-nav-link fs-5 text-primary fw-bold" onClick={() => setIsMobileMenuOpen(false)}>Start Selling</a>
             </nav>
           </div>
         )}
