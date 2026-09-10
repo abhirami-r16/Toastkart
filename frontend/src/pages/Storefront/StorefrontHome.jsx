@@ -118,7 +118,7 @@ export default function StorefrontHome({ storeData, products, categories = [] })
     }
     
     return displayItems.length > 0 ? (
-      <div className={`storefront-product-grid-wrapper ${enableMarquee ? 'marquee-enabled' : 'marquee-disabled'}`} style={{ overflow: 'hidden' }}>
+      <div className={`storefront-product-grid-wrapper ${enableMarquee ? 'marquee-enabled' : 'marquee-disabled'}`} style={{ overflow: enableMarquee ? 'hidden' : 'visible' }}>
         <div className={`storefront-product-grid ${enableMarquee ? 'marquee-active' : ''}`}>
           {displayItems.map((product, idx) => (
             <div key={`${product.id}-${idx}`} className="storefront-product-card position-relative">
