@@ -137,20 +137,7 @@ export default function Checkout() {
               >
                 Proceed to Payment
               </button>
-              <button 
-                type="button" 
-                className="btn w-100 py-3 fw-bold text-white fs-6 d-flex justify-content-center align-items-center gap-2" 
-                style={{ backgroundColor: '#25D366' }}
-                onClick={() => {
-                  const text = encodeURIComponent(`Hi, I would like to place an order for the following items:\n${cartItems.map(i => `- ${i.quantity}x ${i.name}`).join('\n')}\nTotal: ₹${cartTotal.toFixed(2)}`);
-                  window.open(`https://wa.me/1234567890?text=${text}`, '_blank');
-                }}
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-                </svg>
-                Order via WhatsApp
-              </button>
+
             </div>
           </div>
         </div>

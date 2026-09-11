@@ -341,6 +341,22 @@ export default function ProductDetail({ storeData, products }) {
                   <Zap size={20} /> Buy Now
                 </button>
               </div>
+              <button 
+                className="btn btn-lg fw-bold d-flex align-items-center justify-content-center gap-2 w-100 py-3"
+                style={{ backgroundColor: '#25D366', color: '#fff', border: 'none', borderRadius: '8px' }}
+                onClick={() => {
+                  const price = Number(product.price);
+                  const sizeStr = selectedSize ? ` (Size: ${selectedSize})` : '';
+                  const colorStr = selectedColor ? ` (Color: ${selectedColor})` : '';
+                  const text = encodeURIComponent(`Hi, I would like to place an order for:\n- 1x ${product.name}${sizeStr}${colorStr}\nTotal: ₹${price.toFixed(2)}`);
+                  window.open(`https://wa.me/1234567890?text=${text}`, '_blank');
+                }}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                </svg>
+                Order via WhatsApp
+              </button>
             </div>
 
             <div className="border-top pt-4">

@@ -256,6 +256,7 @@ export default function Home() {
             <a href="#hero" className="goslot-nav-link">Home</a>
             <a href="#features" className="goslot-nav-link">Features</a>
             <a href="#about" className="goslot-nav-link">About</a>
+            <a href="#pricing" className="goslot-nav-link">Pricing</a>
           </nav>
 
           <div className="d-flex align-items-center gap-3">
@@ -276,6 +277,7 @@ export default function Home() {
               <a href="#hero" className="goslot-nav-link fs-5" onClick={() => setIsMobileMenuOpen(false)}>Home</a>
               <a href="#features" className="goslot-nav-link fs-5" onClick={() => setIsMobileMenuOpen(false)}>Features</a>
               <a href="#about" className="goslot-nav-link fs-5" onClick={() => setIsMobileMenuOpen(false)}>About</a>
+              <a href="#pricing" className="goslot-nav-link fs-5" onClick={() => setIsMobileMenuOpen(false)}>Pricing</a>
               <div className="border-top my-2"></div>
               <a href="/login" className="goslot-nav-link fs-5 text-primary" onClick={() => setIsMobileMenuOpen(false)}>Login</a>
             </nav>
@@ -430,6 +432,69 @@ export default function Home() {
             </p>
             <div className="fw-bolder fs-5" style={{ color: "var(--primary)" }}>
               Your business. Your store. Your growth. Powered by ToastKart.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* PRICING */}
+      <section id="pricing" className="py-5" style={{ backgroundColor: '#f8f9fc' }}>
+        <div className="container-xl">
+          <div className="text-center mb-5">
+            <div className="goslot-eyebrow">Pricing</div>
+            <h2 className="fs-2 mb-3">ToastKart Pricing</h2>
+            <p className="fs-6 text-muted mx-auto fw-bold" style={{ maxWidth: 600 }}>Free Trial: 14 Days</p>
+          </div>
+          <div className="row g-4 justify-content-center">
+            {/* Basic Tier */}
+            <div className="col-12 col-md-6 col-lg-4">
+              <div className="goslot-card h-100 d-flex flex-column text-center">
+                <h3 className="fs-4 fw-bold mb-2">Basic</h3>
+                <div className="fs-3 fw-bolder text-dark mb-1">₹499<span className="fs-6 text-muted fw-normal">/month</span></div>
+                <div className="fs-6 text-muted mb-4">₹4,999/year</div>
+                <ul className="list-unstyled text-start mb-4 flex-grow-1">
+                  <li className="mb-2"><Check size={16} className="text-success me-2"/> Online Store</li>
+                  <li className="mb-2"><Check size={16} className="text-success me-2"/> ToastKart Subdomain</li>
+                  <li className="mb-2"><Check size={16} className="text-success me-2"/> Up to 50 Products</li>
+                  <li className="mb-2"><Check size={16} className="text-success me-2"/> Order Management</li>
+                  <li className="mb-2"><Check size={16} className="text-success me-2"/> Payment Integration</li>
+                  <li className="mb-2"><Check size={16} className="text-success me-2"/> WhatsApp Integration</li>
+                  <li className="mb-2"><Check size={16} className="text-success me-2"/> Email Support</li>
+                </ul>
+                <button onClick={() => navigate('/login')} className="goslot-btn goslot-btn-outline w-100 mt-auto">Get Started</button>
+              </div>
+            </div>
+            {/* Growth Tier */}
+            <div className="col-12 col-md-6 col-lg-4">
+              <div className="goslot-card h-100 d-flex flex-column text-center position-relative shadow-lg" style={{ border: '2px solid var(--primary)' }}>
+                <div className="position-absolute top-0 start-50 translate-middle badge rounded-pill" style={{ backgroundColor: 'var(--primary)', color: '#fff', fontSize: '0.8rem', padding: '0.4rem 1rem' }}>Most Popular</div>
+                <h3 className="fs-4 fw-bold mb-2">Growth</h3>
+                <div className="fs-3 fw-bolder text-dark mb-1">₹999<span className="fs-6 text-muted fw-normal">/month</span></div>
+                <div className="fs-6 text-muted mb-4">₹9,999/year</div>
+                <ul className="list-unstyled text-start mb-4 flex-grow-1">
+                  <li className="mb-2"><Check size={16} className="text-success me-2"/> Everything in Basic</li>
+                  <li className="mb-2"><Check size={16} className="text-success me-2"/> Custom Domain</li>
+                  <li className="mb-2"><Check size={16} className="text-success me-2"/> Up to 500 Products</li>
+                  <li className="mb-2"><Check size={16} className="text-success me-2"/> Advanced Analytics</li>
+                  <li className="mb-2"><Check size={16} className="text-success me-2"/> Priority Support</li>
+                </ul>
+                <button onClick={() => navigate('/login')} className="goslot-btn goslot-btn-primary w-100 mt-auto">Get Started</button>
+              </div>
+            </div>
+            {/* Pro Tier */}
+            <div className="col-12 col-md-6 col-lg-4">
+              <div className="goslot-card h-100 d-flex flex-column text-center">
+                <h3 className="fs-4 fw-bold mb-2">Pro</h3>
+                <div className="fs-3 fw-bolder text-dark mb-1">₹1,999<span className="fs-6 text-muted fw-normal">/month</span></div>
+                <div className="fs-6 text-muted mb-4">₹19,999/year</div>
+                <ul className="list-unstyled text-start mb-4 flex-grow-1">
+                  <li className="mb-2"><Check size={16} className="text-success me-2"/> Everything in Growth</li>
+                  <li className="mb-2"><Check size={16} className="text-success me-2"/> Unlimited Products</li>
+                  <li className="mb-2"><Check size={16} className="text-success me-2"/> Advanced Analytics</li>
+                  <li className="mb-2"><Check size={16} className="text-success me-2"/> Priority Support</li>
+                </ul>
+                <button onClick={() => navigate('/login')} className="goslot-btn goslot-btn-outline w-100 mt-auto">Get Started</button>
+              </div>
             </div>
           </div>
         </div>

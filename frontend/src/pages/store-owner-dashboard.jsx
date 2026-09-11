@@ -14,6 +14,22 @@ import {
 } from "lucide-react";
 import ToastKartLogo from "../components/ToastKartLogo";
 
+const getSizesForCategory = (productCategory, storeCategory) => {
+  const cat = ((productCategory || '') + ' ' + (storeCategory || '')).toLowerCase();
+  if (cat.includes('jewel') || cat.includes('ring')) {
+    return ['Free Size', '5', '6', '7', '8', '9', '10', '11', '12'];
+  }
+  if (cat.includes('shoe') || cat.includes('footwear')) {
+    return ['5', '6', '7', '8', '9', '10', '11', '12'];
+  }
+  if (cat.includes('makeup') || cat.includes('beauty') || cat.includes('cosmetic')) {
+    return ['5 g', '10 g', '50 g', '100 g', '10 ml', '30 ml', '50 ml', '100 ml', '250 ml', '500 ml', 'Free Size'];
+  }
+  if (cat.includes('home') || cat.includes('living')) {
+    return ['1 Seater', '2 Seater', '3 Seater', '4 Seater', '5 Seater', '6 Seater', '7 Seater', '8 Seater', 'Single', 'Double', 'Queen', 'King', 'Free Size'];
+  }
+  return ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'Free Size'];
+};
 const GOLD = "#FF5722";
 const GOLD_LIGHT = "#FF8A65";
 const GOLD_DEEP = "#BF360C";
@@ -2720,7 +2736,7 @@ export default function StoreOwnerDashboard() {
                     <div className="col-12">
                       <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Colors</label>
                       <div className="d-flex flex-wrap gap-1">
-                        {['Red', 'Blue', 'Green', 'Black', 'White', 'Grey', 'Pink', 'Yellow', 'Brown', 'Purple'].map(c => {
+                        {['Red', 'Blue', 'Green', 'Black', 'White', 'Grey', 'Pink', 'Yellow', 'Brown', 'Purple', 'Gold', 'Silver', 'Orange', 'Navy', 'Beige', 'Maroon', 'Olive', 'Cyan', 'Teal', 'Burgundy', 'Peach', 'Mint', 'Rose Gold', 'Copper', 'Bronze', 'Multicolor'].map(c => {
                           const currentColors = newProd.color ? newProd.color.split(',').map(s=>s.trim()).filter(Boolean) : [];
                           const isSelected = currentColors.includes(c);
                           return (
@@ -2749,7 +2765,7 @@ export default function StoreOwnerDashboard() {
                     <div className="col-12 mt-2">
                       <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Sizes</label>
                       <div className="d-flex flex-wrap gap-1">
-                        {['XS', 'S', 'M', 'L', 'XL', 'XXL', 'Free Size'].map(s => {
+                        {getSizesForCategory(newProd.category, activeStore?.category).map(s => {
                           const currentSizes = newProd.size ? newProd.size.split(',').map(x=>x.trim()).filter(Boolean) : [];
                           const isSelected = currentSizes.includes(s);
                           return (
@@ -3211,7 +3227,7 @@ export default function StoreOwnerDashboard() {
                     <div className="col-12">
                       <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Colors</label>
                       <div className="d-flex flex-wrap gap-1">
-                        {['Red', 'Blue', 'Green', 'Black', 'White', 'Grey', 'Pink', 'Yellow', 'Brown', 'Purple'].map(c => {
+                        {['Red', 'Blue', 'Green', 'Black', 'White', 'Grey', 'Pink', 'Yellow', 'Brown', 'Purple', 'Gold', 'Silver', 'Orange', 'Navy'].map(c => {
                           const currentColors = newProd.color ? newProd.color.split(',').map(s=>s.trim()).filter(Boolean) : [];
                           const isSelected = currentColors.includes(c);
                           return (
@@ -3240,7 +3256,7 @@ export default function StoreOwnerDashboard() {
                     <div className="col-12 mt-2">
                       <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Sizes</label>
                       <div className="d-flex flex-wrap gap-1">
-                        {['XS', 'S', 'M', 'L', 'XL', 'XXL', 'Free Size'].map(s => {
+                        {getSizesForCategory(newProd.category, activeStore?.category).map(s => {
                           const currentSizes = newProd.size ? newProd.size.split(',').map(x=>x.trim()).filter(Boolean) : [];
                           const isSelected = currentSizes.includes(s);
                           return (
