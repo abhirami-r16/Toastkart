@@ -360,7 +360,7 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                   color={
                     isInWishlist(product.id)
                       ? '#ff4757'
-                      : '#ced4da'
+                      : '#666666'
                   }
                 />
               </button>

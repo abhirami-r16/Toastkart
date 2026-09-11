@@ -266,6 +266,13 @@
   stroke: #ffffff;
 }
 
+@media (max-width: 768px) {
+  .theme-jewelry button[class*="rounded-circle"] {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 /* Headers */
 .theme-jewelry .storefront-section-header {
   text-align: center;

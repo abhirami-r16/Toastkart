@@ -296,9 +296,10 @@
 }
 
 .theme-eflyer .storefront-section-header h3 {
-  font-size: 32px;
-  font-weight: 700;
+  font-size: 44px !important;
+  font-weight: 700 !important;
   color: #2b2a29;
+  letter-spacing: 1px;
   text-transform: uppercase;
   position: relative;
   display: inline-block;

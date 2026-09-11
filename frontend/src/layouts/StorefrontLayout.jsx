@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; // Force HMR
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
-import { Search, ShoppingCart, ChevronDown, User, LogOut, Heart, Package } from 'lucide-react';
+import { Search, ShoppingCart, ChevronDown, User, LogOut, Heart, Package, Menu, X } from 'lucide-react';
 import { useStorefrontCart } from '../context/StorefrontCartContext';
 import { useStorefrontAuth } from '../context/StorefrontAuthContext';
 import { resolveStoreTheme } from '../utils/themeResolver';
@@ -110,11 +110,20 @@ export default function StorefrontLayout({ storeData, categories = [], products 
                       </button>
                     </div>
 
-                    <div className="eflyer-actions">
+                    <div className="eflyer-actions" style={{ justifyContent: 'space-between', width: '100%' }}>
+                      {/* Mobile Hamburger Menu Toggle */}
+                      <button 
+                        className="eflyer-action-btn d-md-none" 
+                        onClick={() => setIsCategoryOpen(true)}
+                        style={{ marginRight: 'auto' }}
+                      >
+                        <Menu size={26} />
+                      </button>
+
                       <Link to={`${basePath}/wishlist`} className="eflyer-action-btn position-relative">
                         <Heart size={24} />
                       </Link>
-                      <Link to={`${basePath}/orders`} className="eflyer-action-btn position-relative" title="My Orders">
+                      <Link to={`${basePath}/orders`} className="eflyer-action-btn position-relative d-none d-md-flex" title="My Orders">
                         <Package size={24} />
                       </Link>
                       <Link to={`${basePath}/cart`} className="eflyer-action-btn position-relative">
@@ -127,15 +136,15 @@ export default function StorefrontLayout({ storeData, categories = [], products 
                       </Link>
                       {user && user.id ? (
                         <>
-                          <span className="eflyer-welcome-text fw-bold text-white text-nowrap d-none d-md-inline-block me-3" style={{ alignSelf: 'center' }}>
+                          <span className="eflyer-welcome-text fw-bold text-white text-nowrap d-none d-xl-inline-block me-3" style={{ alignSelf: 'center' }}>
                             Welcome, {user.name.split(' ')[0]}
                           </span>
-                          <button className="eflyer-action-btn" onClick={logout}>
+                          <button className="eflyer-action-btn d-none d-md-flex" onClick={logout}>
                             <LogOut size={24} />
                           </button>
                         </>
                       ) : (
-                        <button className="eflyer-action-btn" onClick={openLoginModal}>
+                        <button className="eflyer-action-btn d-none d-md-flex" onClick={openLoginModal}>
                           <User size={24} />
                         </button>
                       )}
@@ -143,6 +152,81 @@ export default function StorefrontLayout({ storeData, categories = [], products 
                   </div>
                 </div>
               </header>
+              
+              {/* Mobile Sidebar Menu (Shared) */}
+              {isCategoryOpen && (
+                <div className="storefront-mobile-menu-overlay" onClick={() => setIsCategoryOpen(false)}>
+                  <div className="storefront-mobile-menu" onClick={e => e.stopPropagation()}>
+                    <div className="storefront-mobile-menu-header">
+                      <span className="fw-bold fs-5 text-dark">{storeData?.name || 'Menu'}</span>
+                      <button className="btn p-0 border-0 text-dark" onClick={() => setIsCategoryOpen(false)}>
+                        <X size={24} />
+                      </button>
+                    </div>
+                    <div className="storefront-mobile-menu-body text-dark">
+                      <Link 
+                        to={basePath} 
+                        className="storefront-mobile-nav-item text-dark"
+                        onClick={() => setIsCategoryOpen(false)}
+                      >
+                        Home
+                      </Link>
+                      <div className="storefront-mobile-nav-title mt-4 mb-2 text-muted fw-bold" style={{ fontSize: '12px', paddingLeft: '15px' }}>
+                        CATEGORIES
+                      </div>
+                      {activeCategories && activeCategories.map(cat => (
+                        <a
+                          key={cat.id || cat.name}
+                          href={`#${cat.slug}`}
+                          onClick={(e) => {
+                            setIsCategoryOpen(false);
+                            scrollToSection(e, cat.slug);
+                          }}
+                          className="storefront-mobile-nav-item text-dark"
+                        >
+                          {cat.name}
+                        </a>
+                      ))}
+                      
+                      <div className="storefront-mobile-nav-title mt-4 mb-2 text-muted fw-bold" style={{ fontSize: '12px', paddingLeft: '15px' }}>
+                        ACCOUNT
+                      </div>
+                      {user && user.id ? (
+                        <>
+                          <div className="storefront-mobile-nav-item text-primary" style={{ borderBottom: 'none' }}>
+                            Hi, {user.name}
+                          </div>
+                          <Link to={`${basePath}/orders`} className="storefront-mobile-nav-item text-dark" onClick={() => setIsCategoryOpen(false)}>
+                            <Package size={16} className="me-2" /> My Orders
+                          </Link>
+                          <Link to={`${basePath}/wishlist`} className="storefront-mobile-nav-item text-dark" onClick={() => setIsCategoryOpen(false)}>
+                            <Heart size={16} className="me-2" /> Wishlist
+                          </Link>
+                          <button 
+                            className="storefront-mobile-nav-item text-danger border-0 bg-transparent text-start" 
+                            onClick={() => {
+                              logout();
+                              setIsCategoryOpen(false);
+                            }}
+                          >
+                            <LogOut size={16} className="me-2" /> Logout
+                          </button>
+                        </>
+                      ) : (
+                        <button 
+                          className="storefront-mobile-nav-item text-dark border-0 bg-transparent text-start" 
+                          onClick={() => {
+                            openLoginModal();
+                            setIsCategoryOpen(false);
+                          }}
+                        >
+                          <User size={16} className="me-2" /> Login / Create Account
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </>
@@ -150,18 +234,29 @@ export default function StorefrontLayout({ storeData, categories = [], products 
         /* Hexashop/Modern-Style Header for Luxury/Minimal/Fashion Themes */
         <header className="storefront-header hexashop-header">
           <div className="hexashop-header-content">
-            <div className="storefront-logo hexashop-logo" onClick={() => navigate(basePath)}>
-              {storeData?.logo_url ? (
-                <img src={storeData.logo_url} alt={storeData.name} className="storefront-logo-img" />
-              ) : (
-                <span className="storefront-logo-text">
-                  {storeData?.name || 'Store'}
-                  {theme === 'theme-home' && <span className="furni-dot">.</span>}
-                </span>
-              )}
+            <div className="d-flex align-items-center">
+              {/* Mobile Hamburger Menu Toggle */}
+              <button 
+                className="hexashop-icon-btn border-0 bg-transparent p-0 d-lg-none me-2" 
+                onClick={() => setIsCategoryOpen(true)}
+              >
+                <Menu size={24} />
+              </button>
+              
+              <div className="storefront-logo hexashop-logo" onClick={() => navigate(basePath)} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '55vw' }}>
+                {storeData?.logo_url ? (
+                  <img src={storeData.logo_url} alt={storeData.name} className="storefront-logo-img" />
+                ) : (
+                  <span className="storefront-logo-text" style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>
+                    {storeData?.name || 'Store'}
+                    {theme === 'theme-home' && <span className="furni-dot">.</span>}
+                  </span>
+                )}
+              </div>
             </div>
 
-            <nav className="hexashop-nav">
+            {/* Desktop Navigation */}
+            <nav className="hexashop-nav d-none d-lg-flex">
               <Link to={basePath} className="hexashop-nav-item">Home</Link>
               {activeCategories && activeCategories.map(cat => (
                 <a
@@ -176,15 +271,16 @@ export default function StorefrontLayout({ storeData, categories = [], products 
             </nav>
 
             <div className="hexashop-nav-actions">
+              {/* These are hidden on mobile to prevent overlap, except the cart */}
               {user && user.id ? (
-                <div className="d-flex align-items-center gap-3">
-                  <span className="fs-7 fw-semibold d-none d-md-block" style={{ color: '#2a2a2a' }}>Hi, {user.name}</span>
+                <div className="align-items-center gap-3 d-none d-md-flex">
+                  <span className="fs-7 fw-semibold d-none d-lg-block" style={{ color: '#2a2a2a' }}>Hi, {user.name}</span>
                   <button onClick={logout} className="hexashop-icon-btn text-danger border-0 bg-transparent p-0" title="Logout">
                     <LogOut size={20} />
                   </button>
                 </div>
               ) : (
-                <button onClick={openLoginModal} className="hexashop-icon-btn border-0 bg-transparent p-0" title="Login">
+                <button onClick={openLoginModal} className="hexashop-icon-btn border-0 bg-transparent p-0 d-none d-md-block" title="Login">
                   <User size={20} />
                 </button>
               )}
@@ -192,7 +288,7 @@ export default function StorefrontLayout({ storeData, categories = [], products 
               <Link to={`${basePath}/wishlist`} className="hexashop-icon-btn text-decoration-none">
                 <Heart size={20} />
               </Link>
-              <Link to={`${basePath}/orders`} className="hexashop-icon-btn text-decoration-none" title="Orders">
+              <Link to={`${basePath}/orders`} className="hexashop-icon-btn text-decoration-none d-none d-md-block" title="Orders">
                 <Package size={20} />
               </Link>
               <Link to={`${basePath}/cart`} className="hexashop-icon-btn text-decoration-none position-relative">
@@ -205,6 +301,81 @@ export default function StorefrontLayout({ storeData, categories = [], products 
               </Link>
             </div>
           </div>
+          
+          {/* Mobile Sidebar Menu */}
+          {isCategoryOpen && (
+            <div className="storefront-mobile-menu-overlay" onClick={() => setIsCategoryOpen(false)}>
+              <div className="storefront-mobile-menu" onClick={e => e.stopPropagation()}>
+                <div className="storefront-mobile-menu-header">
+                  <span className="fw-bold fs-5">{storeData?.name || 'Menu'}</span>
+                  <button className="btn p-0 border-0" onClick={() => setIsCategoryOpen(false)}>
+                    <X size={24} />
+                  </button>
+                </div>
+                <div className="storefront-mobile-menu-body">
+                  <Link 
+                    to={basePath} 
+                    className="storefront-mobile-nav-item"
+                    onClick={() => setIsCategoryOpen(false)}
+                  >
+                    Home
+                  </Link>
+                  <div className="storefront-mobile-nav-title mt-4 mb-2 text-muted fw-bold" style={{ fontSize: '12px', paddingLeft: '15px' }}>
+                    CATEGORIES
+                  </div>
+                  {activeCategories && activeCategories.map(cat => (
+                    <a
+                      key={cat.id || cat.name}
+                      href={`#${cat.slug}`}
+                      onClick={(e) => {
+                        setIsCategoryOpen(false);
+                        scrollToSection(e, cat.slug);
+                      }}
+                      className="storefront-mobile-nav-item"
+                    >
+                      {cat.name}
+                    </a>
+                  ))}
+                  
+                  <div className="storefront-mobile-nav-title mt-4 mb-2 text-muted fw-bold" style={{ fontSize: '12px', paddingLeft: '15px' }}>
+                    ACCOUNT
+                  </div>
+                  {user && user.id ? (
+                    <>
+                      <div className="storefront-mobile-nav-item text-primary" style={{ borderBottom: 'none' }}>
+                        Hi, {user.name}
+                      </div>
+                      <Link to={`${basePath}/orders`} className="storefront-mobile-nav-item" onClick={() => setIsCategoryOpen(false)}>
+                        <Package size={16} className="me-2" /> My Orders
+                      </Link>
+                      <Link to={`${basePath}/wishlist`} className="storefront-mobile-nav-item" onClick={() => setIsCategoryOpen(false)}>
+                        <Heart size={16} className="me-2" /> Wishlist
+                      </Link>
+                      <button 
+                        className="storefront-mobile-nav-item text-danger border-0 bg-transparent text-start" 
+                        onClick={() => {
+                          logout();
+                          setIsCategoryOpen(false);
+                        }}
+                      >
+                        <LogOut size={16} className="me-2" /> Logout
+                      </button>
+                    </>
+                  ) : (
+                    <button 
+                      className="storefront-mobile-nav-item border-0 bg-transparent text-start" 
+                      onClick={() => {
+                        openLoginModal();
+                        setIsCategoryOpen(false);
+                      }}
+                    >
+                      <User size={16} className="me-2" /> Login / Create Account
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
         </header>
       ) : (
         <>
