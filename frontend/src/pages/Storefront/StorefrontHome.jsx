@@ -878,9 +878,6 @@ export default function StorefrontHome({ storeData, products, categories = [] })
         }
       })()}
 
-      /*
-      * Category sections
-      */
       {categoriesToRender.length > 0 ? (
         categoriesToRender.map((cat) => {
           const catProducts = filteredProducts.filter((p) => {
