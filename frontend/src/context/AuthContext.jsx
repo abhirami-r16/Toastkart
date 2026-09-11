@@ -113,15 +113,7 @@ export const AuthProvider = ({ children }) => {
 
       const { user, token } = res.data;
 
-      if (token) {
-        localStorage.setItem('toastkart_token', token);
-      }
-
-      localStorage.setItem('toastkart_user', JSON.stringify(user));
-      localStorage.setItem('toastkart_last_user_id', user.id);
-
-      setUser(user);
-
+      // Registration successful, return without auto-logging in
       return {
         success: true,
         user,

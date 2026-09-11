@@ -187,6 +187,7 @@ export default function Register() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
 
   useSEO({ title: 'Create Account - ToastKart', description: 'Join the ToastKart Ecosystem' });
@@ -216,7 +217,10 @@ export default function Register() {
 
     const res = await register(name, email, password, 'owner');
     if (res.success) {
-      navigate('/owner/dashboard');
+      setSuccess('Successfully registered! Redirecting to login...');
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
     } else {
       setError(res.message || 'Registration failed. Please check your credentials.');
     }
@@ -254,6 +258,11 @@ export default function Register() {
           {error && (
             <div className="alert alert-danger py-2 px-3 fs-7 mb-4 rounded-3 text-center">
               {error}
+            </div>
+          )}
+          {success && (
+            <div className="alert alert-success py-2 px-3 fs-7 mb-4 rounded-3 text-center">
+              {success}
             </div>
           )}
 
