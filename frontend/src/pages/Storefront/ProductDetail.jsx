@@ -135,14 +135,12 @@ export default function ProductDetail({ storeData, products }) {
   }, [productColors, selectedColor, parsedImages, product.name]);
 
   const handleAddToCart = () => {
-    requireAuth(() => addToCart({ ...product, selectedSize, selectedColor }, 1));
+    addToCart({ ...product, selectedSize, selectedColor }, 1);
   };
 
   const handleBuyNow = () => {
-    requireAuth(() => {
-      addToCart({ ...product, selectedSize, selectedColor }, 1);
-      navigate(`${basePath}/checkout`);
-    });
+    addToCart({ ...product, selectedSize, selectedColor }, 1);
+    navigate(`${basePath}/checkout`);
   };
 
   const handleNextImage = () => {
@@ -219,7 +217,7 @@ export default function ProductDetail({ storeData, products }) {
             <button 
               className="btn position-absolute top-0 end-0 m-3 rounded-circle shadow-sm bg-white"
               style={{ width: '40px', height: '40px', padding: '0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: inWishlist ? '#ff4757' : '#ced4da', zIndex: 10 }}
-              onClick={() => requireAuth(() => toggleWishlist(product))}
+              onClick={() => toggleWishlist(product)}
             >
               <Heart size={20} fill={inWishlist ? '#ff4757' : 'none'} />
             </button>

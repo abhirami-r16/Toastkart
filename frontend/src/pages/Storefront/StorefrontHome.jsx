@@ -341,7 +341,7 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                   e.preventDefault();
                   e.stopPropagation();
 
-                  requireAuth(() => toggleWishlist(product));
+                  toggleWishlist(product);
                 }}
               >
                 <Heart
@@ -389,17 +389,13 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                     e.preventDefault();
                     e.stopPropagation();
 
-                    requireAuth(() =>
-                      addToCart(
-                        {
-                          ...product,
-                          selectedSize:
-                            getFirstAvailableSize(product),
-                          selectedColor:
-                            getFirstAvailableColor(product),
-                        },
-                        1
-                      )
+                    addToCart(
+                      {
+                        ...product,
+                        selectedSize: getFirstAvailableSize(product),
+                        selectedColor: getFirstAvailableColor(product),
+                      },
+                      1
                     );
                   }}
                 >

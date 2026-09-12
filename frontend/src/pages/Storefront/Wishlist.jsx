@@ -90,7 +90,7 @@ export default function Wishlist() {
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    requireAuth(() => addToCart(product, 1));
+                    addToCart(product, 1);
                   }}
                 >
                   <ShoppingCart size={16} /> Move to Cart
