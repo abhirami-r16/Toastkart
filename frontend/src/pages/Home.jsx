@@ -7,308 +7,183 @@ import {
 } from "lucide-react";
 
 const goslotStyles = `
+  @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
   .goslot-theme {
     --primary: #FF5722;
     --primary-dark: #E64A19;
     --secondary: #FF8A65;
-    --accent: #1C2841;
-    --bg: #FAFAFA;
-    --dark: #1C2841;
+    --accent: #EC4899;
+    --bg: #F8FAFC;
+    --dark: #0F172A;
     --white: #FFFFFF;
-    --ink: #111827;
-    --muted: #4B5563;
-    --line: rgba(28, 40, 65, 0.08);
-    background: var(--bg);
+    --ink: #1E293B;
+    --muted: #64748B;
+    --line: rgba(15, 23, 42, 0.08);
+    
+    background-color: var(--bg);
+    background-image: 
+      radial-gradient(at 40% 20%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+      radial-gradient(at 80% 0%, rgba(168, 85, 247, 0.12) 0px, transparent 50%),
+      radial-gradient(at 0% 50%, rgba(236, 72, 153, 0.12) 0px, transparent 50%);
+    background-attachment: fixed;
     color: var(--ink);
-    font-family: system-ui, -apple-system, sans-serif;
+    font-family: 'Outfit', system-ui, -apple-system, sans-serif;
     min-height: 100vh;
     overflow-x: hidden;
   }
-  .goslot-theme h1, .goslot-theme h2, .goslot-theme h3, .goslot-theme h4 {
+  .goslot-theme h1, .goslot-theme h3, .goslot-theme h4 {
     color: var(--dark) !important;
-    font-weight: 700 !important;
-    letter-spacing: -0.02em !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.03em !important;
+  }
+  .goslot-theme h2 {
+    background: linear-gradient(135deg, #FF5722 0%, #FF9800 100%);
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    display: block;
+    font-weight: 800 !important;
+    letter-spacing: -0.03em !important;
   }
   .goslot-theme p, .goslot-theme span, .goslot-theme div, .goslot-theme li, .goslot-theme a {
     color: var(--ink) !important;
   }
   .goslot-theme p {
     color: var(--muted) !important;
-    line-height: 1.7 !important;
+    line-height: 1.8 !important;
   }
-  .goslot-theme .text-dark, .goslot-theme .text-muted, .goslot-theme .fs-8.text-muted, .goslot-theme .fs-7.text-muted, .goslot-theme .fs-9.text-muted {
+  .goslot-theme .text-dark, .goslot-theme .text-muted {
     color: var(--dark) !important;
   }
-  .goslot-theme .text-success {
-    color: var(--primary) !important;
-  }
+  .goslot-theme .text-success { color: var(--primary) !important; }
+  
   .goslot-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 12px 24px;
-    font-weight: 600;
-    border-radius: 999px;
-    transition: all 0.3s ease;
-    border: none;
-    cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 14px 28px; font-weight: 700; border-radius: 100px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    border: none; cursor: pointer; letter-spacing: 0.02em;
   }
   .goslot-btn-primary {
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: var(--white);
-    box-shadow: 0 8px 24px rgba(255, 87, 34, 0.28);
+    background: linear-gradient(135deg, var(--primary), var(--secondary)) !important;
+    color: var(--white) !important;
+    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3) !important;
   }
   .goslot-btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 14px 32px rgba(255, 87, 34, 0.36);
-    color: white;
+    transform: translateY(-4px) scale(1.02) !important;
+    box-shadow: 0 14px 32px rgba(168, 85, 247, 0.4) !important;
+    color: white !important;
   }
   .goslot-btn-outline {
-    background: white;
-    border: 1px solid rgba(31, 41, 55, 0.16);
-    color: var(--dark);
+    background: rgba(255, 255, 255, 0.8) !important;
+    backdrop-filter: blur(10px) !important;
+    border: 2px solid rgba(99, 102, 241, 0.2) !important;
+    color: var(--primary-dark) !important;
   }
   .goslot-btn-outline:hover {
-    border-color: var(--primary);
-    color: var(--primary);
-    transform: translateY(-2px);
+    border-color: var(--primary) !important;
+    background: rgba(99, 102, 241, 0.05) !important;
+    transform: translateY(-4px) scale(1.02) !important;
+    box-shadow: 0 10px 24px rgba(99, 102, 241, 0.15) !important;
   }
+  
   .goslot-eyebrow {
-    display: inline-block;
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--primary);
-    background: rgba(255, 87, 34, 0.08);
-    padding: 6px 14px;
-    border-radius: 999px;
-    margin-bottom: 16px;
+    display: inline-block; font-size: 0.85rem; font-weight: 800;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--primary-dark) !important;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(168, 85, 247, 0.15)) !important;
+    border: 1px solid rgba(99, 102, 241, 0.2) !important;
+    padding: 8px 18px; border-radius: 100px; margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.08) !important;
   }
+  
   .goslot-hero {
-    padding-top: 140px;
-    padding-bottom: 100px;
-    position: relative;
-    overflow: hidden;
-    width: 100%;
+    padding-top: 160px; padding-bottom: 120px;
+    position: relative; overflow: hidden; width: 100%;
   }
-  .goslot-theme .force-white-text,
-  .goslot-theme h1.force-white-text,
-  .goslot-theme p.force-white-text {
+  .goslot-theme .force-white-text {
     color: #ffffff !important;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.8) !important;
+    text-shadow: 0 4px 16px rgba(0,0,0,0.6) !important;
   }
+  
   .template-iframe-container {
-    height: 450px;
-    position: relative;
-    border-radius: 1rem;
-    overflow: hidden;
-    background-color: white;
-    box-shadow: 0 1rem 3rem rgba(0,0,0,.175);
-    border: 1px solid var(--line);
+    height: 450px; position: relative; border-radius: 24px; overflow: hidden;
+    background-color: white; 
+    box-shadow: 0 24px 50px rgba(15, 23, 42, 0.15);
+    border: 1px solid rgba(255,255,255,0.8);
   }
   .template-iframe {
-    width: 200%;
-    height: 900px;
-    transform: scale(0.5);
-    transform-origin: top left;
-    border: none;
-    pointer-events: none;
+    width: 200%; height: 900px; transform: scale(0.5);
+    transform-origin: top left; border: none; pointer-events: none;
   }
+  
   .hero-blob {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.35;
-    z-index: 0;
-    animation: blobFloat 14s ease-in-out infinite;
+    position: absolute; border-radius: 50%; filter: blur(100px);
+    opacity: 0.8; z-index: 0; animation: blobFloat 16s ease-in-out infinite alternate;
   }
   .blob-1 {
-    width: 420px; height: 420px;
-    background: var(--secondary);
-    top: -120px; right: -80px;
+    width: 500px; height: 500px; background: var(--secondary);
+    top: -100px; right: -100px;
   }
   .blob-2 {
-    width: 320px; height: 320px;
-    background: var(--accent);
-    bottom: -100px; left: -60px;
-    animation-delay: -6s;
+    width: 450px; height: 450px; background: var(--primary);
+    bottom: -150px; left: -100px; animation-delay: -8s;
   }
   @keyframes blobFloat {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(30px, -30px) scale(1.08); }
+    0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+    50% { transform: translate(50px, -50px) scale(1.1) rotate(10deg); }
+    100% { transform: translate(-30px, 30px) scale(0.95) rotate(-5deg); }
   }
-  .portfolio-card {
-    transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
-    overflow: hidden;
-  }
-  .portfolio-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 30px 60px rgba(0,0,0,0.2) !important;
-  }
-  .portfolio-img {
-    transition: transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
-  }
-  .portfolio-card:hover .portfolio-img {
-    transform: scale(1.1);
-  }
-  .explore-link {
-    transition: all 0.3s ease;
-    color: var(--white);
-  }
-  .portfolio-card:hover .explore-link {
-    color: var(--primary);
-  }
-  .explore-link svg {
-    transition: transform 0.3s ease;
-  }
-  .portfolio-card:hover .explore-link svg {
-    transform: translateX(8px);
-  }
+  
   .goslot-card {
-    background: var(--white);
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 4px 12px rgba(31, 41, 55, 0.04);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: rgba(255, 255, 255, 0.65) !important;
+    backdrop-filter: blur(24px) !important;
+    -webkit-backdrop-filter: blur(24px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.9) !important;
+    border-radius: 28px !important;
+    box-shadow: 0 10px 40px rgba(15, 23, 42, 0.04) !important;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
   }
   .goslot-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(31, 41, 55, 0.1);
+    transform: translateY(-8px) scale(1.02) !important;
+    box-shadow: 0 24px 48px rgba(99, 102, 241, 0.12) !important;
+    border-color: rgba(99, 102, 241, 0.3) !important;
   }
+  
   .goslot-header {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.75) !important;
+    backdrop-filter: blur(24px) !important;
+    -webkit-backdrop-filter: blur(24px) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.6) !important;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03) !important;
   }
   .goslot-nav-link {
-    color: var(--dark);
-    font-weight: 600;
-    text-decoration: none;
-    position: relative;
-    padding: 4px 0;
-    transition: color 0.2s ease;
+    color: var(--dark); font-weight: 700; text-decoration: none;
+    position: relative; padding: 4px 0; transition: color 0.3s ease;
+    font-size: 1.05rem;
   }
-  .goslot-nav-link:hover {
-    color: var(--primary);
+  .goslot-nav-link:hover { color: var(--primary) !important; }
+  
+  .goslot-theme section.bg-white, .goslot-theme footer.bg-white, .goslot-theme section[style*="background-color: #f8f9fc"] {
+    background: transparent !important;
   }
   
-  /* NEW PREMIUM STYLES */
-  .glass-dark {
-    background: rgba(15, 23, 42, 0.45);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.4);
-  }
-  .glow-on-hover {
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    background: #ffffff;
-  }
-  .glow-on-hover:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 24px 48px rgba(255, 87, 34, 0.12);
-    border-color: rgba(255, 87, 34, 0.25);
-  }
-  .icon-float {
-    transition: transform 0.4s ease;
-  }
-  .glow-on-hover:hover .icon-float {
-    transform: translateY(-6px) scale(1.1);
-  }
-  .browser-mockup {
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 24px 50px rgba(15, 23, 42, 0.15);
-    background: #fff;
-    border: 1px solid rgba(0,0,0,0.08);
-    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  }
-  .browser-mockup:hover {
-    transform: translateY(-12px) scale(1.01);
-    box-shadow: 0 32px 64px rgba(255, 87, 34, 0.15);
-  }
-  .browser-header {
-    background: #f8fafc;
-    padding: 12px 20px;
-    display: flex;
-    gap: 8px;
-    border-bottom: 1px solid rgba(0,0,0,0.06);
-  }
-  .browser-dot {
-    width: 12px; height: 12px; border-radius: 50%;
-  }
-  .dot-red { background: #ff5f56; }
-  .dot-yellow { background: #ffbd2e; }
-  .dot-green { background: #27c93f; }
-  .pricing-card-pro {
-    position: relative;
-    border: 2px solid transparent !important;
-    background: linear-gradient(white, white) padding-box,
-                linear-gradient(135deg, var(--primary), var(--secondary)) border-box !important;
-    transform: scale(1.06);
-    z-index: 2;
-  }
-  .pricing-card-pro:hover {
-    transform: scale(1.1) translateY(-6px);
-    box-shadow: 0 30px 60px rgba(255, 87, 34, 0.25);
-  }
+  .icon-float { transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+  .goslot-card:hover .icon-float { transform: translateY(-8px) scale(1.15) rotate(5deg); }
+  
   .gradient-text {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    background: linear-gradient(135deg, #FF5722 0%, #FF9800 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    display: inline-block;
+  }
+  .glow-text {
+    text-shadow: 0 0 30px rgba(255, 87, 34, 0.6) !important;
   }
   
-  /* Mobile Responsiveness for Landing Page */
   @media (max-width: 767px) {
-    .goslot-hero {
-      padding-top: 110px !important;
-      padding-bottom: 60px !important;
-    }
-    h1.display-4 {
-      font-size: 2.2rem !important;
-    }
-    .hero-blob.blob-1 {
-      width: 250px !important; height: 250px !important;
-      top: -50px !important; right: -50px !important;
-    }
-    .hero-blob.blob-2 {
-      width: 200px !important; height: 200px !important;
-      bottom: -50px !important; left: -50px !important;
-    }
-    .goslot-header .goslot-btn {
-      padding: 6px 12px !important;
-      font-size: 0.7rem !important;
-    }
-    .goslot-hero .goslot-btn {
-      width: 100% !important;
-    }
-    .goslot-header .fs-4 {
-      font-size: 1.1rem !important;
-    }
-    .goslot-header .gap-3 {
-      gap: 0.5rem !important;
-    }
-    .template-iframe-container {
-      height: 250px !important;
-    }
-    .template-iframe {
-      width: 400% !important;
-      height: 1000px !important;
-      transform: scale(0.25) !important;
-    }
-  }
-  @media (min-width: 768px) and (max-width: 991px) {
-    .template-iframe-container {
-      height: 350px !important;
-    }
-    .template-iframe {
-      width: 200% !important;
-      height: 700px !important;
-      transform: scale(0.5) !important;
-    }
+    .goslot-hero { padding-top: 120px; padding-bottom: 80px; }
+    .template-iframe-container { height: 250px; border-radius: 16px; }
+    .template-iframe { width: 400%; height: 1000px; transform: scale(0.25); }
   }
 `;
 
@@ -427,7 +302,7 @@ export default function Home() {
         <div className="container-xl position-relative z-10 text-center max-w-4xl mx-auto py-5">
           <h1 className="display-3 fw-bolder mb-4 force-white-text" style={{ letterSpacing: '-0.03em', lineHeight: 1.15 }}>
             Build Your Ecommerce Store <br />
-            With In 24 Hours
+            <span className="gradient-text">With In 24 Hours</span>
           </h1>
           <p className="fs-5 mx-auto mb-5 force-white-text fw-normal" style={{ maxWidth: 700, lineHeight: 1.6 }}>
             ToastKart is the all-in-one platform for vendors to launch their stores and buyers to shop seamlessly. Manage orders, payouts, and catalogs from a central dashboard.
