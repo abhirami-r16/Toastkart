@@ -199,8 +199,6 @@ export default function StorefrontHome({ storeData, products, categories = [] })
   const renderProductGrid = (items) => {
     const displayItems = items && items.length > 0 ? items : [];
 
-    const isSlider = displayItems.length > 4;
-
     return displayItems.length > 0 ? (
       <div
         className="storefront-product-grid-wrapper"
@@ -209,11 +207,7 @@ export default function StorefrontHome({ storeData, products, categories = [] })
         }}
       >
         <div
-          className={
-            isSlider
-              ? 'storefront-product-slider'
-              : 'storefront-product-grid'
-          }
+          className="storefront-product-grid"
         >
           {displayItems.map((product, idx) => (
             <div
@@ -426,7 +420,7 @@ export default function StorefrontHome({ storeData, products, categories = [] })
 
   return (
     <div className="storefront-home">
-      {(() => {
+      {!searchQuery && (() => {
         switch (theme) {
           /*
            * FLYER / FASHION THEME
@@ -878,7 +872,17 @@ export default function StorefrontHome({ storeData, products, categories = [] })
         }
       })()}
 
-      {categoriesToRender.length > 0 ? (
+      {searchQuery ? (
+        <div className="storefront-section scroll-mt" style={{ paddingTop: '250px' }}>
+          {filteredProducts.length > 0 ? (
+            renderProductGrid(filteredProducts)
+          ) : (
+            <div className="storefront-empty-state text-center py-5">
+              <p>No products found matching your search.</p>
+            </div>
+          )}
+        </div>
+      ) : categoriesToRender.length > 0 ? (
         categoriesToRender.map((cat) => {
           const catProducts = filteredProducts.filter((p) => {
             const pCat = String(

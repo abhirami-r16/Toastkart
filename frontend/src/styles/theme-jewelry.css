@@ -361,5 +361,9 @@
     height: 60vh;
     margin-bottom: 40px;
   }
+  .theme-jewelry .storefront-product-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
 }
 

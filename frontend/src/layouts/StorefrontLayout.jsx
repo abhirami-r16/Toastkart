@@ -78,25 +78,28 @@ export default function StorefrontLayout({ storeData, categories = [], products 
   const isHome = location.pathname === basePath || location.pathname === `${basePath}/`;
 
   return (
-    <div className={`storefront-body ${theme} ${isHome ? 'is-home' : ''}`}>
+    <div className={`storefront-body ${theme} ${(isHome && !searchQuery) ? 'is-home' : ''}`}>
       {isEflyer ? (
         <>
           {isHome && (
             <div className="eflyer-banner-wrapper">
-              <header className="eflyer-header">
+              <header className="eflyer-header" style={{ backgroundColor: (!isHome || searchQuery) ? '#eab41f' : 'transparent', paddingBottom: '10px' }}>
                 <div className="eflyer-middle-bar">
                   <Link to={basePath} className="eflyer-logo">
                     {storeData?.name || 'Eflyer'}
                   </Link>
                 </div>
                 <div className="eflyer-bottom-bar">
-                  <div className="eflyer-bottom-bar-content">
+                  <div className="eflyer-bottom-bar-content w-100">
                     
+                    {/* Spacer to balance the layout on desktop so search bar is perfectly centered */}
+                    <div className="d-none d-lg-block" style={{ flex: 1 }}></div>
+
                     <div className="eflyer-search-container">
                       <input
                         type="text"
                         placeholder={`Search for products...`}
-                        className="eflyer-search-input"
+                        className="eflyer-search-input w-100"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         onKeyDown={(e) => {
@@ -110,7 +113,7 @@ export default function StorefrontLayout({ storeData, categories = [], products 
                       </button>
                     </div>
 
-                    <div className="eflyer-actions" style={{ justifyContent: 'space-between', width: '100%' }}>
+                    <div className="eflyer-actions d-flex align-items-center justify-content-end" style={{ gap: '24px', flex: 1 }}>
                       {/* Mobile Hamburger Menu Toggle */}
                       <button 
                         className="eflyer-action-btn d-md-none" 

@@ -81,7 +81,6 @@ const ownerLinks = [
   { key: "orders", label: "Orders", icon: ShoppingCart },
   { key: "customers", label: "Customers", icon: Users },
   { key: "discounts", label: "Discounts", icon: Percent },
-  { key: "payment", label: "Payment Gateway", icon: CreditCard },
 ];
 
 const salesTrendDaily = [
@@ -1344,6 +1343,9 @@ export default function StoreOwnerDashboard() {
           .store-sidebar > div > div:not(nav) {
             display: block !important;
           }
+          .store-sidebar .pt-3.border-top {
+            display: block !important;
+          }
           .store-sidebar nav {
             flex-direction: column !important;
             align-items: stretch !important;
@@ -1440,14 +1442,15 @@ export default function StoreOwnerDashboard() {
                 </button>
               );
             })}
-          </nav>
-        </div>
 
-        {/* Logout */}
-        <div className="pt-3 border-top" style={{ borderColor: "#dfe3e8" }}>
-          <button onClick={handleLogout} className="btn btn-sm btn-outline-secondary w-100 d-flex align-items-center justify-content-center gap-2">
-            <LogOut size={16} /> Logout
-          </button>
+            {/* Logout */}
+            <div className="mt-2 pt-2 border-top" style={{ borderColor: "#dfe3e8" }}>
+              <button onClick={handleLogout} className="sidebar-link d-flex align-items-center gap-3 p-2.5 rounded-3 border-0 w-100 transition-all" style={{ background: "transparent", color: "#d82c0d", fontWeight: "600", textAlign: "left" }}>
+                <LogOut size={18} style={{ color: "#d82c0d" }} />
+                <span style={{ color: "#d82c0d" }}>Logout</span>
+              </button>
+            </div>
+          </nav>
         </div>
       </aside>
 
@@ -3060,31 +3063,6 @@ export default function StoreOwnerDashboard() {
             </div>
           )}
 
-
-
-          {/* MODULE: PAYMENT GATEWAY (DUMMY) */}
-          {active === "payment" && (
-            <div className="d-flex flex-column gap-3">
-              <div className="d-flex align-items-center justify-content-between">
-                <div>
-                  <h2 className="fs-4 font-bold mb-0" style={{ color: "#202223" }}>Payment Gateway</h2>
-                  <p className="fs-8 mb-0" style={{ color: "#6d7175" }}>Configure your store payment providers.</p>
-                </div>
-              </div>
-              <div style={{ background: "#ffffff", border: "1px dashed #dfe3e8", borderRadius: "8px", padding: "40px", textAlign: "center", margin: "16px 0", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
-                <div className="w-16 h-16 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style={{ background: "rgba(255,87,34,0.1)", color: "#FF5722" }}>
-                  <CreditCard size={34} />
-                </div>
-                <h2 className="fs-3 font-bold mb-2" style={{ color: "#202223" }}>Payment Configuration</h2>
-                <p className="fs-7 max-w-md mx-auto mb-4" style={{ color: "#6d7175", maxWidth: 480, lineHeight: 1.6 }}>
-                  Stripe and Razorpay integrations are currently being provisioned. Once complete, you can configure your payment settings here.
-                </p>
-                <button className="btn py-2.5 px-4 font-bold fs-7 d-inline-flex align-items-center gap-2 text-white" style={{ background: "#1c2226", borderRadius: "8px" }} disabled>
-                  Setup Payments
-                </button>
-              </div>
-            </div>
-          )}
 
 
 
