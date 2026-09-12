@@ -5,7 +5,7 @@ import { X, Mail, Lock, User } from 'lucide-react';
 export default function StorefrontLoginModal() {
   const { login, register, isLoginModalOpen, closeLoginModal } = useStorefrontAuth();
 
-  const [isRegistering, setIsRegistering] = useState(true);
+  const [isRegistering, setIsRegistering] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

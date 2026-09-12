@@ -146,11 +146,7 @@ export default function StorefrontLayout({ storeData, categories = [], products 
                             <LogOut size={24} />
                           </button>
                         </>
-                      ) : (
-                        <button className="eflyer-action-btn d-none d-md-flex" onClick={openLoginModal}>
-                          <User size={24} />
-                        </button>
-                      )}
+                      ) : null}
                     </div>
                   </div>
                 </div>
@@ -215,17 +211,7 @@ export default function StorefrontLayout({ storeData, categories = [], products 
                             <LogOut size={16} className="me-2" /> Logout
                           </button>
                         </>
-                      ) : (
-                        <button 
-                          className="storefront-mobile-nav-item text-dark border-0 bg-transparent text-start" 
-                          onClick={() => {
-                            openLoginModal();
-                            setIsCategoryOpen(false);
-                          }}
-                        >
-                          <User size={16} className="me-2" /> Login / Create Account
-                        </button>
-                      )}
+                      ) : null}
                     </div>
                   </div>
                 </div>
@@ -282,11 +268,7 @@ export default function StorefrontLayout({ storeData, categories = [], products 
                     <LogOut size={20} />
                   </button>
                 </div>
-              ) : (
-                <button onClick={openLoginModal} className="hexashop-icon-btn border-0 bg-transparent p-0 d-none d-md-block" title="Login">
-                  <User size={20} />
-                </button>
-              )}
+              ) : null}
 
               <Link to={`${basePath}/wishlist`} className="hexashop-icon-btn text-decoration-none">
                 <Heart size={20} />
@@ -364,17 +346,7 @@ export default function StorefrontLayout({ storeData, categories = [], products 
                         <LogOut size={16} className="me-2" /> Logout
                       </button>
                     </>
-                  ) : (
-                    <button 
-                      className="storefront-mobile-nav-item border-0 bg-transparent text-start" 
-                      onClick={() => {
-                        openLoginModal();
-                        setIsCategoryOpen(false);
-                      }}
-                    >
-                      <User size={16} className="me-2" /> Login / Create Account
-                    </button>
-                  )}
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -423,15 +395,7 @@ export default function StorefrontLayout({ storeData, categories = [], products 
                       Logout
                     </button>
                   </div>
-                ) : (
-                  <button 
-                    className="btn bg-white fw-bold px-4 rounded-1 shadow-sm d-flex align-items-center justify-content-center" 
-                    style={{ color: '#2874f0', height: '36px', border: 'none' }}
-                    onClick={openLoginModal}
-                  >
-                    Create account
-                  </button>
-                )}
+                ) : null}
 
                 <Link to={`${basePath}/wishlist`} className="storefront-nav-item text-decoration-none">
                   Wishlist

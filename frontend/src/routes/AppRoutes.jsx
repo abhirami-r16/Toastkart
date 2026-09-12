@@ -6,6 +6,7 @@ import { StoreProvider } from '../context/StoreContext';
 import { CartProvider } from '../context/CartContext';
 
 import Home from '../pages/Home';
+import Portfolio from '../pages/Portfolio';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import StoreOwnerDashboard from '../pages/store-owner-dashboard';
@@ -25,6 +26,7 @@ import SettingsPage from '../pages/Settings';
 import StorefrontApp from '../pages/Storefront/StorefrontApp';
 import PortfolioBuilder from '../pages/PortfolioBuilder';
 import PortfolioView from '../pages/PortfolioView';
+import WhatsappWidget from '../components/WhatsappWidget';
 
 const getSubdomain = () => {
   const host = window.location.hostname;
@@ -124,6 +126,7 @@ function AppRoutes() {
             <Routes>
               {/* Portal Landing Page */}
               <Route path="/" element={<Home />} />
+              <Route path="/portfolio" element={<Portfolio />} />
               <Route path="/portal" element={<Home />} />
               <Route path="/landing" element={<Home />} />
 
@@ -271,6 +274,7 @@ function AppRoutes() {
           </CartProvider>
         </StoreProvider>
       </AuthProvider>
+      <WhatsappWidget />
     </BrowserRouter>
   );
 }

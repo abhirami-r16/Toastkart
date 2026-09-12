@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import ToastKartLogo from "../components/ToastKartLogo";
 import {
   Sparkles, ArrowRight, ShieldCheck, Zap, Store, Package, ShoppingCart, DollarSign,
-  CheckCircle, Star, Rocket, Crown, Mail, Check, Menu, X
+  CheckCircle, Star, Rocket, Crown, Mail, Check, Menu, X, MapPin, Phone, Send, MessageCircle
 } from "lucide-react";
 
 const goslotStyles = `
@@ -139,6 +139,33 @@ const goslotStyles = `
     0%, 100% { transform: translate(0, 0) scale(1); }
     50% { transform: translate(30px, -30px) scale(1.08); }
   }
+  .portfolio-card {
+    transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+    overflow: hidden;
+  }
+  .portfolio-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.2) !important;
+  }
+  .portfolio-img {
+    transition: transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+  .portfolio-card:hover .portfolio-img {
+    transform: scale(1.1);
+  }
+  .explore-link {
+    transition: all 0.3s ease;
+    color: var(--white);
+  }
+  .portfolio-card:hover .explore-link {
+    color: var(--primary);
+  }
+  .explore-link svg {
+    transition: transform 0.3s ease;
+  }
+  .portfolio-card:hover .explore-link svg {
+    transform: translateX(8px);
+  }
   .goslot-card {
     background: var(--white);
     border: 1px solid var(--line);
@@ -166,6 +193,72 @@ const goslotStyles = `
   }
   .goslot-nav-link:hover {
     color: var(--primary);
+  }
+  
+  /* NEW PREMIUM STYLES */
+  .glass-dark {
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.4);
+  }
+  .glow-on-hover {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background: #ffffff;
+  }
+  .glow-on-hover:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 24px 48px rgba(255, 87, 34, 0.12);
+    border-color: rgba(255, 87, 34, 0.25);
+  }
+  .icon-float {
+    transition: transform 0.4s ease;
+  }
+  .glow-on-hover:hover .icon-float {
+    transform: translateY(-6px) scale(1.1);
+  }
+  .browser-mockup {
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 24px 50px rgba(15, 23, 42, 0.15);
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.08);
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .browser-mockup:hover {
+    transform: translateY(-12px) scale(1.01);
+    box-shadow: 0 32px 64px rgba(255, 87, 34, 0.15);
+  }
+  .browser-header {
+    background: #f8fafc;
+    padding: 12px 20px;
+    display: flex;
+    gap: 8px;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+  .browser-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+  }
+  .dot-red { background: #ff5f56; }
+  .dot-yellow { background: #ffbd2e; }
+  .dot-green { background: #27c93f; }
+  .pricing-card-pro {
+    position: relative;
+    border: 2px solid transparent !important;
+    background: linear-gradient(white, white) padding-box,
+                linear-gradient(135deg, var(--primary), var(--secondary)) border-box !important;
+    transform: scale(1.06);
+    z-index: 2;
+  }
+  .pricing-card-pro:hover {
+    transform: scale(1.1) translateY(-6px);
+    box-shadow: 0 30px 60px rgba(255, 87, 34, 0.25);
+  }
+  .gradient-text {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
   
   /* Mobile Responsiveness for Landing Page */
@@ -255,8 +348,10 @@ export default function Home() {
           <nav className="d-none d-lg-flex align-items-center gap-4">
             <a href="#hero" className="goslot-nav-link">Home</a>
             <a href="#features" className="goslot-nav-link">Features</a>
+            <a href="/portfolio" className="goslot-nav-link">Portfolio</a>
             <a href="#about" className="goslot-nav-link">About</a>
             <a href="#pricing" className="goslot-nav-link">Pricing</a>
+            <a href="#contact" className="goslot-nav-link">Contact Us</a>
           </nav>
 
           <div className="d-flex align-items-center gap-3">
@@ -276,8 +371,10 @@ export default function Home() {
             <nav className="d-flex flex-column p-4 gap-3 text-center">
               <a href="#hero" className="goslot-nav-link fs-5" onClick={() => setIsMobileMenuOpen(false)}>Home</a>
               <a href="#features" className="goslot-nav-link fs-5" onClick={() => setIsMobileMenuOpen(false)}>Features</a>
+              <a href="/portfolio" className="goslot-nav-link fs-5" onClick={() => setIsMobileMenuOpen(false)}>Portfolio</a>
               <a href="#about" className="goslot-nav-link fs-5" onClick={() => setIsMobileMenuOpen(false)}>About</a>
               <a href="#pricing" className="goslot-nav-link fs-5" onClick={() => setIsMobileMenuOpen(false)}>Pricing</a>
+              <a href="#contact" className="goslot-nav-link fs-5" onClick={() => setIsMobileMenuOpen(false)}>Contact Us</a>
               <div className="border-top my-2"></div>
               <a href="/login" className="goslot-nav-link fs-5 text-primary" onClick={() => setIsMobileMenuOpen(false)}>Login</a>
             </nav>
@@ -299,7 +396,7 @@ export default function Home() {
           overflow: 'hidden'
         }}>
           <iframe
-            src="https://www.youtube.com/embed/01BZVNowenQ?autoplay=1&mute=1&loop=1&playlist=01BZVNowenQ&controls=0&showinfo=0&vq=hd1080"
+            src="https://www.youtube.com/embed/01BZVNowenQ?autoplay=1&mute=1&loop=1&playlist=01BZVNowenQ&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&disablekb=1"
             style={{
               width: '100vw',
               height: '56.25vw',
@@ -308,7 +405,7 @@ export default function Home() {
               position: 'absolute',
               top: '50%',
               left: '50%',
-              transform: 'translate(-50%, -50%)',
+              transform: 'translate(-50%, -50%) scale(1.35)',
               pointerEvents: 'none',
               border: 'none'
             }}
@@ -327,15 +424,14 @@ export default function Home() {
         <div className="hero-blob blob-1"></div>
         <div className="hero-blob blob-2"></div>
 
-        <div className="container-xl position-relative z-10 text-center max-w-4xl mx-auto">
-          <h1 className="display-4 fw-bolder mb-4 force-white-text">
+        <div className="container-xl position-relative z-10 text-center max-w-4xl mx-auto py-5">
+          <h1 className="display-3 fw-bolder mb-4 force-white-text" style={{ letterSpacing: '-0.03em', lineHeight: 1.15 }}>
             Build Your Ecommerce Store <br />
             With In 24 Hours
           </h1>
-          <p className="fs-5 mx-auto mb-5 force-white-text" style={{ maxWidth: 680 }}>
+          <p className="fs-5 mx-auto mb-5 force-white-text fw-normal" style={{ maxWidth: 700, lineHeight: 1.6 }}>
             ToastKart is the all-in-one platform for vendors to launch their stores and buyers to shop seamlessly. Manage orders, payouts, and catalogs from a central dashboard.
           </p>
-
         </div>
       </section>
 
@@ -379,27 +475,30 @@ export default function Home() {
         </div>
       </section>
 
+      {/* PORTFOLIO / FEATURED STORES MOVED TO DEDICATED PAGE */}
+
       {/* FEATURES */}
-      <section id="features" className="py-5">
+      <section id="features" className="py-5 my-5">
         <div className="container-xl">
-          <div className="text-center mb-5">
-            <div className="goslot-eyebrow">Core Features</div>
-            <h2 className="fs-2 mb-3">Everything you need to run a platform</h2>
+          <div className="text-center mb-5 pb-4">
+            <div className="goslot-eyebrow">Enterprise Grade</div>
+            <h2 className="display-5 fw-bolder mb-3" style={{ letterSpacing: '-0.02em' }}>Everything you need to scale</h2>
+            <p className="fs-5 text-muted mx-auto" style={{ maxWidth: 600 }}>Powerful tools engineered to help you manage products, process orders, and grow revenue on autopilot.</p>
           </div>
-          <div className="row g-4">
+          <div className="row g-4 pt-2">
             {[
-              { icon: Store, title: "Storefronts", desc: "Merchants get custom subdomains, catalogs, and branding out of the box." },
-              { icon: DollarSign, title: "Automated Payouts", desc: "Split payments seamlessly with Stripe Connect. Instant merchant commissions." },
-              { icon: ShieldCheck, title: "Enterprise Security", desc: "Bank-grade 256-bit SSL encryption and full transaction audit logs." },
-              { icon: ShoppingCart, title: "Unified Cart", desc: "Shoppers can buy from multiple stores in a single, seamless checkout flow." }
+              { icon: Store, title: "Custom Storefronts", desc: "Merchants get branded subdomains, unlimited catalogs, and conversion-optimized checkout flows." },
+              { icon: DollarSign, title: "Automated Payouts", desc: "Split payments seamlessly. Instant merchant commissions routed directly to linked bank accounts." },
+              { icon: ShieldCheck, title: "Enterprise Security", desc: "Rest easy with bank-grade 256-bit SSL encryption, PCI compliance, and full transaction audit logs." },
+              { icon: ShoppingCart, title: "Unified Cart System", desc: "Shoppers can effortlessly buy from multiple vendors in a single, lightning-fast checkout flow." }
             ].map((f, i) => (
               <div key={i} className="col-12 col-md-6 col-lg-3">
-                <div className="goslot-card h-100 d-flex flex-column">
-                  <div className="d-inline-flex align-items-center justify-content-center rounded-3 mb-3" style={{ width: 48, height: 48, background: "rgba(255,87,34,0.1)", color: "var(--primary)" }}>
-                    <f.icon size={24} />
+                <div className="goslot-card glow-on-hover h-100 d-flex flex-column p-4" style={{ borderRadius: 24, border: '1px solid rgba(0,0,0,0.06)' }}>
+                  <div className="d-inline-flex align-items-center justify-content-center rounded-circle mb-4 shadow-sm" style={{ width: 64, height: 64, background: "linear-gradient(135deg, rgba(255,87,34,0.12), rgba(255,87,34,0.03))", color: "var(--primary)" }}>
+                    <f.icon size={32} className="icon-float" />
                   </div>
-                  <h3 className="fs-5 mb-2">{f.title}</h3>
-                  <p className="fs-7 mb-0">{f.desc}</p>
+                  <h3 className="fs-4 fw-bold mb-3">{f.title}</h3>
+                  <p className="fs-6 text-muted mb-0" style={{ lineHeight: 1.6 }}>{f.desc}</p>
                 </div>
               </div>
             ))}
@@ -502,8 +601,59 @@ export default function Home() {
 
 
 
-
-
+      {/* CONTACT */}
+      <section id="contact" className="py-5 bg-white">
+        <div className="container-xl" style={{ maxWidth: 1000 }}>
+          <div className="text-center mb-5">
+            <div className="goslot-eyebrow">Contact Us</div>
+            <h2 className="fs-2 fw-bolder mb-3">Get in Touch</h2>
+            <p className="fs-5 text-muted mx-auto" style={{ maxWidth: 600 }}>
+              Have questions or need help setting up your store? Reach out to our team.
+            </p>
+          </div>
+          <div className="row g-4 justify-content-center text-center">
+            {/* Address */}
+            <div className="col-12 col-md-4">
+              <div className="goslot-card glow-on-hover h-100 p-4 p-xl-5" style={{ borderRadius: 24, border: '1px solid rgba(0,0,0,0.06)' }}>
+                <MapPin size={40} className="mb-3 icon-float" style={{ color: "var(--primary)" }} />
+                <h3 className="fs-5 fw-bold mb-3">Address</h3>
+                <p className="fs-6 text-muted mb-0">
+                  Webtoast<br />
+                  inQ Tower, 1st floor<br />
+                  Opp EMC NH Bypass<br />
+                  Palarivattom, Kochi, Kerala 682025
+                </p>
+              </div>
+            </div>
+            {/* Email */}
+            <div className="col-12 col-md-4">
+              <div className="goslot-card glow-on-hover h-100 p-4 p-xl-5" style={{ borderRadius: 24, border: '1px solid rgba(0,0,0,0.06)' }}>
+                <Mail size={40} className="mb-3 icon-float" style={{ color: "var(--primary)" }} />
+                <h3 className="fs-5 fw-bold mb-3">Email Support</h3>
+                <p className="fs-6 text-muted mb-4">
+                  Send us an email and our support team will get back to you within 24 hours.
+                </p>
+                <a href="mailto:business@webtoast.in" className="fw-bold text-decoration-none" style={{ color: "var(--primary)" }}>
+                  business@webtoast.in
+                </a>
+              </div>
+            </div>
+            {/* Phone */}
+            <div className="col-12 col-md-4">
+              <div className="goslot-card glow-on-hover h-100 p-4 p-xl-5" style={{ borderRadius: 24, border: '1px solid rgba(0,0,0,0.06)' }}>
+                <Phone size={40} className="mb-3 icon-float" style={{ color: "var(--primary)" }} />
+                <h3 className="fs-5 fw-bold mb-3">Phone</h3>
+                <p className="fs-6 text-muted mb-4">
+                  Call us directly for immediate assistance during business hours.
+                </p>
+                <a href="tel:9526706406" className="fw-bold text-decoration-none" style={{ color: "var(--primary)" }}>
+                  9526706406
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* FOOTER */}
       <footer className="py-4 mt-5 bg-white border-top">

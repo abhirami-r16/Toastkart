@@ -48,6 +48,12 @@ body {
   letter-spacing: -0.01em;
 }
 
+#root {
+  position: relative;
+  min-height: 100vh;
+  padding-bottom: 120px; /* Space for the widget */
+}
+
 .storefront-body {
   background: #f8f9fa !important;
   color: #212529 !important;

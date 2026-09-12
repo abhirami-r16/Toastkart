@@ -22,61 +22,50 @@ export default function MyOrders() {
   const basePath = getBasePath();
 
   useEffect(() => {
-    if (!user) {
-      setLoading(false);
-      return;
-    }
-
     const fetchOrders = async () => {
       try {
         setLoading(true);
-        // Try fetching from API
-        const response = await api.get('/orders');
-        let apiOrders = Array.isArray(response.data) ? response.data : (response.data?.data || []);
+        let uniqueOrders = [];
         
-        // Filter by the current store if possible
-        if (storeId) {
-          apiOrders = apiOrders.filter(o => String(o.store_id) === String(storeId) || !o.store_id);
-        }
+        if (user) {
+          // Fetch from API for logged-in user
+          const response = await api.get('/orders');
+          let apiOrders = Array.isArray(response.data) ? response.data : (response.data?.data || []);
+          
+          if (storeId) {
+            apiOrders = apiOrders.filter(o => String(o.store_id) === String(storeId) || !o.store_id);
+          }
 
-        // Strictly ensure customers only see their OWN orders
-        apiOrders = apiOrders.filter(o => {
-          const orderEmail = o.customer_email || o.email || o.customer?.email;
-          return orderEmail && orderEmail.toLowerCase() === user.email.toLowerCase();
-        });
-        
-        // Also get from local storage just in case (fallback or local-only orders)
-        let localOrders = [];
-        try {
-          const saved = JSON.parse(localStorage.getItem('aureum_owner_orders') || '[]');
-          // Attempt to match user email if present and MUST match storeId
-          localOrders = saved.filter(o => {
-            const emailMatch = !o.email || o.email.toLowerCase() === user.email.toLowerCase() || !o.customer_email || o.customer_email.toLowerCase() === user.email.toLowerCase();
-            const storeMatch = !storeId || String(o.store_id) === String(storeId) || !o.store_id;
-            return emailMatch && storeMatch;
+          apiOrders = apiOrders.filter(o => {
+            const orderEmail = o.customer_email || o.email || o.customer?.email;
+            return orderEmail && orderEmail.toLowerCase() === user.email.toLowerCase();
           });
-        } catch (e) {}
-        
-        // Combine, ensuring no duplicates by ID
-        const combined = [...localOrders, ...apiOrders];
-        const uniqueOrders = Array.from(new Map(combined.map(o => [o.id, o])).values());
+          
+          let localOrders = [];
+          try {
+            const saved = JSON.parse(localStorage.getItem('aureum_owner_orders') || '[]');
+            localOrders = saved.filter(o => {
+              const emailMatch = !o.email || o.email.toLowerCase() === user.email.toLowerCase() || !o.customer_email || o.customer_email.toLowerCase() === user.email.toLowerCase();
+              const storeMatch = !storeId || String(o.store_id) === String(storeId) || !o.store_id;
+              return emailMatch && storeMatch;
+            });
+          } catch (e) {}
+          
+          const combined = [...localOrders, ...apiOrders];
+          uniqueOrders = Array.from(new Map(combined.map(o => [o.id, o])).values());
+        } else {
+          // Guest User: Automatically load all local device orders for this store
+          try {
+            const saved = JSON.parse(localStorage.getItem('aureum_owner_orders') || '[]');
+            uniqueOrders = saved.filter(o => !storeId || String(o.store_id) === String(storeId) || !o.store_id);
+          } catch (e) {}
+        }
         
         // Sort by date descending
         uniqueOrders.sort((a, b) => new Date(b.created_at || b.date) - new Date(a.created_at || a.date));
-        
         setOrders(uniqueOrders);
       } catch (err) {
         console.error("Failed to fetch orders:", err);
-        // Fallback to local storage only
-        try {
-          const saved = JSON.parse(localStorage.getItem('aureum_owner_orders') || '[]');
-          const localOrders = saved.filter(o => {
-            const emailMatch = !o.email || o.email.toLowerCase() === user.email.toLowerCase() || !o.customer_email || o.customer_email.toLowerCase() === user.email.toLowerCase();
-            const storeMatch = !storeId || String(o.store_id) === String(storeId) || !o.store_id;
-            return emailMatch && storeMatch;
-          });
-          setOrders(localOrders);
-        } catch (e) {}
       } finally {
         setLoading(false);
       }
@@ -125,17 +114,7 @@ export default function MyOrders() {
         <h1 className="fs-2 font-bold m-0">My Orders</h1>
       </div>
 
-      {!user ? (
-        <div className="text-center py-5">
-          <div className="w-16 h-16 rounded-circle bg-light d-inline-flex align-items-center justify-content-center mb-3">
-            <Package size={34} className="text-secondary" />
-          </div>
-          <h2 className="fs-3 fw-bold mb-2">Please Login</h2>
-          <p className="text-secondary max-w-md mx-auto mb-4">
-            You must be logged in to view your orders for this store.
-          </p>
-        </div>
-      ) : loading ? (
+      {loading ? (
         <div className="d-flex justify-content-center py-5">
           <div className="spinner-border text-primary" role="status">
             <span className="visually-hidden">Loading...</span>

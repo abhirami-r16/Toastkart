@@ -212,6 +212,7 @@ export default function Login() {
         <div className="goslot-nav-links">
           <a href="/" className="text-decoration-none text-dark">Home</a>
           <a href="/#features" className="text-decoration-none text-dark">Features</a>
+          <a href="/portfolio" className="text-decoration-none text-dark">Portfolio</a>
           <a href="/#about" className="text-decoration-none text-dark">About</a>
         </div>
         
