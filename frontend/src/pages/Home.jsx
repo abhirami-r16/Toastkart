@@ -312,8 +312,14 @@ export default function Home() {
 
       {/* FEATURES */}
       {/* TEMPLATES */}
-      <section id="templates" className="py-5" style={{ backgroundColor: '#f8f9fc' }}>
-        <div className="container-xl">
+      <section id="templates" className="py-5 position-relative" style={{ 
+        background: 'linear-gradient(135deg, #fff3e0 0%, #ffe0b2 50%, #ffcc80 100%)',
+        overflow: 'hidden'
+      }}>
+        <div className="position-absolute rounded-circle" style={{ width: 400, height: 400, background: 'rgba(255, 87, 34, 0.15)', top: -100, right: -100, filter: 'blur(60px)' }}></div>
+        <div className="position-absolute rounded-circle" style={{ width: 600, height: 600, background: 'rgba(255, 152, 0, 0.15)', bottom: -200, left: -200, filter: 'blur(80px)' }}></div>
+        <div className="position-absolute w-100 h-100" style={{ top: 0, left: 0, background: 'radial-gradient(circle at center, transparent 30%, rgba(255, 255, 255, 0.3) 100%)', pointerEvents: 'none' }}></div>
+        <div className="container-xl position-relative" style={{ zIndex: 1 }}>
           <div className="text-center mb-5">
             <div className="goslot-eyebrow">Stunning Templates</div>
             <h2 className="fs-2 mb-3">Launch With Beautiful Themes</h2>
