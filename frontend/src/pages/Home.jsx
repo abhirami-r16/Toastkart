@@ -195,6 +195,7 @@ export default function Home() {
   const [cartCount, setCartCount] = useState(2);
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [newsletterSuccess, setNewsletterSuccess] = useState(false);
+  const [isYearly, setIsYearly] = useState(false);
 
   const handleAddToCart = (e, prod) => {
     e.stopPropagation();
@@ -424,18 +425,44 @@ export default function Home() {
       {/* PRICING */}
       <section id="pricing" className="py-5" style={{ backgroundColor: '#f8f9fc' }}>
         <div className="container-xl">
-          <div className="text-center mb-5">
+          <div className="text-center mb-4">
             <div className="goslot-eyebrow">Pricing</div>
             <h2 className="fs-2 mb-3">ToastKart Pricing</h2>
             <p className="fs-6 text-muted mx-auto fw-bold" style={{ maxWidth: 600 }}>Free Trial: 14 Days</p>
           </div>
+          
+          <div className="d-flex justify-content-center align-items-center mb-5 gap-3">
+            <span className={`fw-bold ${!isYearly ? 'text-dark' : 'text-muted'}`} style={{ cursor: 'pointer' }} onClick={() => setIsYearly(false)}>Pay monthly</span>
+            <div 
+              className="form-check form-switch fs-4 m-0" 
+              style={{ cursor: 'pointer' }}
+            >
+              <input 
+                className="form-check-input shadow-none" 
+                type="checkbox" 
+                role="switch" 
+                checked={isYearly} 
+                onChange={(e) => setIsYearly(e.target.checked)} 
+                style={{ cursor: 'pointer', borderColor: isYearly ? 'var(--primary)' : '', backgroundColor: isYearly ? 'var(--primary)' : '' }}
+              />
+            </div>
+            <span className={`fw-bold ${isYearly ? 'text-dark' : 'text-muted'}`} style={{ cursor: 'pointer' }} onClick={() => setIsYearly(true)}>
+              Pay yearly <span className="badge bg-success bg-opacity-10 text-success rounded-pill ms-1 fs-9 fw-bold px-2 py-1 align-text-top">Save 20%</span>
+            </span>
+          </div>
+
           <div className="row g-4 justify-content-center">
             {/* Basic Tier */}
             <div className="col-12 col-md-6 col-lg-4">
               <div className="goslot-card h-100 d-flex flex-column text-center">
                 <h3 className="fs-4 fw-bold mb-2">Basic</h3>
-                <div className="fs-3 fw-bolder text-dark mb-1">₹499<span className="fs-6 text-muted fw-normal">/month</span></div>
-                <div className="fs-6 text-muted mb-4">₹4,999/year</div>
+                <div className="fs-3 fw-bolder text-dark mb-1">
+                  {isYearly ? '₹4,999' : '₹499'}
+                  <span className="fs-6 text-muted fw-normal">/{isYearly ? 'year' : 'month'}</span>
+                </div>
+                <div className="fs-6 text-muted mb-4" style={{ minHeight: '24px' }}>
+                  {isYearly ? 'Billed annually' : ''}
+                </div>
                 <ul className="list-unstyled text-start mb-4 flex-grow-1">
                   <li className="mb-2"><Check size={16} className="text-success me-2"/> Online Store</li>
                   <li className="mb-2"><Check size={16} className="text-success me-2"/> ToastKart Subdomain</li>
@@ -452,8 +479,13 @@ export default function Home() {
             <div className="col-12 col-md-6 col-lg-4">
               <div className="goslot-card h-100 d-flex flex-column text-center position-relative shadow-lg" style={{ border: '2px solid var(--primary)' }}>
                 <h3 className="fs-4 fw-bold mb-2">Growth</h3>
-                <div className="fs-3 fw-bolder text-dark mb-1">₹999<span className="fs-6 text-muted fw-normal">/month</span></div>
-                <div className="fs-6 text-muted mb-4">₹9,999/year</div>
+                <div className="fs-3 fw-bolder text-dark mb-1">
+                  {isYearly ? '₹9,999' : '₹999'}
+                  <span className="fs-6 text-muted fw-normal">/{isYearly ? 'year' : 'month'}</span>
+                </div>
+                <div className="fs-6 text-muted mb-4" style={{ minHeight: '24px' }}>
+                  {isYearly ? 'Billed annually' : ''}
+                </div>
                 <ul className="list-unstyled text-start mb-4 flex-grow-1">
                   <li className="mb-2"><Check size={16} className="text-success me-2"/> Everything in Basic</li>
                   <li className="mb-2"><Check size={16} className="text-success me-2"/> Custom Domain</li>
@@ -468,8 +500,13 @@ export default function Home() {
             <div className="col-12 col-md-6 col-lg-4">
               <div className="goslot-card h-100 d-flex flex-column text-center">
                 <h3 className="fs-4 fw-bold mb-2">Pro</h3>
-                <div className="fs-3 fw-bolder text-dark mb-1">₹1,999<span className="fs-6 text-muted fw-normal">/month</span></div>
-                <div className="fs-6 text-muted mb-4">₹19,999/year</div>
+                <div className="fs-3 fw-bolder text-dark mb-1">
+                  {isYearly ? '₹19,999' : '₹1,999'}
+                  <span className="fs-6 text-muted fw-normal">/{isYearly ? 'year' : 'month'}</span>
+                </div>
+                <div className="fs-6 text-muted mb-4" style={{ minHeight: '24px' }}>
+                  {isYearly ? 'Billed annually' : ''}
+                </div>
                 <ul className="list-unstyled text-start mb-4 flex-grow-1">
                   <li className="mb-2"><Check size={16} className="text-success me-2"/> Everything in Growth</li>
                   <li className="mb-2"><Check size={16} className="text-success me-2"/> Unlimited Products</li>
