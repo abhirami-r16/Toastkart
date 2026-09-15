@@ -134,6 +134,23 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Update Password
+  const updatePassword = async (email, newPassword) => {
+    try {
+      const res = await api.post('/update-password', {
+        email,
+        new_password: newPassword,
+      });
+      return { success: true, message: res.data.message };
+    } catch (err) {
+      console.error('Update password failed:', err);
+      const message =
+        err.response?.data?.message ||
+        'Failed to update password. Please try again.';
+      return { success: false, message };
+    }
+  };
+
   // Logout
   const logout = async () => {
     try {
@@ -159,6 +176,7 @@ export const AuthProvider = ({ children }) => {
         login,
         register,
         logout,
+        updatePassword,
       }}
     >
       {children}

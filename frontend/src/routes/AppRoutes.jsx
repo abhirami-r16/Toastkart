@@ -1,5 +1,12 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useParams } from 'react-router-dom';
+import { Capacitor } from '@capacitor/core';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useParams,
+} from 'react-router-dom';
 
 import { AuthProvider, useAuth } from '../context/AuthContext';
 import { StoreProvider } from '../context/StoreContext';
@@ -60,6 +67,9 @@ const StorefrontWrapper = () => {
 
 function AppRoutes() {
   const subdomain = getSubdomain();
+
+  // Detect Android app
+  const isAndroidApp = Capacitor.getPlatform() === 'android';
 
   // Clean up massive base64 images to prevent QuotaExceededError
   React.useEffect(() => {
@@ -124,10 +134,23 @@ function AppRoutes() {
         <StoreProvider>
           <CartProvider>
             <Routes>
+
               {/* Portal Landing Page */}
-              <Route path="/" element={<Home />} />
+              <Route
+                path="/"
+                element={
+                  isAndroidApp ? (
+                    <Navigate to="/login" replace />
+                  ) : (
+                    <Home />
+                  )
+                }
+              />
+
               <Route path="/portfolio" element={<Portfolio />} />
+
               <Route path="/portal" element={<Home />} />
+
               <Route path="/landing" element={<Home />} />
 
               {/* Storefront Pages */}
@@ -153,8 +176,15 @@ function AppRoutes() {
               />
 
               {/* Authentication Routes */}
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
+              <Route
+                path="/login"
+                element={<Login />}
+              />
+
+              <Route
+                path="/register"
+                element={<Register />}
+              />
 
               {/* Dashboard Routes */}
               <Route
@@ -214,6 +244,7 @@ function AppRoutes() {
 
               {/* Merchant Admin Sub-pages */}
               <Route element={<AdminLayout />}>
+
                 <Route
                   path="/stores"
                   element={<StoresPage />}
@@ -263,6 +294,7 @@ function AppRoutes() {
                   path="/settings"
                   element={<SettingsPage />}
                 />
+
               </Route>
 
               {/* Fallback */}
@@ -270,11 +302,14 @@ function AppRoutes() {
                 path="*"
                 element={<Navigate to="/" replace />}
               />
+
             </Routes>
           </CartProvider>
         </StoreProvider>
       </AuthProvider>
+
       <WhatsappWidget />
+
     </BrowserRouter>
   );
 }
