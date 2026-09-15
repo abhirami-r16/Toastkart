@@ -451,7 +451,6 @@ export default function Home() {
             {/* Growth Tier */}
             <div className="col-12 col-md-6 col-lg-4">
               <div className="goslot-card h-100 d-flex flex-column text-center position-relative shadow-lg" style={{ border: '2px solid var(--primary)' }}>
-                <div className="position-absolute top-0 start-50 translate-middle badge rounded-pill" style={{ backgroundColor: 'var(--primary)', color: '#fff', fontSize: '0.8rem', padding: '0.4rem 1rem' }}>Most Popular</div>
                 <h3 className="fs-4 fw-bold mb-2">Growth</h3>
                 <div className="fs-3 fw-bolder text-dark mb-1">₹999<span className="fs-6 text-muted fw-normal">/month</span></div>
                 <div className="fs-6 text-muted mb-4">₹9,999/year</div>
