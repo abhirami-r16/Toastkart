@@ -9,7 +9,7 @@ export default function WhatsappWidget() {
   const isStorefront = location.pathname.startsWith('/storefront') || location.pathname.startsWith('/store/');
   if (isStorefront) return null;
 
-  const whatsappNumber = "919526706406";
+  const whatsappNumber = "918281311293";
   const defaultMessage = "I am interested to develop an online store";
 
   const handleWhatsappSend = () => {

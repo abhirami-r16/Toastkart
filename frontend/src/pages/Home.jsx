@@ -270,8 +270,13 @@ export default function Home() {
           pointerEvents: 'none',
           overflow: 'hidden'
         }}>
-          <iframe
-            src="https://www.youtube.com/embed/01BZVNowenQ?autoplay=1&mute=1&loop=1&playlist=01BZVNowenQ&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&disablekb=1"
+          <video
+            src="/videos/hero-video.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
             style={{
               width: '100vw',
               height: '56.25vw',
@@ -282,11 +287,10 @@ export default function Home() {
               left: '50%',
               transform: 'translate(-50%, -50%) scale(1.35)',
               pointerEvents: 'none',
-              border: 'none'
+              border: 'none',
+              objectFit: 'cover'
             }}
-            allow="autoplay; encrypted-media"
-            title="Background Video"
-          ></iframe>
+          />
           <div style={{
             position: 'absolute',
             top: 0,
