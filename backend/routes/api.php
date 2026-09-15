@@ -23,7 +23,7 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout']);
 Route::get('/me', [AuthController::class, 'me']);
-
+Route::post('/update-password', [AuthController::class, 'updatePassword']);
 // Dashboard
 Route::get('/dashboard', [DashboardController::class, 'index']);
 

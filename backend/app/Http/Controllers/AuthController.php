@@ -57,6 +57,28 @@ class AuthController extends Controller
             'message' => 'Registration successful',
         ], 201);
     }
+    public function updatePassword(Request $request)
+    {
+        $fields = $request->validate([
+            'email' => 'required|string|email',
+            'new_password' => 'required|string|min:6'
+        ]);
+
+        $user = User::where('email', $fields['email'])->first();
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'No account found with this email.'
+            ], 404);
+        }
+
+        $user->password = Hash::make($fields['new_password']);
+        $user->save();
+
+        return response()->json([
+            'message' => 'Password updated successfully'
+        ]);
+    }
 
     public function login(Request $request)
     {
