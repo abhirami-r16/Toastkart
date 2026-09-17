@@ -209,40 +209,34 @@
   color: #c9888f;
 }
 
-/* Quick Add Button */
+/* Quick Add Button (Fixed inside card) */
 .theme-beauty .add-to-cart-wrapper {
-  position: absolute;
-  bottom: -60px;
-  left: 0;
   width: 100%;
   display: flex;
   justify-content: center;
-  transition: bottom 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 10;
-}
-
-.theme-beauty .storefront-product-card:hover .add-to-cart-wrapper {
-  bottom: 25px;
+  padding: 15px 0 0 0;
 }
 
 .theme-beauty .theme-cart-btn {
-  background: rgba(255, 255, 255, 0.9) !important;
-  backdrop-filter: blur(5px);
-  color: #c9888f !important;
-  border: 1px solid #c9888f;
+  width: 100%;
+  background: linear-gradient(135deg, #f8ccd1 0%, #e8a8b1 100%) !important;
+  color: #fff !important;
+  border: none;
   border-radius: 30px;
-  padding: 12px 25px;
+  padding: 10px 20px;
   font-family: 'Montserrat', sans-serif;
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 1px;
+  text-transform: uppercase;
   transition: all 0.3s ease;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(232, 168, 177, 0.3);
 }
 
 .theme-beauty .theme-cart-btn:hover {
-  background: #c9888f !important;
-  color: #fff !important;
+  background: linear-gradient(135deg, #e8a8b1 0%, #d898a1 100%) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(232, 168, 177, 0.4);
 }
 
 /* ==========================================================================
@@ -278,6 +272,22 @@
   }
   .theme-beauty .beauty-title {
     font-size: 40px;
+  }
+}
+
+@media (max-width: 575px) {
+  .theme-beauty .beauty-hero-section {
+    margin: 10px 5px;
+    border-radius: 20px;
+  }
+  .theme-beauty .beauty-hero-text {
+    padding: 40px 20px;
+  }
+  .theme-beauty .beauty-title {
+    font-size: 32px;
+  }
+  .theme-beauty .storefront-product-grid {
+    grid-template-columns: 1fr;
   }
 }
 

@@ -2529,7 +2529,11 @@ export default function StoreOwnerDashboard() {
                         <span className="fs-9 fw-semibold" style={{ color: "#6d7175", fontSize: "0.7rem" }}>• Store ID #{activeStore.id}</span>
                       </div>
                       <button
-                        onClick={() => setActive("categories")}
+                        onClick={() => {
+                          setEditingCategory(null);
+                          setCategoryForm({ name: "", description: "", featured: false });
+                          setShowInlineCategoryForm(true);
+                        }}
                         className="btn btn-sm d-flex align-items-center justify-content-center gap-1 fw-bold flex-shrink-0 px-2 px-sm-3"
                         style={{ background: "#1c2226", color: "#fff", borderRadius: "6px", fontSize: "0.75rem" }}
                       >
@@ -2538,10 +2542,9 @@ export default function StoreOwnerDashboard() {
                       </button>
                     </div>
 
-                    {categoriesList.length === 0 ? (
-                      showInlineCategoryForm ? (
-                        <div className="bg-white p-4" style={{ borderRadius: "8px", border: "1px solid #dfe3e8" }}>
-                          <h4 className="fs-6 font-bold mb-3" style={{ color: "#202223" }}>Create First Collection</h4>
+                    {showInlineCategoryForm ? (
+                        <div className="bg-white p-4" style={{ borderBottom: "1px solid #dfe3e8" }}>
+                          <h4 className="fs-6 font-bold mb-3" style={{ color: "#202223" }}>{editingCategory ? "Edit Collection" : "Create Collection"}</h4>
                           <form onSubmit={(e) => { handleCategorySubmit(e); setShowInlineCategoryForm(false); }} className="d-flex flex-column gap-3 fs-7">
                             
               <div>
@@ -2597,7 +2600,7 @@ export default function StoreOwnerDashboard() {
             
                           </form>
                         </div>
-                      ) : (
+                      ) : categoriesList.length === 0 ? (
                         <div className="text-center py-5 px-4">
                           <Tag size={32} style={{ color: "#c9cccf", marginBottom: 10 }} />
                           <p className="fs-8 mb-2" style={{ color: "#6d7175" }}>No collections found for Store ID #{activeStore.id}</p>
@@ -2609,8 +2612,7 @@ export default function StoreOwnerDashboard() {
                             Create First Collection
                           </button>
                         </div>
-                      )
-                    ) : (
+                      ) : (
                       <div className="table-responsive">
                         <table className="table table-hover mb-0 align-middle border-0">
                           <thead>

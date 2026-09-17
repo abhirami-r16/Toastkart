@@ -353,18 +353,7 @@ export default function Home() {
             ))}
           </div>
           
-          <div className="text-center mt-3 pt-5 border-top" style={{ borderColor: 'rgba(0,0,0,0.1)' }}>
-            <h3 className="fs-3 fw-bold mb-3">Ready to launch your online store?</h3>
-            <p className="fs-6 text-muted mb-4">Choose a theme and start selling in minutes.</p>
-            <div className="d-flex align-items-center justify-content-center gap-3">
-              <button onClick={() => navigate("/login")} className="goslot-btn goslot-btn-outline fs-6 px-4 py-2">
-                Login
-              </button>
-              <button onClick={() => navigate("/register")} className="goslot-btn goslot-btn-primary fs-6 px-4 py-2 shadow-sm">
-                Start your 14-Day Free Trial
-              </button>
-            </div>
-          </div>
+
         </div>
       </section>
 
