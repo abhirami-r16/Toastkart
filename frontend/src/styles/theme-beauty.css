@@ -1,118 +1,248 @@
 /* ==========================================================================
-   Theme: Beauty & Cosmetics (Elegant & Clean)
+   Theme: Beauty & Cosmetics (Premium & Elegant)
    ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap');
+
 .theme-beauty.storefront-body {
-  background-color: #fdfbf7 !important; /* Soft Blush Pink/White */
-  font-family: 'Montserrat', sans-serif !important;
-  color: #333;
+  background-color: #fdf0f2 !important; /* Soft Pink / Rose */
+  font-family: 'Jost', sans-serif !important;
+  color: #2c2929;
+}
+
+.theme-beauty h1, .theme-beauty h2, .theme-beauty h3, .theme-beauty h4, .theme-beauty h5, .theme-beauty h6 {
+  font-family: 'Cormorant Garamond', serif !important;
+  font-weight: 500;
+}
+
+/* Animations */
+@keyframes softFadeUp {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+@keyframes floatReverse {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(10px); }
+  100% { transform: translateY(0px); }
 }
 
 /* Beauty Hero Section */
 .theme-beauty .beauty-hero-section {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 500px;
-  background: #f9f4ef;
-  margin: 30px 20px;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.03);
+  align-items: stretch;
+  justify-content: space-between;
+  min-height: 550px;
+  background: linear-gradient(135deg, #f8ccd1 0%, #e8a8b1 100%); /* Vibrant Rose Gradient */
+  margin: 40px 20px;
+  border-radius: 24px;
+  overflow: hidden; /* To clip background images to rounded corners */
+  box-shadow: 0 30px 60px rgba(183, 110, 121, 0.15);
+  position: relative;
+}
+
+.theme-beauty .beauty-hero-bg-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.theme-beauty .beauty-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(248, 204, 209, 0.95) 0%, rgba(232, 168, 177, 0.6) 45%, rgba(232, 168, 177, 0.1) 100%);
+  z-index: 2;
 }
 
 .theme-beauty .beauty-hero-text {
   flex: 1;
-  padding: 60px;
+  padding: 80px;
+  z-index: 3;
+  animation: softFadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .theme-beauty .beauty-tag {
-  font-size: 12px;
-  letter-spacing: 3px;
-  color: #b76e79; /* Rose Gold */
+  font-size: 13px;
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: 4px;
+  color: #c9888f; /* Premium Rose Gold */
   text-transform: uppercase;
-  margin-bottom: 15px;
-  display: block;
+  margin-bottom: 20px;
+  display: inline-block;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(201, 136, 143, 0.4);
+  padding-bottom: 4px;
 }
 
 .theme-beauty .beauty-title {
-  font-size: 48px;
-  font-weight: 300;
-  color: #2a2a2a;
-  margin-bottom: 20px;
-  line-height: 1.2;
+  font-size: 56px;
+  font-weight: 400;
+  color: #1a1a1a;
+  margin-bottom: 25px;
+  line-height: 1.15;
 }
 
 .theme-beauty .beauty-subtitle {
-  font-size: 16px;
-  color: #666;
-  margin-bottom: 40px;
-  line-height: 1.6;
+  font-size: 18px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  color: #555;
+  margin-bottom: 45px;
+  line-height: 1.7;
+  max-width: 450px;
 }
 
 .theme-beauty .beauty-btn {
-  background: #b76e79;
+  background: linear-gradient(135deg, #c9888f 0%, #b76e79 100%);
   color: #fff;
   border: none;
-  padding: 15px 40px;
-  border-radius: 30px;
-  font-size: 14px;
+  padding: 16px 45px;
+  border-radius: 40px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: all 0.3s ease;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 10px 20px rgba(183, 110, 121, 0.3);
+  cursor: pointer;
 }
 
 .theme-beauty .beauty-btn:hover {
-  background: #9a5b65;
-  box-shadow: 0 10px 20px rgba(183, 110, 121, 0.2);
-  transform: translateY(-2px);
+  box-shadow: 0 15px 30px rgba(183, 110, 121, 0.4);
+  transform: translateY(-3px);
+  background: linear-gradient(135deg, #d4989e 0%, #c27b86 100%);
 }
 
-.theme-beauty .beauty-hero-image-container {
-  flex: 1;
-  height: 100%;
+/* Beauty Product Grid */
+.theme-beauty .storefront-section {
+  background-color: transparent !important;
+  box-shadow: none !important;
 }
 
-.theme-beauty .beauty-hero-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-top-left-radius: 50% 20%;
-  border-bottom-left-radius: 50% 20%;
+.theme-beauty .storefront-product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px 20px;
 }
 
-/* Beauty Product Cards */
 .theme-beauty .storefront-product-card {
-  background: #fff;
-  border: none;
-  border-radius: 16px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.02);
+  background: #ffffff;
+  border: 1px solid #eaeaea;
+  border-radius: 4px;
+  text-align: center;
   transition: all 0.4s ease;
-  padding: 10px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 
 .theme-beauty .storefront-product-card:hover {
-  box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+  box-shadow: none;
   transform: translateY(-5px);
 }
 
 .theme-beauty .storefront-product-image-container {
-  border-radius: 12px;
-  background: #fdfbf7;
+  overflow: hidden;
+  margin-bottom: 15px;
+  background-color: #fff;
+  position: relative;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-beauty .storefront-product-card:hover .storefront-product-image-container {
+  box-shadow: 0 20px 40px rgba(183, 110, 121, 0.15);
+}
+
+.theme-beauty .storefront-product-image {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  transition: transform 0.6s ease;
+}
+
+.theme-beauty .storefront-product-card:hover .storefront-product-image {
+  transform: scale(1.08);
+}
+
+.theme-beauty .storefront-product-details {
+  text-align: center;
+}
+
+.theme-beauty .storefront-product-category {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #999;
+  margin-bottom: 8px;
+  display: block;
 }
 
 .theme-beauty .storefront-product-title {
+  font-size: 20px;
   font-weight: 500;
-  color: #333;
+  color: #1a1a1a;
+  margin-bottom: 12px;
 }
 
-/* Add to Cart */
+.theme-beauty .storefront-product-price {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #c9888f;
+}
+
+/* Quick Add Button */
+.theme-beauty .add-to-cart-wrapper {
+  position: absolute;
+  bottom: -60px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  transition: bottom 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 10;
+}
+
+.theme-beauty .storefront-product-card:hover .add-to-cart-wrapper {
+  bottom: 25px;
+}
+
 .theme-beauty .theme-cart-btn {
-  background: #b76e79 !important;
-  color: #fff !important;
-  border-radius: 20px;
-  padding: 12px;
+  background: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(5px);
+  color: #c9888f !important;
+  border: 1px solid #c9888f;
+  border-radius: 30px;
+  padding: 12px 25px;
+  font-family: 'Montserrat', sans-serif;
   font-size: 13px;
+  font-weight: 600;
   letter-spacing: 1px;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.theme-beauty .theme-cart-btn:hover {
+  background: #c9888f !important;
+  color: #fff !important;
 }
 
 /* ==========================================================================
@@ -120,21 +250,25 @@
    ========================================================================== */
 @media (max-width: 991px) {
   .theme-beauty .beauty-hero-section {
-    flex-direction: column-reverse;
+    flex-direction: column;
     text-align: center;
+    overflow: hidden;
   }
   .theme-beauty .beauty-hero-text {
-    padding: 40px 20px;
+    padding: 50px 30px;
   }
-  .theme-beauty .beauty-title {
-    font-size: 36px;
+  .theme-beauty .beauty-tag {
+    margin: 0 auto 20px auto;
   }
-  .theme-beauty .beauty-hero-img {
-    border-radius: 20px 20px 0 0;
+  .theme-beauty .beauty-subtitle {
+    margin: 0 auto 30px auto;
   }
-  .theme-beauty .beauty-hero-image-container {
+  .theme-beauty .beauty-hero-img-main {
     width: 100%;
-    height: 350px;
+    border-radius: 30px 30px 0 0;
+  }
+  .theme-beauty .glass-card {
+    display: none; /* Hide glass cards on small screens for cleaner look */
   }
 }
 
@@ -143,45 +277,22 @@
     margin: 15px 10px;
   }
   .theme-beauty .beauty-title {
-    font-size: 30px;
-  }
-  .theme-beauty .beauty-subtitle {
-    font-size: 14px;
-    margin-bottom: 25px;
+    font-size: 40px;
   }
 }
 
 @media (max-width: 575px) {
   .theme-beauty .beauty-hero-section {
     margin: 10px 5px;
-    border-radius: 12px;
+    border-radius: 20px;
   }
   .theme-beauty .beauty-hero-text {
-    padding: 25px 15px;
+    padding: 40px 20px;
   }
   .theme-beauty .beauty-title {
-    font-size: 24px;
-    margin-bottom: 12px;
+    font-size: 32px;
   }
-  .theme-beauty .beauty-subtitle {
-    font-size: 13px;
-    margin-bottom: 20px;
-  }
-  .theme-beauty .beauty-hero-image-container {
-    height: 250px;
-  }
-  .theme-beauty .beauty-hero-img {
-    border-radius: 12px 12px 0 0;
-  }
-  
-  /* Product Detail Mobile Overrides */
-  .theme-beauty .product-info-details h1 {
-    font-size: 28px !important;
-  }
-  .theme-beauty .product-info-details .fs-2 {
-    font-size: 24px !important;
-  }
-  .theme-beauty .product-image-container {
-    padding: 15px !important;
+  .theme-beauty .storefront-product-grid {
+    grid-template-columns: 1fr;
   }
 }

@@ -1,17 +1,18 @@
-import React, { useEffect, useState, useCallback } from 'react'; // Syncing file to fix syntax error
+import React, { useEffect, useState, useCallback, Suspense } from 'react'; // Syncing file to fix syntax error
 import { Routes, Route, Navigate, useParams } from 'react-router-dom';
 import api from '../../api/axios';
 import { useStorefrontAuth } from '../../context/StorefrontAuthContext';
 import { StorefrontCartProvider } from '../../context/StorefrontCartContext';
 import { StorefrontAuthProvider } from '../../context/StorefrontAuthContext';
 import StorefrontLayout from '../../layouts/StorefrontLayout';
-import StorefrontHome from './StorefrontHome';
-import ProductDetail from './ProductDetail';
-import Cart from './Cart';
-import Checkout from './Checkout';
-import PaymentGateway from './PaymentGateway';
-import Wishlist from './Wishlist';
-import MyOrders from './MyOrders';
+
+const StorefrontHome = React.lazy(() => import('./StorefrontHome'));
+const ProductDetail = React.lazy(() => import('./ProductDetail'));
+const Cart = React.lazy(() => import('./Cart'));
+const Checkout = React.lazy(() => import('./Checkout'));
+const PaymentGateway = React.lazy(() => import('./PaymentGateway'));
+const Wishlist = React.lazy(() => import('./Wishlist'));
+const MyOrders = React.lazy(() => import('./MyOrders'));
 import '../../styles/storefront.css';
 
 export default function StorefrontApp({ subdomain }) {
@@ -137,49 +138,53 @@ if (!foundStore) {
       const normalizeStoreValue = (value) => String(value || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '');
       const cleanSub = subdomain.toLowerCase().replace(/[^a-z0-9]/g, '');
 
+      let fetchedProducts = [];
       try {
         // Use store_id filter on API when we have a real store ID
         const productsUrl = storeId ? `/products?store_id=${storeId}` : '/products';
         const res = await api.get(productsUrl);
         if (Array.isArray(res.data) && res.data.length > 0) {
-          currentStoreProducts = res.data;
+          fetchedProducts = res.data;
         }
       } catch (e) {
         console.debug('Backend products failed, trying local storage', e);
       }
 
-      // LocalStorage fallback: filter by store identity
-      if (currentStoreProducts.length === 0) {
+      // LocalStorage fallback
+      if (fetchedProducts.length === 0) {
         const saved = localStorage.getItem('aureum_owner_products');
-        let allLocalProducts = [];
         if (saved) {
-          try { allLocalProducts = JSON.parse(saved) || []; } catch (e) {}
+          try { fetchedProducts = JSON.parse(saved) || []; } catch (e) {}
         }
-        if (allLocalProducts.length > 0) {
-          const currentStoreIdentity = foundStore ? {
-            id: foundStore.id ?? foundStore.store_id ?? foundStore.storeId ?? null,
-            slug: foundStore.slug ?? foundStore.subdomain ?? foundStore.store_slug ?? null,
-            subdomain: foundStore.subdomain ?? foundStore.slug ?? foundStore.store_slug ?? null,
-            name: foundStore.name ?? foundStore.store_name ?? null,
-          } : null;
+      }
 
-          currentStoreProducts = allLocalProducts.filter(p => {
-            const pStoreId = p.store_id ?? p.store?.id ?? p.storeId ?? null;
-            const pStoreSlug = p.store?.slug ?? p.store?.subdomain ?? p.store_subdomain ?? p.store_slug ?? null;
-            const pStoreSubdomain = p.store?.subdomain ?? p.store_subdomain ?? pStoreSlug ?? null;
-            const pStoreName = p.store?.name ?? p.store_name ?? null;
+      // Strictly filter products to only those matching the current store
+      const currentStoreIdentity = foundStore ? {
+        id: foundStore.id ?? foundStore.store_id ?? foundStore.storeId ?? null,
+        slug: foundStore.slug ?? foundStore.subdomain ?? foundStore.store_slug ?? null,
+        subdomain: foundStore.subdomain ?? foundStore.slug ?? foundStore.store_slug ?? null,
+        name: foundStore.name ?? foundStore.store_name ?? null,
+      } : null;
 
-            if (currentStoreIdentity?.id && pStoreId && String(pStoreId) === String(currentStoreIdentity.id)) return true;
-            if (currentStoreIdentity?.slug && pStoreSlug && normalizeStoreValue(pStoreSlug) === normalizeStoreValue(currentStoreIdentity.slug)) return true;
-            if (currentStoreIdentity?.subdomain && pStoreSubdomain && normalizeStoreValue(pStoreSubdomain) === normalizeStoreValue(currentStoreIdentity.subdomain)) return true;
-            if (currentStoreIdentity?.name && pStoreName && normalizeStoreValue(pStoreName) === normalizeStoreValue(currentStoreIdentity.name)) return true;
-            if (pStoreSlug && normalizeStoreValue(pStoreSlug) === cleanSub) return true;
-            if (pStoreSubdomain && normalizeStoreValue(pStoreSubdomain) === cleanSub) return true;
-            if (p.store_subdomain && normalizeStoreValue(p.store_subdomain) === cleanSub) return true;
-            if (p.store?.slug && normalizeStoreValue(p.store.slug) === cleanSub) return true;
-            return false;
-          });
-        }
+      if (fetchedProducts.length > 0) {
+
+        currentStoreProducts = fetchedProducts.filter(p => {
+          const pStoreId = p.store_id ?? p.store?.id ?? p.storeId ?? null;
+          const pStoreSlug = p.store?.slug ?? p.store?.subdomain ?? p.store_subdomain ?? p.store_slug ?? null;
+          const pStoreSubdomain = p.store?.subdomain ?? p.store_subdomain ?? pStoreSlug ?? null;
+          const pStoreName = p.store?.name ?? p.store_name ?? null;
+
+          if (currentStoreIdentity?.id && pStoreId && String(pStoreId) === String(currentStoreIdentity.id)) return true;
+          if (currentStoreIdentity?.slug && pStoreSlug && normalizeStoreValue(pStoreSlug) === normalizeStoreValue(currentStoreIdentity.slug)) return true;
+          if (currentStoreIdentity?.subdomain && pStoreSubdomain && normalizeStoreValue(pStoreSubdomain) === normalizeStoreValue(currentStoreIdentity.subdomain)) return true;
+          if (currentStoreIdentity?.name && pStoreName && normalizeStoreValue(pStoreName) === normalizeStoreValue(currentStoreIdentity.name)) return true;
+          if (pStoreSlug && normalizeStoreValue(pStoreSlug) === cleanSub) return true;
+          if (pStoreSubdomain && normalizeStoreValue(pStoreSubdomain) === cleanSub) return true;
+          if (p.store_subdomain && normalizeStoreValue(p.store_subdomain) === cleanSub) return true;
+          if (p.store?.slug && normalizeStoreValue(p.store.slug) === cleanSub) return true;
+          
+          return false;
+        });
       }
 
       setStoreProducts(currentStoreProducts);
@@ -201,19 +206,31 @@ if (!foundStore) {
         const saved = localStorage.getItem('aureum_owner_categories');
         if (saved) {
           try { allCategories = JSON.parse(saved) || []; } catch (e) {}
-          // Filter local categories by store
-          if (allCategories.length > 0 && storeId) {
-            allCategories = allCategories.filter(c => {
-              const cStoreId = c.store_id ?? c.store?.id ?? c.storeId ?? null;
-              if (!cStoreId) return false;
-              return String(cStoreId) === String(storeId);
-            });
-          }
         }
       }
-
+      // Strictly filter categories to only those matching the current store
       if (allCategories.length > 0) {
-        setStoreCategories(allCategories);
+        let currentStoreCategories = allCategories.filter(c => {
+          const cStoreId = c.store_id ?? c.store?.id ?? c.storeId ?? null;
+          const cStoreSlug = c.store?.slug ?? c.store?.subdomain ?? c.store_subdomain ?? c.store_slug ?? null;
+          const cStoreSubdomain = c.store?.subdomain ?? c.store_subdomain ?? cStoreSlug ?? null;
+          const cStoreName = c.store?.name ?? c.store_name ?? null;
+
+          if (currentStoreIdentity?.id && cStoreId && String(cStoreId) === String(currentStoreIdentity.id)) return true;
+          if (currentStoreIdentity?.slug && cStoreSlug && normalizeStoreValue(cStoreSlug) === normalizeStoreValue(currentStoreIdentity.slug)) return true;
+          if (currentStoreIdentity?.subdomain && cStoreSubdomain && normalizeStoreValue(cStoreSubdomain) === normalizeStoreValue(currentStoreIdentity.subdomain)) return true;
+          if (currentStoreIdentity?.name && cStoreName && normalizeStoreValue(cStoreName) === normalizeStoreValue(currentStoreIdentity.name)) return true;
+          if (cStoreSlug && normalizeStoreValue(cStoreSlug) === cleanSub) return true;
+          if (cStoreSubdomain && normalizeStoreValue(cStoreSubdomain) === cleanSub) return true;
+          if (c.store_subdomain && normalizeStoreValue(c.store_subdomain) === cleanSub) return true;
+          if (c.store?.slug && normalizeStoreValue(c.store.slug) === cleanSub) return true;
+          
+          return false;
+        });
+
+        setStoreCategories(currentStoreCategories);
+      } else {
+        setStoreCategories([]);
       }
     } catch (e) {
       console.error('Error loading store data for storefront:', e);
@@ -267,25 +284,27 @@ if (!foundStore) {
     <div className="storefront-app-root">
       <StorefrontAuthProvider>
         <StorefrontCartProvider storeId={storeData.id}>
-          <Routes>
-            <Route
-              path="/"
-              element={<StorefrontLayout storeData={storeData} categories={storeCategories} products={storeProducts} />}
-            >
+          <Suspense fallback={<div className="storefront-loading"><div className="spinner" /></div>}>
+            <Routes>
               <Route
-              index
-              element={<StorefrontHome storeData={storeData} products={storeProducts} categories={storeCategories} />}
-            />
-            <Route path="product/:id" element={<ProductDetail storeData={storeData} products={storeProducts} />} />
-            <Route path="cart" element={<Cart />} />
-            <Route path="checkout" element={<Checkout />} />
-            <Route path="payment" element={<PaymentGateway />} />
-            <Route path="wishlist" element={<Wishlist />} />
-            <Route path="orders" element={<MyOrders />} />
-            {/* Additional routes such as /product/:id can be added here */}
-            <Route path="*" element={<Navigate to={basePath} replace />} />
-            </Route>
-          </Routes>
+                path="/"
+                element={<StorefrontLayout storeData={storeData} categories={storeCategories} products={storeProducts} />}
+              >
+                <Route
+                index
+                element={<StorefrontHome storeData={storeData} products={storeProducts} categories={storeCategories} />}
+              />
+              <Route path="product/:id" element={<ProductDetail storeData={storeData} products={storeProducts} />} />
+              <Route path="cart" element={<Cart />} />
+              <Route path="checkout" element={<Checkout />} />
+              <Route path="payment" element={<PaymentGateway />} />
+              <Route path="wishlist" element={<Wishlist />} />
+              <Route path="orders" element={<MyOrders />} />
+              {/* Additional routes such as /product/:id can be added here */}
+              <Route path="*" element={<Navigate to={basePath} replace />} />
+              </Route>
+            </Routes>
+          </Suspense>
         </StorefrontCartProvider>
       </StorefrontAuthProvider>
     </div>

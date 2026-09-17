@@ -114,9 +114,9 @@ export default function StorefrontLayout({ storeData, categories = [], products 
                     </div>
 
                     <div className="eflyer-actions d-flex align-items-center justify-content-end" style={{ gap: '24px', flex: 1 }}>
-                      {/* Mobile Hamburger Menu Toggle */}
+                      {/* Mobile & Desktop Hamburger Menu Toggle */}
                       <button 
-                        className="eflyer-action-btn d-md-none" 
+                        className="eflyer-action-btn" 
                         onClick={() => setIsCategoryOpen(true)}
                         style={{ marginRight: 'auto' }}
                       >
@@ -211,7 +211,23 @@ export default function StorefrontLayout({ storeData, categories = [], products 
                             <LogOut size={16} className="me-2" /> Logout
                           </button>
                         </>
-                      ) : null}
+                      ) : (
+                        <>
+                          <button 
+                            className="storefront-mobile-nav-item text-dark border-0 bg-transparent text-start w-100" 
+                            onClick={() => { setIsCategoryOpen(false); openLoginModal(); }}
+                          >
+                            Login
+                          </button>
+                          <button 
+                            className="storefront-mobile-nav-item text-dark border-0 bg-transparent text-start w-100 d-flex align-items-center justify-content-between" 
+                            onClick={() => { setIsCategoryOpen(false); openLoginModal(); }}
+                          >
+                            <span>Create Account</span>
+                            <span className="badge bg-success bg-opacity-10 text-success rounded-pill" style={{ fontSize: '10px' }}>14 Days Free Trial</span>
+                          </button>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -223,16 +239,17 @@ export default function StorefrontLayout({ storeData, categories = [], products 
         /* Hexashop/Modern-Style Header for Luxury/Minimal/Fashion Themes */
         <header className="storefront-header hexashop-header">
           <div className="hexashop-header-content">
-            <div className="d-flex align-items-center">
-              {/* Mobile Hamburger Menu Toggle */}
+            <div className="d-flex align-items-center position-relative">
+              {/* Hamburger Menu Toggle (Mobile & Desktop) */}
               <button 
-                className="hexashop-icon-btn border-0 bg-transparent p-0 d-lg-none me-2" 
+                className="hexashop-icon-btn border-0 bg-transparent p-0 me-3 position-absolute" 
+                style={{ left: '-20px' }}
                 onClick={() => setIsCategoryOpen(true)}
               >
                 <Menu size={24} />
               </button>
               
-              <div className="storefront-logo hexashop-logo" onClick={() => navigate(basePath)} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '55vw' }}>
+              <div className="storefront-logo hexashop-logo ms-4" onClick={() => navigate(basePath)} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '55vw' }}>
                 {storeData?.logo_url ? (
                   <img src={storeData.logo_url} alt={storeData.name} className="storefront-logo-img" />
                 ) : (
@@ -346,7 +363,22 @@ export default function StorefrontLayout({ storeData, categories = [], products 
                         <LogOut size={16} className="me-2" /> Logout
                       </button>
                     </>
-                  ) : null}
+                  ) : (
+                    <>
+                      <button 
+                        className="storefront-mobile-nav-item border-0 bg-transparent text-start w-100" 
+                        onClick={() => { setIsCategoryOpen(false); openLoginModal(); }}
+                      >
+                        Login
+                      </button>
+                      <button 
+                        className="storefront-mobile-nav-item border-0 bg-transparent text-start w-100" 
+                        onClick={() => { setIsCategoryOpen(false); openLoginModal(); }}
+                      >
+                        Create Account
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

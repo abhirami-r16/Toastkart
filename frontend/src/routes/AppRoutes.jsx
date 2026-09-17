@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Capacitor } from '@capacitor/core';
 import {
   BrowserRouter,
@@ -12,27 +12,27 @@ import { AuthProvider, useAuth } from '../context/AuthContext';
 import { StoreProvider } from '../context/StoreContext';
 import { CartProvider } from '../context/CartContext';
 
-import Home from '../pages/Home';
-import Portfolio from '../pages/Portfolio';
-import Login from '../pages/Login';
-import Register from '../pages/Register';
-import StoreOwnerDashboard from '../pages/store-owner-dashboard';
-import CustomerDashboard from '../pages/customer-dashboard';
-import AdminDashboard from '../pages/admin-dashboard';
-import AdminLayout from '../layouts/AdminLayout';
-import StoresPage from '../pages/Stores';
-import CategoriesPage from '../pages/Categories';
-import ProductsPage from '../pages/Products';
-import ProductDetailPage from '../pages/ProductDetail';
-import InventoryPage from '../pages/Inventory';
-import CustomersPage from '../pages/Customers';
-import CartPage from '../pages/Cart';
-import OrdersPage from '../pages/Orders';
-import SettingsPage from '../pages/Settings';
+const Home = React.lazy(() => import('../pages/Home'));
+const Portfolio = React.lazy(() => import('../pages/Portfolio'));
+const Login = React.lazy(() => import('../pages/Login'));
+const Register = React.lazy(() => import('../pages/Register'));
+const StoreOwnerDashboard = React.lazy(() => import('../pages/store-owner-dashboard'));
+const CustomerDashboard = React.lazy(() => import('../pages/customer-dashboard'));
+const AdminDashboard = React.lazy(() => import('../pages/admin-dashboard'));
+const AdminLayout = React.lazy(() => import('../layouts/AdminLayout'));
+const StoresPage = React.lazy(() => import('../pages/Stores'));
+const CategoriesPage = React.lazy(() => import('../pages/Categories'));
+const ProductsPage = React.lazy(() => import('../pages/Products'));
+const ProductDetailPage = React.lazy(() => import('../pages/ProductDetail'));
+const InventoryPage = React.lazy(() => import('../pages/Inventory'));
+const CustomersPage = React.lazy(() => import('../pages/Customers'));
+const CartPage = React.lazy(() => import('../pages/Cart'));
+const OrdersPage = React.lazy(() => import('../pages/Orders'));
+const SettingsPage = React.lazy(() => import('../pages/Settings'));
 
-import StorefrontApp from '../pages/Storefront/StorefrontApp';
-import PortfolioBuilder from '../pages/PortfolioBuilder';
-import PortfolioView from '../pages/PortfolioView';
+const StorefrontApp = React.lazy(() => import('../pages/Storefront/StorefrontApp'));
+const PortfolioBuilder = React.lazy(() => import('../pages/PortfolioBuilder'));
+const PortfolioView = React.lazy(() => import('../pages/PortfolioView'));
 import WhatsappWidget from '../components/WhatsappWidget';
 
 const getSubdomain = () => {
@@ -119,7 +119,9 @@ function AppRoutes() {
     return (
       <BrowserRouter>
         <AuthProvider>
-          <StorefrontApp subdomain={subdomain} />
+          <Suspense fallback={<div className="d-flex justify-content-center align-items-center vh-100"><div className="spinner-border text-primary"></div></div>}>
+            <StorefrontApp subdomain={subdomain} />
+          </Suspense>
         </AuthProvider>
       </BrowserRouter>
     );
@@ -133,7 +135,8 @@ function AppRoutes() {
       <AuthProvider>
         <StoreProvider>
           <CartProvider>
-            <Routes>
+            <Suspense fallback={<div className="d-flex justify-content-center align-items-center vh-100"><div className="spinner-border text-primary"></div></div>}>
+              <Routes>
 
               {/* Portal Landing Page */}
               <Route
@@ -303,7 +306,8 @@ function AppRoutes() {
                 element={<Navigate to="/" replace />}
               />
 
-            </Routes>
+              </Routes>
+            </Suspense>
           </CartProvider>
         </StoreProvider>
       </AuthProvider>

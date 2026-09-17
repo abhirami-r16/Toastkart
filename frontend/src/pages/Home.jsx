@@ -231,7 +231,7 @@ export default function Home() {
           </nav>
 
           <div className="d-flex align-items-center gap-3">
-            <button onClick={() => navigate("/login")} className="d-none d-md-flex goslot-btn goslot-btn-primary py-1.5 px-3 fs-8">
+            <button onClick={() => navigate("/login")} className="d-none d-md-flex goslot-btn goslot-btn-primary py-1.5 px-4 fs-8 fw-bold">
               Login
             </button>
 
@@ -271,22 +271,18 @@ export default function Home() {
           pointerEvents: 'none',
           overflow: 'hidden'
         }}>
-          <video
-            src="/videos/hero-video.mp4"
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
+          <img
+            src="/main-hero-bg.png"
+            alt="Hero Background"
             style={{
               width: '100vw',
-              height: '56.25vw',
+              height: '100%',
               minHeight: '100%',
-              minWidth: '177.77vh',
+              minWidth: '100vw',
               position: 'absolute',
               top: '50%',
               left: '50%',
-              transform: 'translate(-50%, -50%) scale(1.35)',
+              transform: 'translate(-50%, -50%)',
               pointerEvents: 'none',
               border: 'none',
               objectFit: 'cover'
@@ -301,15 +297,13 @@ export default function Home() {
             backgroundColor: 'rgba(0,0,0,0.3)'
           }}></div>
         </div>
-        <div className="hero-blob blob-1"></div>
-        <div className="hero-blob blob-2"></div>
 
         <div className="container-xl position-relative z-10 text-center max-w-4xl mx-auto py-5">
           <h1 className="display-3 fw-bolder mb-4 force-white-text" style={{ letterSpacing: '-0.03em', lineHeight: 1.15 }}>
             Build Your Ecommerce Store <br />
             <span className="gradient-text">With In 24 Hours</span>
           </h1>
-          <p className="fs-5 mx-auto mb-5 force-white-text fw-normal" style={{ maxWidth: 700, lineHeight: 1.6 }}>
+          <p className="fs-5 mx-auto mb-4 force-white-text fw-normal" style={{ maxWidth: 700, lineHeight: 1.6 }}>
             ToastKart is the all-in-one platform for vendors to launch their stores and buyers to shop seamlessly. Manage orders, payouts, and catalogs from a central dashboard.
           </p>
         </div>
@@ -357,6 +351,19 @@ export default function Home() {
                 </div>
               </div>
             ))}
+          </div>
+          
+          <div className="text-center mt-3 pt-5 border-top" style={{ borderColor: 'rgba(0,0,0,0.1)' }}>
+            <h3 className="fs-3 fw-bold mb-3">Ready to launch your online store?</h3>
+            <p className="fs-6 text-muted mb-4">Choose a theme and start selling in minutes.</p>
+            <div className="d-flex align-items-center justify-content-center gap-3">
+              <button onClick={() => navigate("/login")} className="goslot-btn goslot-btn-outline fs-6 px-4 py-2">
+                Login
+              </button>
+              <button onClick={() => navigate("/register")} className="goslot-btn goslot-btn-primary fs-6 px-4 py-2 shadow-sm">
+                Start your 14-Day Free Trial
+              </button>
+            </div>
           </div>
         </div>
       </section>

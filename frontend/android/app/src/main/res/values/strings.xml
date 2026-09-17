@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Toastkart</string>
+    <string name="title_activity_main">Toastkart</string>
+    <string name="package_name">com.toastkart.app</string>
+    <string name="custom_url_scheme">com.toastkart.app</string>
+</resources>

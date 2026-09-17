@@ -49,7 +49,9 @@ export default function StorefrontLoginModal() {
           <div className="modal-body px-4 pb-4 px-sm-5 pb-sm-5">
             <div className="text-center mb-4">
               <h2 className="fw-bold fs-3 mb-1 text-black">{isRegistering ? 'Create Account' : 'Welcome Back'}</h2>
-              <p className="text-dark fs-7 fw-semibold">{isRegistering ? 'Sign up to start shopping.' : 'Please login to continue shopping.'}</p>
+              <p className="text-dark fs-7 fw-semibold">{isRegistering ? (
+                <span>Sign up for your <span className="text-success fw-bolder">14 Days Free Trial</span>.</span>
+              ) : 'Please login to continue shopping.'}</p>
             </div>
 
             {error && (
@@ -93,6 +95,7 @@ export default function StorefrontLoginModal() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email"
+                    autoComplete="off"
                   />
                 </div>
               </div>
@@ -111,6 +114,7 @@ export default function StorefrontLoginModal() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter your password"
+                    autoComplete="new-password"
                   />
                 </div>
               </div>

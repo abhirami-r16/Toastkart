@@ -16,6 +16,7 @@ export default function StorefrontHome({ storeData, products, categories = [] })
   const [eflyerSlide, setEflyerSlide] = useState(0);
   const [aranozSlide, setAranozSlide] = useState(0);
   const [jewelrySlide, setJewelrySlide] = useState(0);
+  const [beautySlide, setBeautySlide] = useState(0);
 
   /*
    * Hero slider
@@ -25,6 +26,7 @@ export default function StorefrontHome({ storeData, products, categories = [] })
       setEflyerSlide((prev) => (prev + 1) % 3);
       setAranozSlide((prev) => (prev + 1) % 3);
       setJewelrySlide((prev) => (prev + 1) % 8);
+      setBeautySlide((prev) => (prev + 1) % 6);
     }, 4000);
 
     return () => clearInterval(timer);
@@ -226,6 +228,7 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                     )}
                     alt={product.name}
                     className="storefront-product-image"
+                    loading="lazy"
                   />
                 </div>
 
@@ -631,37 +634,65 @@ export default function StorefrontHome({ storeData, products, categories = [] })
           /*
            * BEAUTY THEME
            */
-          case 'theme-beauty':
+          case 'theme-beauty': {
+            const beautyImages = [
+              "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=1920&h=800&fit=crop",
+              "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=1920&h=800&fit=crop",
+              "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=1920&h=800&fit=crop",
+              "https://images.unsplash.com/photo-1615397323674-51e443ce71d1?w=1920&h=800&fit=crop",
+              "https://images.unsplash.com/photo-1522337660859-02fbefca4702?w=1920&h=800&fit=crop",
+              "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=1920&h=800&fit=crop"
+            ];
+            
             return (
               <div className="beauty-hero-section">
+                {/* Full Background Slider */}
+                <div className="beauty-hero-bg-container">
+                  {beautyImages.map((img, idx) => (
+                    <img
+                      key={idx}
+                      src={img}
+                      className="beauty-hero-bg-img"
+                      alt={`Cosmetics ${idx + 1}`}
+                      loading="lazy"
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        opacity: idx === beautySlide ? 1 : 0,
+                        transition: 'opacity 1.5s ease-in-out',
+                        zIndex: 1
+                      }}
+                    />
+                  ))}
+                  {/* Overlay for text readability */}
+                  <div className="beauty-hero-overlay"></div>
+                </div>
+
                 <div className="beauty-hero-text">
                   <span className="beauty-tag">
-                    NEW ARRIVALS
+                    PREMIUM COLLECTION
                   </span>
 
                   <h1 className="beauty-title">
-                    Pure. Natural. Flawless.
+                    Discover Your <br />Natural Radiance.
                   </h1>
 
                   <p className="beauty-subtitle">
-                    Elevate your skincare routine with our premium
-                    organic essentials.
+                    Elevate your daily skincare routine with our exclusive, dermatologist-tested organic essentials crafted for your perfect glow.
                   </p>
 
                   <button className="beauty-btn">
-                    Shop Skincare
+                    Explore Collection
                   </button>
                 </div>
 
-                <div className="beauty-hero-image-container">
-                  <img
-                    src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800&h=800&fit=crop"
-                    className="beauty-hero-img"
-                    alt="Cosmetics"
-                  />
-                </div>
               </div>
             );
+          }
 
           /*
            * HOME / ARANOZ THEME
