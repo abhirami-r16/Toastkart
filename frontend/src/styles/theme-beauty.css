@@ -287,11 +287,13 @@
     font-size: 32px;
   }
   .theme-beauty .storefront-product-grid {
-    display: flex;
-    overflow-x: auto;
+    display: flex !important;
+    overflow-x: auto !important;
     scroll-snap-type: x mandatory;
     gap: 15px;
     padding-bottom: 15px;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
   }
   .theme-beauty .storefront-product-grid > * {
     flex: 0 0 65%;
@@ -311,11 +313,13 @@
     font-size: 32px;
   }
   .theme-beauty .storefront-product-grid {
-    display: flex;
-    overflow-x: auto;
+    display: flex !important;
+    overflow-x: auto !important;
     scroll-snap-type: x mandatory;
     gap: 15px;
     padding-bottom: 15px;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
   }
   .theme-beauty .storefront-product-grid > * {
     flex: 0 0 75%;
