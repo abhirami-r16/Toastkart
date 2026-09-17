@@ -189,6 +189,12 @@ export default function StorefrontHome({ storeData, products, categories = [] })
     return colors.length > 0 ? colors[0] : null;
   };
 
+  const parsePrice = (val) => {
+    if (val === null || val === undefined || val === '') return 0;
+    const num = Number(String(val).replace(/[^0-9.]/g, ''));
+    return isNaN(num) ? 0 : num;
+  };
+
   /*
    * Product grid / horizontal product slider
    *
@@ -260,8 +266,8 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                     }}
                   >
                     {product.compare_price &&
-                      Number(product.compare_price) >
-                      Number(product.price) ? (
+                      parsePrice(product.compare_price) >
+                      parsePrice(product.price) ? (
                       <>
                         <span
                           className="storefront-product-original-price"
@@ -272,7 +278,7 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                           }}
                         >
                           ₹
-                          {Number(product.compare_price).toLocaleString(
+                          {parsePrice(product.compare_price).toLocaleString(
                             'en-IN'
                           )}
                         </span>
@@ -286,7 +292,7 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                           }}
                         >
                           ₹
-                          {Number(product.price).toLocaleString('en-IN')}
+                          {parsePrice(product.price).toLocaleString('en-IN')}
                         </span>
 
                         <span
@@ -299,9 +305,9 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                         >
                           —{' '}
                           {Math.round(
-                            ((Number(product.compare_price) -
-                              Number(product.price)) /
-                              Number(product.compare_price)) *
+                            ((parsePrice(product.compare_price) -
+                              parsePrice(product.price)) /
+                              parsePrice(product.compare_price)) *
                             100
                           )}
                           % OFF
@@ -317,7 +323,7 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                         }}
                       >
                         ₹
-                        {Number(product.price).toLocaleString('en-IN')}
+                        {parsePrice(product.price).toLocaleString('en-IN')}
                       </span>
                     )}
                   </div>
