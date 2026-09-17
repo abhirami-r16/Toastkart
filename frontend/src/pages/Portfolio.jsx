@@ -163,6 +163,44 @@ export default function Portfolio() {
                   </div>
                 </div>
               </div>
+              {/* Store 3 */}
+              <div className="col-12 col-md-6">
+                <div className="portfolio-card position-relative border-0 shadow-lg" style={{ borderRadius: '24px', minHeight: '450px' }}>
+                  <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=800&auto=format&fit=crop" alt="Glow & Grace" className="w-100 h-100 position-absolute top-0 start-0 portfolio-img" style={{ objectFit: 'cover', zIndex: 0 }} />
+                  <div className="position-absolute top-0 start-0 w-100 h-100" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%)', zIndex: 1 }}></div>
+                  
+                  <div className="position-absolute top-0 end-0 p-4" style={{ zIndex: 2 }}>
+                     <span className="badge bg-white text-dark rounded-pill px-3 py-2 fw-bold shadow-sm fs-7">Beauty</span>
+                  </div>
+
+                  <div className="position-absolute bottom-0 start-0 w-100 p-4 p-xl-5 text-start" style={{ zIndex: 2 }}>
+                    <h3 className="display-6 fw-bold mb-3 force-white-text" style={{ color: '#fff' }}>Glow & Grace</h3>
+                    <p className="fs-6 force-white-text mb-4" style={{ maxWidth: '400px', lineHeight: 1.6, color: 'rgba(255,255,255,0.85)' }}>Elegant and clean layouts for skincare and makeup brands.</p>
+                    <a href="https://www.toastkart.com/store/glow-grace" target="_blank" rel="noreferrer" className="d-inline-flex align-items-center fw-bold explore-link fs-6 text-uppercase force-white-text text-decoration-none" style={{ color: '#fff' }}>
+                      View More <ArrowRight size={20} className="ms-2" />
+                    </a>
+                  </div>
+                </div>
+              </div>
+              {/* Store 4 */}
+              <div className="col-12 col-md-6">
+                <div className="portfolio-card position-relative border-0 shadow-lg" style={{ borderRadius: '24px', minHeight: '450px' }}>
+                  <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=800&auto=format&fit=crop" alt="Sree Homes" className="w-100 h-100 position-absolute top-0 start-0 portfolio-img" style={{ objectFit: 'cover', zIndex: 0 }} />
+                  <div className="position-absolute top-0 start-0 w-100 h-100" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%)', zIndex: 1 }}></div>
+                  
+                  <div className="position-absolute top-0 end-0 p-4" style={{ zIndex: 2 }}>
+                     <span className="badge bg-white text-dark rounded-pill px-3 py-2 fw-bold shadow-sm fs-7">Home & Living</span>
+                  </div>
+
+                  <div className="position-absolute bottom-0 start-0 w-100 p-4 p-xl-5 text-start" style={{ zIndex: 2 }}>
+                    <h3 className="display-6 fw-bold mb-3 force-white-text" style={{ color: '#fff' }}>Sree Homes</h3>
+                    <p className="fs-6 force-white-text mb-4" style={{ maxWidth: '400px', lineHeight: 1.6, color: 'rgba(255,255,255,0.85)' }}>Warm and inviting design for furniture and home decor stores.</p>
+                    <a href="https://www.toastkart.com/store/sree-homes" target="_blank" rel="noreferrer" className="d-inline-flex align-items-center fw-bold explore-link fs-6 text-uppercase force-white-text text-decoration-none" style={{ color: '#fff' }}>
+                      View More <ArrowRight size={20} className="ms-2" />
+                    </a>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>

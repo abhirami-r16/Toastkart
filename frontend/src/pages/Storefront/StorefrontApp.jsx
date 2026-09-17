@@ -139,18 +139,30 @@ if (!foundStore) {
       const cleanSub = subdomain.toLowerCase().replace(/[^a-z0-9]/g, '');
 
       let fetchedProducts = [];
-      try {
-        // Use store_id filter on API when we have a real store ID
-        const productsUrl = storeId ? `/products?store_id=${storeId}` : '/products';
-        const res = await api.get(productsUrl);
-        if (Array.isArray(res.data) && res.data.length > 0) {
-          fetchedProducts = res.data;
-        }
-      } catch (e) {
-        console.debug('Backend products failed, trying local storage', e);
+      let allCategories = [];
+
+      // Fetch products and categories concurrently
+      const productsUrl = storeId ? `/products?store_id=${storeId}` : '/products';
+      const categoriesUrl = storeId ? `/categories?store_id=${storeId}` : '/categories';
+
+      const [productsResult, categoriesResult] = await Promise.allSettled([
+        api.get(productsUrl),
+        api.get(categoriesUrl)
+      ]);
+
+      if (productsResult.status === 'fulfilled' && Array.isArray(productsResult.value.data) && productsResult.value.data.length > 0) {
+        fetchedProducts = productsResult.value.data;
+      } else {
+        console.debug('Backend products failed, trying local storage');
       }
 
-      // LocalStorage fallback
+      if (categoriesResult.status === 'fulfilled' && Array.isArray(categoriesResult.value.data) && categoriesResult.value.data.length > 0) {
+        allCategories = categoriesResult.value.data;
+      } else {
+        console.debug('Backend categories failed, trying local storage');
+      }
+
+      // LocalStorage fallback for products
       if (fetchedProducts.length === 0) {
         const saved = localStorage.getItem('aureum_owner_products');
         if (saved) {
@@ -167,7 +179,6 @@ if (!foundStore) {
       } : null;
 
       if (fetchedProducts.length > 0) {
-
         currentStoreProducts = fetchedProducts.filter(p => {
           const pStoreId = p.store_id ?? p.store?.id ?? p.storeId ?? null;
           const pStoreSlug = p.store?.slug ?? p.store?.subdomain ?? p.store_subdomain ?? p.store_slug ?? null;
@@ -188,19 +199,6 @@ if (!foundStore) {
       }
 
       setStoreProducts(currentStoreProducts);
-
-      // ----- Categories -----
-      let allCategories = [];
-      try {
-        // Use store_id filter on API when we have a real store ID
-        const categoriesUrl = storeId ? `/categories?store_id=${storeId}` : '/categories';
-        const res = await api.get(categoriesUrl);
-        if (Array.isArray(res.data) && res.data.length > 0) {
-          allCategories = res.data;
-        }
-      } catch (e) {
-        console.debug('Backend categories failed, trying local storage', e);
-      }
 
       if (allCategories.length === 0) {
         const saved = localStorage.getItem('aureum_owner_categories');
@@ -257,8 +255,10 @@ if (!foundStore) {
 
   if (loading) {
     return (
-      <div className="storefront-loading">
-        <div className="spinner" />
+      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh', backgroundColor: '#fdfdfd' }}>
+        <div className="spinner-border text-primary" role="status" style={{ width: '3rem', height: '3rem' }}>
+          <span className="visually-hidden">Loading...</span>
+        </div>
       </div>
     );
   }
