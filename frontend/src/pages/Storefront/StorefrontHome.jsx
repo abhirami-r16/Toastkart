@@ -955,7 +955,7 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                 </button>
               </div>
 
-              {renderProductGrid(catProducts)}
+              {renderProductGrid(catProducts.slice(0, 8))}
             </div>
           );
         })

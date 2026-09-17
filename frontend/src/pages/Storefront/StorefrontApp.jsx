@@ -141,25 +141,33 @@ if (!foundStore) {
       let fetchedProducts = [];
       let allCategories = [];
 
-      // Fetch products and categories concurrently
-      const productsUrl = storeId ? `/products?store_id=${storeId}` : '/products';
-      const categoriesUrl = storeId ? `/categories?store_id=${storeId}` : '/categories';
-
-      const [productsResult, categoriesResult] = await Promise.allSettled([
-        api.get(productsUrl),
-        api.get(categoriesUrl)
-      ]);
-
-      if (productsResult.status === 'fulfilled' && Array.isArray(productsResult.value.data) && productsResult.value.data.length > 0) {
-        fetchedProducts = productsResult.value.data;
+      // OPTIMIZATION: If the store already includes products and categories, use them directly!
+      if (foundStore?.products && Array.isArray(foundStore.products) && foundStore.products.length > 0) {
+        fetchedProducts = foundStore.products;
+        if (foundStore?.categories && Array.isArray(foundStore.categories)) {
+          allCategories = foundStore.categories;
+        }
       } else {
-        console.debug('Backend products failed, trying local storage');
-      }
+        // Fetch products and categories concurrently only if they aren't already provided
+        const productsUrl = storeId ? `/products?store_id=${storeId}` : '/products';
+        const categoriesUrl = storeId ? `/categories?store_id=${storeId}` : '/categories';
 
-      if (categoriesResult.status === 'fulfilled' && Array.isArray(categoriesResult.value.data) && categoriesResult.value.data.length > 0) {
-        allCategories = categoriesResult.value.data;
-      } else {
-        console.debug('Backend categories failed, trying local storage');
+        const [productsResult, categoriesResult] = await Promise.allSettled([
+          api.get(productsUrl),
+          api.get(categoriesUrl)
+        ]);
+
+        if (productsResult.status === 'fulfilled' && Array.isArray(productsResult.value.data) && productsResult.value.data.length > 0) {
+          fetchedProducts = productsResult.value.data;
+        } else {
+          console.debug('Backend products failed, trying local storage');
+        }
+
+        if (categoriesResult.status === 'fulfilled' && Array.isArray(categoriesResult.value.data) && categoriesResult.value.data.length > 0) {
+          allCategories = categoriesResult.value.data;
+        } else {
+          console.debug('Backend categories failed, trying local storage');
+        }
       }
 
       // LocalStorage fallback for products

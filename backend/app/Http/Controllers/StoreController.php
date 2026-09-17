@@ -77,7 +77,11 @@ class StoreController extends Controller
 
     public function show($idOrSlug)
     {
-        $store = Store::with(['categories', 'products.category', 'orders'])
+        $store = Store::with([
+            'categories:id,store_id,name,slug',
+            'products:id,store_id,category_id,name,slug,price,compare_price,image,rating,color,status,stock_quantity',
+            'products.category:id,name'
+        ])
             ->where('id', $idOrSlug)
             ->orWhere('slug', $idOrSlug)
             ->firstOrFail();

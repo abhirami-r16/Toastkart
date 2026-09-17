@@ -13,11 +13,20 @@ const api = axios.create({
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('toastkart_token');
-  if (token) {
+  const activeStoreId = localStorage.getItem('toastkart_active_store_id');
+  
+  // Public GET endpoints that do not require auth and should avoid CORS preflight OPTIONS requests
+  const isPublicGet = config.method === 'get' && (
+    config.url.startsWith('/stores') || 
+    config.url.startsWith('/products') || 
+    config.url.startsWith('/categories') ||
+    config.url.match(/^\/stores\/[a-zA-Z0-9-]+$/)
+  );
+
+  if (token && !isPublicGet) {
     config.headers.Authorization = `Bearer ${token}`;
   }
-  const activeStoreId = localStorage.getItem('toastkart_active_store_id');
-  if (activeStoreId) {
+  if (activeStoreId && !isPublicGet) {
     config.headers['X-Store-Id'] = activeStoreId;
   }
   return config;
