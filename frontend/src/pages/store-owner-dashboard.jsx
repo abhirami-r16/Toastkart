@@ -2645,7 +2645,7 @@ export default function StoreOwnerDashboard() {
                                     {cat.slug || (cat.name || "").toLowerCase().replace(/\s+/g, "-")}
                                   </code>
                                 </td>
-                                <td className="border-0 py-2 fw-bold fs-7" style={{ color: "#202223" }}>{cat.products_count ?? 0}</td>
+                                <td className="border-0 py-2 fw-bold fs-7" style={{ color: "#202223" }}>{productsList.filter(p => (p.category?.name || p.category) === cat.name).length}</td>
                                 <td className="border-0 text-end pe-4 py-2">
                                   <div className="d-flex justify-content-end gap-1">
                                     <button

@@ -715,7 +715,7 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                 title: 'Minimalist<br/>Living',
                 subtitle:
                   'Transform your space with our curated selection of minimalist decor and functional pieces.',
-                img: 'https://images.unsplash.com/photo-1540574163026-643ea20d25b5?w=600&h=600&fit=crop',
+                img: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&h=600&fit=crop',
               },
             ];
 

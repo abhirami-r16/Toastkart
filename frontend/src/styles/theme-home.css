@@ -240,7 +240,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .theme-home .storefront-product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 30px;
 }
 
@@ -304,19 +304,10 @@ h1, h2, h3, h4, h5, h6 {
   color: #777777;
 }
 
-/* Hover Add to Cart Button */
+/* Fixed Add to Cart Button */
 .theme-home .theme-cart-wrapper {
-  position: absolute;
-  bottom: -30px;
-  left: 20px;
-  opacity: 0;
-  transition: all 0.5s ease;
-  z-index: 10;
+  margin-top: 15px;
   width: auto;
-}
-
-.theme-home .storefront-product-card:hover .theme-cart-wrapper {
-  bottom: 20px;
   opacity: 1;
 }
 
@@ -325,16 +316,15 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 15px;
   font-weight: 500;
   background: transparent !important;
-  border: none;
-  padding: 0;
+  border: 1px solid #ff3368;
+  border-radius: 4px;
+  padding: 8px 16px;
+  transition: all 0.3s ease;
 }
 
 .theme-home .theme-cart-btn:hover {
-  color: #2a2a2a !important;
-}
-
-.theme-home .storefront-product-card:hover .storefront-product-price-row {
-  opacity: 0;
+  background: #ff3368 !important;
+  color: #ffffff !important;
 }
 
 /* ==========================================================================
@@ -367,6 +357,10 @@ h1, h2, h3, h4, h5, h6 {
   .theme-home .aranoz-hero-section {
     padding: 60px 0;
   }
+  
+  .theme-home .storefront-product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 768px) {
@@ -383,5 +377,9 @@ h1, h2, h3, h4, h5, h6 {
   .theme-home .btn_2 {
     padding: 12px 24px;
     font-size: 14px;
+  }
+
+  .theme-home .storefront-product-grid {
+    grid-template-columns: repeat(1, 1fr);
   }
 }
