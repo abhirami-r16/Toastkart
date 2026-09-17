@@ -50,7 +50,7 @@ export default function StorefrontLoginModal() {
             <div className="text-center mb-4">
               <h2 className="fw-bold fs-3 mb-1 text-black">{isRegistering ? 'Create Account' : 'Welcome Back'}</h2>
               <p className="text-dark fs-7 fw-semibold">{isRegistering ? (
-                <span>Sign up for your <span className="text-success fw-bolder">14 Days Free Trial</span>.</span>
+                <span>Create an account to continue shopping.</span>
               ) : 'Please login to continue shopping.'}</p>
             </div>
 

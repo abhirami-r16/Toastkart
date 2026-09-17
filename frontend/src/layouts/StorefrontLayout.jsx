@@ -220,11 +220,10 @@ export default function StorefrontLayout({ storeData, categories = [], products 
                             Login
                           </button>
                           <button 
-                            className="storefront-mobile-nav-item text-dark border-0 bg-transparent text-start w-100 d-flex align-items-center justify-content-between" 
+                            className="storefront-mobile-nav-item text-dark border-0 bg-transparent text-start w-100" 
                             onClick={() => { setIsCategoryOpen(false); openLoginModal(); }}
                           >
-                            <span>Create Account</span>
-                            <span className="badge bg-success bg-opacity-10 text-success rounded-pill" style={{ fontSize: '10px' }}>14 Days Free Trial</span>
+                            Create Account
                           </button>
                         </>
                       )}
