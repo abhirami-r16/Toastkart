@@ -359,7 +359,15 @@ h1, h2, h3, h4, h5, h6 {
   }
   
   .theme-home .storefront-product-grid {
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 15px;
+    padding-bottom: 15px;
+  }
+  .theme-home .storefront-product-grid > * {
+    flex: 0 0 45%;
+    scroll-snap-align: start;
   }
 }
 
@@ -380,6 +388,14 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .theme-home .storefront-product-grid {
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 15px;
+    padding-bottom: 15px;
+  }
+  .theme-home .storefront-product-grid > * {
+    flex: 0 0 65%;
+    scroll-snap-align: start;
   }
 }
