@@ -352,18 +352,10 @@
     min-height: 400px;
     padding-top: 100px;
   }
-
-  .theme-jewelry .storefront-product-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
 @media (max-width: 576px) {
   .theme-jewelry .jewelry-hero-title {
     font-size: 32px;
-  }
-
-  .theme-jewelry .storefront-product-grid {
-    grid-template-columns: repeat(1, 1fr);
   }
 }

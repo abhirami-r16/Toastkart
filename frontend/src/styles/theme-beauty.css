@@ -284,37 +284,4 @@
   .theme-beauty .beauty-title {
     font-size: 32px;
   }
-  .theme-beauty .storefront-product-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 10px;
-    padding-bottom: 15px;
-    width: 100%;
-  }
-  .theme-beauty .storefront-product-grid > * {
-    flex: none;
-  }
-}
-
-@media (max-width: 575px) {
-  .theme-beauty .beauty-hero-section {
-    margin: 10px 5px;
-    border-radius: 20px;
-  }
-  .theme-beauty .beauty-hero-text {
-    padding: 40px 20px;
-  }
-  .theme-beauty .beauty-title {
-    font-size: 32px;
-  }
-  .theme-beauty .storefront-product-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 10px;
-    padding-bottom: 15px;
-    width: 100%;
-  }
-  .theme-beauty .storefront-product-grid > * {
-    flex: none;
-  }
 }
