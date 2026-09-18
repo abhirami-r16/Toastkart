@@ -23,6 +23,26 @@ const INITIAL_DEMO_STORES = [
     timezone: 'America/New_York',
     products_count: 24,
     orders_count: 142
+  },
+  {
+    id: 2,
+    user_id: 1,
+    name: 'Glow & Grace',
+    slug: 'glow-grace',
+    subdomain: 'glow-grace',
+    customDomain: '',
+    logo: '/sarah_avatar.png',
+    banner: '/beauty-template.webp',
+    currency: 'USD',
+    description: 'Elevate your daily skincare routine with our exclusive, dermatologist-tested organic essentials crafted for your perfect glow.',
+    status: 'Active',
+    email: 'hello@glowgrace.com',
+    phone: '+1 (555) 987-6543',
+    category: 'Beauty & Cosmetics',
+    timezone: 'America/New_York',
+    products_count: 12,
+    orders_count: 50,
+    theme: 'theme-beauty'
   }
 ];
 
