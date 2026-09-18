@@ -128,7 +128,7 @@ export default function Portfolio() {
               {/* Store 1 */}
               <div className="col-12 col-md-6">
                 <div className="portfolio-card position-relative border-0 shadow-lg" style={{ borderRadius: '24px', minHeight: '450px' }}>
-                  <img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=800&auto=format&fit=crop" alt="Elara Fashions" className="w-100 h-100 position-absolute top-0 start-0 portfolio-img" style={{ objectFit: 'cover', zIndex: 0 }} />
+                  <img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=800&auto=format&fit=crop" alt="Elara Boutique" className="w-100 h-100 position-absolute top-0 start-0 portfolio-img" style={{ objectFit: 'cover', zIndex: 0 }} />
                   <div className="position-absolute top-0 start-0 w-100 h-100" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%)', zIndex: 1 }}></div>
                   
                   <div className="position-absolute top-0 end-0 p-4" style={{ zIndex: 2 }}>
@@ -136,7 +136,7 @@ export default function Portfolio() {
                   </div>
 
                   <div className="position-absolute bottom-0 start-0 w-100 p-4 p-xl-5 text-start" style={{ zIndex: 2 }}>
-                    <h3 className="display-6 fw-bold mb-3 force-white-text" style={{ color: '#fff' }}>Elara Fashions</h3>
+                    <h3 className="display-6 fw-bold mb-3 force-white-text" style={{ color: '#fff' }}>Elara Boutique</h3>
                     <p className="fs-6 force-white-text mb-4" style={{ maxWidth: '400px', lineHeight: 1.6, color: 'rgba(255,255,255,0.85)' }}>Explore the latest trends in apparel and accessories, showcased in a vibrant and engaging storefront.</p>
                     <a href="https://www.toastkart.com/store/john-fashion-1" target="_blank" rel="noreferrer" className="d-inline-flex align-items-center fw-bold explore-link fs-6 text-uppercase force-white-text text-decoration-none" style={{ color: '#fff' }}>
                       View More <ArrowRight size={20} className="ms-2" />
