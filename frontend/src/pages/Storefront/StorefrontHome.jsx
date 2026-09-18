@@ -215,7 +215,11 @@ export default function StorefrontHome({ storeData, products, categories = [] })
         }}
       >
         <div
-          className="storefront-product-grid"
+          className={
+            displayItems.length >= 5
+              ? "storefront-product-slider"
+              : "storefront-product-grid"
+          }
         >
           {displayItems.map((product, idx) => (
             <div

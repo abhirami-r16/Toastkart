@@ -24,7 +24,7 @@ export default function StorefrontApp({ subdomain }) {
 const tenantId = slug;
 
   // Fetch all required data (store, products, categories)
-  const fetchStoreData = useCallback(async () => {
+  const fetchStoreData = useCallback(async (isMounted = () => true) => {
     try {
       let foundStore = null;
       let allStores = [];
@@ -121,6 +121,7 @@ if (!foundStore) {
 }
 
       // 5️⃣ Set store data (or dummy if not found)
+      if (!isMounted()) return;
       if (foundStore) {
         console.log('FOUND STORE:', foundStore);
         console.log('STORE CATEGORY:', foundStore.category);
@@ -206,6 +207,7 @@ if (!foundStore) {
         });
       }
 
+      if (!isMounted()) return;
       setStoreProducts(currentStoreProducts);
 
       if (allCategories.length === 0) {
@@ -234,31 +236,39 @@ if (!foundStore) {
           return false;
         });
 
+        if (!isMounted()) return;
         setStoreCategories(currentStoreCategories);
       } else {
+        if (!isMounted()) return;
         setStoreCategories([]);
       }
     } catch (e) {
       console.error('Error loading store data for storefront:', e);
     } finally {
-      setLoading(false);
+      if (isMounted()) setLoading(false);
     }
   }, [subdomain, tenantId]);
 
   // Initial load & re‑load when relevant identifiers change
   useEffect(() => {
-    fetchStoreData();
+    let mounted = true;
+    fetchStoreData(() => mounted);
+    return () => { mounted = false; };
   }, [fetchStoreData]);
 
   // Listen for changes to categories/products in localStorage (owner dashboard writes here)
   useEffect(() => {
+    let mounted = true;
     const handler = e => {
       if (e.key === 'aureum_owner_categories' || e.key === 'aureum_owner_products') {
-        fetchStoreData();
+        fetchStoreData(() => mounted);
       }
     };
     window.addEventListener('storage', handler);
-    return () => window.removeEventListener('storage', handler);
+    return () => {
+      mounted = false;
+      window.removeEventListener('storage', handler);
+    };
   }, [fetchStoreData]);
 
   if (loading) {
