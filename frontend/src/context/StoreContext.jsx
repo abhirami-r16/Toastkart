@@ -174,7 +174,7 @@ export const StoreProvider = ({ children }) => {
         subdomain: storeData.subdomain || slug,
         customDomain: storeData.customDomain || '',
         logo: storeData.logo || '/sarah_avatar.png',
-        banner: storeData.banner || '/hero-banner-v2.png',
+        banner: storeData.banner || '/hero-banner-v2.webp',
         currency: storeData.currency || 'USD',
         description: storeData.description || 'Welcome to my store!',
         status: storeData.status || 'Active',

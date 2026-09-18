@@ -182,8 +182,8 @@ const goslotStyles = `
   
   @media (max-width: 767px) {
     .goslot-hero { padding-top: 120px; padding-bottom: 80px; }
-    .template-iframe-container { height: 250px; border-radius: 16px; }
-    .template-iframe { width: 400%; height: 1000px; transform: scale(0.25); }
+    .template-iframe-container { height: 450px; border-radius: 16px; }
+    .template-iframe { width: 400%; height: 1800px; transform: scale(0.25); }
   }
 `;
 
@@ -272,7 +272,7 @@ export default function Home() {
           overflow: 'hidden'
         }}>
           <img
-            src="/main-hero-bg.png"
+            src="/main-hero-bg.webp"
             alt="Hero Background"
             style={{
               width: '100vw',
@@ -327,9 +327,9 @@ export default function Home() {
           <div className="d-flex flex-column pt-4">
             {[
               { title: "Fashion Theme", url: "https://themewagon.github.io/eflyer/", img: null, desc: "Vibrant and modern aesthetic for apparel and boutiques." },
-              { title: "Beauty & Cosmetics", url: null, img: "/beauty-template.png", desc: "Elegant and clean layouts for skincare and makeup brands." },
+              { title: "Beauty & Cosmetics", url: null, img: "/beauty-template.webp", desc: "Elegant and clean layouts for skincare and makeup brands." },
               { title: "Home & Living", url: "https://themewagon.github.io/aranoz/", img: null, desc: "Warm and inviting design for furniture and home decor stores." },
-              { title: "Jewelry & Luxury", url: null, img: "/jewelry-template.png", desc: "Premium, luxurious aesthetic for fine jewelry and accessories." }
+              { title: "Jewelry & Luxury", url: null, img: "/jewelry-template.webp", desc: "Premium, luxurious aesthetic for fine jewelry and accessories." }
             ].map((t, i) => (
               <div key={i} className={`row align-items-center mb-5 pb-4`}>
                 <div className={`col-12 col-lg-7 ${i % 2 !== 0 ? 'order-lg-2' : ''}`}>
@@ -341,7 +341,7 @@ export default function Home() {
                         className="template-iframe"
                       />
                     ) : (
-                      <img src={t.img} alt={t.title} className="w-100 h-100" style={{ objectFit: 'cover' }} />
+                      <img src={t.img} alt={t.title} className="w-100 h-100" style={{ objectFit: 'cover' }} loading="lazy" decoding="async" />
                     )}
                   </div>
                 </div>

@@ -433,7 +433,7 @@ export default function StorefrontHome({ storeData, products, categories = [] })
           case 'theme-eflyer': {
             const eflyerSlides = [
               {
-                bg: 'https://themewagon.github.io/eflyer/images/banner-bg.png',
+                bg: '/banner-bg.webp',
                 title: 'GET START<br />YOUR FAVRIOT SHOPING',
                 btn: 'Buy Now',
               },
@@ -645,7 +645,7 @@ export default function StorefrontHome({ storeData, products, categories = [] })
               "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=1920&h=800&fit=crop",
               "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=1920&h=800&fit=crop",
               "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=1920&h=800&fit=crop",
-              "https://images.unsplash.com/photo-1615397323674-51e443ce71d1?w=1920&h=800&fit=crop",
+              "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=1920&h=800&fit=crop",
               "https://images.unsplash.com/photo-1522337660859-02fbefca4702?w=1920&h=800&fit=crop",
               "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=1920&h=800&fit=crop"
             ];

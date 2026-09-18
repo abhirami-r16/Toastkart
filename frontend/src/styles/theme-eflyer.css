@@ -1,6 +1,4 @@
 /* Eflyer Theme Styling */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
-
 .theme-eflyer {
   font-family: 'Poppins', sans-serif;
   background-color: #f8f9fa;
@@ -13,7 +11,7 @@
 
 /* Header Wrapper - ensures the orange background covers the whole header area */
 .theme-eflyer .eflyer-banner-wrapper {
-  background-image: url('https://themewagon.github.io/eflyer/images/banner-bg.png');
+  background-image: url('/banner-bg.webp');
   background-color: #eab41f;
   background-size: cover;
   background-position: center;
@@ -187,7 +185,7 @@
 /* Hero Section */
 .theme-eflyer .eflyer-hero {
   /* Using a generic gradient or image similar to the screenshot if we don't have the exact asset */
-  background: #eab41f url('https://themewagon.github.io/eflyer/images/banner-bg.png') no-repeat center center;
+  background: #eab41f url('/banner-bg.webp') no-repeat center center;
   background-size: cover;
   position: relative;
   /* Add top padding to account for the absolute positioned header */

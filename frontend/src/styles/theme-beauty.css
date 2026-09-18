@@ -1,8 +1,6 @@
 /* ==========================================================================
    Theme: Beauty & Cosmetics (Premium & Elegant)
    ========================================================================== */
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap');
-
 .theme-beauty.storefront-body {
   background-color: #fdf0f2 !important; /* Soft Pink / Rose */
   font-family: 'Jost', sans-serif !important;
