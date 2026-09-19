@@ -55,7 +55,7 @@ export default function Wishlist() {
                           ₹{Number(product.price).toLocaleString('en-IN')}
                         </span>
                         <span className="storefront-product-discount">
-                          — {Math.round(((Number(product.compare_price) - Number(product.price)) / Number(product.compare_price)) * 100)}% OFF
+                          {Math.round(((Number(product.compare_price) - Number(product.price)) / Number(product.compare_price)) * 100)}% OFF
                         </span>
                       </>
                     ) : (

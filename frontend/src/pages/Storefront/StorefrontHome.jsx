@@ -279,7 +279,6 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                         </span>
 
                         <span className="storefront-product-discount">
-                          —{' '}
                           {Math.round(
                             ((parsePrice(product.compare_price) -
                               parsePrice(product.price)) /
