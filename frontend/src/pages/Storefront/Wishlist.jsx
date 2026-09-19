@@ -41,11 +41,6 @@ export default function Wishlist() {
                 </div>
                 <div className="storefront-product-details pb-5">
                   <div className="storefront-product-title">{product.name}</div>
-                  <div className="storefront-product-rating">
-                    <span className="rating-badge">
-                      {product.rating || "4.5"} ★
-                    </span>
-                  </div>
                   <div className="storefront-product-price-row">
                     {product.compare_price && Number(product.compare_price) > Number(product.price) ? (
                       <>
@@ -62,7 +57,6 @@ export default function Wishlist() {
                       </span>
                     )}
                   </div>
-                  <div className="storefront-product-delivery text-success fs-8 mt-1">In Stock</div>
                 </div>
               </Link>
               

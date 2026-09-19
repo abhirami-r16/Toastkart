@@ -267,12 +267,6 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                     {product.name}
                   </div>
 
-                  <div className="storefront-product-rating">
-                    <span className="rating-badge">
-                      {product.rating || '4.5'} ★
-                    </span>
-                  </div>
-
                   <div className="storefront-product-price-row">
                     {product.compare_price &&
                       parsePrice(product.compare_price) >
@@ -295,10 +289,6 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                         {parsePrice(product.price).toLocaleString('en-IN')}
                       </span>
                     )}
-                  </div>
-
-                  <div className="storefront-product-delivery">
-                    Free delivery
                   </div>
                 </div>
               </Link>
