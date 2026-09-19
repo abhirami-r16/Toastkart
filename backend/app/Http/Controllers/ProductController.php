@@ -35,7 +35,8 @@ class ProductController extends Controller
             });
         }
 
-        $products = $query->orderBy('id', 'desc')->get();
+        $products = $query->select('id', 'store_id', 'category_id', 'name', 'slug', 'price', 'compare_price', 'image', 'rating', 'status', 'stock_quantity', 'is_active', 'color')
+                          ->orderBy('id', 'desc')->get();
 
         return response()->json($products);
     }

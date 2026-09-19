@@ -133,12 +133,24 @@ function AppRoutes() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <StoreProvider>
-          <CartProvider>
-            <Suspense fallback={<div className="d-flex justify-content-center align-items-center vh-100"><div className="spinner-border text-primary"></div></div>}>
-              <Routes>
+        <Routes>
 
-              {/* Portal Landing Page */}
+              {/* Storefront Pages explicitly placed OUTSIDE StoreProvider to prevent duplicate stores request */}
+              <Route
+                path="/store/:slug/*"
+                element={<StorefrontWrapper />}
+              />
+              <Route
+                path="/storefront/*"
+                element={<StorefrontWrapper />}
+              />
+              <Route path="*" element={
+                <StoreProvider>
+                  <CartProvider>
+                    <Suspense fallback={<div className="d-flex justify-content-center align-items-center vh-100"><div className="spinner-border text-primary"></div></div>}>
+                      <Routes>
+
+                      {/* Portal Landing Page */}
               <Route
                 path="/"
                 element={
@@ -156,16 +168,7 @@ function AppRoutes() {
 
               <Route path="/landing" element={<Home />} />
 
-              {/* Storefront Pages */}
-              <Route
-                path="/storefront/*"
-                element={<StorefrontWrapper />}
-              />
-
-              <Route
-                path="/store/:slug/*"
-                element={<StorefrontWrapper />}
-              />
+              {/* Storefront Pages moved above StoreProvider */}
 
               {/* Portfolio Pages */}
               <Route
@@ -306,11 +309,13 @@ function AppRoutes() {
                 element={<Navigate to="/" replace />}
               />
 
-              </Routes>
-            </Suspense>
-          </CartProvider>
-        </StoreProvider>
-      </AuthProvider>
+                      </Routes>
+                    </Suspense>
+                  </CartProvider>
+                </StoreProvider>
+              } />
+            </Routes>
+        </AuthProvider>
 
       <React.Suspense fallback={null}>
         <WhatsappWidget />

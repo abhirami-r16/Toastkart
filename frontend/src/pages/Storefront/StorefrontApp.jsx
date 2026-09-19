@@ -21,7 +21,7 @@ export default function StorefrontApp({ subdomain }) {
   const [storeCategories, setStoreCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const { slug } = useParams();
-const tenantId = slug;
+  const tenantId = subdomain || slug;
 
   // Fetch all required data (store, products, categories)
   const fetchStoreData = useCallback(async (isMounted = () => true) => {
