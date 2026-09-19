@@ -33,7 +33,7 @@ const SettingsPage = React.lazy(() => import('../pages/Settings'));
 const StorefrontApp = React.lazy(() => import('../pages/Storefront/StorefrontApp'));
 const PortfolioBuilder = React.lazy(() => import('../pages/PortfolioBuilder'));
 const PortfolioView = React.lazy(() => import('../pages/PortfolioView'));
-import WhatsappWidget from '../components/WhatsappWidget';
+const WhatsappWidget = React.lazy(() => import('../components/WhatsappWidget'));
 
 const getSubdomain = () => {
   const host = window.location.hostname;
@@ -312,7 +312,9 @@ function AppRoutes() {
         </StoreProvider>
       </AuthProvider>
 
-      <WhatsappWidget />
+      <React.Suspense fallback={null}>
+        <WhatsappWidget />
+      </React.Suspense>
 
     </BrowserRouter>
   );

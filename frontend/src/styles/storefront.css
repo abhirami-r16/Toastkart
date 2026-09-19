@@ -1,10 +1,4 @@
-@import url('./theme-home.css');
-@import url('./theme-beauty.css');
-@import url('./theme-electronics.css');
-@import url('./theme-footwear.css');
-@import url('./theme-gift.css');
-@import url('./theme-grocery.css');
-@import url('./theme-jewelry.css');
+/* Themes are now dynamically loaded in StorefrontApp.jsx to reduce bundle size */
 
 /* Storefront Specific CSS (Isolated from main Aureum CSS) */
 

@@ -4,8 +4,9 @@ import { Search, ShoppingCart, ChevronDown, User, LogOut, Heart, Package, Menu, 
 import { useStorefrontCart } from '../context/StorefrontCartContext';
 import { useStorefrontAuth } from '../context/StorefrontAuthContext';
 import { resolveStoreTheme } from '../utils/themeResolver';
-import StorefrontLoginModal from '../components/StorefrontLoginModal';
-import '../styles/theme-eflyer.css';
+const StorefrontLoginModal = React.lazy(() => import('../components/StorefrontLoginModal'));
+// Themes are now dynamically loaded in useEffect below to drastically cut initial CSS payload
+// import '../styles/theme-eflyer.css';
 
 export default function StorefrontLayout({ storeData, categories = [], products = [] }) {
   const { cartCount } = useStorefrontCart();
@@ -26,6 +27,21 @@ export default function StorefrontLayout({ storeData, categories = [], products 
   const theme = resolveStoreTheme(storeData);
   const useModernHeader = ['theme-hexashop', 'theme-jewelry', 'theme-beauty', 'theme-home', 'theme-footwear'].includes(theme);
   const isEflyer = theme === 'theme-eflyer';
+
+  // Dynamically load only the required theme CSS to prevent downloading massive unused CSS
+  React.useEffect(() => {
+    switch (theme) {
+      case 'theme-home': import('../styles/theme-home.css'); break;
+      case 'theme-beauty': import('../styles/theme-beauty.css'); break;
+      case 'theme-electronics': import('../styles/theme-electronics.css'); break;
+      case 'theme-footwear': import('../styles/theme-footwear.css'); break;
+      case 'theme-gift': import('../styles/theme-gift.css'); break;
+      case 'theme-grocery': import('../styles/theme-grocery.css'); break;
+      case 'theme-jewelry': import('../styles/theme-jewelry.css'); break;
+      case 'theme-eflyer': import('../styles/theme-eflyer.css'); break;
+      default: break;
+    }
+  }, [theme]);
 
   // Compute the combined list of categories (same logic as StorefrontHome)
   const productCategories = [];
@@ -476,7 +492,9 @@ export default function StorefrontLayout({ storeData, categories = [], products 
         </>
       )}
 
-      <StorefrontLoginModal />
+      <React.Suspense fallback={null}>
+        <StorefrontLoginModal />
+      </React.Suspense>
 
       <main className="storefront-main-content">
         <Outlet />

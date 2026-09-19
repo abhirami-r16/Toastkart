@@ -603,14 +603,17 @@ export default function StorefrontHome({ storeData, products, categories = [] })
            */
           case 'theme-beauty': {
             const beautyImages = [
-              "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=1920&h=800&fit=crop",
-              "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=1920&h=800&fit=crop",
-              "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=1920&h=800&fit=crop",
-              "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=1920&h=800&fit=crop",
-              "https://images.unsplash.com/photo-1522337660859-02fbefca4702?w=1920&h=800&fit=crop",
-              "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=1920&h=800&fit=crop"
+              "https://images.unsplash.com/photo-1596462502278-27bfdc403348",
+              "https://images.unsplash.com/photo-1620916566398-39f1143ab7be",
+              "https://images.unsplash.com/photo-1571781926291-c477ebfd024b",
+              "https://images.unsplash.com/photo-1556228578-0d85b1a4d571",
+              "https://images.unsplash.com/photo-1522337660859-02fbefca4702",
+              "https://images.unsplash.com/photo-1556228578-0d85b1a4d571"
             ];
             
+            const isMobileView = typeof window !== 'undefined' && window.innerWidth < 768;
+            const imgWidth = isMobileView ? '800' : '1920';
+
             return (
               <div className="beauty-hero-section">
                 {/* Full Background Slider */}
@@ -618,10 +621,12 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                   {beautyImages.map((img, idx) => (
                     <img
                       key={idx}
-                      src={img}
+                      src={`${img}?w=${imgWidth}&h=800&fit=crop`}
                       className="beauty-hero-bg-img"
                       alt={`Cosmetics ${idx + 1}`}
-                      loading="lazy"
+                      loading={idx === 0 ? "eager" : "lazy"}
+                      fetchpriority={idx === 0 ? "high" : "auto"}
+                      decoding="async"
                       style={{
                         position: 'absolute',
                         top: 0,
