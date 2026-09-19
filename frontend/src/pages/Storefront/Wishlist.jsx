@@ -45,7 +45,7 @@ export default function Wishlist() {
                       {product.rating || "4.5"} ★
                     </span>
                   </div>
-                  <div className="storefront-product-price-row" style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+                  <div className="storefront-product-price-row" style={{ display: 'flex', alignItems: 'baseline', gap: '6px', flexWrap: 'wrap' }}>
                     {product.compare_price && Number(product.compare_price) > Number(product.price) ? (
                       <>
                         <span className="storefront-product-original-price" style={{ textDecoration: 'line-through', color: '#878787', fontSize: '14px' }}>

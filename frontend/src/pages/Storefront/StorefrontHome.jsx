@@ -267,6 +267,7 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                       display: 'flex',
                       alignItems: 'baseline',
                       gap: '6px',
+                      flexWrap: 'wrap'
                     }}
                   >
                     {product.compare_price &&
@@ -438,16 +439,16 @@ export default function StorefrontHome({ storeData, products, categories = [] })
             const eflyerSlides = [
               {
                 bg: '/banner-bg.webp',
-                title: 'GET START<br />YOUR FAVRIOT SHOPING',
-                btn: 'Buy Now',
+                title: 'UP TO 65% OFF<br />ENJOY YOUR SHOPPING',
+                btn: 'Shop Now',
               },
               {
-                bg: 'https://images.unsplash.com/photo-1617137968427-85924c800a22?w=1600&h=800&fit=crop',
-                title: "NEW ARRIVALS<br />MEN'S COLLECTION",
-                btn: 'Shop Men',
+                bg: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1600&h=800&fit=crop',
+                title: "NEW ARRIVALS<br />WOMEN'S BOUTIQUE",
+                btn: 'Shop Collection',
               },
               {
-                bg: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1600&h=800&fit=crop',
+                bg: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1600&h=800&fit=crop',
                 title: 'EXCLUSIVE OFFERS<br />UP TO 50% OFF',
                 btn: 'Explore Deals',
               },
@@ -513,9 +514,9 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                     />
 
                     <div className="hexashop-hero-content">
-                      <h2>We Are Hexashop</h2>
+                      <h2>Elara Boutique</h2>
                       <span>
-                        Awesome, clean &amp; creative fashion template
+                        Awesome, clean &amp; creative boutique fashion
                       </span>
 
                       <button className="hexashop-btn">
@@ -528,49 +529,49 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                 <div className="hexashop-hero-right">
                   <div className="hexashop-hero-item">
                     <img
-                      src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=400&fit=crop"
-                      alt="Women"
+                      src="https://images.unsplash.com/photo-1515347619252-73a7266100b7?w=400&h=400&fit=crop"
+                      alt="Dresses"
                     />
 
                     <div className="hexashop-hero-content small-content">
-                      <h4>Women</h4>
-                      <span>Best Clothes</span>
+                      <h4>Dresses</h4>
+                      <span>Evening & Casual</span>
                     </div>
                   </div>
 
                   <div className="hexashop-hero-item">
                     <img
-                      src="https://images.unsplash.com/photo-1617137968427-85924c800a22?w=400&h=400&fit=crop"
-                      alt="Men"
+                      src="https://images.unsplash.com/photo-1584916201218-f4242ceb4809?w=400&h=400&fit=crop"
+                      alt="Handbags"
                     />
 
                     <div className="hexashop-hero-content small-content">
-                      <h4>Men</h4>
-                      <span>Best Clothes</span>
+                      <h4>Handbags</h4>
+                      <span>Luxury & Everyday</span>
                     </div>
                   </div>
 
                   <div className="hexashop-hero-item">
                     <img
-                      src="https://images.unsplash.com/photo-1514090458221-65bb69cf63e6?w=400&h=400&fit=crop"
-                      alt="Kids"
+                      src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=400&h=400&fit=crop"
+                      alt="Shoes"
                     />
 
                     <div className="hexashop-hero-content small-content">
-                      <h4>Kids</h4>
-                      <span>Best Clothes</span>
+                      <h4>Shoes</h4>
+                      <span>Heels & Flats</span>
                     </div>
                   </div>
 
                   <div className="hexashop-hero-item">
                     <img
-                      src="https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?w=400&h=400&fit=crop"
+                      src="https://images.unsplash.com/photo-1509319117193-57bab727e09d?w=400&h=400&fit=crop"
                       alt="Accessories"
                     />
 
                     <div className="hexashop-hero-content small-content">
                       <h4>Accessories</h4>
-                      <span>Trend Accessories</span>
+                      <span>Jewelry & Shades</span>
                     </div>
                   </div>
                 </div>
