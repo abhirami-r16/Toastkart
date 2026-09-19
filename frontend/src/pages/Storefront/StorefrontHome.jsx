@@ -261,53 +261,24 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                     </span>
                   </div>
 
-                  <div
-                    className="storefront-product-price-row"
-                    style={{
-                      display: 'flex',
-                      alignItems: 'baseline',
-                      gap: '6px',
-                      flexWrap: 'wrap'
-                    }}
-                  >
+                  <div className="storefront-product-price-row">
                     {product.compare_price &&
                       parsePrice(product.compare_price) >
                       parsePrice(product.price) ? (
                       <>
-                        <span
-                          className="storefront-product-original-price"
-                          style={{
-                            textDecoration: 'line-through',
-                            color: '#878787',
-                            fontSize: '14px',
-                          }}
-                        >
+                        <span className="storefront-product-original-price">
                           ₹
                           {parsePrice(product.compare_price).toLocaleString(
                             'en-IN'
                           )}
                         </span>
 
-                        <span
-                          className="storefront-product-price"
-                          style={{
-                            color: '#212121',
-                            fontSize: '16px',
-                            fontWeight: '500',
-                          }}
-                        >
+                        <span className="storefront-product-price">
                           ₹
                           {parsePrice(product.price).toLocaleString('en-IN')}
                         </span>
 
-                        <span
-                          className="storefront-product-discount"
-                          style={{
-                            color: '#388e3c',
-                            fontSize: '13px',
-                            fontWeight: '500',
-                          }}
-                        >
+                        <span className="storefront-product-discount">
                           —{' '}
                           {Math.round(
                             ((parsePrice(product.compare_price) -
@@ -319,14 +290,7 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                         </span>
                       </>
                     ) : (
-                      <span
-                        className="storefront-product-price"
-                        style={{
-                          color: '#212121',
-                          fontSize: '16px',
-                          fontWeight: '500',
-                        }}
-                      >
+                      <span className="storefront-product-price">
                         ₹
                         {parsePrice(product.price).toLocaleString('en-IN')}
                       </span>

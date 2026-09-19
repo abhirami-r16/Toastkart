@@ -564,4 +564,25 @@
     padding: 0 15px;
     font-size: 14px;
   }
+  
+  .theme-eflyer .storefront-product-title {
+    font-size: 13px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  .theme-eflyer .storefront-product-price {
+    font-size: 14px !important;
+  }
+  .theme-eflyer .storefront-product-original-price {
+    font-size: 12px !important;
+  }
+  .theme-eflyer .storefront-product-discount {
+    font-size: 11px !important;
+    white-space: nowrap !important;
+  }
+  .theme-eflyer .theme-cart-btn {
+    padding: 6px !important;
+    font-size: 12px !important;
+  }
 }

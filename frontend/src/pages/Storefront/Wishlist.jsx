@@ -45,21 +45,21 @@ export default function Wishlist() {
                       {product.rating || "4.5"} ★
                     </span>
                   </div>
-                  <div className="storefront-product-price-row" style={{ display: 'flex', alignItems: 'baseline', gap: '6px', flexWrap: 'wrap' }}>
+                  <div className="storefront-product-price-row">
                     {product.compare_price && Number(product.compare_price) > Number(product.price) ? (
                       <>
-                        <span className="storefront-product-original-price" style={{ textDecoration: 'line-through', color: '#878787', fontSize: '14px' }}>
+                        <span className="storefront-product-original-price">
                           ₹{Number(product.compare_price).toLocaleString('en-IN')}
                         </span>
-                        <span className="storefront-product-price" style={{ color: '#212121', fontSize: '16px', fontWeight: '500' }}>
+                        <span className="storefront-product-price">
                           ₹{Number(product.price).toLocaleString('en-IN')}
                         </span>
-                        <span className="storefront-product-discount" style={{ color: '#388e3c', fontSize: '13px', fontWeight: '500' }}>
+                        <span className="storefront-product-discount">
                           — {Math.round(((Number(product.compare_price) - Number(product.price)) / Number(product.compare_price)) * 100)}% OFF
                         </span>
                       </>
                     ) : (
-                      <span className="storefront-product-price" style={{ color: '#212121', fontSize: '16px', fontWeight: '500' }}>
+                      <span className="storefront-product-price">
                         ₹{Number(product.price).toLocaleString('en-IN')}
                       </span>
                     )}

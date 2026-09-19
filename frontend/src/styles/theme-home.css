@@ -374,3 +374,26 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 14px;
   }
 }
+
+@media (max-width: 575px) {
+  .theme-home .storefront-product-title {
+    font-size: 13px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  .theme-home .storefront-product-price {
+    font-size: 14px !important;
+  }
+  .theme-home .storefront-product-original-price {
+    font-size: 12px !important;
+  }
+  .theme-home .storefront-product-discount {
+    font-size: 11px !important;
+    white-space: nowrap !important;
+  }
+  .theme-home .theme-cart-btn {
+    padding: 6px !important;
+    font-size: 12px !important;
+  }
+}

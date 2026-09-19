@@ -560,15 +560,34 @@ html {
   }
   .storefront-product-card {
     padding: 8px;
+    overflow: hidden !important;
   }
   .storefront-product-image-container {
     height: 140px;
   }
   .storefront-product-title {
     font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .storefront-product-price-row {
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+  }
+  .storefront-product-original-price {
+    font-size: 12px !important;
   }
   .storefront-product-price {
-    font-size: 14px;
+    font-size: 14px !important;
+  }
+  .storefront-product-discount {
+    font-size: 11px !important;
+    white-space: nowrap !important;
+  }
+  .add-to-cart-btn, .theme-cart-btn {
+    padding: 6px !important;
+    font-size: 12px !important;
   }
   .storefront-banner-img {
     height: 160px;
