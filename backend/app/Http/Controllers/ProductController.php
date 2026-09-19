@@ -5,9 +5,27 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
+    private function processBase64Image($imageString, $prefix = 'product')
+    {
+        if (is_string($imageString) && Str::startsWith($imageString, 'data:image')) {
+            $imageParts = explode(';base64,', $imageString);
+            if (count($imageParts) === 2) {
+                $imageTypeAux = explode('image/', $imageParts[0]);
+                $imageType = $imageTypeAux[1] ?? 'png';
+                $imageBase64 = base64_decode($imageParts[1]);
+                $imageName = $prefix . '_' . Str::random(10) . '.' . $imageType;
+                
+                Storage::disk('public')->put('products/' . $imageName, $imageBase64);
+                return '/storage/products/' . $imageName;
+            }
+        }
+        return $imageString;
+    }
+
     public function index(Request $request)
     {
         $query = Product::with(['category', 'store']);
@@ -83,6 +101,27 @@ class ProductController extends Controller
         $stock = (int)$validated['stock_quantity'];
         $status = $stock <= 0 ? 'Out of Stock' : ($stock <= 5 ? 'Low Stock' : 'In Stock');
 
+        // Process images
+        $processedImage = $this->processBase64Image($validated['image'] ?? null, 'primary');
+        if (!$processedImage) {
+            $processedImage = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80';
+        }
+
+        $processedGallery = [];
+        if (isset($validated['images']) && is_array($validated['images'])) {
+            foreach ($validated['images'] as $img) {
+                $url = is_string($img) ? $img : ($img['url'] ?? '');
+                $color = is_array($img) ? ($img['color'] ?? '') : '';
+                $processedUrl = $this->processBase64Image($url, 'gallery');
+                
+                if (is_array($img)) {
+                    $processedGallery[] = ['url' => $processedUrl, 'color' => $color];
+                } else {
+                    $processedGallery[] = $processedUrl;
+                }
+            }
+        }
+
         $product = Product::create([
             'store_id'       => $storeId,
             'category_id'    => $categoryId,
@@ -93,12 +132,12 @@ class ProductController extends Controller
             'compare_price'  => $validated['compare_price'] ?? null,
             'stock_quantity' => $stock,
             'description'    => $validated['description'] ?? '',
-            'image'          => $validated['image'] ?? 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80',
+            'image'          => $processedImage,
             'status'         => $status,
             'is_active'      => $validated['is_active'] ?? true,
             'color'          => $validated['color'] ?? null,
             'size'           => $validated['size'] ?? null,
-            'images'         => $validated['images'] ?? [],
+            'images'         => $processedGallery,
         ]);
 
         return response()->json($product->load(['category', 'store']), 201);
@@ -141,6 +180,26 @@ class ProductController extends Controller
         if (isset($validated['stock_quantity'])) {
             $stock = (int)$validated['stock_quantity'];
             $validated['status'] = $stock <= 0 ? 'Out of Stock' : ($stock <= 5 ? 'Low Stock' : 'In Stock');
+        }
+
+        if (isset($validated['image'])) {
+            $validated['image'] = $this->processBase64Image($validated['image'], 'primary');
+        }
+
+        if (isset($validated['images']) && is_array($validated['images'])) {
+            $processedGallery = [];
+            foreach ($validated['images'] as $img) {
+                $url = is_string($img) ? $img : ($img['url'] ?? '');
+                $color = is_array($img) ? ($img['color'] ?? '') : '';
+                $processedUrl = $this->processBase64Image($url, 'gallery');
+                
+                if (is_array($img)) {
+                    $processedGallery[] = ['url' => $processedUrl, 'color' => $color];
+                } else {
+                    $processedGallery[] = $processedUrl;
+                }
+            }
+            $validated['images'] = $processedGallery;
         }
 
         $product->update($validated);

@@ -23,14 +23,14 @@ export default function StorefrontHome({ storeData, products, categories = [] })
    */
   useEffect(() => {
     const timer = setInterval(() => {
-      setEflyerSlide((prev) => (prev + 1) % 3);
-      setAranozSlide((prev) => (prev + 1) % 3);
-      setJewelrySlide((prev) => (prev + 1) % 8);
-      setBeautySlide((prev) => (prev + 1) % 6);
+      if (theme === 'theme-eflyer') setEflyerSlide((prev) => (prev + 1) % 3);
+      else if (theme === 'theme-aranoz') setAranozSlide((prev) => (prev + 1) % 3);
+      else if (theme === 'theme-jewelry') setJewelrySlide((prev) => (prev + 1) % 6);
+      else if (theme === 'theme-beauty') setBeautySlide((prev) => (prev + 1) % 6);
     }, 4000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [theme]);
 
   /*
    * Get store base path
@@ -419,6 +419,9 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                   background: 'transparent',
                 }}
               >
+                {/* Preload first hero image */}
+                <link rel="preload" as="image" href={eflyerSlides[0].bg} fetchPriority="high" />
+                
                 {eflyerSlides.map((s, idx) => (
                   <div
                     key={`bg-${idx}`}
