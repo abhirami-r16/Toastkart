@@ -402,12 +402,12 @@ html {
 
 .storefront-discount-badge {
   position: absolute;
-  top: 8px;
-  left: 8px;
+  top: 5px;
+  left: 5px;
   background-color: #ef4444;
   color: white;
-  padding: 4px 8px;
-  font-size: 11px;
+  padding: 2px 5px;
+  font-size: 10px;
   font-weight: 700;
   border-radius: 2px;
   z-index: 10;

@@ -355,11 +355,15 @@
 }
 
 @media (max-width: 576px) {
+  .theme-jewelry .storefront-product-grid,
+  .theme-jewelry .storefront-product-slider {
+    gap: 4px !important;
+  }
   .theme-jewelry .jewelry-hero-title {
     font-size: 32px;
   }
   .theme-jewelry .storefront-product-card {
-    padding: 8px !important;
+    padding: 6px !important;
   }
   .theme-jewelry .storefront-product-details {
     padding: 0 !important;
