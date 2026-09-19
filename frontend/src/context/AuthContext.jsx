@@ -94,6 +94,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (
     name,
     email,
+    phone,
     password,
     role = 'owner',
     storeName = null,
@@ -103,6 +104,7 @@ export const AuthProvider = ({ children }) => {
       const payload = {
         name,
         email,
+        phone,
         password,
         role,
         store_name: storeName,
@@ -168,6 +170,18 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Refresh user data from API
+  const refreshUser = async () => {
+    try {
+      const res = await api.get('/me');
+      setUser(res.data);
+      localStorage.setItem('toastkart_user', JSON.stringify(res.data));
+      return res.data;
+    } catch (err) {
+      console.error('Refresh user failed:', err);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -177,6 +191,7 @@ export const AuthProvider = ({ children }) => {
         register,
         logout,
         updatePassword,
+        refreshUser,
       }}
     >
       {children}

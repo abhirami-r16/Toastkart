@@ -228,6 +228,12 @@ export default function StoreOwnerDashboard() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   
+  useEffect(() => {
+    if (!loading && user && user.role === 'owner' && !user.active_subscription && !user.activeSubscription) {
+      navigate('/plans');
+    }
+  }, [user, loading, navigate]);
+  
   const [active, setActive] = useState(() => {
     try {
       const saved = localStorage.getItem("aureum_owner_stores");

@@ -215,7 +215,11 @@ export default function Login() {
       if (userRole === 'admin') {
         navigate('/admin/dashboard');
       } else {
-        navigate('/owner/dashboard');
+        if (!res.user?.active_subscription) {
+           navigate('/plans');
+        } else {
+           navigate('/owner/dashboard');
+        }
       }
     } else {
       setError(res.message || 'Authentication failed. Please verify your credentials.');

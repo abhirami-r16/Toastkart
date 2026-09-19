@@ -184,6 +184,7 @@ export default function Register() {
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
@@ -215,7 +216,7 @@ export default function Register() {
     setError('');
     setLoading(true);
 
-    const res = await register(name, email, password, 'owner');
+    const res = await register(name, email, phone, password, 'owner');
     if (res.success) {
       setSuccess('Successfully registered! Redirecting to login...');
       setTimeout(() => {
@@ -291,6 +292,20 @@ export default function Register() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@example.com"
+              />
+            </div>
+
+            <div className="mb-3">
+              <label className="goslot-label">PHONE NUMBER</label>
+              <input
+                type="tel"
+                className="goslot-input"
+                required
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="10-digit phone number"
+                pattern="[0-9]{10}"
+                maxLength="10"
               />
             </div>
 

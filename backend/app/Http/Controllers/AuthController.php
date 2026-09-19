@@ -15,6 +15,7 @@ class AuthController extends Controller
         $fields = $request->validate([
             'name' => 'required|string',
             'email' => 'required|string|email|unique:users,email',
+            'phone' => 'nullable|string|max:15',
             'password' => 'required|string|min:6',
             'role' => 'nullable|string',
             'store_name' => 'nullable|string|max:255',
@@ -25,6 +26,7 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $fields['name'],
             'email' => $fields['email'],
+            'phone' => $fields['phone'] ?? null,
             'password' => Hash::make($fields['password']),
             'role' => $role,
         ]);
@@ -96,6 +98,7 @@ class AuthController extends Controller
         }
 
         $token = $user->createToken('shopify_token')->plainTextToken;
+        $user->load(['stores', 'activeSubscription']);
 
         return response()->json([
             'user' => $user,
@@ -119,7 +122,7 @@ class AuthController extends Controller
         if (!$user) {
             return response()->json(['message' => 'Unauthenticated'], 401);
         }
-        $user->load('stores');
+        $user->load(['stores', 'activeSubscription']);
         return response()->json($user);
     }
 }
