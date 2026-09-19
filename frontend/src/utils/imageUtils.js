@@ -29,8 +29,19 @@ export const normalizeProductImage = (rawUrl, productName = "", size = 800) => {
   if (cleanUrl.includes("source.unsplash.com") || cleanUrl.includes("unsplash.com/?")) {
     return getFallbackImageByName(productName || cleanUrl);
   }
-  if (cleanUrl.includes("images.unsplash.com") && !cleanUrl.includes("w=") && !cleanUrl.includes("h=")) {
-    return cleanUrl.includes("?") ? `${cleanUrl}&w=${size}&q=80&fm=webp` : `${cleanUrl}?w=${size}&q=80&fm=webp`;
+  
+  if (cleanUrl.includes("images.unsplash.com")) {
+    try {
+      const urlObj = new URL(cleanUrl);
+      urlObj.searchParams.set('w', size);
+      urlObj.searchParams.set('q', '80');
+      urlObj.searchParams.set('fm', 'webp');
+      urlObj.searchParams.delete('h'); // let it auto-scale height to preserve aspect ratio without cropping blur
+      return urlObj.toString();
+    } catch (e) {
+      return cleanUrl;
+    }
   }
+  
   return cleanUrl;
 };
