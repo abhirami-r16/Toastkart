@@ -21,7 +21,7 @@ export const getFallbackImageByName = (name = "") => {
   return "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500";
 };
 
-export const normalizeProductImage = (rawUrl, productName = "", size = 400) => {
+export const normalizeProductImage = (rawUrl, productName = "", size = 800) => {
   if (!rawUrl || typeof rawUrl !== "string" || rawUrl.trim() === "") {
     return getFallbackImageByName(productName);
   }
