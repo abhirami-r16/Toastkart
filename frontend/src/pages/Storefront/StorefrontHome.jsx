@@ -246,7 +246,8 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                   <img
                     src={normalizeProductImage(
                       product.image || product.image_url,
-                      product.name
+                      product.name,
+                      400
                     )}
                     alt={product.name}
                     className="storefront-product-image"
@@ -621,7 +622,7 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                   {beautyImages.map((img, idx) => (
                     <img
                       key={idx}
-                      src={`${img}?w=${imgWidth}&h=800&fit=crop`}
+                      src={`${img}?w=${imgWidth}&h=800&fit=crop&fm=webp&q=80`}
                       className="beauty-hero-bg-img"
                       alt={`Cosmetics ${idx + 1}`}
                       loading={idx === 0 ? "eager" : "lazy"}

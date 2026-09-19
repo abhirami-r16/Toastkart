@@ -37,7 +37,7 @@ export default function Wishlist() {
                       {Math.round(((Number(product.compare_price) - Number(product.price)) / Number(product.compare_price)) * 100)}% OFF
                     </div>
                   )}
-                  <img src={normalizeProductImage(product.image || product.image_url, product.name)} alt={product.name} className="storefront-product-image" loading="lazy" decoding="async" />
+                  <img src={normalizeProductImage(product.image || product.image_url, product.name, 400)} alt={product.name} className="storefront-product-image" loading="lazy" decoding="async" />
                 </div>
                 <div className="storefront-product-details pb-5">
                   <div className="storefront-product-title">{product.name}</div>

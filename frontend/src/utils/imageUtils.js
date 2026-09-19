@@ -21,7 +21,7 @@ export const getFallbackImageByName = (name = "") => {
   return "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500";
 };
 
-export const normalizeProductImage = (rawUrl, productName = "") => {
+export const normalizeProductImage = (rawUrl, productName = "", size = 400) => {
   if (!rawUrl || typeof rawUrl !== "string" || rawUrl.trim() === "") {
     return getFallbackImageByName(productName);
   }
@@ -30,7 +30,7 @@ export const normalizeProductImage = (rawUrl, productName = "") => {
     return getFallbackImageByName(productName || cleanUrl);
   }
   if (cleanUrl.includes("images.unsplash.com") && !cleanUrl.includes("w=") && !cleanUrl.includes("h=")) {
-    return cleanUrl.includes("?") ? `${cleanUrl}&w=800&q=80` : `${cleanUrl}?w=800&q=80`;
+    return cleanUrl.includes("?") ? `${cleanUrl}&w=${size}&q=80&fm=webp` : `${cleanUrl}?w=${size}&q=80&fm=webp`;
   }
   return cleanUrl;
 };
