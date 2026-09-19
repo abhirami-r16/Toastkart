@@ -18,6 +18,8 @@ export default function StorefrontHome({ storeData, products, categories = [] })
   const [jewelrySlide, setJewelrySlide] = useState(0);
   const [beautySlide, setBeautySlide] = useState(0);
 
+  const theme = resolveStoreTheme(storeData);
+
   /*
    * Hero slider
    */
@@ -65,9 +67,6 @@ export default function StorefrontHome({ storeData, products, categories = [] })
           .includes(searchQuery)
     );
   }, [products, searchQuery]);
-
-  const theme = resolveStoreTheme(storeData);
-
   /*
    * Get unique category names from products
    */
