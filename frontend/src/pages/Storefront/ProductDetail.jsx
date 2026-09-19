@@ -98,6 +98,12 @@ export default function ProductDetail({ storeData, products }) {
       return [{ url: product.image || product.image_url, color: '' }];
     }
     
+    // Ensure the primary image is always included and is first
+    const primaryUrl = product.image || product.image_url;
+    if (primaryUrl && !normalizedImgs.some(img => img.url === primaryUrl)) {
+      normalizedImgs.unshift({ url: primaryUrl, color: '' });
+    }
+    
     return normalizedImgs;
   }, [product.images, product.color, product.image, product.image_url]);
 
