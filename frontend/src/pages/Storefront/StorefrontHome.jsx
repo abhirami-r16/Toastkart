@@ -29,7 +29,7 @@ export default function StorefrontHome({ storeData, products, categories = [] })
       else if (theme === 'theme-aranoz') setAranozSlide((prev) => (prev + 1) % 3);
       else if (theme === 'theme-jewelry') setJewelrySlide((prev) => (prev + 1) % 6);
       else if (theme === 'theme-beauty') setBeautySlide((prev) => (prev + 1) % 6);
-    }, 4000);
+    }, 10000);
 
     return () => clearInterval(timer);
   }, [theme]);
@@ -418,8 +418,8 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                   background: 'transparent',
                 }}
               >
-                {/* Preload first hero image */}
-                <link rel="preload" as="image" href={eflyerSlides[0].bg} fetchPriority="high" />
+                {/* Preload first hero image immediately using a DOM element to guarantee high priority parsing */}
+                <img src={eflyerSlides[0].bg} fetchPriority="high" alt="" aria-hidden="true" style={{ position: 'absolute', width: 0, height: 0, opacity: 0, pointerEvents: 'none' }} />
                 
                 {eflyerSlides.map((s, idx) => (
                   <div
