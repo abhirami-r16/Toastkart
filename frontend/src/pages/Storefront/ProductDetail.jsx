@@ -50,6 +50,10 @@ export default function ProductDetail({ storeData, products }) {
     }
   });
 
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id]);
+
   // Set default size
   React.useEffect(() => {
     if (productSizes.length > 0 && !selectedSize) {
