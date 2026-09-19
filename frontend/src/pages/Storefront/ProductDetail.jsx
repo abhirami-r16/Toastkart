@@ -239,23 +239,34 @@ export default function ProductDetail({ storeData, products }) {
             <h1 className="fs-2 fs-md-1 fw-bold mb-3 lh-sm">{product.name}</h1>
             
             <div className="d-flex align-items-baseline flex-wrap gap-2 mb-4">
-              {product.compare_price && Number(product.compare_price) > Number(product.price) ? (
-                <>
-                  <span className="fs-4 text-muted text-decoration-line-through">
-                    ₹{Number(product.compare_price).toLocaleString('en-IN')}
-                  </span>
+              {(() => {
+                const parsePrice = (val) => {
+                  if (val === null || val === undefined || val === '') return 0;
+                  if (typeof val === 'number') return val;
+                  const parsed = parseFloat(String(val).replace(/[^0-9.]/g, ''));
+                  return isNaN(parsed) ? 0 : parsed;
+                };
+                const pPrice = parsePrice(product.price);
+                const pCompare = parsePrice(product.compare_price);
+                
+                return pCompare > pPrice && pPrice > 0 ? (
+                  <>
+                    <span className="fs-4 text-muted text-decoration-line-through">
+                      ₹{pCompare.toLocaleString('en-IN')}
+                    </span>
+                    <span className="fs-2 fw-bold text-dark">
+                      ₹{pPrice.toLocaleString('en-IN')}
+                    </span>
+                    <span className="fs-5 fw-bold ms-auto ms-sm-0" style={{ color: '#388e3c' }}>
+                      — {Math.round(((pCompare - pPrice) / pCompare) * 100)}% OFF
+                    </span>
+                  </>
+                ) : (
                   <span className="fs-2 fw-bold text-dark">
-                    ₹{Number(product.price).toLocaleString('en-IN')}
+                    ₹{pPrice.toLocaleString('en-IN')}
                   </span>
-                  <span className="fs-5 fw-bold ms-auto ms-sm-0" style={{ color: '#388e3c' }}>
-                    — {Math.round(((Number(product.compare_price) - Number(product.price)) / Number(product.compare_price)) * 100)}% OFF
-                  </span>
-                </>
-              ) : (
-                <span className="fs-2 fw-bold text-dark">
-                  ₹{Number(product.price).toLocaleString('en-IN')}
-                </span>
-              )}
+                );
+              })()}
             </div>
 
             {(() => {
