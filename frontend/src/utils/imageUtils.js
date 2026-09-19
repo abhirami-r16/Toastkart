@@ -29,5 +29,8 @@ export const normalizeProductImage = (rawUrl, productName = "") => {
   if (cleanUrl.includes("source.unsplash.com") || cleanUrl.includes("unsplash.com/?")) {
     return getFallbackImageByName(productName || cleanUrl);
   }
+  if (cleanUrl.includes("images.unsplash.com") && !cleanUrl.includes("w=") && !cleanUrl.includes("h=")) {
+    return cleanUrl.includes("?") ? `${cleanUrl}&w=800&q=80` : `${cleanUrl}?w=800&q=80`;
+  }
   return cleanUrl;
 };

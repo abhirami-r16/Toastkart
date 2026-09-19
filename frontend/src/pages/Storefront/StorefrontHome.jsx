@@ -251,6 +251,7 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                     alt={product.name}
                     className="storefront-product-image"
                     loading="lazy"
+                    decoding="async"
                   />
                 </div>
 
@@ -537,15 +538,16 @@ export default function StorefrontHome({ storeData, products, categories = [] })
            */
           case 'theme-jewelry': {
             const jewelryBgs = [
-              'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=1600&h=800&fit=crop',
-              'https://images.unsplash.com/photo-1605100804763-247f67b2548e?w=1600&h=800&fit=crop',
-              'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=1600&h=800&fit=crop',
-              'https://images.unsplash.com/photo-1599643478514-4a4e03d3ce6b?w=1600&h=800&fit=crop',
-              'https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?w=1600&h=800&fit=crop',
-              'https://images.unsplash.com/photo-1573408301145-b98c4af3066e?w=1600&h=800&fit=crop',
-              'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=1600&h=800&fit=crop',
-              'https://images.unsplash.com/photo-1622398925373-3f91b1e275f5?w=1600&h=800&fit=crop',
+              'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338',
+              'https://images.unsplash.com/photo-1605100804763-247f67b2548e',
+              'https://images.unsplash.com/photo-1611591437281-460bfbe1220a',
+              'https://images.unsplash.com/photo-1599643477877-530eb83abc8e',
+              'https://images.unsplash.com/photo-1601121141461-9d6647bca1ed',
+              'https://images.unsplash.com/photo-1622398925373-3f91b1e275f5',
             ];
+            
+            const isMobileView = typeof window !== 'undefined' && window.innerWidth < 768;
+            const imgWidth = isMobileView ? '800' : '1600';
 
             return (
               <div className="jewelry-hero-section">
@@ -555,7 +557,7 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                     className={`jewelry-hero-bg ${idx === jewelrySlide ? 'active' : ''
                       }`}
                     style={{
-                      backgroundImage: `url(${bg})`,
+                      backgroundImage: `url(${bg}?w=${imgWidth}&h=800&fit=crop)`,
                     }}
                   />
                 ))}
