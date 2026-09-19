@@ -366,7 +366,7 @@
   }
   .theme-jewelry .storefront-product-price-row {
     flex-wrap: nowrap !important;
-    gap: 2px !important;
+    gap: 1px !important;
   }
   .theme-jewelry .add-to-cart-wrapper {
     padding-top: 10px !important;
@@ -378,14 +378,17 @@
     text-overflow: ellipsis !important;
   }
   .theme-jewelry .storefront-product-price {
-    font-size: 13px !important;
+    font-size: 12px !important;
+    letter-spacing: -0.2px !important;
   }
   .theme-jewelry .storefront-product-original-price {
-    font-size: 11px !important;
+    font-size: 10px !important;
+    letter-spacing: -0.2px !important;
   }
   .theme-jewelry .storefront-product-discount {
-    font-size: 10px !important;
+    font-size: 9px !important;
     white-space: nowrap !important;
+    letter-spacing: -0.2px !important;
   }
   .theme-jewelry .theme-cart-btn {
     padding: 6px !important;
