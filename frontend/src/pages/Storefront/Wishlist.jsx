@@ -31,12 +31,13 @@ export default function Wishlist() {
           {wishlistItems.map(product => (
             <div key={product.id} className="storefront-product-card position-relative">
               <Link to={`${basePath}/product/${product.id}`} className="text-decoration-none text-dark d-block">
-                <div className="storefront-product-image-container">
-                  <img 
-                    src={normalizeProductImage(product.image || product.image_url, product.name)} 
-                    alt={product.name} 
-                    className="storefront-product-image"
-                  />
+                <div className="storefront-product-image-container position-relative">
+                  {product.compare_price && Number(product.compare_price) > Number(product.price) && (
+                    <div className="storefront-discount-badge">
+                      {Math.round(((Number(product.compare_price) - Number(product.price)) / Number(product.compare_price)) * 100)}% OFF
+                    </div>
+                  )}
+                  <img src={normalizeProductImage(product.image || product.image_url, product.name)} alt={product.name} className="storefront-product-image" loading="lazy" />
                 </div>
                 <div className="storefront-product-details pb-5">
                   <div className="storefront-product-title">{product.name}</div>
@@ -48,14 +49,11 @@ export default function Wishlist() {
                   <div className="storefront-product-price-row">
                     {product.compare_price && Number(product.compare_price) > Number(product.price) ? (
                       <>
-                        <span className="storefront-product-original-price">
-                          ₹{Number(product.compare_price).toLocaleString('en-IN')}
-                        </span>
                         <span className="storefront-product-price">
                           ₹{Number(product.price).toLocaleString('en-IN')}
                         </span>
-                        <span className="storefront-product-discount">
-                          {Math.round(((Number(product.compare_price) - Number(product.price)) / Number(product.compare_price)) * 100)}% OFF
+                        <span className="storefront-product-original-price">
+                          ₹{Number(product.compare_price).toLocaleString('en-IN')}
                         </span>
                       </>
                     ) : (

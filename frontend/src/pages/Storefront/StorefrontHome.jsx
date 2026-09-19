@@ -230,7 +230,19 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                 to={`${basePath}/product/${product.id}`}
                 className="text-decoration-none text-dark d-block"
               >
-                <div className="storefront-product-image-container">
+                <div className="storefront-product-image-container position-relative">
+                  {product.compare_price &&
+                    parsePrice(product.compare_price) > parsePrice(product.price) && (
+                      <div className="storefront-discount-badge">
+                        {Math.round(
+                          ((parsePrice(product.compare_price) -
+                            parsePrice(product.price)) /
+                            parsePrice(product.compare_price)) *
+                          100
+                        )}
+                        % OFF
+                      </div>
+                  )}
                   <img
                     src={normalizeProductImage(
                       product.image || product.image_url,
@@ -266,26 +278,15 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                       parsePrice(product.compare_price) >
                       parsePrice(product.price) ? (
                       <>
+                        <span className="storefront-product-price">
+                          ₹
+                          {parsePrice(product.price).toLocaleString('en-IN')}
+                        </span>
                         <span className="storefront-product-original-price">
                           ₹
                           {parsePrice(product.compare_price).toLocaleString(
                             'en-IN'
                           )}
-                        </span>
-
-                        <span className="storefront-product-price">
-                          ₹
-                          {parsePrice(product.price).toLocaleString('en-IN')}
-                        </span>
-
-                        <span className="storefront-product-discount">
-                          {Math.round(
-                            ((parsePrice(product.compare_price) -
-                              parsePrice(product.price)) /
-                              parsePrice(product.compare_price)) *
-                            100
-                          )}
-                          % OFF
                         </span>
                       </>
                     ) : (
