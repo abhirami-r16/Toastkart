@@ -284,24 +284,30 @@
   .theme-beauty .beauty-title {
     font-size: 32px;
   }
+  .theme-beauty .storefront-product-card {
+    padding: 8px !important;
+  }
+  .theme-beauty .add-to-cart-wrapper {
+    padding: 10px 0 0 0 !important;
+  }
   .theme-beauty .storefront-product-title {
-    font-size: 13px !important;
+    font-size: 12px !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
   }
   .theme-beauty .storefront-product-price {
-    font-size: 14px !important;
+    font-size: 13px !important;
   }
   .theme-beauty .storefront-product-original-price {
-    font-size: 12px !important;
+    font-size: 11px !important;
   }
   .theme-beauty .storefront-product-discount {
-    font-size: 11px !important;
+    font-size: 10px !important;
     white-space: nowrap !important;
   }
   .theme-beauty .theme-cart-btn {
     padding: 6px !important;
-    font-size: 12px !important;
+    font-size: 11px !important;
   }
 }
