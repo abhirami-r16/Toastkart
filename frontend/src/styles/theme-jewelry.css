@@ -361,6 +361,13 @@
   .theme-jewelry .storefront-product-card {
     padding: 8px !important;
   }
+  .theme-jewelry .storefront-product-details {
+    padding: 0 !important;
+  }
+  .theme-jewelry .storefront-product-price-row {
+    flex-wrap: nowrap !important;
+    gap: 2px !important;
+  }
   .theme-jewelry .add-to-cart-wrapper {
     padding-top: 10px !important;
   }

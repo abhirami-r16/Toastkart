@@ -287,6 +287,13 @@
   .theme-beauty .storefront-product-card {
     padding: 8px !important;
   }
+  .theme-beauty .storefront-product-details {
+    padding: 0 !important;
+  }
+  .theme-beauty .storefront-product-price-row {
+    flex-wrap: nowrap !important;
+    gap: 2px !important;
+  }
   .theme-beauty .add-to-cart-wrapper {
     padding: 10px 0 0 0 !important;
   }
