@@ -84,6 +84,7 @@ class StoreController extends Controller
         ])
             ->where('id', $idOrSlug)
             ->orWhere('slug', $idOrSlug)
+            ->orWhere('subdomain', $idOrSlug)
             ->firstOrFail();
 
         return response()->json($store);

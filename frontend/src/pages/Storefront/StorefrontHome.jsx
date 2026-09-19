@@ -426,7 +426,7 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                     key={`bg-${idx}`}
                     className="position-absolute top-0 start-0 w-100 h-100"
                     style={{
-                      backgroundImage: `url(${s.bg})`,
+                      backgroundImage: (idx === 0 || eflyerSlide > 0) ? `url(${s.bg})` : 'none',
                       backgroundSize: 'cover',
                       backgroundPosition: 'center',
                       opacity: eflyerSlide === idx ? 1 : 0,
@@ -560,7 +560,7 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                     className={`jewelry-hero-bg ${idx === jewelrySlide ? 'active' : ''
                       }`}
                     style={{
-                      backgroundImage: `url(${bg}?w=${imgWidth}&h=800&fit=crop)`,
+                      backgroundImage: (idx === 0 || jewelrySlide > 0) ? `url(${bg}?w=${imgWidth}&h=800&fit=crop)` : 'none',
                     }}
                   />
                 ))}
@@ -624,7 +624,7 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                   {beautyImages.map((img, idx) => (
                     <img
                       key={idx}
-                      src={`${img}?w=${imgWidth}&h=800&fit=crop&fm=webp&q=80`}
+                      src={(idx === 0 || beautySlide > 0) ? `${img}?w=${imgWidth}&h=800&fit=crop&fm=webp&q=80` : ''}
                       className="beauty-hero-bg-img"
                       alt={`Cosmetics ${idx + 1}`}
                       loading={idx === 0 ? "eager" : "lazy"}
