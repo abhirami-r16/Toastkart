@@ -1,9 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import api from '../api/axios';
-import useSEO from '../hooks/useSEO';
-import ToastKartLogo from '../components/ToastKartLogo';
-import { useAuth } from '../context/AuthContext';
+import React from 'react';
 import { 
   Zap, 
   Store, 
@@ -20,152 +15,15 @@ import {
 } from 'lucide-react';
 import '../styles/Plans.css';
 
-export default function PlanSelection() {
-  const [loading, setLoading] = useState(false);
-  const [isRazorpayLoaded, setIsRazorpayLoaded] = useState(false);
-  const [error, setError] = useState('');
-  const { user, refreshUser } = useAuth();
-  const navigate = useNavigate();
-
-  useSEO({ title: 'Select a Plan - ToastKart', description: 'Choose a subscription plan for your store' });
-
-  useEffect(() => {
-    if (!loading) {
-      if (!user) {
-        navigate('/login', { replace: true });
-      } else if (user.active_subscription || user.activeSubscription) {
-        navigate('/owner/dashboard', { replace: true });
-      }
-    }
-  }, [user, loading, navigate]);
-
-  useEffect(() => {
-    if (window.Razorpay) {
-      setIsRazorpayLoaded(true);
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-    script.async = true;
-    
-    script.onload = () => {
-      setIsRazorpayLoaded(true);
-    };
-    
-    script.onerror = () => {
-      setError('Failed to load Razorpay SDK. Please check your network connection.');
-    };
-
-    document.body.appendChild(script);
-    return () => {};
-  }, []);
-
-  const handleSelectPlan = async (planId) => {
-    if (!isRazorpayLoaded) {
-      setError('Razorpay is still loading. Please wait a moment and try again.');
-      return;
-    }
-    
-    setLoading(true);
-    setError('');
-
-    try {
-      const orderRes = await api.post('/subscriptions/order', {
-        plan: planId,
-        billing_cycle: 'monthly', // the design only has monthly pricing
-      });
-
-      if (!orderRes.data.success) {
-        throw new Error(orderRes.data.message || 'Failed to create order');
-      }
-
-      const { order_id, amount, currency } = orderRes.data;
-
-      const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID, 
-        amount: amount,
-        currency: currency,
-        name: 'ToastKart',
-        description: `${planId.charAt(0).toUpperCase() + planId.slice(1)} Plan (monthly)`,
-        image: 'https://www.toastkart.com/favicon.png', 
-        order_id: order_id,
-        handler: async function (response) {
-          try {
-            setLoading(true);
-            const verifyRes = await api.post('/subscriptions/verify', {
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature,
-            });
-
-            if (verifyRes.data.success) {
-              await refreshUser(); 
-              navigate('/owner/dashboard');
-            } else {
-              setError(verifyRes.data.message || 'Payment verification failed.');
-              setLoading(false);
-            }
-          } catch (err) {
-            setError('Error verifying payment. Please contact support if amount was deducted.');
-            setLoading(false);
-          }
-        },
-        prefill: {
-          name: user?.name || '',
-          email: user?.email || '',
-          ...(user?.phone ? { contact: user.phone } : {}),
-        },
-        theme: {
-          color: '#ff5a1f',
-        },
-        modal: {
-          ondismiss: function () {
-            setLoading(false);
-          },
-        },
-      };
-
-      const rzp = new window.Razorpay(options);
-      
-      rzp.on('payment.failed', function (response) {
-        setError(response.error.description || 'Payment failed.');
-        setLoading(false);
-      });
-
-      rzp.open();
-    } catch (err) {
-      setError(err.response?.data?.message || err.message || 'An error occurred while setting up the payment.');
-      setLoading(false);
-    }
-  };
-
+const Plans = () => {
   return (
     <div className="pricing-page-wrapper">
-      {loading && (
-        <div className="position-fixed top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-flex align-items-center justify-content-center" style={{ zIndex: 1000 }}>
-          <div className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }}></div>
-        </div>
-      )}
-
-      {/* Nav with Logout button added back at the top right to maintain functionality */}
-      <div className="d-flex justify-content-end p-3 position-absolute w-100">
-        <button 
-          className="btn rounded-pill px-4 py-2"
-          style={{ backgroundColor: '#ff5a1f', color: 'white', border: 'none', fontWeight: '600', zIndex: 100 }}
-          onClick={async () => {
-            await api.post('/logout');
-            window.location.href = '/login';
-          }}
-        >
-          Logout
-        </button>
-      </div>
-
+      {/* Header Section */}
       <div className="pricing-header position-relative">
         <h1>Choose Your <span className="brand-text">Toastkart</span> Plan</h1>
         <p>Start your online store today. Simple, affordable and powerful.</p>
         
+        {/* Doodle image (simulated with SVG for simplicity, though we could use an image) */}
         <div className="business-online-doodle">
           <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
             <text x="10" y="30" fontFamily="Caveat, cursive, sans-serif" fontSize="24" fill="#111827" transform="rotate(-5)">Your</text>
@@ -189,14 +47,9 @@ export default function PlanSelection() {
             <TrendingUp size={18} /> Grow Your Business
           </div>
         </div>
-
-        {error && (
-          <div className="alert alert-danger text-center mx-auto mb-4" style={{ maxWidth: '600px' }}>
-            {error}
-          </div>
-        )}
       </div>
 
+      {/* Pricing Cards */}
       <div className="pricing-cards-container">
         {/* Basic Plan */}
         <div className="pricing-card">
@@ -227,13 +80,7 @@ export default function PlanSelection() {
             <li><Check size={18} /> Email Support</li>
           </ul>
 
-          <button 
-            className="btn-get-started btn-outline"
-            onClick={() => handleSelectPlan('basic')}
-            disabled={loading || !isRazorpayLoaded}
-          >
-            Get Started
-          </button>
+          <button className="btn-get-started btn-outline">Get Started</button>
         </div>
 
         {/* Growth Plan */}
@@ -268,13 +115,7 @@ export default function PlanSelection() {
             <li><Check size={18} /> Priority Support</li>
           </ul>
 
-          <button 
-            className="btn-get-started btn-solid"
-            onClick={() => handleSelectPlan('growth')}
-            disabled={loading || !isRazorpayLoaded}
-          >
-            Get Started
-          </button>
+          <button className="btn-get-started btn-solid">Get Started</button>
         </div>
 
         {/* Pro Plan */}
@@ -308,13 +149,7 @@ export default function PlanSelection() {
             <li><Check size={18} /> Priority Support</li>
           </ul>
 
-          <button 
-            className="btn-get-started btn-outline"
-            onClick={() => handleSelectPlan('pro')}
-            disabled={loading || !isRazorpayLoaded}
-          >
-            Get Started
-          </button>
+          <button className="btn-get-started btn-outline">Get Started</button>
         </div>
       </div>
 
@@ -375,4 +210,6 @@ export default function PlanSelection() {
       </div>
     </div>
   );
-}
+};
+
+export default Plans;

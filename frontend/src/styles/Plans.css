@@ -1,0 +1,366 @@
+.pricing-page-wrapper {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  background-color: #f8faff;
+  min-height: 100vh;
+  padding-bottom: 2rem;
+  color: #111827;
+}
+
+.pricing-header {
+  text-align: center;
+  padding: 4rem 1rem 2rem;
+}
+
+.pricing-header h1 {
+  font-weight: 800;
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  color: #0f172a;
+}
+
+.pricing-header h1 .brand-text {
+  color: #ff5a1f;
+}
+
+.pricing-header p {
+  font-size: 1.1rem;
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+}
+
+.pricing-badges {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.pricing-badges .badge-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pricing-badges .badge-item svg {
+  color: #ff5a1f;
+}
+
+.pricing-cards-container {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  align-items: stretch;
+}
+
+.pricing-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 360px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  border: 1px solid #f3f4f6;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pricing-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.pricing-card.popular {
+  border: 2px solid #ff5a1f;
+  transform: scale(1.03);
+  box-shadow: 0 20px 25px -5px rgba(255, 90, 31, 0.15);
+}
+
+.pricing-card.popular:hover {
+  transform: scale(1.03) translateY(-5px);
+}
+
+.popular-tag {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ff5a1f;
+  color: white;
+  padding: 0.4rem 1.2rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.card-title-section {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.card-title-section h2 {
+  font-weight: 800;
+  font-size: 2rem;
+  margin-bottom: 0.25rem;
+  color: #111827;
+}
+
+.card-title-section p {
+  color: #6b7280;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+
+.card-price {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #111827;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-price .currency {
+  font-size: 2.5rem;
+  margin-right: 2px;
+}
+
+.card-price .period {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #6b7280;
+  margin-left: 4px;
+}
+
+.setup-fee-box {
+  background: #fdfbf7;
+  border: 1px dashed #e5e7eb;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pricing-card.popular .setup-fee-box {
+  background: #fff8f5;
+  border-color: #ffd8cc;
+}
+
+.setup-fee-icon {
+  color: #ff5a1f;
+  flex-shrink: 0;
+}
+
+.setup-fee-text {
+  font-size: 0.85rem;
+  color: #4b5563;
+  text-align: left;
+}
+
+.setup-fee-text .price {
+  font-weight: 700;
+  color: #111827;
+  display: block;
+  font-size: 1rem;
+}
+
+.setup-fee-text .optional {
+  color: #6b7280;
+}
+
+.features-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem 0;
+  flex-grow: 1;
+}
+
+.features-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  color: #374151;
+  font-weight: 500;
+}
+
+.features-list li svg {
+  color: #ff5a1f;
+  flex-shrink: 0;
+}
+
+.btn-get-started {
+  width: 100%;
+  padding: 0.875rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1rem;
+  text-align: center;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-outline {
+  background: white;
+  border: 2px solid #ff5a1f;
+  color: #ff5a1f;
+}
+
+.btn-outline:hover {
+  background: #fff5f2;
+}
+
+.btn-solid {
+  background: #ff5a1f;
+  border: 2px solid #ff5a1f;
+  color: white;
+}
+
+.btn-solid:hover {
+  background: #e04512;
+  border-color: #e04512;
+}
+
+.info-boxes-container {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 3rem auto 2rem;
+  padding: 0 1rem;
+  flex-wrap: wrap;
+}
+
+.info-box {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  flex: 1;
+  min-width: 300px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.info-icon-wrapper {
+  background: #fff5f2;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ff5a1f;
+  flex-shrink: 0;
+}
+
+.info-icon-wrapper.green {
+  background: #f0fdf4;
+  color: #22c55e;
+}
+
+.info-content h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  color: #111827;
+}
+
+.info-content p {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.pricing-footer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.trust-badges {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.trust-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.trust-badge svg {
+  color: #4b5563;
+}
+
+.footer-logo {
+  text-align: right;
+}
+
+.footer-logo .logo-text {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #111827;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.footer-logo .logo-text span {
+  color: #ff5a1f;
+}
+
+.footer-logo p {
+  font-size: 0.7rem;
+  color: #9ca3af;
+  margin: 0;
+  letter-spacing: 0.05em;
+}
+
+.business-online-doodle {
+  position: absolute;
+  right: 15%;
+  top: 4rem;
+  width: 140px;
+  transform: rotate(5deg);
+}
+
+@media (max-width: 992px) {
+  .pricing-cards-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .pricing-card {
+    max-width: 100%;
+  }
+
+  .business-online-doodle {
+    display: none;
+  }
+}

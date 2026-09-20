@@ -8,10 +8,12 @@ import Inventory from "./pages/Inventory";
 import Orders from "./pages/Orders";
 import Customers from "./pages/Customers";
 import Settings from "./pages/Settings";
+import Plans from "./pages/Plans";
 
 function App() {
   return (
     <Routes>
+      <Route path="/plans" element={<Plans />} />
       <Route path="/" element={<StoreLayout />}>
         <Route index element={<Dashboard />} />
         <Route path="stores" element={<Stores />} />
