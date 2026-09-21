@@ -28,20 +28,42 @@ export default function StorefrontLayout({ storeData, categories = [], products 
   const useModernHeader = ['theme-hexashop', 'theme-jewelry', 'theme-beauty', 'theme-home', 'theme-footwear'].includes(theme);
   const isEflyer = theme === 'theme-eflyer';
 
+  const [themeLoaded, setThemeLoaded] = useState(false);
+
   // Dynamically load only the required theme CSS to prevent downloading massive unused CSS
+  // Wait for the import to finish to prevent Flash of Unstyled Content (FOUC)
   React.useEffect(() => {
-    switch (theme) {
-      case 'theme-home': import('../styles/theme-home.css'); break;
-      case 'theme-beauty': import('../styles/theme-beauty.css'); break;
-      case 'theme-electronics': import('../styles/theme-electronics.css'); break;
-      case 'theme-footwear': import('../styles/theme-footwear.css'); break;
-      case 'theme-gift': import('../styles/theme-gift.css'); break;
-      case 'theme-grocery': import('../styles/theme-grocery.css'); break;
-      case 'theme-jewelry': import('../styles/theme-jewelry.css'); break;
-      case 'theme-eflyer': import('../styles/theme-eflyer.css'); break;
-      default: break;
-    }
+    let mounted = true;
+    const loadTheme = async () => {
+      try {
+        switch (theme) {
+          case 'theme-home': await import('../styles/theme-home.css'); break;
+          case 'theme-beauty': await import('../styles/theme-beauty.css'); break;
+          case 'theme-electronics': await import('../styles/theme-electronics.css'); break;
+          case 'theme-footwear': await import('../styles/theme-footwear.css'); break;
+          case 'theme-gift': await import('../styles/theme-gift.css'); break;
+          case 'theme-grocery': await import('../styles/theme-grocery.css'); break;
+          case 'theme-jewelry': await import('../styles/theme-jewelry.css'); break;
+          case 'theme-eflyer': await import('../styles/theme-eflyer.css'); break;
+          default: break;
+        }
+      } catch (e) {
+        console.error('Failed to load theme CSS', e);
+      } finally {
+        if (mounted) setThemeLoaded(true);
+      }
+    };
+    loadTheme();
+    return () => { mounted = false; };
   }, [theme]);
+
+  if (!themeLoaded) {
+    return (
+      <div className="d-flex justify-content-center align-items-center vh-100">
+        <div className="spinner-border text-primary"></div>
+      </div>
+    );
+  }
 
   // Compute the combined list of categories (same logic as StorefrontHome)
   const productCategories = [];

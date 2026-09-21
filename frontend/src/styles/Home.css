@@ -1,0 +1,176 @@
+.goslot-theme {
+  --primary: #FF5722;
+  --primary-dark: #E64A19;
+  --secondary: #FF8A65;
+  --accent: #EC4899;
+  --bg: #F8FAFC;
+  --dark: #0F172A;
+  --white: #FFFFFF;
+  --ink: #1E293B;
+  --muted: #64748B;
+  --line: rgba(15, 23, 42, 0.08);
+  
+  background-color: var(--bg);
+  background-image: 
+    radial-gradient(at 40% 20%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+    radial-gradient(at 80% 0%, rgba(168, 85, 247, 0.12) 0px, transparent 50%),
+    radial-gradient(at 0% 50%, rgba(236, 72, 153, 0.12) 0px, transparent 50%);
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+.goslot-theme h1, .goslot-theme h3, .goslot-theme h4 {
+  color: var(--dark) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.03em !important;
+}
+.goslot-theme h2 {
+  background: linear-gradient(135deg, #FF5722 0%, #FF9800 100%);
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  display: block;
+  font-weight: 800 !important;
+  letter-spacing: -0.03em !important;
+}
+.goslot-theme p, .goslot-theme span, .goslot-theme div, .goslot-theme li, .goslot-theme a {
+  color: var(--ink) !important;
+}
+.goslot-theme p {
+  color: var(--muted) !important;
+  line-height: 1.8 !important;
+}
+.goslot-theme .text-dark, .goslot-theme .text-muted {
+  color: var(--dark) !important;
+}
+.goslot-theme .text-success { color: var(--primary) !important; }
+
+.goslot-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 14px 28px; font-weight: 700; border-radius: 100px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+  border: none; cursor: pointer; letter-spacing: 0.02em;
+}
+.goslot-btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--secondary)) !important;
+  color: var(--white) !important;
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3) !important;
+}
+.goslot-btn-primary:hover {
+  transform: translateY(-4px) scale(1.02) !important;
+  box-shadow: 0 14px 32px rgba(168, 85, 247, 0.4) !important;
+  color: white !important;
+}
+.goslot-btn-outline {
+  background: rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(10px) !important;
+  border: 2px solid rgba(99, 102, 241, 0.2) !important;
+  color: var(--primary-dark) !important;
+}
+.goslot-btn-outline:hover {
+  border-color: var(--primary) !important;
+  background: rgba(99, 102, 241, 0.05) !important;
+  transform: translateY(-4px) scale(1.02) !important;
+  box-shadow: 0 10px 24px rgba(99, 102, 241, 0.15) !important;
+}
+
+.goslot-eyebrow {
+  display: inline-block; font-size: 0.85rem; font-weight: 800;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--primary-dark) !important;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(168, 85, 247, 0.15)) !important;
+  border: 1px solid rgba(99, 102, 241, 0.2) !important;
+  padding: 8px 18px; border-radius: 100px; margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.08) !important;
+}
+
+.goslot-hero {
+  padding-top: 160px; padding-bottom: 120px;
+  position: relative; overflow: hidden; width: 100%;
+}
+.goslot-theme .force-white-text {
+  color: #ffffff !important;
+  text-shadow: 0 4px 16px rgba(0,0,0,0.6) !important;
+}
+
+.template-iframe-container {
+  height: 450px; position: relative; border-radius: 24px; overflow: hidden;
+  background-color: white; 
+  box-shadow: 0 24px 50px rgba(15, 23, 42, 0.15);
+  border: 1px solid rgba(255,255,255,0.8);
+}
+.template-iframe {
+  width: 200%; height: 900px; transform: scale(0.5);
+  transform-origin: top left; border: none; pointer-events: none;
+}
+
+.hero-blob {
+  position: absolute; border-radius: 50%; filter: blur(100px);
+  opacity: 0.8; z-index: 0; animation: blobFloat 16s ease-in-out infinite alternate;
+}
+.blob-1 {
+  width: 500px; height: 500px; background: var(--secondary);
+  top: -100px; right: -100px;
+}
+.blob-2 {
+  width: 450px; height: 450px; background: var(--primary);
+  bottom: -150px; left: -100px; animation-delay: -8s;
+}
+@keyframes blobFloat {
+  0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+  50% { transform: translate(50px, -50px) scale(1.1) rotate(10deg); }
+  100% { transform: translate(-30px, 30px) scale(0.95) rotate(-5deg); }
+}
+
+.goslot-card {
+  background: rgba(255, 255, 255, 0.65) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.9) !important;
+  border-radius: 28px !important;
+  box-shadow: 0 10px 40px rgba(15, 23, 42, 0.04) !important;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+.goslot-card:hover {
+  transform: translateY(-8px) scale(1.02) !important;
+  box-shadow: 0 24px 48px rgba(99, 102, 241, 0.12) !important;
+  border-color: rgba(99, 102, 241, 0.3) !important;
+}
+
+.goslot-header {
+  background: rgba(255, 255, 255, 0.75) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.6) !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03) !important;
+}
+.goslot-nav-link {
+  color: var(--dark); font-weight: 700; text-decoration: none;
+  position: relative; padding: 4px 0; transition: color 0.3s ease;
+  font-size: 1.05rem;
+}
+.goslot-nav-link:hover { color: var(--primary) !important; }
+
+.goslot-theme section.bg-white, .goslot-theme footer.bg-white, .goslot-theme section[style*="background-color: #f8f9fc"] {
+  background: transparent !important;
+}
+
+.icon-float { transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.goslot-card:hover .icon-float { transform: translateY(-8px) scale(1.15) rotate(5deg); }
+
+.gradient-text {
+  background: linear-gradient(135deg, #FF5722 0%, #FF9800 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+.glow-text {
+  text-shadow: 0 0 30px rgba(255, 87, 34, 0.6) !important;
+}
+
+@media (max-width: 767px) {
+  .goslot-hero { padding-top: 120px; padding-bottom: 80px; }
+  .template-iframe-container { height: 450px; border-radius: 16px; }
+  .template-iframe { width: 400%; height: 1800px; transform: scale(0.25); }
+}

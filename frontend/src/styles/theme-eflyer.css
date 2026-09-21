@@ -11,12 +11,24 @@
 
 /* Header Wrapper - ensures the orange background covers the whole header area */
 .theme-eflyer .eflyer-banner-wrapper {
-  background-image: url('/banner-bg.webp');
+  background-image: url('/banner-bg-desktop.webp');
   background-color: #eab41f;
   background-size: cover;
   background-position: center;
   position: relative;
   z-index: 10;
+}
+
+@media (max-width: 1200px) {
+  .theme-eflyer .eflyer-banner-wrapper {
+    background-image: url('/banner-bg-tablet.webp');
+  }
+}
+
+@media (max-width: 800px) {
+  .theme-eflyer .eflyer-banner-wrapper {
+    background-image: url('/banner-bg-mobile.webp');
+  }
 }
 
 .theme-eflyer.is-home .eflyer-banner-wrapper {
@@ -184,8 +196,7 @@
 
 /* Hero Section */
 .theme-eflyer .eflyer-hero {
-  /* Using a generic gradient or image similar to the screenshot if we don't have the exact asset */
-  background: #eab41f url('/banner-bg.webp') no-repeat center center;
+  background: #eab41f;
   background-size: cover;
   position: relative;
   /* Add top padding to account for the absolute positioned header */
