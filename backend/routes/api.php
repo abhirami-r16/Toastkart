@@ -79,3 +79,11 @@ Route::put('/orders/{id}/status', [OrderController::class, 'updateStatus']);
 // Subscriptions
 Route::post('/subscriptions/order', [\App\Http\Controllers\SubscriptionController::class, 'createOrder'])->middleware('auth:sanctum');
 Route::post('/subscriptions/verify', [\App\Http\Controllers\SubscriptionController::class, 'verifyPayment'])->middleware('auth:sanctum');
+
+// AutoPay
+Route::post('/subscriptions/autopay/create', [\App\Http\Controllers\SubscriptionController::class, 'createAutoPay'])->middleware('auth:sanctum');
+Route::post('/subscriptions/autopay/verify', [\App\Http\Controllers\SubscriptionController::class, 'verifyAutoPay'])->middleware('auth:sanctum');
+Route::post('/subscriptions/autopay/cancel', [\App\Http\Controllers\SubscriptionController::class, 'cancelAutoPay'])->middleware('auth:sanctum');
+
+// Webhook
+Route::post('/webhooks/razorpay', [\App\Http\Controllers\RazorpayWebhookController::class, 'handleWebhook']);

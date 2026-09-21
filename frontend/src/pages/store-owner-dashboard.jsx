@@ -81,6 +81,7 @@ const ownerLinks = [
   { key: "orders", label: "Orders", icon: ShoppingCart },
   { key: "customers", label: "Customers", icon: Users },
   { key: "discounts", label: "Discounts", icon: Percent },
+  { key: "billing", label: "Billing", icon: CreditCard },
 ];
 
 const salesTrendDaily = [
@@ -3159,6 +3160,191 @@ export default function StoreOwnerDashboard() {
                           })}
                         </tbody>
                       </table>
+                    </div>
+                  </div>
+                );
+              })()}
+            </div>
+          )}
+          {active === "billing" && (
+            <div className="d-flex flex-column gap-3">
+              <div className="d-flex align-items-center justify-content-between">
+                <div>
+                  <h2 className="fs-4 font-bold mb-0" style={{ color: "#202223" }}>Billing & Subscription</h2>
+                  <p className="fs-8 mb-0" style={{ color: "#6d7175" }}>Manage your plan, payments, and AutoPay.</p>
+                </div>
+              </div>
+              
+              {(() => {
+                const sub = user?.active_subscription || user?.activeSubscription;
+                if (!sub) {
+                  return (
+                    <div className="alert alert-warning">
+                      No active subscription found. Please select a plan.
+                      <div className="mt-2">
+                        <button onClick={() => navigate('/plans')} className="btn btn-warning btn-sm">View Plans</button>
+                      </div>
+                    </div>
+                  );
+                }
+
+                const isFailed = sub.billing_status === 'failed' || sub.status === 'failed' || sub.status === 'expired';
+                
+                return (
+                  <div className="row g-3 mt-2">
+                    <div className="col-12 col-md-6">
+                      <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }} className="p-4 h-100">
+                        <h3 className="fs-6 font-bold mb-3 d-flex align-items-center gap-2">
+                          <CreditCard size={18} /> Current Plan
+                        </h3>
+                        <div className="mb-2">
+                          <span className="text-muted fs-8">Plan:</span> <strong className="text-capitalize fs-7">{sub.plan} ({sub.billing_cycle})</strong>
+                        </div>
+                        <div className="mb-2">
+                          <span className="text-muted fs-8">Amount:</span> <strong className="fs-7">₹{sub.amount / 100}</strong>
+                        </div>
+                        <div className="mb-2">
+                          <span className="text-muted fs-8">Status:</span> 
+                          <span className={`badge ms-2 ${isFailed ? 'bg-danger' : 'bg-success'}`}>
+                            {sub.billing_status || sub.status}
+                          </span>
+                        </div>
+                        <div className="mb-2">
+                          <span className="text-muted fs-8">Expiry Date:</span> <span className="fs-7">{new Date(sub.expiry_date).toLocaleDateString()}</span>
+                        </div>
+                        {sub.next_billing_date && (
+                          <div className="mb-2">
+                            <span className="text-muted fs-8">Next Billing:</span> <span className="fs-7 fw-bold">{new Date(sub.next_billing_date).toLocaleDateString()}</span>
+                          </div>
+                        )}
+
+                        {isFailed && (
+                          <div className="mt-4 pt-3 border-top">
+                            <p className="text-danger fs-8 fw-semibold mb-2">Automatic payment failed or subscription expired. Please pay manually to restore access.</p>
+                            <button onClick={() => navigate('/plans')} className="btn btn-primary btn-sm px-4">Pay Manually</button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="col-12 col-md-6">
+                      <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }} className="p-4 h-100">
+                        <h3 className="fs-6 font-bold mb-3 d-flex align-items-center gap-2">
+                          <RefreshCw size={18} /> AutoPay Configuration
+                        </h3>
+                        
+                        <div className="mb-3">
+                          <div className="d-flex align-items-center justify-content-between p-3 rounded bg-light border">
+                            <div>
+                              <strong className="d-block fs-7">AutoPay Status</strong>
+                              <span className="text-muted fs-8">
+                                {sub.autopay_enabled 
+                                  ? "Your subscription will renew automatically." 
+                                  : "You are paying manually each cycle."}
+                              </span>
+                            </div>
+                            <div>
+                              {sub.autopay_enabled ? (
+                                <span className="badge bg-success px-3 py-2 fs-7">ON</span>
+                              ) : (
+                                <span className="badge bg-secondary px-3 py-2 fs-7">OFF</span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="mt-4">
+                          {sub.autopay_enabled ? (
+                            <button 
+                              onClick={async (e) => {
+                                const btn = e.currentTarget;
+                                btn.disabled = true;
+                                btn.textContent = 'Processing...';
+                                if (window.confirm('Are you sure you want to cancel AutoPay? Your current access will remain until expiry.')) {
+                                  try {
+                                    await api.post('/subscriptions/autopay/cancel');
+                                    alert('AutoPay has been cancelled successfully.');
+                                    window.location.reload();
+                                  } catch(e) {
+                                    alert(e.response?.data?.message || 'Failed to cancel AutoPay');
+                                    btn.disabled = false;
+                                    btn.textContent = 'Cancel AutoPay';
+                                  }
+                                } else {
+                                  btn.disabled = false;
+                                  btn.textContent = 'Cancel AutoPay';
+                                }
+                              }}
+                              className="btn btn-outline-danger btn-sm w-100"
+                            >
+                              Cancel AutoPay
+                            </button>
+                          ) : (
+                            <button 
+                              onClick={async (e) => {
+                                const btn = e.currentTarget;
+                                btn.disabled = true;
+                                btn.textContent = 'Setting up AutoPay...';
+                                try {
+                                  // First get the subscription authorization ID from backend
+                                  const res = await api.post('/subscriptions/autopay/create');
+                                  if (res.data.success) {
+                                    // Open Razorpay Checkout for recurring payment mandate
+                                    const options = {
+                                      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+                                      subscription_id: res.data.subscription_id,
+                                      name: 'ToastKart',
+                                      description: 'Enable AutoPay',
+                                      handler: async function (response) {
+                                        try {
+                                          const verifyRes = await api.post('/subscriptions/autopay/verify', {
+                                            razorpay_payment_id: response.razorpay_payment_id,
+                                            razorpay_subscription_id: response.razorpay_subscription_id,
+                                            razorpay_signature: response.razorpay_signature
+                                          });
+                                          if (verifyRes.data.success) {
+                                            alert('AutoPay enabled successfully!');
+                                            window.location.reload();
+                                          } else {
+                                            alert(verifyRes.data.message || 'AutoPay verification failed.');
+                                            btn.disabled = false;
+                                            btn.textContent = 'Enable AutoPay';
+                                          }
+                                        } catch (err) {
+                                          alert('Failed to verify AutoPay. Please contact support.');
+                                          btn.disabled = false;
+                                          btn.textContent = 'Enable AutoPay';
+                                        }
+                                      },
+                                      modal: {
+                                        ondismiss: function() {
+                                          btn.disabled = false;
+                                          btn.textContent = 'Enable AutoPay';
+                                        }
+                                      }
+                                    };
+                                    
+                                    const rzp = new window.Razorpay(options);
+                                    rzp.on('payment.failed', function (response) {
+                                      alert(response.error.description || 'Payment failed.');
+                                      btn.disabled = false;
+                                      btn.textContent = 'Enable AutoPay';
+                                    });
+                                    rzp.open();
+                                  }
+                                } catch(err) {
+                                  alert(err.response?.data?.message || 'Failed to setup AutoPay');
+                                  btn.disabled = false;
+                                  btn.textContent = 'Enable AutoPay';
+                                }
+                              }}
+                              className="btn btn-primary btn-sm w-100"
+                            >
+                              Enable AutoPay
+                            </button>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 );
