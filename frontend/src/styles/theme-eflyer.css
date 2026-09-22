@@ -10,7 +10,7 @@
 }
 
 /* Header Wrapper - ensures the orange background covers the whole header area */
-.theme-eflyer .eflyer-banner-wrapper {
+.theme-eflyer:not(.is-home) .eflyer-banner-wrapper {
   background-image: url('/banner-bg-desktop.webp');
   background-color: #eab41f;
   background-size: cover;
@@ -20,19 +20,15 @@
 }
 
 @media (max-width: 1200px) {
-  .theme-eflyer .eflyer-banner-wrapper {
+  .theme-eflyer:not(.is-home) .eflyer-banner-wrapper {
     background-image: url('/banner-bg-tablet.webp');
   }
 }
 
 @media (max-width: 800px) {
-  .theme-eflyer .eflyer-banner-wrapper {
+  .theme-eflyer:not(.is-home) .eflyer-banner-wrapper {
     background-image: url('/banner-bg-mobile.webp');
   }
-}
-
-.theme-eflyer.is-home .eflyer-banner-wrapper {
-  background: transparent;
 }
 
 /* Let's actually put the background on the eflyer-hero and pull it up under the header */

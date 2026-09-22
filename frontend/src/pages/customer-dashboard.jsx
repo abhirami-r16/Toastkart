@@ -17,6 +17,7 @@ import {
   TrendingUp, BarChart3, Store, ExternalLink
 } from 'lucide-react';
 import AureumLogo from '../assets/aureum-logo.svg';
+import '../styles/dashboard-premium.css';
 
 const GOLD = "#007f5f";
 const GOLD_LIGHT = "#00a87a";

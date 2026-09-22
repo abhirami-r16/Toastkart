@@ -1,0 +1,1619 @@
+﻿/* Merchant Dashboard Premium Aesthetics */
+.merchant-header-banner {
+  background: linear-gradient(135deg, #0b0f19 0%, #0f172a 50%, #1e293b 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.25);
+}
+
+.merchant-tab-pill {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  font-weight: 700;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 10px;
+}
+
+.merchant-tab-pill:hover {
+  border-color: #cbd5e1;
+  color: #0f172a;
+  transform: translateY(-1px);
+}
+
+.merchant-tab-pill.active {
+  background: linear-gradient(135deg, #FF5722 0%, #005a43 100%);
+  color: #ffffff !important;
+  border-color: #BF360C;
+  box-shadow: 0 4px 14px rgba(0, 128, 96, 0.35);
+}
+
+.merchant-glass-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+  transition: all 0.25s ease;
+}
+
+.merchant-glass-card:hover {
+  box-shadow: 0 8px 25px rgba(15, 23, 42, 0.08);
+  border-color: #cbd5e1;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Utility Helpers */
+.fw-black {
+  font-weight: 900 !important;
+}
+
+.hover-underline:hover {
+  text-decoration: underline !important;
+}
+
+.hover-bg-dark:hover {
+  background-color: #0f172a !important;
+  color: #ffffff !important;
+}
+
+.transition-all {
+  transition: all 0.25s ease !important;
+}
+
+/* Buttons */
+.btn-shopify {
+  background: linear-gradient(180deg, #FF5722 0%, #007054 100%);
+  color: #ffffff !important;
+  font-weight: 600;
+  font-size: 0.88rem;
+  border: 1px solid #005e46;
+  padding: 0.55rem 1.25rem;
+  border-radius: 10px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 5px rgba(0, 128, 96, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  cursor: pointer;
+}
+
+.btn-shopify:hover, .btn-shopify:focus {
+  background: linear-gradient(180deg, #E64A19 0%, #005a43 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0, 128, 96, 0.35);
+}
+
+.btn-shopify:active {
+  transform: translateY(0);
+}
+
+.btn-shopify-outline {
+  background: #ffffff;
+  color: #0f172a !important;
+  border: 1px solid #cbd5e1;
+  font-weight: 600;
+  font-size: 0.86rem;
+  padding: 0.5rem 1.15rem;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.btn-shopify-outline:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  color: var(--shopify-primary) !important;
+}
+
+.btn-shopify-dark {
+  background-color: var(--shopify-dark);
+  color: #ffffff !important;
+  font-weight: 600;
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+  padding: 0.55rem 1.2rem;
+  transition: all 0.2s ease;
+}
+
+.btn-shopify-dark:hover {
+  background-color: #1e293b;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.3);
+}
+
+/* Polaris Period Selector */
+.polaris-period-group {
+  background: #e2e8f0;
+  padding: 3px;
+  border-radius: 10px;
+  display: inline-flex;
+  gap: 2px;
+}
+
+.polaris-period-btn {
+  background: transparent;
+  border: none;
+  padding: 0.35rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #475569;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.polaris-period-btn:hover {
+  color: #0f172a;
+}
+
+.polaris-period-btn.active {
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Polaris Badges */
+.badge-shopify-success {
+  background: #dcfce7;
+  color: #166534;
+  font-weight: 700;
+  padding: 0.35em 0.8em;
+  border-radius: 30px;
+  font-size: 0.75rem;
+  border: 1px solid #bbf7d0;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.badge-shopify-warning {
+  background: #fef9c3;
+  color: #854d0e;
+  font-weight: 700;
+  padding: 0.35em 0.8em;
+  border-radius: 30px;
+  font-size: 0.75rem;
+  border: 1px solid #fef08a;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.badge-shopify-danger {
+  background: #fee2e2;
+  color: #991b1b;
+  font-weight: 700;
+  padding: 0.35em 0.8em;
+  border-radius: 30px;
+  font-size: 0.75rem;
+  border: 1px solid #fecaca;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.badge-shopify-info {
+  background: #e0f2fe;
+  color: #075985;
+  font-weight: 700;
+  padding: 0.35em 0.8em;
+  border-radius: 30px;
+  font-size: 0.75rem;
+  border: 1px solid #bae6fd;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.badge-dot.bg-success { background-color: #166534 !important; }
+.badge-dot.bg-warning { background-color: #854d0e !important; }
+.badge-dot.bg-danger { background-color: #991b1b !important; }
+.badge-dot.bg-info { background-color: #075985 !important; }
+
+/* Dashboard background */
+.dashboard-page {
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  background-image: linear-gradient(180deg, rgba(3, 122, 89, 0.10), rgba(248, 250, 252, 0.9)), url('/hero-banner-v2.webp');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.dashboard-page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.92));
+  pointer-events: none;
+}
+
+.dashboard-page > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Card Styling */
+.shopify-card {
+  background: #ffffff;
+  border: 1px solid var(--shopify-border);
+  border-radius: 18px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.shopify-card:hover {
+  box-shadow: var(--shopify-shadow);
+  border-color: #cbd5e1;
+}
+
+.store-highlight-pill {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.18);
+  backdrop-filter: blur(20px);
+}
+
+.store-hero-preview {
+  position: relative;
+  min-height: 280px;
+}
+
+.store-hero-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.75rem;
+  background: linear-gradient(180deg, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.78) 100%);
+}
+
+.store-action-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  transition: all 0.25s ease;
+}
+
+.store-action-card:hover {
+  transform: translateY(-1px);
+  background: #ffffff;
+  border-color: #cbd5e1;
+}
+
+.bg-gradient-info {
+  background: linear-gradient(135deg, #0f172a 0%, #111827 100%);
+}
+
+/* Metric Stat Cards */
+.shopify-stat-card {
+  background: #ffffff;
+  border: 1px solid var(--shopify-border);
+  border-radius: 14px;
+  padding: 1.25rem 1.35rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 0.25s ease;
+}
+
+.shopify-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shopify-shadow);
+  border-color: #cbd5e1;
+}
+
+.shopify-stat-card .stat-icon-wrapper {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.trend-pill-up {
+  background: #dcfce7;
+  color: #15803d;
+  font-weight: 700;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* Polaris Action Center Cards */
+.polaris-action-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1rem 1.15rem;
+  transition: all 0.2s ease;
+}
+
+.polaris-action-card:hover {
+  border-color: var(--shopify-primary);
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(0, 128, 96, 0.08);
+}
+
+/* Store Manager Dashboard Theme */
+.store-manager-layout {
+  min-height: 100vh;
+  background: var(--shopify-bg);
+  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--shopify-text);
+  transition: background 0.25s ease;
+}
+
+/* Sidebar Styles - Premium Black & Gold Theme */
+.store-sidebar {
+  width: 220px;
+  min-width: 220px;
+  background: #050505;
+  color: #FFAB91;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  transition: all 0.3s ease;
+  z-index: 1040;
+  border-right: 1px solid rgba(212, 175, 55, 0.18);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.4);
+}
+
+.store-sidebar-brand {
+  padding: 1.25rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+  background: #000000;
+}
+
+.brand-icon-box {
+  width: 34px;
+  height: 34px;
+  background: #0f0e0c;
+  border: 1px solid #FF5722;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FF5722;
+  font-weight: 800;
+  font-size: 1rem;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+}
+
+.brand-title {
+  color: #FF8A65;
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* Sidebar Navigation Items */
+.sidebar-nav-list {
+  padding: 1rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex-grow: 1;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 0.9rem;
+  color: #FF5722;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+  border-left: 3px solid transparent;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+}
+
+.sidebar-link:hover {
+  color: #FF8A65;
+  background-color: rgba(212, 175, 55, 0.12);
+}
+
+.sidebar-link:hover svg {
+  color: #FF8A65 !important;
+  stroke: #FF8A65 !important;
+}
+
+.sidebar-link.active {
+  background-color: rgba(212, 175, 55, 0.18);
+  color: #FF8A65;
+  font-weight: 700;
+  border-left: 3px solid #FF8A65;
+}
+
+.sidebar-link.active .sidebar-icon,
+.sidebar-link.active svg {
+  color: #FF8A65 !important;
+  stroke: #FF8A65 !important;
+}
+
+.sidebar-link-content {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.sidebar-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FF5722;
+}
+
+.sidebar-submenu {
+  padding-left: 2.5rem;
+  padding-top: 0.35rem;
+  padding-bottom: 0.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.submenu-link {
+  color: #FFAB91;
+  text-decoration: none;
+  font-size: 0.84rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+  font-weight: 500;
+}
+
+.submenu-link:hover, .submenu-link.active {
+  color: #FF8A65;
+  background-color: rgba(212, 175, 55, 0.1);
+}
+
+.sidebar-logout {
+  color: #ef4444 !important;
+  margin-top: auto;
+}
+
+.sidebar-logout:hover {
+  background-color: rgba(239, 68, 68, 0.15) !important;
+  color: #f87171 !important;
+}
+
+/* Top Navbar Styles */
+.store-topbar {
+  height: 64px;
+  background: var(--surface-1);
+  border-bottom: 1px solid var(--shopify-border);
+  backdrop-filter: blur(16px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.75rem;
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+  box-shadow: 0 8px 24px -16px rgba(15, 23, 42, 0.16);
+}
+
+.topbar-search-box {
+  position: relative;
+  width: 320px;
+}
+
+.topbar-search-box input {
+  width: 100%;
+  background-color: var(--surface-3);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 0.45rem 1rem 0.45rem 2.4rem;
+  font-size: 0.88rem;
+  color: var(--shopify-text);
+  transition: all 0.2s ease;
+}
+
+.topbar-search-box input:focus {
+  outline: none;
+  background-color: var(--surface-2);
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.topbar-search-icon {
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.topbar-right-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.topbar-icon-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid var(--shopify-border);
+  background: var(--surface-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--shopify-muted);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.topbar-icon-btn:hover {
+  background: var(--surface-3);
+  color: var(--shopify-text);
+  border-color: var(--shopify-border-hover);
+  transform: translateY(-1px);
+}
+
+.notification-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 16px;
+  height: 16px;
+  background-color: #ef4444;
+  color: #ffffff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #ffffff;
+}
+
+.user-profile-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.25rem 0.6rem 0.25rem 0.25rem;
+  border-radius: 24px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.user-profile-pill:hover {
+  background-color: #f1f5f9;
+}
+
+.user-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+/* Store Manager Dashboard Shell */
+.dashboard-shell {
+  padding-bottom: 1.5rem;
+}
+
+.dashboard-hero {
+  background: linear-gradient(135deg, #0f172a 0%, #2563eb 55%, #38bdf8 100%);
+  color: #ffffff;
+  border-radius: 20px;
+  padding: 1.35rem 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  box-shadow: 0 14px 35px rgba(15, 23, 42, 0.16);
+}
+
+.hero-banner-card {
+  background: linear-gradient(135deg, rgba(0, 128, 96, 0.98) 0%, rgba(2, 132, 199, 0.95) 100%);
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 20px;
+  padding: 1.3rem 1.4rem;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  box-shadow: var(--shopify-shadow-lg);
+  min-height: 220px;
+}
+
+.hero-banner-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 0.2rem 0 0.4rem;
+}
+
+.hero-banner-copy {
+  margin: 0;
+  max-width: 520px;
+  color: rgba(255,255,255,0.88);
+}
+
+.hero-actions-row {
+  display: flex;
+  gap: 0.7rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.hero-badge-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.hero-badge-stack span {
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 999px;
+  padding: 0.45rem 0.7rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.premium-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.premium-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.premium-form-group label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--shopify-muted);
+}
+
+.premium-input,
+.premium-select {
+  border: 1px solid var(--shopify-border);
+  border-radius: 12px;
+  background: var(--surface-3);
+  padding: 0.7rem 0.8rem;
+  color: var(--shopify-text);
+  transition: all 0.2s ease;
+}
+
+.premium-input:focus,
+.premium-select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.product-card-grid {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.product-card {
+  display: flex;
+  gap: 0.8rem;
+  background: var(--surface-3);
+  border: 1px solid var(--shopify-border);
+  border-radius: 14px;
+  padding: 0.7rem;
+  transition: all 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shopify-shadow);
+  border-color: var(--shopify-border-hover);
+}
+
+.product-card img {
+  width: 74px;
+  height: 74px;
+  object-fit: cover;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.product-card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+}
+
+.product-card-meta {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--shopify-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.2rem;
+}
+
+.product-card-title {
+  font-weight: 700;
+  color: var(--shopify-text);
+  margin-bottom: 0.45rem;
+}
+
+.product-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--shopify-muted);
+  font-size: 0.9rem;
+}
+
+.product-card-footer button {
+  border: none;
+  background: var(--shopify-primary);
+  color: #fff;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.dashboard-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  padding: 0.35rem 0.7rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.65rem;
+}
+
+.dashboard-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  margin: 0 0 0.25rem;
+}
+
+.dashboard-subtitle {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 0.95rem;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 0.7rem;
+}
+
+.dashboard-action-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 0.6rem 0.95rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard-action-btn:hover {
+  transform: translateY(-1px);
+}
+
+.dashboard-action-btn.primary {
+  background: #ffffff;
+  color: #0f172a;
+}
+
+.dashboard-action-btn.secondary {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+}
+
+.section-kicker {
+  margin: 0.15rem 0 0;
+  color: #64748b;
+  font-size: 0.8rem;
+}
+
+/* Store Manager Stat Cards */
+.sm-stat-card {
+  border-radius: 18px;
+  padding: 1.2rem 1.25rem 0.6rem 1.25rem;
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shopify-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-height: 145px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.sm-stat-card::before {
+  content: '';
+  position: absolute;
+  inset: auto -20px -20px auto;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.sm-stat-card:hover {
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: var(--shopify-shadow-lg);
+}
+
+.sm-stat-card-blue {
+  background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+}
+
+.sm-stat-card-dark {
+  background: linear-gradient(135deg, #273240 0%, #1e2530 100%);
+}
+
+.sm-stat-card-cyan {
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+}
+
+.sm-stat-card-slate {
+  background: linear-gradient(135deg, #576574 0%, #404b56 100%);
+}
+
+.sm-stat-title {
+  font-size: 0.86rem;
+  font-weight: 500;
+  opacity: 0.92;
+}
+
+.sm-stat-value {
+  font-size: 1.65rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-top: 0.15rem;
+}
+
+/* Circular Progress Ring */
+.progress-ring-container {
+  width: 44px;
+  height: 44px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-ring-text {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #ffffff;
+  position: absolute;
+}
+
+/* Dashboard Cards (White Containers) */
+.sm-card {
+  background: var(--surface-1);
+  border-radius: 18px;
+  border: 1px solid var(--shopify-border);
+  box-shadow: var(--shopify-shadow);
+  padding: 1.25rem 1.4rem;
+  backdrop-filter: blur(18px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sm-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shopify-shadow-lg);
+}
+
+.sm-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.sm-card-title {
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: var(--shopify-text);
+  margin: 0;
+}
+
+.sm-dropdown-btn {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.3rem 0.65rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.sm-dropdown-btn:hover {
+  background-color: #f1f5f9;
+  color: #0f172a;
+}
+
+/* Activity Timeline */
+.activity-timeline {
+  position: relative;
+  padding-left: 2.75rem;
+}
+
+.activity-timeline::before {
+  content: '';
+  position: absolute;
+  left: 17px;
+  top: 18px;
+  bottom: 25px;
+  width: 2px;
+  background-color: #3b82f6;
+  opacity: 0.35;
+}
+
+.activity-item {
+  position: relative;
+  padding-bottom: 1.4rem;
+}
+
+.activity-item:last-child {
+  padding-bottom: 0;
+}
+
+.activity-icon-badge {
+  position: absolute;
+  left: -2.75rem;
+  top: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #3b82f6;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 8px rgba(59, 130, 246, 0.3);
+}
+
+.activity-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.1rem;
+}
+
+.activity-time {
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+/* Weekly Sales Bar Chart Alignment */
+.bar-chart-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.bar-chart-body {
+  display: flex;
+  align-items: stretch;
+  height: 190px;
+  position: relative;
+}
+
+.chart-y-axis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 36px;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  text-align: right;
+  padding-right: 8px;
+  user-select: none;
+}
+
+.bar-chart-plot-area {
+  flex-grow: 1;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  border-bottom: 1px solid #cbd5e1;
+}
+
+.bar-grid-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.grid-line {
+  border-top: 1px dashed #e2e8f0;
+  width: 100%;
+}
+
+.day-bars-group {
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+  height: 100%;
+  z-index: 2;
+  padding: 0 4px;
+}
+
+.bar-single {
+  width: 13px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  transition: height 0.3s ease;
+}
+
+.bar-dark-blue {
+  background-color: #2563eb;
+}
+
+.bar-light-blue {
+  background-color: #38bdf8;
+}
+
+.chart-x-axis {
+  display: flex;
+  justify-content: space-around;
+  padding-left: 36px;
+  margin-top: 8px;
+  font-size: 0.78rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+/* Tables in Store Manager */
+.sm-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.sm-table th {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #64748b;
+  padding: 0.65rem 0.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+}
+
+.sm-table td {
+  padding: 0.8rem 0.5rem;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.86rem;
+  vertical-align: middle;
+}
+
+.sm-table tr:last-child td {
+  border-bottom: none;
+}
+
+.order-link {
+  color: #2563eb;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.order-link:hover {
+  text-decoration: underline;
+}
+
+/* Status Badges */
+.status-pill-pending-green {
+  background-color: #dcfce7;
+  color: #166534;
+  font-weight: 700;
+  font-size: 0.72rem;
+  padding: 0.2rem 0.65rem;
+  border-radius: 12px;
+  display: inline-block;
+}
+
+.status-pill-pending-orange {
+  background-color: #fef3c7;
+  color: #b45309;
+  font-weight: 700;
+  font-size: 0.72rem;
+  padding: 0.2rem 0.65rem;
+  border-radius: 12px;
+  display: inline-block;
+}
+
+.action-icon-btn {
+  background: transparent;
+  border: none;
+  color: #64748b;
+  font-size: 0.9rem;
+  padding: 0.2rem 0.35rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.action-icon-btn:hover {
+  color: var(--shopify-text);
+  background-color: var(--surface-3);
+}
+
+@media (max-width: 768px) {
+  .dashboard-hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hero-banner-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hero-badge-stack {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .store-topbar {
+    padding: 0 1rem;
+    height: auto;
+    min-height: 64px;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .topbar-search-box {
+    width: 100%;
+    order: 3;
+  }
+
+  .store-sidebar {
+    width: 92vw;
+    min-width: 92vw;
+  }
+}
+
+/* ==========================================
+   AUREUM ULTRA-LUXURY AUTHENTICATION STYLES
+   ========================================== */
+
+.auth-page-container {
+  min-height: 100vh;
+  background: radial-gradient(circle at 50% 20%, #15120a 0%, #08080a 60%, #030304 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-ambient-glow-1 {
+  position: absolute;
+  top: -120px;
+  left: 30%;
+  width: 650px;
+  height: 650px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.16) 0%, rgba(243, 214, 117, 0.04) 45%, rgba(0, 0, 0, 0) 70%);
+  filter: blur(80px);
+  pointer-events: none;
+  animation: pulseGlow 10s ease-in-out infinite alternate;
+}
+
+.auth-ambient-glow-2 {
+  position: absolute;
+  bottom: -150px;
+  right: 15%;
+  width: 550px;
+  height: 550px;
+  background: radial-gradient(circle, rgba(205, 140, 30, 0.12) 0%, rgba(184, 134, 11, 0.03) 50%, rgba(0, 0, 0, 0) 70%);
+  filter: blur(90px);
+  pointer-events: none;
+  animation: pulseGlow 12s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes pulseGlow {
+  0% { transform: scale(1) translateY(0); opacity: 0.8; }
+  50% { transform: scale(1.1) translateY(-20px); opacity: 1; }
+  100% { transform: scale(1) translateY(0); opacity: 0.8; }
+}
+
+/* Background Grid Mesh */
+.auth-grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(to right, rgba(212, 175, 55, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(212, 175, 55, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%);
+  pointer-events: none;
+}
+
+/* Glass Card */
+.auth-glass-card {
+  background: rgba(13, 12, 10, 0.88) !important;
+  backdrop-filter: blur(28px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
+  border: 1px solid rgba(212, 175, 55, 0.28) !important;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(243, 214, 117, 0.15) !important;
+  border-radius: 24px !important;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.auth-glass-card:hover {
+  border-color: rgba(212, 175, 55, 0.45) !important;
+  box-shadow: 0 35px 90px rgba(0, 0, 0, 0.9), 0 0 30px rgba(212, 175, 55, 0.1) !important;
+}
+
+/* Interactive Role Selection Cards */
+.auth-role-card {
+  background: rgba(20, 18, 14, 0.7);
+  border: 1.5px solid rgba(212, 175, 55, 0.2);
+  border-radius: 16px;
+  padding: 0.9rem 1rem;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  user-select: none;
+}
+
+.auth-role-card:hover {
+  background: rgba(30, 26, 18, 0.85);
+  border-color: rgba(212, 175, 55, 0.5);
+  transform: translateY(-2px);
+}
+
+.auth-role-card.active {
+  background: linear-gradient(135deg, rgba(35, 29, 17, 0.95) 0%, rgba(22, 19, 13, 0.95) 100%);
+  border-color: #FF8A65;
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.25), inset 0 0 15px rgba(243, 214, 117, 0.1);
+  transform: translateY(-2px);
+}
+
+.auth-role-card .role-icon-box {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(212, 175, 55, 0.12);
+  color: #FF8A65;
+  transition: all 0.25s ease;
+}
+
+.auth-role-card.active .role-icon-box {
+  background: linear-gradient(135deg, #FF8A65 0%, #FF5722 100%);
+  color: #050505;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+}
+
+.auth-role-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(212, 175, 55, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+}
+
+.auth-role-card.active .auth-role-check {
+  background: #FF8A65;
+  border-color: #FF8A65;
+  color: #050505;
+}
+
+/* Custom Input Field Styling */
+.auth-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.auth-input-icon {
+  position: absolute;
+  left: 14px;
+  color: #FF5722;
+  pointer-events: none;
+  transition: color 0.2s ease;
+  z-index: 5;
+}
+
+.auth-input {
+  width: 100%;
+  background: rgba(18, 16, 13, 0.9) !important;
+  border: 1px solid rgba(212, 175, 55, 0.25) !important;
+  border-radius: 12px !important;
+  padding: 0.75rem 1rem 0.75rem 2.75rem !important;
+  color: #ffffff !important;
+  font-size: 0.9rem !important;
+  transition: all 0.25s ease !important;
+}
+
+.auth-input:focus {
+  background: rgba(22, 19, 14, 0.95) !important;
+  border-color: #FF8A65 !important;
+  box-shadow: 0 0 18px rgba(212, 175, 55, 0.25) !important;
+  outline: none !important;
+}
+
+.auth-input-wrapper:focus-within .auth-input-icon {
+  color: #FF8A65;
+  filter: drop-shadow(0 0 6px rgba(243, 214, 117, 0.6));
+}
+
+.auth-input-toggle {
+  position: absolute;
+  right: 14px;
+  background: none;
+  border: none;
+  color: rgba(212, 175, 55, 0.7);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+  z-index: 5;
+}
+
+.auth-input-toggle:hover {
+  color: #FF8A65;
+}
+
+/* Password Strength Indicator */
+.strength-bar-container {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+
+.strength-bar-fill {
+  height: 100%;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+/* Feature Showcase Panel (Left side on wide viewports) */
+.auth-feature-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2.5rem;
+  height: 100%;
+}
+
+.auth-feature-badge {
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  color: #FF8A65;
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: fit-content;
+}
+
+.auth-feature-card {
+  background: rgba(18, 16, 12, 0.6);
+  border: 1px solid rgba(212, 175, 55, 0.18);
+  border-radius: 16px;
+  padding: 1.1rem;
+  backdrop-filter: blur(12px);
+  transition: all 0.25s ease;
+}
+
+.auth-feature-card:hover {
+  border-color: rgba(212, 175, 55, 0.4);
+  background: rgba(24, 21, 15, 0.8);
+  transform: translateX(4px);
+}
+
+/* Shimmer Animation */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.gold-shimmer-btn {
+  background: linear-gradient(135deg, #FF8A65 0%, #FF5722 40%, #f6e69f 60%, #E64A19 100%) !important;
+  background-size: 200% 100% !important;
+  color: #040404 !important;
+  font-weight: 800 !important;
+  border-radius: 14px !important;
+  border: 1px solid #FF8A65 !important;
+  box-shadow: 0 10px 25px rgba(212, 175, 55, 0.35) !important;
+  transition: all 0.3s ease !important;
+}
+
+.gold-shimmer-btn:hover {
+  background-position: 100% 0 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 15px 35px rgba(212, 175, 55, 0.5) !important;
+}
+
+.gold-shimmer-btn:active {
+  transform: translateY(0) !important;
+}
+
+/* OVERRIDES FOR ADMIN DASHBOARD LIGHT THEME */
+.admin-root .text-muted,
+.admin-root .text-secondary,
+.admin-root .text-white-50,
+.admin-root .text-black-50,
+.admin-root .fs-8.text-muted,
+.admin-root .fs-7.text-muted,
+.admin-root .fs-9.text-muted {
+  color: #6d7175 !important;
+}
+.admin-root .text-dark,
+.admin-root .text-white {
+  color: #202223 !important;
+}
+
+/* ==========================================================================
+   Store Manager Dashboard Responsive (Mobile Sidebar to Bottom Nav)
+   ========================================================================== */
+@media (max-width: 991px) {
+  .store-sidebar {
+    width: 180px !important;
+    min-width: 180px !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .store-manager-layout,
+  .admin-root {
+    flex-direction: column !important;
+    padding-bottom: 70px !important;
+  }
+  .store-sidebar {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 70px !important;
+    min-height: 70px !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    z-index: 1050 !important;
+    border-right: none !important;
+    border-top: 1px solid #dfe3e8 !important;
+    background: #ffffff !important;
+    white-space: nowrap !important;
+    padding: 0 !important;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08) !important;
+  }
+  .store-sidebar-brand {
+    display: none !important;
+  }
+  .store-sidebar > div {
+    display: flex !important;
+    width: 100% !important;
+    height: 100% !important;
+    padding: 0 !important;
+  }
+  .store-sidebar nav {
+    display: flex !important;
+    flex-direction: row !important;
+    padding: 0 !important;
+    align-items: center !important;
+    justify-content: space-around !important;
+    margin: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    gap: 0 !important;
+    overflow-x: auto !important;
+  }
+  .sidebar-link {
+    flex-direction: column !important;
+    padding: 8px 12px !important;
+    justify-content: center !important;
+    border-left: none !important;
+    border-bottom: 3px solid transparent !important;
+    font-size: 0.65rem !important;
+    min-width: 75px !important;
+    text-align: center !important;
+    border-radius: 0 !important;
+    gap: 4px !important;
+  }
+  .sidebar-link.active {
+    border-left: none !important;
+    border-bottom: 3px solid #007f5f !important;
+    background-color: rgba(0, 127, 95, 0.1) !important;
+  }
+  .sidebar-user-section,
+  .store-sidebar .pt-3.border-top,
+  .store-sidebar > div > div:not(nav) {
+    display: none !important;
+  }
+  
+  /* Make topbar responsive */
+  .store-manager-layout .d-flex.align-items-center.gap-3.mb-4,
+  .admin-root .d-flex.align-items-center.gap-3.mb-4 {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+  .store-manager-layout .d-flex.align-items-center.gap-3.mb-4 > .d-flex,
+  .admin-root .d-flex.align-items-center.gap-3.mb-4 > .d-flex {
+    width: 100% !important;
+    justify-content: space-between !important;
+  }
+}
+

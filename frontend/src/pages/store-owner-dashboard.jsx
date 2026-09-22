@@ -13,6 +13,7 @@ import {
   PlusCircle, Edit3, Globe, Copy, ExternalLink, CreditCard
 } from "lucide-react";
 import ToastKartLogo from "../components/ToastKartLogo";
+import "../styles/dashboard-premium.css";
 
 const getSizesForCategory = (productCategory, storeCategory) => {
   const cat = ((productCategory || '') + ' ' + (storeCategory || '')).toLowerCase();

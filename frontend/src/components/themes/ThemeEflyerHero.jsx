@@ -48,13 +48,16 @@ export default function ThemeEflyerHero({ eflyerSlide }) {
             }}
           />
         ) : (
-          <div
+          <img
             key={`bg-${idx}`}
             className="position-absolute top-0 start-0 w-100 h-100"
+            src={s.bg}
+            alt=""
+            loading="lazy"
+            decoding="async"
             style={{
-              backgroundImage: eflyerSlide > 0 ? `url(${s.bg})` : 'none',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
+              objectFit: 'cover',
+              objectPosition: 'center',
               opacity: eflyerSlide === idx ? 1 : 0,
               transition: 'opacity 1s ease-in-out',
               zIndex: 1,

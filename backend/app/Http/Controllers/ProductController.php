@@ -28,7 +28,10 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
-        $query = Product::with(['category', 'store']);
+        $query = Product::with([
+            'category:id,name,slug', 
+            'store:id,name,slug,subdomain'
+        ]);
 
         if ($request->has('store_id') && $request->store_id) {
             $query->where('store_id', $request->store_id);

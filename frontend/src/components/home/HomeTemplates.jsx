@@ -30,6 +30,7 @@ export default function HomeTemplates() {
                       src={t.url}
                       title={t.title}
                       className="template-iframe"
+                      loading="lazy"
                     />
                   ) : (
                     <img src={t.img} alt={t.title} className="w-100 h-100" style={{ objectFit: 'cover' }} loading="lazy" decoding="async" />

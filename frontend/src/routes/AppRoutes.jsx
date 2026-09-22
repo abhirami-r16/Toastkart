@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { Capacitor } from '@capacitor/core';
+// import { Capacitor } from '@capacitor/core';
 import {
   BrowserRouter,
   Routes,
@@ -36,97 +36,37 @@ const PortfolioBuilder = React.lazy(() => import('../pages/PortfolioBuilder'));
 const PortfolioView = React.lazy(() => import('../pages/PortfolioView'));
 const WhatsappWidget = React.lazy(() => import('../components/WhatsappWidget'));
 
-const getSubdomain = () => {
-  const host = window.location.hostname;
-  const isIp = /^(\d{1,3}\.){3}\d{1,3}$/.test(host);
-
-  // Main platform domains
-  const mainDomains = [
-    'localhost',
-    'toastkart.com',
-    'www.toastkart.com',
-  ];
-
-  if (isIp || mainDomains.includes(host)) {
-    return null;
-  }
-
-  const parts = host.split('.');
-
-  if (parts.length >= 2 && parts[0] !== 'www') {
-    return parts[0];
-  }
-
-  return null;
-};
-
 const StorefrontWrapper = () => {
   const { slug } = useParams();
-
   return <StorefrontApp subdomain={slug || 'demo'} />;
 };
 
 function AppRoutes() {
-  const subdomain = getSubdomain();
-
   // Detect Android app
-  const isAndroidApp = Capacitor.getPlatform() === 'android';
+  const isAndroidApp = typeof window !== 'undefined' && window?.Capacitor?.getPlatform?.() === 'android';
 
   // Clean up massive base64 images to prevent QuotaExceededError
   React.useEffect(() => {
     try {
       const saved = localStorage.getItem('aureum_owner_products');
-
       if (saved) {
         let products = JSON.parse(saved);
         let changed = false;
-
         products = products.map((p) => {
-          if (
-            p.image &&
-            typeof p.image === 'string' &&
-            p.image.startsWith('data:image/') &&
-            p.image.length > 50000
-          ) {
+          if (p.image && typeof p.image === 'string' && p.image.startsWith('data:image/') && p.image.length > 50000) {
             changed = true;
-
-            return {
-              ...p,
-              image: '',
-            };
+            return { ...p, image: '' };
           }
-
           return p;
         });
-
         if (changed) {
-          localStorage.setItem(
-            'aureum_owner_products',
-            JSON.stringify(products)
-          );
-
-          console.log(
-            'Cleaned up massive base64 images from local storage to free quota.'
-          );
+          localStorage.setItem('aureum_owner_products', JSON.stringify(products));
         }
       }
     } catch (e) {
       console.error('Failed to clean up localStorage', e);
     }
   }, []);
-
-  // Store subdomain / storefront
-  if (subdomain) {
-    return (
-      <BrowserRouter>
-        <AuthProvider>
-          <Suspense fallback={<div className="d-flex justify-content-center align-items-center vh-100"><div className="spinner-border text-primary"></div></div>}>
-            <StorefrontApp subdomain={subdomain} />
-          </Suspense>
-        </AuthProvider>
-      </BrowserRouter>
-    );
-  }
 
   // Main application
   // AuthProvider must be ABOVE StoreProvider because

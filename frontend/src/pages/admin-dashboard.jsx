@@ -12,6 +12,7 @@ import {
   Plus, Trash2, Eye, Shield, RefreshCw, Download, Check, X, ShieldAlert,
   Server, Zap, Globe, Sliders
 } from "lucide-react";
+import "../styles/dashboard-premium.css";
 
 
 const GOLD = "#d4af37";

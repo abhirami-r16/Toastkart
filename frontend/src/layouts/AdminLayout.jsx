@@ -3,6 +3,7 @@ import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useStore } from '../context/StoreContext';
 import { ExternalLink } from 'lucide-react';
+import '../styles/dashboard-premium.css';
 
 export default function AdminLayout() {
   const { user, logout } = useAuth();
