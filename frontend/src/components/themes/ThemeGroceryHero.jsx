@@ -8,7 +8,7 @@ export default function ThemeGroceryHero() {
           src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=1600&h=500&fit=crop"
           alt="Fresh Groceries"
           loading="eager"
-          fetchpriority="high"
+          fetchPriority="high"
         />
 
         <div className="grocery-hero-content">

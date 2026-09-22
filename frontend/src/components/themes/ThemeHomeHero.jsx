@@ -64,7 +64,7 @@ export default function ThemeHomeHero({ aranozSlide }) {
               borderRadius: '15px',
             }}
             loading="eager"
-            fetchpriority="high"
+            fetchPriority="high"
           />
         </div>
       </div>

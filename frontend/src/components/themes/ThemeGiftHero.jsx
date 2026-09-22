@@ -20,7 +20,7 @@ export default function ThemeGiftHero() {
         alt="Gifts"
         className="gift-hero-img"
         loading="eager"
-        fetchpriority="high"
+        fetchPriority="high"
       />
     </div>
   );

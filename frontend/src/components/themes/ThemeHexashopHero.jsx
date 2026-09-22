@@ -9,7 +9,7 @@ export default function ThemeHexashopHero() {
             src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&h=800&fit=crop"
             alt="Fashion"
             loading="eager"
-            fetchpriority="high"
+            fetchPriority="high"
           />
 
           <div className="hexashop-hero-content">

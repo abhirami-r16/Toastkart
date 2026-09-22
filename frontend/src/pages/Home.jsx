@@ -101,7 +101,7 @@ export default function Home() {
             src="/main-hero-bg.webp"
             alt="Hero Background"
             loading="eager"
-            fetchpriority="high"
+            fetchPriority="high"
             style={{
               width: '100vw',
               height: '100%',
