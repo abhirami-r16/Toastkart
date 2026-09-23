@@ -61,14 +61,7 @@ const Plans = () => {
             </div>
           </div>
           
-          <div className="setup-fee-box">
-            <Settings className="setup-fee-icon" size={24} />
-            <div className="setup-fee-text">
-              Store Setup Fee
-              <span className="price">₹4,999 one-time</span>
-              <span className="optional">(Optional, if needed)</span>
-            </div>
-          </div>
+
 
           <ul className="features-list">
             <li><Check size={18} /> Online Store</li>
@@ -94,14 +87,7 @@ const Plans = () => {
             </div>
           </div>
           
-          <div className="setup-fee-box">
-            <Settings className="setup-fee-icon" size={24} />
-            <div className="setup-fee-text">
-              Store Setup Fee
-              <span className="price">₹4,999 one-time</span>
-              <span className="optional">(Optional, if needed)</span>
-            </div>
-          </div>
+
 
           <ul className="features-list">
             <li><Check size={18} /> Online Store</li>
@@ -128,14 +114,7 @@ const Plans = () => {
             </div>
           </div>
           
-          <div className="setup-fee-box">
-            <Settings className="setup-fee-icon" size={24} />
-            <div className="setup-fee-text">
-              Store Setup Fee
-              <span className="price">₹9,999 one-time</span>
-              <span className="optional">(Optional, if needed)</span>
-            </div>
-          </div>
+
 
           <ul className="features-list">
             <li><Check size={18} /> Online Store</li>
