@@ -41,14 +41,8 @@ export default function ProductDetail({ storeData, products }) {
   const productSizes = product.size 
     ? String(product.size).toUpperCase().split(',').map(s => s.trim()).filter(Boolean) 
     : [];
-  const standardSizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
-  const displaySizes = [...standardSizes];
-  
-  productSizes.forEach(sz => {
-    if (!displaySizes.includes(sz)) {
-      displaySizes.push(sz);
-    }
-  });
+  // Keep only exact ml sizes (e.g., "100ml", "150ml")
+  const displaySizes = productSizes.filter(sz => /\d+\s*ML/i.test(sz));
 
   React.useEffect(() => {
     window.scrollTo(0, 0);
@@ -242,13 +236,8 @@ export default function ProductDetail({ storeData, products }) {
             )}
             <h1 className="fs-2 fs-md-1 fw-bold mb-3 lh-sm">{product.name}</h1>
             
-            <div className="perfume-variants d-flex gap-2 flex-wrap mb-2">
-  {productSizes.map((sz, idx) => (
-    <span key={idx} className="btn btn-outline-dark btn-sm rounded-1 px-2 py-1" style={{fontSize: '0.7rem'}}>
-      {sz}
-    </span>
-  ))}
-</div>
+            
+
 <div className="d-flex align-items-baseline flex-wrap gap-2 mb-4">
               {(() => {
                 const parsePrice = (val) => {
