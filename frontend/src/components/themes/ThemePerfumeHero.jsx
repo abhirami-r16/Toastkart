@@ -19,24 +19,39 @@ export default function ThemePerfumeHero() {
 
   return (
     <>
-      <link rel="preload" as="image" href={slides[0]} />
+      {/* Preload only the first (LCP) hero image */}
+      <link rel="preload" as="image" href={slides[0]} fetchpriority="high" />
       <div className="storefront-hero-container">
         <div className="storefront-hero" style={{ position: 'relative' }}>
           {slides.map((slide, index) => (
-            <div
+            <picture
               key={index}
-              className="hero-background"
               style={{
-                backgroundImage: `url(${slide})`,
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                zIndex: 1,
                 opacity: currentSlide === index ? 1 : 0,
                 transition: 'opacity 1.5s ease',
-                position: 'absolute',
-                top: 0, left: 0, right: 0, bottom: 0,
-                zIndex: 1,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center'
+                overflow: 'hidden',
               }}
-            ></div>
+            >
+              <source type="image/webp" srcSet={`${slide}.webp`} />
+              <img
+                src={slide}
+                alt="Perfume hero slide"
+                loading={index === 0 ? "eager" : "lazy"}
+                fetchpriority={index === 0 ? "high" : undefined}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  display: 'block',
+                }}
+              />
+            </picture>
           ))}
 
 

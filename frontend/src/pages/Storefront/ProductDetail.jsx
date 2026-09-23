@@ -242,7 +242,14 @@ export default function ProductDetail({ storeData, products }) {
             )}
             <h1 className="fs-2 fs-md-1 fw-bold mb-3 lh-sm">{product.name}</h1>
             
-            <div className="d-flex align-items-baseline flex-wrap gap-2 mb-4">
+            <div className="perfume-variants d-flex gap-2 flex-wrap mb-2">
+  {productSizes.map((sz, idx) => (
+    <span key={idx} className="btn btn-outline-dark btn-sm rounded-1 px-2 py-1" style={{fontSize: '0.7rem'}}>
+      {sz}
+    </span>
+  ))}
+</div>
+<div className="d-flex align-items-baseline flex-wrap gap-2 mb-4">
               {(() => {
                 const parsePrice = (val) => {
                   if (val === null || val === undefined || val === '') return 0;
