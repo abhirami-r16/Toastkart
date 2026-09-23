@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import perfumeBg from '../assets/perfume_bg.png';
 import { useNavigate } from 'react-router-dom';
 import { Menu, X, ArrowRight } from 'lucide-react';
 import ToastKartLogo from '../components/ToastKartLogo';
@@ -201,6 +202,25 @@ export default function Portfolio() {
                   </div>
                 </div>
               </div>
+                {/* Store 5 - Perfume */}
+                <div className="col-12 col-md-6">
+                  <div className="portfolio-card position-relative border-0 shadow-lg" style={{ borderRadius: '24px', minHeight: '450px', backgroundImage: `url(${perfumeBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                    {/* background handled via div style */}
+                    {/* overlay removed */}
+                    <div className="position-absolute top-0 end-0 p-4" style={{ zIndex: 2 }}>
+                      <span className="badge bg-white text-dark rounded-pill px-3 py-2 fw-bold shadow-sm fs-7">Perfume</span>
+                    </div>
+                    <div className="position-absolute bottom-0 start-0 w-100 p-4 p-xl-5 text-start" style={{ zIndex: 2 }}>
+                      <h3 className="display-6 fw-bold mb-3 force-white-text" style={{ color: '#fff' }}>Craft Your Own Perfume</h3>
+                      <p className="fs-6 force-white-text mb-4" style={{ maxWidth: '400px', lineHeight: 1.6, color: 'rgba(255,255,255,0.85)' }}>
+                        Create personalized perfume blends with ease, showcased in a stunning storefront.
+                      </p>
+                      <a href="http://localhost:5173/store/craft-your-own-perfume" target="_blank" rel="noreferrer" className="d-inline-flex align-items-center fw-bold explore-link fs-6 text-uppercase force-white-text text-decoration-none" style={{ color: '#fff' }}>
+                        View More <ArrowRight size={20} className="ms-2" />
+                      </a>
+                    </div>
+                  </div>
+                </div>
             </div>
           </div>
         </section>

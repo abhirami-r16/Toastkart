@@ -1,0 +1,502 @@
+/* 
+ * Theme: Perfumes (MYOP Aesthetic)
+ * A dark, elegant, premium, minimalist aesthetic inspired by myop.in
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+.theme-perfume {
+  --perfume-bg: #f9f6f0; /* Light floral background */
+  --perfume-surface: #ffffff; /* White cards */
+  --perfume-text-primary: #2a2a2a; /* Dark text */
+  --perfume-text-secondary: #6c757d; /* Gray text for secondary info */
+  --perfume-accent: #cda85c; /* Gold accent */
+  --perfume-border: #e9ecef; /* Subtle border */
+  
+  --perfume-font-heading: 'Montserrat', sans-serif;
+  --perfume-font-body: 'Inter', sans-serif;
+}
+
+/* Global resets for the theme */
+.theme-perfume.storefront-body {
+  background-color: var(--perfume-bg);
+  color: var(--perfume-text-primary);
+  font-family: var(--perfume-font-body);
+  min-height: 100vh;
+}
+
+.theme-perfume .storefront-main-content {
+  margin-top: 0 !important;
+}
+
+.theme-perfume h1, .theme-perfume h2, .theme-perfume h3, .theme-perfume h4, .theme-perfume h5, .theme-perfume h6 {
+  font-family: var(--perfume-font-heading);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--perfume-text-primary);
+}
+
+/* Hero Section */
+.theme-perfume .storefront-hero-container {
+  padding: 0;
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  margin-top: 0;
+  background-color: var(--perfume-bg);
+}
+
+.theme-perfume .jewelry-hero-section,
+.theme-perfume .storefront-hero {
+  position: relative;
+  height: calc(100vh - 80px);
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  background-color: #f9f6f0;
+  overflow: hidden;
+  text-align: left;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.theme-perfume .perfume-video-section h2 {
+  color: #ffffff !important;
+}
+
+.theme-perfume .jewelry-hero-bg,
+.theme-perfume .hero-background {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 1; 
+  transition: opacity 1.5s ease;
+  border-radius: 0;
+}
+
+.theme-perfume .jewelry-hero-content-wrapper,
+.theme-perfume .hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  padding: 0 4rem;
+}
+
+.theme-perfume .jewelry-hero-title,
+.theme-perfume .hero-title {
+  font-family: var(--perfume-font-heading);
+  font-size: 4.5rem;
+  font-weight: 400;
+  line-height: 1.1;
+  margin-bottom: 2rem;
+  color: #fff;
+  /* allow breaking into two lines on small screens */
+  white-space: normal;
+  word-break: break-word;
+}
+
+/* Mobile adjustments for hero title */
+@media (max-width: 576px) {
+  .theme-perfume .hero-title {
+    font-size: 2.5rem; /* smaller on mobile */
+    max-width: 90%;
+    margin: 0 auto;
+  }
+}
+
+
+.theme-perfume .hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5); /* dark overlay */
+  z-index: 2;
+  text-align: center;
+}
+
+.theme-perfume .hero-title {
+  font-size: 3rem;
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.theme-perfume .hero-cta {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  background: #cda85c;
+  color: #000;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+@media (max-width: 576px) {
+  .theme-perfume .hero-title {
+    font-size: 2rem;
+  }
+  .theme-perfume .hero-cta {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+}
+@keyframes slowZoom {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.15); }
+}
+
+/* Ticker Animation */
+@keyframes perfumeTicker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+.perfume-ticker-bar {
+  background-color: #000000;
+  color: #ffffff;
+  padding: 10px 0;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  z-index: 101;
+  width: 100%;
+}
+
+.perfume-ticker-content {
+  display: inline-block;
+  white-space: nowrap;
+  animation: perfumeTicker 30s linear infinite;
+  padding-left: 100%; /* Start off-screen right */
+}
+
+.perfume-ticker-content span {
+  display: inline-block;
+  padding: 0 40px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #ffffff; /* Force white text */
+}
+
+.theme-perfume .hero-btn-cyop {
+  display: inline-block;
+  background: transparent;
+  color: var(--perfume-accent);
+  border: 1px solid var(--perfume-accent);
+  border-radius: 30px;
+  padding: 0.75rem 2rem;
+  font-family: var(--perfume-font-body);
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.theme-perfume .hero-btn-cyop:hover {
+  background: var(--perfume-accent);
+  color: #000;
+}
+
+/* Product Grid */
+.theme-perfume .storefront-product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 3rem 2rem;
+  padding: 4rem 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Product Card */
+.theme-perfume .storefront-product-card {
+  background: var(--perfume-surface);
+  border: 1px solid var(--perfume-border);
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  cursor: pointer;
+  padding: 1rem;
+}
+.theme-perfume .storefront-product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+}
+
+/* Product Cards for Perfume Theme */
+.theme-perfume .storefront-product-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  background: #ffffff;
+  border: 1px solid #f2f2f2;
+}
+
+.theme-perfume .storefront-product-image-container {
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: #fcfcfc;
+}
+
+.theme-perfume .storefront-product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.theme-perfume .storefront-product-card:hover .storefront-product-image {
+  transform: scale(1.05);
+}
+
+/* Product Details */
+.theme-perfume .storefront-product-details {
+  text-align: left;
+  padding: 0 0.5rem;
+}
+
+.theme-perfume .storefront-product-category {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--perfume-accent);
+  margin-bottom: 0.5rem;
+  display: block;
+  font-weight: 600;
+}
+
+.theme-perfume .storefront-product-title {
+  font-family: var(--perfume-font-heading);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--perfume-text-primary);
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.theme-perfume .storefront-product-price-row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.theme-perfume .storefront-product-price {
+  font-family: var(--perfume-font-body);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--perfume-text-primary);
+}
+
+.theme-perfume .storefront-product-original-price {
+  font-family: var(--perfume-font-body);
+  font-size: 0.9rem;
+  color: var(--perfume-text-secondary);
+  text-decoration: line-through;
+}
+
+/* Default hover overlay disabled for Perfume Theme */
+.theme-perfume .add-to-cart-wrapper {
+  display: none;
+}
+
+.theme-perfume .theme-cart-btn {
+  background: #fff;
+  color: #000;
+  border: none;
+  padding: 0.75rem 2rem;
+  font-family: var(--perfume-font-body);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.theme-perfume .theme-cart-btn:hover {
+  background: var(--perfume-accent);
+  color: #000;
+}
+
+/* Header & Nav */
+.theme-perfume .storefront-header {
+  background-color: #ffffff;
+  border-bottom: none;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  height: 110px;
+}
+
+.theme-perfume .storefront-logo-text {
+  font-family: var(--perfume-font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--perfume-accent) !important;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: linear-gradient(135deg, #d4af37 0%, #aa841f 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.theme-perfume .storefront-logo-sub {
+  color: #333333 !important;
+  font-size: 0.75rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.theme-perfume .storefront-header .storefront-nav-item,
+.theme-perfume .storefront-header .text-white,
+.theme-perfume .storefront-header svg {
+  color: #333333 !important;
+}
+
+.theme-perfume .storefront-nav-link,
+.theme-perfume .hexashop-nav-item {
+  color: #333333 !important;
+  font-size: 0.95rem;
+  text-transform: capitalize;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.theme-perfume .storefront-nav-link:hover,
+.theme-perfume .hexashop-nav-item:hover {
+  color: var(--perfume-accent) !important;
+}
+
+.theme-perfume .hexashop-nav-item::after {
+  background-color: var(--perfume-accent) !important;
+}
+
+/* Cart drawer override for dark theme */
+.theme-perfume .offcanvas {
+  background-color: var(--perfume-surface);
+  color: var(--perfume-text-primary);
+}
+.theme-perfume .offcanvas-header {
+  border-bottom: 1px solid var(--perfume-border);
+}
+.theme-perfume .offcanvas-title {
+  font-family: var(--perfume-font-heading);
+}
+.theme-perfume .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Adjusting modals or dropdowns */
+.theme-perfume .dropdown-menu {
+  background-color: var(--perfume-surface);
+  border: 1px solid var(--perfume-border);
+}
+.theme-perfume .dropdown-item {
+  color: var(--perfume-text-primary);
+}
+.theme-perfume .dropdown-item:hover {
+  background-color: rgba(255,255,255,0.05);
+  color: var(--perfume-accent);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .theme-perfume .jewelry-hero-title,
+  .theme-perfume .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .theme-perfume .storefront-product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1.5rem 1rem;
+    padding: 2rem 1rem;
+  }
+  
+  .theme-perfume .add-to-cart-wrapper {
+    opacity: 1;
+    transform: translateY(0);
+    padding: 0.75rem;
+    background: transparent;
+  }
+  
+  .theme-perfume .theme-cart-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+  }
+}
+.theme-perfume .perfume-highlight { 
+  background: linear-gradient(90deg, #ff8c00 0%, #ff3b3b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Responsive product grid for perfume theme */
+@media (max-width: 576px) {
+  /* Horizontal scroll for perfume products */
+  .theme-perfume .storefront-product-slider {
+    display: flex !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    gap: 16px !important;
+    padding-bottom: 8px !important;
+  }
+  .theme-perfume .storefront-product-slider::-webkit-scrollbar {
+    display: none;
+  }
+  .theme-perfume .storefront-product-slider .storefront-product-card {
+    flex: 0 0 300px !important;
+    max-width: 90% !important;
+    width: 300px !important;
+    padding: 16px !important;
+    scroll-snap-align: start !important;
+  }
+  .theme-perfume .storefront-product-image-container {
+    aspect-ratio: 4 / 5 !important; /* taller image */
+    height: auto !important;
+  }
+}
+
+/* Responsive adjustments for About and Video sections */
+@media (max-width: 768px) {
+  .theme-perfume .perfume-video-section {
+    height: auto;
+    min-height: 300px;
+  }
+  .theme-perfume .perfume-video-section h2 {
+    font-size: 2rem !important;
+    padding: 0 1rem;
+  }
+  .theme-perfume .perfume-about-section .row {
+    flex-direction: column;
+  }
+  .theme-perfume .perfume-about-section .col-lg-6 {
+    max-width: 100%;
+    padding: 0 !important;
+    margin-bottom: 1.5rem;
+  }
+  .theme-perfume .perfume-about-section img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+  .theme-perfume .perfume-about-section h2 {
+    font-size: 2.5rem;
+  }
+}

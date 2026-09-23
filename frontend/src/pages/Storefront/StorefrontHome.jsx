@@ -15,6 +15,7 @@ const ThemeElectronicsHero = React.lazy(() => import('../../components/themes/Th
 const ThemeFootwearHero = React.lazy(() => import('../../components/themes/ThemeFootwearHero'));
 const ThemeGroceryHero = React.lazy(() => import('../../components/themes/ThemeGroceryHero'));
 const ThemeGiftHero = React.lazy(() => import('../../components/themes/ThemeGiftHero'));
+const ThemePerfumeHero = React.lazy(() => import('../../components/themes/ThemePerfumeHero'));
 const ThemeDefaultHero = React.lazy(() => import('../../components/themes/ThemeDefaultHero'));
 
 export default function StorefrontHome({ storeData, products, categories = [] }) {
@@ -226,7 +227,7 @@ export default function StorefrontHome({ storeData, products, categories = [] })
       >
         <div
           className={
-            displayItems.length >= 5
+            theme === 'theme-perfume' || displayItems.length >= 5
               ? "storefront-product-slider"
               : "storefront-product-grid"
           }
@@ -266,42 +267,69 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                   />
                 </div>
 
-                <div className="storefront-product-details pb-5">
-                  {theme === 'theme-jewelry' && (
-                    <span className="storefront-product-category">
-                      {product.category?.name ||
-                        product.category ||
-                        'Luxury'}
-                    </span>
-                  )}
-
-                  <div className="storefront-product-title">
-                    {product.name}
-                  </div>
-
-                  <div className="storefront-product-price-row">
-                    {product.compare_price &&
-                      parsePrice(product.compare_price) >
-                      parsePrice(product.price) ? (
-                      <>
+                <div className="storefront-product-details pb-3 px-3 mt-3 d-flex flex-column" style={{ flexGrow: 1 }}>
+                  {theme === 'theme-perfume' ? (
+                    <div className="perfume-card-details d-flex flex-column h-100">
+                      <div className="storefront-product-title text-uppercase mb-0 fw-bold" style={{ fontSize: '1.05rem', color: '#333' }}>
+                        {product.name}
+                      </div>
+                      <div className="storefront-product-category text-uppercase text-muted mt-1 mb-2" style={{ fontSize: '0.65rem', letterSpacing: '0.5px' }}>
+                        {product.category?.name || product.category || 'WOODY | ALLDAY | UNISEX'}
+                      </div>
+                      
+                      <div className="storefront-product-price-row fw-bold mb-1" style={{ color: '#000', fontSize: '1.1rem' }}>
                         <span className="storefront-product-price">
-                          ₹
-                          {parsePrice(product.price).toLocaleString('en-IN')}
+                          ₹{parsePrice(product.price).toLocaleString('en-IN')}.00
                         </span>
-                        <span className="storefront-product-original-price">
-                          ₹
-                          {parsePrice(product.compare_price).toLocaleString(
-                            'en-IN'
-                          )}
+                      </div>
+                      
+                      <div className="perfume-variants d-flex gap-2 flex-wrap mb-4 mt-auto">
+                        <span className="btn btn-outline-dark btn-sm rounded-1 px-2 py-1" style={{ fontSize: '0.7rem' }}>50ml</span>
+                        <span className="btn btn-outline-dark border-2 border-dark btn-sm rounded-1 fw-bold px-2 py-1" style={{ fontSize: '0.7rem' }}>100ml</span>
+                        <span className="btn btn-outline-dark btn-sm rounded-1 px-2 py-1 d-flex align-items-center gap-1" style={{ fontSize: '0.7rem' }}>
+                          <i className="bi bi-gift-fill" style={{ fontSize: '0.7rem' }}></i> Personalized
                         </span>
-                      </>
-                    ) : (
-                      <span className="storefront-product-price">
-                        ₹
-                        {parsePrice(product.price).toLocaleString('en-IN')}
-                      </span>
-                    )}
-                  </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      {theme === 'theme-jewelry' && (
+                        <span className="storefront-product-category">
+                          {product.category?.name ||
+                            product.category ||
+                            'Luxury'}
+                        </span>
+                      )}
+
+                      <div className="storefront-product-title">
+                        {product.name}
+                      </div>
+
+                      <div className="storefront-product-price-row">
+                        {product.compare_price &&
+                          parsePrice(product.compare_price) >
+                          parsePrice(product.price) ? (
+                          <>
+                            <span className="storefront-product-price">
+                              ₹
+                              {parsePrice(product.price).toLocaleString('en-IN')}
+                            </span>
+                            <span className="storefront-product-original-price">
+                              ₹
+                              {parsePrice(product.compare_price).toLocaleString(
+                                'en-IN'
+                              )}
+                            </span>
+                          </>
+                        ) : (
+                          <span className="storefront-product-price">
+                            ₹
+                            {parsePrice(product.price).toLocaleString('en-IN')}
+                          </span>
+                        )}
+                      </div>
+                    </>
+                  )}
                 </div>
               </Link>
 
@@ -340,49 +368,73 @@ export default function StorefrontHome({ storeData, products, categories = [] })
               </button>
 
               {/* Add to Cart Button */}
-              <div
-                className={`add-to-cart-wrapper ${theme !== 'theme-default'
-                    ? 'theme-cart-wrapper'
-                    : 'position-absolute bottom-0 start-0 w-100 p-2'
-                  }`}
-                style={{
-                  zIndex: 2,
-                }}
-              >
-                <button
-                  className={`btn w-100 fw-bold d-flex align-items-center justify-content-center gap-2 add-to-cart-btn ${theme !== 'theme-default'
-                      ? 'theme-cart-btn'
-                      : ''
+              {theme === 'theme-perfume' ? (
+                <div className="px-3 pb-3 mt-auto w-100">
+                  <button
+                    className="btn btn-dark w-100 rounded-pill fw-bold text-uppercase d-flex align-items-center justify-content-center gap-2"
+                    style={{ fontSize: '0.8rem', padding: '12px' }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      addToCart(
+                        {
+                          ...product,
+                          selectedSize: getFirstAvailableSize(product),
+                          selectedColor: getFirstAvailableColor(product),
+                        },
+                        1
+                      );
+                    }}
+                  >
+                    <ShoppingCart size={16} />
+                    Add to Cart
+                  </button>
+                </div>
+              ) : (
+                <div
+                  className={`add-to-cart-wrapper ${theme !== 'theme-default'
+                      ? 'theme-cart-wrapper'
+                      : 'position-absolute bottom-0 start-0 w-100 p-2'
                     }`}
-                  style={
-                    theme !== 'theme-default'
-                      ? {}
-                      : {
-                        backgroundColor: '#ff9f00',
-                        color: '#fff',
-                        border: 'none',
-                        fontSize: '0.85rem',
-                        padding: '8px',
-                      }
-                  }
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    addToCart(
-                      {
-                        ...product,
-                        selectedSize: getFirstAvailableSize(product),
-                        selectedColor: getFirstAvailableColor(product),
-                      },
-                      1
-                    );
+                  style={{
+                    zIndex: 2,
                   }}
                 >
-                  <ShoppingCart size={16} />
-                  Add to Cart
-                </button>
-              </div>
+                  <button
+                    className={`btn w-100 fw-bold d-flex align-items-center justify-content-center gap-2 add-to-cart-btn ${theme !== 'theme-default'
+                        ? 'theme-cart-btn'
+                        : ''
+                      }`}
+                    style={
+                      theme !== 'theme-default'
+                        ? {}
+                        : {
+                          backgroundColor: '#ff9f00',
+                          color: '#fff',
+                          border: 'none',
+                          fontSize: '0.85rem',
+                          padding: '8px',
+                        }
+                    }
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+
+                      addToCart(
+                        {
+                          ...product,
+                          selectedSize: getFirstAvailableSize(product),
+                          selectedColor: getFirstAvailableColor(product),
+                        },
+                        1
+                      );
+                    }}
+                  >
+                    <ShoppingCart size={16} />
+                    Add to Cart
+                  </button>
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -407,7 +459,8 @@ export default function StorefrontHome({ storeData, products, categories = [] })
           {theme === 'theme-footwear' && <ThemeFootwearHero />}
           {theme === 'theme-grocery' && <ThemeGroceryHero />}
           {theme === 'theme-gift' && <ThemeGiftHero />}
-          {!['theme-eflyer', 'theme-hexashop', 'theme-jewelry', 'theme-beauty', 'theme-home', 'theme-electronics', 'theme-footwear', 'theme-grocery', 'theme-gift'].includes(theme) && (
+          {theme === 'theme-perfume' && <ThemePerfumeHero />}
+          {!['theme-eflyer', 'theme-hexashop', 'theme-jewelry', 'theme-beauty', 'theme-home', 'theme-electronics', 'theme-footwear', 'theme-grocery', 'theme-gift', 'theme-perfume'].includes(theme) && (
             <ThemeDefaultHero />
           )}
         </React.Suspense>
@@ -452,11 +505,18 @@ export default function StorefrontHome({ storeData, products, categories = [] })
               className="storefront-section scroll-mt"
             >
               <div className="storefront-section-header">
-                <h3>
-                  {cat.isCustom
-                    ? `Best of ${cat.name}`
-                    : `Trending in ${cat.name}`}
-                </h3>
+                {theme === 'theme-perfume' ? (
+                  <h3 style={{ textTransform: 'uppercase', letterSpacing: '1px', fontSize: '2rem' }}>
+                    <span style={{ fontWeight: 'bold' }}>DISCOVER </span>
+                    <span className="perfume-highlight" style={{ fontWeight: 'bold' }}>{cat.name}</span>
+                  </h3>
+                ) : (
+                  <h3>
+                    {cat.isCustom
+                      ? `Best of ${cat.name}`
+                      : `Trending in ${cat.name}`}
+                  </h3>
+                )}
 
                 <button className="storefront-view-all-btn">
                   VIEW ALL
@@ -480,6 +540,49 @@ export default function StorefrontHome({ storeData, products, categories = [] })
           <p>
             This store doesn't have any collections or products yet.
           </p>
+        </div>
+      )}
+
+      {/* Video Section for Perfume Theme */}
+      {theme === 'theme-perfume' && !searchQuery && (
+        <div className="perfume-video-section" style={{ marginTop: '6rem', position: 'relative', width: '100%', height: '70vh', minHeight: '500px', overflow: 'hidden' }}>
+          <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', overflow: 'hidden' }}>
+            <iframe 
+              src="https://www.youtube.com/embed/jlsfs5jCB7k?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&playlist=jlsfs5jCB7k" 
+              style={{ width: '100vw', height: '56.25vw', minHeight: '100vh', minWidth: '177.77vh', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', border: 'none' }}
+              allow="autoplay; encrypted-media"
+              title="Clean Aesthetic Perfume Commercial"
+            />
+          </div>
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.4)', zIndex: 1 }}></div>
+          <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 2, textAlign: 'center', width: '100%', padding: '0 20px' }}>
+            <h2 style={{ color: 'white', fontSize: '3.5rem', fontFamily: 'var(--perfume-font-heading, sans-serif)', letterSpacing: '4px', textTransform: 'uppercase', textShadow: '2px 4px 12px rgba(0,0,0,0.9), 0px 0px 4px rgba(255,255,255,0.5)', fontWeight: 'bold' }}>Discover Your Essence</h2>
+          </div>
+        </div>
+      )}
+
+      {/* About Section for Perfume Theme */}
+      {theme === 'theme-perfume' && !searchQuery && (
+        <div className="perfume-about-section container" style={{ marginTop: '6rem', marginBottom: '4rem' }}>
+          <div className="row align-items-center">
+            <div className="col-lg-6 mb-4 mb-lg-0">
+              <div style={{ borderRadius: '24px', overflow: 'hidden', height: '100%', minHeight: '500px', boxShadow: '0 10px 30px rgba(0,0,0,0.08)' }}>
+                <img 
+                  src="https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=800&q=80" 
+                  alt="Craft Your Own Perfume" 
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', minHeight: '500px' }} 
+                />
+              </div>
+            </div>
+            <div className="col-lg-6 ps-lg-5">
+              <h2 style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '1.5rem', lineHeight: '1.1', fontFamily: 'var(--perfume-font-heading, sans-serif)', letterSpacing: '-0.5px' }}>
+                <span style={{ color: '#ff7b00' }}>WHY WE DO,</span> <span style={{ color: '#000000' }}>WHAT<br/>WE DO</span>
+              </h2>
+              <p style={{ color: '#666', fontSize: '1.1rem', lineHeight: '1.8', marginBottom: '2.5rem', fontFamily: 'var(--perfume-font-body, sans-serif)' }}>
+                Craft Your Own Perfume, CYOP is India's premier perfume bar known for <span style={{ color: '#ff7b00', fontWeight: '500' }}>high-quality, long-lasting</span> fragrances with unparalleled expertise in the art and science of perfumery. CYOP perfumes, reformulated with <span style={{ color: '#ff7b00', fontWeight: '500' }}>50% fragrance oil concentration</span> last longer in tropical weather conditions. Our experts can guide the customer to not just select the right perfume, but also provide them with the unique experience of mixing perfumes to create a <span style={{ color: '#ff7b00', fontWeight: '500' }}>fully personalised olfactory experience.</span>
+              </p>
+            </div>
+          </div>
         </div>
       )}
     </div>

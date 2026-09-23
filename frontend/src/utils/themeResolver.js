@@ -10,6 +10,7 @@ export function resolveStoreTheme(storeData) {
     'jewelry': 'theme-jewelry',
     'jewellery': 'theme-jewelry',
     'home & living': 'theme-home',
+    'perfumes': 'theme-perfume',
     'beauty': 'theme-beauty',
     'beauty & cosmetics': 'theme-beauty',
     'electronics': 'theme-electronics',

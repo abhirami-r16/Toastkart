@@ -71,6 +71,30 @@ html {
 }
 
 /* Header */
+.store-topbar {
+  background-color: #2874f0;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  color: #fff;
+}
+.store-topbar .store-name {
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.2;
+  white-space: normal;
+  flex: 1;
+  margin: 0 0.5rem;
+}
+@media (max-width: 576px) {
+  .store-topbar .store-name {
+    font-size: 0.9rem;
+  }
+}
 .storefront-header {
   background-color: #2874f0;
   height: 56px;
@@ -656,7 +680,9 @@ html {
 .hexashop-nav {
   display: flex;
   align-items: center;
-  gap: 30px;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px 30px;
 }
 
 .hexashop-nav-item {

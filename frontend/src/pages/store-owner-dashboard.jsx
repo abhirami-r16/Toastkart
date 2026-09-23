@@ -20,6 +20,9 @@ const getSizesForCategory = (productCategory, storeCategory) => {
   if (cat.includes('jewel') || cat.includes('ring')) {
     return ['Free Size', '5', '6', '7', '8', '9', '10', '11', '12'];
   }
+  if (cat.includes('perfume') || cat.includes('fragrance') || cat.includes('cologne')) {
+    return ['10ml', '30ml', '50ml', '100ml', '150ml', '200ml', 'Personalized'];
+  }
   if (cat.includes('shoe') || cat.includes('footwear')) {
     return ['5', '6', '7', '8', '9', '10', '11', '12'];
   }
@@ -191,33 +194,17 @@ const initialCustomers = [
 ];
 
 const getFallbackImageByName = (name = "") => {
-  const lower = String(name || "").toLowerCase();
-  if (lower.includes("sneaker") || lower.includes("shoe") || lower.includes("kicks") || lower.includes("footwear")) {
-    return "https://images.unsplash.com/photo-1552346154-21d32810aba3?w=500";
-  }
-  if (lower.includes("watch") || lower.includes("chronograph") || lower.includes("luxury")) {
-    return "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=500";
-  }
-  if (lower.includes("tote") || lower.includes("bag") || lower.includes("leather")) {
-    return "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500";
-  }
-  if (lower.includes("earbud") || lower.includes("headphone") || lower.includes("audio") || lower.includes("tech") || lower.includes("wireless")) {
-    return "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=500";
-  }
-  if (lower.includes("vase") || lower.includes("decor") || lower.includes("ceramic") || lower.includes("home")) {
-    return "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=500";
-  }
-  if (lower.includes("kurta") || lower.includes("apparel") || lower.includes("shirt") || lower.includes("dress") || lower.includes("cloth")) {
-    return "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=500";
-  }
-  return "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500";
+  return "data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%221000%22%20viewBox%3D%220%200%20800%201000%22%3E%3Crect%20fill%3D%22%23f3f4f6%22%20width%3D%22800%22%20height%3D%221000%22%2F%3E%3Ctext%20fill%3D%22%239ca3af%22%20font-family%3D%22sans-serif%22%20font-size%3D%2230%22%20dy%3D%2210.5%22%20font-weight%3D%22bold%22%20x%3D%2250%25%22%20y%3D%2250%25%22%20text-anchor%3D%22middle%22%3ENo%20Image%3C%2Ftext%3E%3C%2Fsvg%3E";
 };
 
 const normalizeProductImage = (rawUrl, productName = "") => {
-  if (!rawUrl || typeof rawUrl !== "string") {
+  if (!rawUrl || typeof rawUrl !== "string" || rawUrl.trim() === "") {
     return getFallbackImageByName(productName);
   }
-  const cleanUrl = rawUrl.trim();
+  let cleanUrl = rawUrl.trim();
+  if (cleanUrl.startsWith('/storage/')) {
+    cleanUrl = `http://127.0.0.1:8000${cleanUrl}`;
+  }
   if (cleanUrl.includes("source.unsplash.com") || cleanUrl.includes("unsplash.com/?")) {
     return getFallbackImageByName(productName || cleanUrl);
   }
@@ -231,9 +218,9 @@ export default function StoreOwnerDashboard() {
   const { user, loading } = useAuth();
   
   useEffect(() => {
-    if (!loading && user && user.role === 'owner' && !user.active_subscription && !user.activeSubscription) {
-      navigate('/plans');
-    }
+    // if (!loading && user && user.role === 'owner' && !user.active_subscription && !user.activeSubscription) {
+    //   navigate('/plans');
+    // }
   }, [user, loading, navigate]);
   
   const [active, setActive] = useState(() => {
@@ -1161,7 +1148,11 @@ export default function StoreOwnerDashboard() {
 
   const handleAddProductSubmit = async (e) => {
     e.preventDefault();
-    if (!newProd.name || !newProd.price) return;
+    const hasImage = newProd.image || (newProd.images && newProd.images.length > 0);
+    if (!newProd.name || !newProd.price || !hasImage) {
+      alert("Product name, price, and at least one image are required!");
+      return;
+    }
 
     const normalizedStock = Number(newProd.stock) || 10;
     const status = normalizedStock > 10 ? "In Stock" : normalizedStock > 0 ? "Low Stock" : "Out of Stock";
@@ -2373,6 +2364,7 @@ export default function StoreOwnerDashboard() {
                               <option value="Jewellery">Jewellery</option>
                               <option value="Beauty & Cosmetics">Beauty & Cosmetics</option>
                               <option value="Home & Living">Home & Living</option>
+                              <option value="Perfumes">Perfumes</option>
                             </select>
                           </div>
                           <div className="col-6">

@@ -1,9 +1,12 @@
 import React from 'react';
 import { Search, Mail, Bell, ChevronDown } from 'lucide-react';
+import logo from '../assets/store_logo.png';
+import logo from '../assets/perfume_logo.png';
 
 export default function Navbar() {
   return (
     <header className="store-topbar">
+  <img src={logo} alt="Perfume Logo" className="navbar-logo" />
       <div className="topbar-search-box">
         <Search className="topbar-search-icon" size={16} />
         <input type="text" placeholder="Search..." />
