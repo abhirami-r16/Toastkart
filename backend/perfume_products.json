@@ -1,0 +1,402 @@
+[
+    {
+        "id": 25,
+        "store_id": 12,
+        "category_id": 15,
+        "name": "LElixir Dore",
+        "slug": "lelixir-dore-OEkx",
+        "sku": "SKU-758",
+        "price": "540.00",
+        "compare_price": "600.00",
+        "stock_quantity": 15,
+        "description": "• A radiant, opulent blend celebrating timeless floral and golden amber notes.",
+        "color": "Gold",
+        "size": "100ml",
+        "image": "\/storage\/products\/primary_vKGVhfiMBa.jpeg",
+        "status": "In Stock",
+        "is_active": 1,
+        "created_at": "2026-09-22T15:49:21.000000Z",
+        "updated_at": "2026-09-22T15:49:21.000000Z",
+        "images": [
+            {
+                "url": "\/storage\/products\/gallery_6musqpLua9.jpeg",
+                "color": "Gold"
+            }
+        ]
+    },
+    {
+        "id": 26,
+        "store_id": 12,
+        "category_id": 15,
+        "name": "Rose Éternelle",
+        "slug": "rose-eternelle-ezNV",
+        "sku": "SKU-184",
+        "price": "935.00",
+        "compare_price": "1100.00",
+        "stock_quantity": 20,
+        "description": "• A romantic, delicate floral classic centered around velvety French Damask rose petals.",
+        "color": "Pink",
+        "size": "100ml",
+        "image": "\/storage\/products\/primary_Nc32jUhf2K.jpeg",
+        "status": "In Stock",
+        "is_active": 1,
+        "created_at": "2026-09-22T15:51:01.000000Z",
+        "updated_at": "2026-09-22T15:51:01.000000Z",
+        "images": [
+            {
+                "url": "\/storage\/products\/gallery_N0o2IoO3t5.jpeg",
+                "color": "Pink"
+            }
+        ]
+    },
+    {
+        "id": 27,
+        "store_id": 12,
+        "category_id": 15,
+        "name": "Noir Absolu",
+        "slug": "noir-absolu-jAgT",
+        "sku": "SKU-986",
+        "price": "1425.00",
+        "compare_price": "1900.00",
+        "stock_quantity": 25,
+        "description": "• An enigmatic, bold evening scent composed of dark woods, smoky leather, and spicy noir accords.",
+        "color": "Black",
+        "size": "150ml",
+        "image": "\/storage\/products\/primary_JfQXcioFBD.jpeg",
+        "status": "In Stock",
+        "is_active": 1,
+        "created_at": "2026-09-22T15:52:57.000000Z",
+        "updated_at": "2026-09-22T15:52:57.000000Z",
+        "images": [
+            {
+                "url": "\/storage\/products\/gallery_tcs6ICBBMx.jpeg",
+                "color": "Black"
+            }
+        ]
+    },
+    {
+        "id": 28,
+        "store_id": 12,
+        "category_id": 15,
+        "name": "Oud Impérial",
+        "slug": "oud-imperial-TgCV",
+        "sku": "SKU-739",
+        "price": "1360.00",
+        "compare_price": "1700.00",
+        "stock_quantity": 20,
+        "description": "Smoky agarwood, spiced saffron, and imperial majesty.",
+        "color": "Brown",
+        "size": "200ml",
+        "image": "\/storage\/products\/primary_zdGnXa3KkL.jpeg",
+        "status": "In Stock",
+        "is_active": 1,
+        "created_at": "2026-09-22T15:59:27.000000Z",
+        "updated_at": "2026-09-22T15:59:27.000000Z",
+        "images": [
+            {
+                "url": "\/storage\/products\/gallery_4GQrO4Cw1U.jpeg",
+                "color": "Brown"
+            }
+        ]
+    },
+    {
+        "id": 29,
+        "store_id": 12,
+        "category_id": 13,
+        "name": "Bleu Céleste",
+        "slug": "bleu-celeste-FGb6",
+        "sku": "SKU-275",
+        "price": "1890.00",
+        "compare_price": "2100.00",
+        "stock_quantity": 15,
+        "description": "• Mediterranean sea salt, fresh bergamot, and cedar.",
+        "color": "Blue",
+        "size": "100ml",
+        "image": "http:\/\/127.0.0.1:8000\/storage\/products\/gallery_ySNw0lni9y.jpeg",
+        "status": "In Stock",
+        "is_active": 1,
+        "created_at": "2026-09-22T16:00:30.000000Z",
+        "updated_at": "2026-09-22T16:00:49.000000Z",
+        "images": [
+            {
+                "url": "http:\/\/127.0.0.1:8000\/storage\/products\/gallery_ySNw0lni9y.jpeg",
+                "color": "Blue"
+            }
+        ]
+    },
+    {
+        "id": 30,
+        "store_id": 12,
+        "category_id": 13,
+        "name": "Jardin d’Émeraude",
+        "slug": "jardin-demeraude-syOM",
+        "sku": "SKU-172",
+        "price": "1020.00",
+        "compare_price": "1200.00",
+        "stock_quantity": 30,
+        "description": "• Emerald cut glass bottle with vintage bulb atomizer amidst lush botanical greenery and white blooms.",
+        "color": "Green",
+        "size": "100ml",
+        "image": "\/storage\/products\/primary_4Mz3DLMaE1.jpeg",
+        "status": "In Stock",
+        "is_active": 1,
+        "created_at": "2026-09-22T16:02:46.000000Z",
+        "updated_at": "2026-09-22T16:22:12.000000Z",
+        "images": [
+            {
+                "url": "\/storage\/products\/gallery_UkqkNoHpdB.jpeg",
+                "color": "Green"
+            }
+        ]
+    },
+    {
+        "id": 31,
+        "store_id": 12,
+        "category_id": 13,
+        "name": "Cuir Mystique",
+        "slug": "cuir-mystique-CUHK",
+        "sku": "SKU-540",
+        "price": "1045.00",
+        "compare_price": "1100.00",
+        "stock_quantity": 20,
+        "description": "• Rich aged leather, tobacco leaf, and smoked cedarwood.",
+        "color": "Brown",
+        "size": "150ml",
+        "image": "\/storage\/products\/primary_AYn4S5cGBx.jpeg",
+        "status": "In Stock",
+        "is_active": 1,
+        "created_at": "2026-09-22T16:04:41.000000Z",
+        "updated_at": "2026-09-22T16:04:41.000000Z",
+        "images": [
+            {
+                "url": "\/storage\/products\/gallery_25TCO7mjys.jpeg",
+                "color": "Brown"
+            }
+        ]
+    },
+    {
+        "id": 32,
+        "store_id": 12,
+        "category_id": 13,
+        "name": "Vanille Céleste",
+        "slug": "vanille-celeste-5sRy",
+        "sku": "SKU-483",
+        "price": "2800.00",
+        "compare_price": "3500.00",
+        "stock_quantity": 15,
+        "description": "• Creamy Bourbon vanilla, caramelized tonka, and spun sugar.",
+        "color": "Gold",
+        "size": "200ml",
+        "image": "\/storage\/products\/primary_wydxfnxmuH.jpeg",
+        "status": "In Stock",
+        "is_active": 1,
+        "created_at": "2026-09-22T16:05:58.000000Z",
+        "updated_at": "2026-09-22T16:05:58.000000Z",
+        "images": [
+            {
+                "url": "\/storage\/products\/gallery_mFrWxThxIz.jpeg",
+                "color": "Gold"
+            }
+        ]
+    },
+    {
+        "id": 33,
+        "store_id": 12,
+        "category_id": 14,
+        "name": "Lune d’Argent",
+        "slug": "lune-dargent-ZagT",
+        "sku": "SKU-460",
+        "price": "1360.00",
+        "compare_price": "1600.00",
+        "stock_quantity": 20,
+        "description": "• Crisp frosted aldehydes, silver musk, and cool moonlight.",
+        "color": "Silver",
+        "size": "150ml",
+        "image": "\/storage\/products\/primary_z0VBugUvI7.jpeg",
+        "status": "In Stock",
+        "is_active": 1,
+        "created_at": "2026-09-22T16:07:35.000000Z",
+        "updated_at": "2026-09-22T16:07:35.000000Z",
+        "images": [
+            {
+                "url": "\/storage\/products\/gallery_lLjadmjzx1.jpeg",
+                "color": "Silver"
+            }
+        ]
+    },
+    {
+        "id": 34,
+        "store_id": 12,
+        "category_id": 14,
+        "name": "Soleil de Capri",
+        "slug": "soleil-de-capri-OUcc",
+        "sku": "SKU-356",
+        "price": "1040.00",
+        "compare_price": "1300.00",
+        "stock_quantity": 17,
+        "description": "• Sun-drenched citrus, neroli blossoms, and warm Mediterranean sea breeze.",
+        "color": "Yellow",
+        "size": "150ml",
+        "image": "\/storage\/products\/primary_I8YipryjDk.jpeg",
+        "status": "In Stock",
+        "is_active": 1,
+        "created_at": "2026-09-22T16:08:45.000000Z",
+        "updated_at": "2026-09-22T16:08:45.000000Z",
+        "images": [
+            {
+                "url": "\/storage\/products\/gallery_ipjRGcp2ug.jpeg",
+                "color": "Yellow"
+            }
+        ]
+    },
+    {
+        "id": 35,
+        "store_id": 12,
+        "category_id": 14,
+        "name": "Velours Noir",
+        "slug": "velours-noir-Yx0l",
+        "sku": "SKU-452",
+        "price": "945.00",
+        "compare_price": "1050.00",
+        "stock_quantity": 20,
+        "description": "• Ornate baroque gold filigree and deep plum glass set against dark wine velvet and fresh figs.",
+        "color": "Purple",
+        "size": "150ml",
+        "image": "\/storage\/products\/primary_1rHLqCQxpC.jpeg",
+        "status": "In Stock",
+        "is_active": 1,
+        "created_at": "2026-09-22T16:10:15.000000Z",
+        "updated_at": "2026-09-22T16:21:23.000000Z",
+        "images": [
+            {
+                "url": "\/storage\/products\/gallery_oeoLt0TGkd.jpeg",
+                "color": "Purple"
+            }
+        ]
+    },
+    {
+        "id": 36,
+        "store_id": 12,
+        "category_id": 14,
+        "name": "Santal Divin",
+        "slug": "santal-divin-mIuU",
+        "sku": "SKU-815",
+        "price": "765.00",
+        "compare_price": "900.00",
+        "stock_quantity": 10,
+        "description": "• Creamy Mysore sandalwood, cardamom, and soft golden amber.",
+        "color": "Yellow",
+        "size": "150ml",
+        "image": "\/storage\/products\/primary_3qct31j6NN.jpeg",
+        "status": "In Stock",
+        "is_active": 1,
+        "created_at": "2026-09-22T16:12:08.000000Z",
+        "updated_at": "2026-09-22T16:12:08.000000Z",
+        "images": [
+            {
+                "url": "\/storage\/products\/gallery_4DY6KDM7Sy.jpeg",
+                "color": "Yellow"
+            }
+        ]
+    },
+    {
+        "id": 37,
+        "store_id": 12,
+        "category_id": 12,
+        "name": "Cerise Noire",
+        "slug": "cerise-noire-BMMk",
+        "sku": "SKU-182",
+        "price": "2945.00",
+        "compare_price": "3100.00",
+        "stock_quantity": 20,
+        "description": "• A sultry, decadent gourmand composed of liqueur-soaked black cherry, bitter almond, and dark roasted cocoa beans.",
+        "color": "Red",
+        "size": "200ml",
+        "image": "\/storage\/products\/primary_svUoDjj4UX.jpeg",
+        "status": "In Stock",
+        "is_active": 1,
+        "created_at": "2026-09-22T16:13:40.000000Z",
+        "updated_at": "2026-09-22T16:13:40.000000Z",
+        "images": [
+            {
+                "url": "\/storage\/products\/gallery_LE1oD6GiJ8.jpeg",
+                "color": "Red"
+            }
+        ]
+    },
+    {
+        "id": 38,
+        "store_id": 12,
+        "category_id": 12,
+        "name": "Lavande Royale",
+        "slug": "lavande-royale-hDXK",
+        "sku": "SKU-815",
+        "price": "3600.00",
+        "compare_price": "4500.00",
+        "stock_quantity": 15,
+        "description": "• A soothing blend of aromatic French lavender, crisp bergamot, and warm herbal resins.",
+        "color": "Purple",
+        "size": "200ml",
+        "image": "\/storage\/products\/primary_4XUfCTfEFr.jpeg",
+        "status": "In Stock",
+        "is_active": 1,
+        "created_at": "2026-09-22T16:15:54.000000Z",
+        "updated_at": "2026-09-22T16:15:54.000000Z",
+        "images": [
+            {
+                "url": "\/storage\/products\/gallery_vEmVeHHyC9.jpeg",
+                "color": "Purple"
+            }
+        ]
+    },
+    {
+        "id": 39,
+        "store_id": 12,
+        "category_id": 12,
+        "name": "Fleur Océane",
+        "slug": "fleur-oceane-QeSP",
+        "sku": "SKU-275",
+        "price": "2000.00",
+        "compare_price": "2500.00",
+        "stock_quantity": 16,
+        "description": "• A refreshing aquatic floral bouquet infused with sea minerals, salty ocean mist, and water lily.",
+        "color": "Blue",
+        "size": "200ml",
+        "image": "\/storage\/products\/primary_ffAM14w4V1.jpeg",
+        "status": "In Stock",
+        "is_active": 1,
+        "created_at": "2026-09-22T16:18:02.000000Z",
+        "updated_at": "2026-09-22T16:18:02.000000Z",
+        "images": [
+            {
+                "url": "\/storage\/products\/gallery_4Aas5Ld7xH.jpeg",
+                "color": "Blue"
+            }
+        ]
+    },
+    {
+        "id": 40,
+        "store_id": 12,
+        "category_id": 12,
+        "name": "Ambre Blanc",
+        "slug": "ambre-blanc-NDPP",
+        "sku": "SKU-557",
+        "price": "2090.00",
+        "compare_price": "2200.00",
+        "stock_quantity": 20,
+        "description": "• A contemporary minimalist scent layered with white amber, powdery musk, and rare orchids.",
+        "color": "Yellow",
+        "size": "200ml",
+        "image": "\/storage\/products\/primary_mLL80m7Ll1.jpeg",
+        "status": "In Stock",
+        "is_active": 1,
+        "created_at": "2026-09-22T16:19:35.000000Z",
+        "updated_at": "2026-09-22T16:19:35.000000Z",
+        "images": [
+            {
+                "url": "\/storage\/products\/gallery_nLYNeMw6Nb.jpeg",
+                "color": "Yellow"
+            }
+        ]
+    }
+]

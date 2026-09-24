@@ -20,7 +20,7 @@ export default function ThemePerfumeHero() {
   return (
     <>
       {/* Preload only the first (LCP) hero image */}
-      <link rel="preload" as="image" href={slides[0]} fetchpriority="high" />
+      <link rel="preload" as="image" href={slides[0]} fetchPriority="high" />
       <div className="storefront-hero-container">
         <div className="storefront-hero" style={{ position: 'relative' }}>
           {slides.map((slide, index) => (
@@ -43,7 +43,8 @@ export default function ThemePerfumeHero() {
                 src={slide}
                 alt="Perfume hero slide"
                 loading={index === 0 ? "eager" : "lazy"}
-                fetchpriority={index === 0 ? "high" : undefined}
+                fetchPriority={index === 0 ? "high" : undefined}
+                decoding="async"
                 style={{
                   width: '100%',
                   height: '100%',

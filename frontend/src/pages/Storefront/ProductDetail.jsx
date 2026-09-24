@@ -188,6 +188,8 @@ export default function ProductDetail({ storeData, products }) {
               src={activeImage} 
               alt={product.name} 
               className="img-fluid rounded" 
+              fetchPriority="high"
+              decoding="async"
               style={{ maxHeight: '400px', objectFit: 'contain', transition: 'all 0.15s ease-in-out', opacity: isFading ? 0 : 1, transform: isFading ? 'scale(0.98)' : 'scale(1)' }}
             />
             {parsedImages.length > 1 && (
@@ -212,7 +214,7 @@ export default function ProductDetail({ storeData, products }) {
                         changeImageWithFade(img.url, img.color);
                       }}
                     >
-                      <img src={imgUrl} alt="Thumbnail" className="w-100 h-100 rounded" style={{ objectFit: 'cover' }} />
+                      <img src={imgUrl} alt="Thumbnail" className="w-100 h-100 rounded" loading="lazy" decoding="async" style={{ objectFit: 'cover' }} />
                     </div>
                   );
                 })}

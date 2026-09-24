@@ -29,6 +29,7 @@ export default function StorefrontHome({ storeData, products, categories = [] })
   const [aranozSlide, setAranozSlide] = useState(0);
   const [jewelrySlide, setJewelrySlide] = useState(0);
   const [beautySlide, setBeautySlide] = useState(0);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
   const theme = resolveStoreTheme(storeData);
 
@@ -546,16 +547,27 @@ export default function StorefrontHome({ storeData, products, categories = [] })
       {/* Video Section for Perfume Theme */}
       {theme === 'theme-perfume' && !searchQuery && (
         <div className="perfume-video-section" style={{ marginTop: '6rem', position: 'relative', width: '100%', height: '70vh', minHeight: '500px', overflow: 'hidden' }}>
-          <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', overflow: 'hidden' }}>
-            <iframe 
-              src="https://www.youtube.com/embed/jlsfs5jCB7k?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&playlist=jlsfs5jCB7k" 
-              style={{ width: '100vw', height: '56.25vw', minHeight: '100vh', minWidth: '177.77vh', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', border: 'none' }}
-              allow="autoplay; encrypted-media"
-              title="Clean Aesthetic Perfume Commercial"
-            />
+          <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', overflow: 'hidden' }}>
+            {isVideoPlaying ? (
+              <iframe 
+                src="https://www.youtube.com/embed/jlsfs5jCB7k?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&playlist=jlsfs5jCB7k" 
+                style={{ width: '100vw', height: '56.25vw', minHeight: '100vh', minWidth: '177.77vh', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', border: 'none' }}
+                allow="autoplay; encrypted-media"
+                title="Clean Aesthetic Perfume Commercial"
+              />
+            ) : (
+              <div 
+                style={{ width: '100%', height: '100%', backgroundImage: 'url(https://img.youtube.com/vi/jlsfs5jCB7k/maxresdefault.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                onClick={() => setIsVideoPlaying(true)}
+              >
+                <div style={{ width: '80px', height: '80px', backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                   <div style={{ width: 0, height: 0, borderTop: '15px solid transparent', borderBottom: '15px solid transparent', borderLeft: '25px solid white', marginLeft: '10px' }}></div>
+                </div>
+              </div>
+            )}
           </div>
-          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.4)', zIndex: 1 }}></div>
-          <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 2, textAlign: 'center', width: '100%', padding: '0 20px' }}>
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.4)', zIndex: 1, pointerEvents: 'none' }}></div>
+          <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 2, textAlign: 'center', width: '100%', padding: '0 20px', pointerEvents: 'none' }}>
             <h2 style={{ color: 'white', fontSize: '3.5rem', fontFamily: 'var(--perfume-font-heading, sans-serif)', letterSpacing: '4px', textTransform: 'uppercase', textShadow: '2px 4px 12px rgba(0,0,0,0.9), 0px 0px 4px rgba(255,255,255,0.5)', fontWeight: 'bold' }}>Discover Your Essence</h2>
           </div>
         </div>
@@ -570,6 +582,8 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                 <img 
                   src="https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=800&q=80" 
                   alt="Craft Your Own Perfume" 
+                  loading="lazy"
+                  decoding="async"
                   style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', minHeight: '500px' }} 
                 />
               </div>
