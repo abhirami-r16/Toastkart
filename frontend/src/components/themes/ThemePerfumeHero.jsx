@@ -38,7 +38,6 @@ export default function ThemePerfumeHero() {
                 overflow: 'hidden',
               }}
             >
-              <source type="image/webp" srcSet={`${slide}.webp`} />
               <img
                 src={slide}
                 alt="Perfume hero slide"

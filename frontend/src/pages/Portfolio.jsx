@@ -215,7 +215,7 @@ export default function Portfolio() {
                       <p className="fs-6 force-white-text mb-4" style={{ maxWidth: '400px', lineHeight: 1.6, color: 'rgba(255,255,255,0.85)' }}>
                         Create personalized perfume blends with ease, showcased in a stunning storefront.
                       </p>
-                      <a href="http://localhost:5173/store/craft-your-own-perfume" target="_blank" rel="noreferrer" className="d-inline-flex align-items-center fw-bold explore-link fs-6 text-uppercase force-white-text text-decoration-none" style={{ color: '#fff' }}>
+                      <a href="https://toastkart.com/store/craft-your-own-perfume" target="_blank" rel="noreferrer" className="d-inline-flex align-items-center fw-bold explore-link fs-6 text-uppercase force-white-text text-decoration-none" style={{ color: '#fff' }}>
                         View More <ArrowRight size={20} className="ms-2" />
                       </a>
                     </div>

@@ -285,8 +285,8 @@ if (!foundStore) {
     return (
       <div className="storefront-not-found">
         <h2>Store Not Found</h2>
-        <p>The store at {subdomain}.localhost could not be found.</p>
-        <a href="http://localhost:3000">Return to Marketplace</a>
+        <p>The requested store could not be found.</p>
+        <a href="https://toastkart.com">Return to Marketplace</a>
       </div>
     );
   }
