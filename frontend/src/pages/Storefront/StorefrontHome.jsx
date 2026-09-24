@@ -285,8 +285,15 @@ export default function StorefrontHome({ storeData, products, categories = [] })
                       </div>
                       
                       <div className="perfume-variants d-flex gap-2 flex-wrap mb-4 mt-auto">
-                        <span className="btn btn-outline-dark btn-sm rounded-1 px-2 py-1" style={{ fontSize: '0.7rem' }}>50ml</span>
-                        <span className="btn btn-outline-dark border-2 border-dark btn-sm rounded-1 fw-bold px-2 py-1" style={{ fontSize: '0.7rem' }}>100ml</span>
+                        {product.size ? (
+                          String(product.size).split(',').map((sz, i) => (
+                            <span key={i} className={`btn btn-outline-dark ${i === 0 ? 'border-2 border-dark fw-bold' : ''} btn-sm rounded-1 px-2 py-1`} style={{ fontSize: '0.7rem' }}>
+                              {sz.trim()}
+                            </span>
+                          ))
+                        ) : (
+                          <span className="btn btn-outline-dark border-2 border-dark btn-sm rounded-1 fw-bold px-2 py-1" style={{ fontSize: '0.7rem' }}>100ml</span>
+                        )}
                         <span className="btn btn-outline-dark btn-sm rounded-1 px-2 py-1 d-flex align-items-center gap-1" style={{ fontSize: '0.7rem' }}>
                           <i className="bi bi-gift-fill" style={{ fontSize: '0.7rem' }}></i> Personalized
                         </span>

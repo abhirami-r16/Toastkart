@@ -59,7 +59,7 @@ class ProductController extends Controller
         $products = $query->select([
             'id', 'store_id', 'category_id', 'name', 'slug', 'sku', 
             'price', 'compare_price', 'image', 'status', 'is_active', 
-            'color', 'size'
+            'color', 'size', 'description', 'images', 'stock_quantity'
         ])->orderBy('id', 'desc')->get();
 
         return response()->json($products);

@@ -79,7 +79,7 @@ class StoreController extends Controller
     {
         $store = Store::with([
             'categories:id,store_id,name,slug',
-            'products:id,store_id,category_id,name,slug,price,compare_price,image,rating,color,status,stock_quantity',
+            'products:id,store_id,category_id,name,slug,price,compare_price,image,description,images,size,color,status,stock_quantity',
             'products.category:id,name'
         ])
             ->where('id', $idOrSlug)

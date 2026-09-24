@@ -211,7 +211,7 @@ const normalizeProductImage = (rawUrl, productName = "") => {
   return cleanUrl;
 };
 
-const emptyProductForm = { name: "", sku: "", price: "", compare_price: "", discount_percentage: "", category: "Apparel", stock: "", image: "", images: [], color: "", size: "" };
+const emptyProductForm = { name: "", sku: "", price: "", compare_price: "", discount_percentage: "", category: "Apparel", stock: "", description: "", image: "", images: [], color: "", size: "" };
 
 export default function StoreOwnerDashboard() {
   const navigate = useNavigate();
@@ -571,9 +571,11 @@ export default function StoreOwnerDashboard() {
             category: p.category?.name || p.category || "Uncategorized",
             price: typeof p.price === "number" ? `${currencySymbol}${p.price.toFixed(2)}` : p.price,
             compare_price: typeof p.compare_price === "number" ? `${currencySymbol}${p.compare_price.toFixed(2)}` : p.compare_price,
-            stock: p.stock_quantity ?? 0,
+            stock: p.stock_quantity ?? p.stock ?? 0,
             status: p.status || (p.stock_quantity > 0 ? "In Stock" : "Out of Stock"),
             image: p.image || getFallbackImageByName(p.name),
+            images: p.images || [],
+            description: p.description || "",
             color: p.color || null,
             size: p.size || null
           })));
@@ -1120,6 +1122,7 @@ export default function StoreOwnerDashboard() {
       discount_percentage: "",
       category: product.category || "Apparel",
       stock: product.stock_quantity ?? product.stock ?? "",
+      description: product.description || "",
       image: product.image || "",
       images: Array.isArray(product.images) ? product.images.map(img => typeof img === 'string' ? { url: img, color: '' } : img) : (product.image ? [{ url: product.image, color: '' }] : []),
       color: product.color || "",
@@ -1208,6 +1211,7 @@ export default function StoreOwnerDashboard() {
         status: p.status || status,
         image: p.image || normalizeProductImage(newProd.images?.[0]?.url || newProd.image, newProd.name),
         images: Array.isArray(p.images) && p.images.length > 0 ? p.images : (newProd.images?.length > 0 ? newProd.images : [{ url: p.image || normalizeProductImage(newProd.image, newProd.name), color: '' }]),
+        description: p.description || newProd.description || "",
         color: p.color || newProd.color || null,
         size: p.size || newProd.size || null,
       };

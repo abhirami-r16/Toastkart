@@ -271,27 +271,18 @@ export default function ProductDetail({ storeData, products }) {
               })()}
             </div>
 
-            {(() => {
-              const desc = product.description || 'This premium product is part of our exclusive collection. Crafted with the finest materials and designed to exceed your expectations. Experience the perfect blend of style and functionality.';
-              // Split by bullet characters or newlines
-              const lines = desc.split(/•|\n/).map(line => line.trim()).filter(line => line.length > 0);
-              
-              if (lines.length > 1) {
-                return (
-                  <ul className="text-secondary fs-6 mb-4 lh-lg ps-4" style={{ listStyleType: 'disc' }}>
-                    {lines.map((line, idx) => (
-                      <li key={idx} className="mb-2">{line}</li>
-                    ))}
-                  </ul>
-                );
-              }
-              
-              return (
-                <p className="text-secondary fs-6 mb-4 lh-lg">
-                  {desc}
-                </p>
-              );
-            })()}
+            <div className="mb-4">
+              <h6 className="fw-bold mb-2 text-uppercase" style={{ letterSpacing: '0.5px' }}>Product Details</h6>
+              {product.description ? (
+                <div 
+                  className="text-secondary fs-6 lh-base product-description" 
+                  style={{ whiteSpace: 'pre-wrap' }}
+                  dangerouslySetInnerHTML={{ __html: product.description.includes('<p>') || product.description.includes('<ul>') || product.description.includes('<br>') ? product.description : product.description.replace(/</g, '&lt;').replace(/>/g, '&gt;') }} 
+                />
+              ) : (
+                <div className="text-secondary fs-6 fst-italic">No product details provided.</div>
+              )}
+            </div>
 
             <div className="mb-4">
               <div className="d-flex justify-content-between align-items-center mb-2">
