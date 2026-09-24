@@ -86,54 +86,88 @@ export default function Home() {
 
       {/* HERO */}
       <section id="hero" className="goslot-hero position-relative">
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          zIndex: 0,
-          opacity: 1,
-          pointerEvents: 'none',
-          overflow: 'hidden'
-        }}>
-          <img
-            src="/main-hero-bg.webp"
-            alt="Hero Background"
-            loading="eager"
-            fetchPriority="high"
-            style={{
-              width: '100vw',
-              height: '100%',
-              minHeight: '100%',
-              minWidth: '100vw',
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              pointerEvents: 'none',
-              border: 'none',
-              objectFit: 'cover'
-            }}
-          />
-          <div style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'rgba(0,0,0,0.3)'
-          }}></div>
-        </div>
+        <div className="container-xl position-relative z-10 py-5">
+          {/* Top Row: Text + Illustration */}
+          <div className="row align-items-center mb-5 pb-4">
+            <div className="col-12 col-md-6 text-center text-md-start mb-4 mb-md-0">
+              <h1 className="display-4 fw-bolder mb-3" style={{ letterSpacing: '-0.03em', lineHeight: 1.2 }}>
+                <span style={{ color: '#2563eb', whiteSpace: 'nowrap' }}>Build Your Online Store</span><br />
+                <span className="gradient-text">With In 24 Hours</span>
+              </h1>
+              <p className="fs-5 text-muted mx-auto mx-md-0 fw-normal" style={{ maxWidth: 500, lineHeight: 1.6 }}>
+                ToastKart is the all-in-one platform for vendors to launch their stores and buyers to shop seamlessly. Manage orders, payouts, and catalogs from a central dashboard.
+              </p>
+            </div>
+            <div className="col-12 col-md-6">
+              <img src="/main-hero-bg.webp" alt="Fashion Storefront" className="img-fluid rounded-4 shadow-lg w-100" style={{ height: 450, objectFit: 'cover' }} />
+            </div>
+          </div>
 
-        <div className="container-xl position-relative z-10 text-center max-w-4xl mx-auto py-5">
-          <h1 className="display-3 fw-bolder mb-4 force-white-text" style={{ letterSpacing: '-0.03em', lineHeight: 1.15 }}>
-            Build Your Ecommerce Store <br />
-            <span className="gradient-text">With In 24 Hours</span>
-          </h1>
-          <p className="fs-5 mx-auto mb-4 force-white-text fw-normal" style={{ maxWidth: 700, lineHeight: 1.6 }}>
-            ToastKart is the all-in-one platform for vendors to launch their stores and buyers to shop seamlessly. Manage orders, payouts, and catalogs from a central dashboard.
-          </p>
+          {/* Bottom Row: 5 Steps Timeline */}
+          <div className="position-relative mt-5 pt-4 px-2">
+            {/* Desktop connecting line (Glowing Orange Gradient) */}
+            <div className="d-none d-lg-block position-absolute" style={{ top: '32px', left: '8%', right: '8%', height: '4px', background: 'linear-gradient(90deg, rgba(234,88,12,0) 0%, rgba(234,88,12,1) 50%, rgba(234,88,12,0) 100%)', zIndex: 0, boxShadow: '0 0 15px rgba(234,88,12,0.4)', borderRadius: '4px' }}></div>
+            
+            <div className="d-flex flex-column flex-lg-row justify-content-between gap-4 gap-lg-3">
+              {[
+                { num: '1', title: 'Login', desc: 'Create an account or sign in to access your dashboard.', icon: <ShieldCheck size={28} strokeWidth={2} /> },
+                { num: '2', title: 'Select Plan', desc: 'Pick a simple subscription plan that fits your business.', icon: <CheckCircle size={28} strokeWidth={2} /> },
+                { num: '3', title: 'Build Store', desc: 'Add products, set prices, and customize your look.', icon: <Store size={28} strokeWidth={2} /> },
+                { num: '4', title: 'Go Live', desc: 'Connect your domain and securely set up payments.', icon: <Rocket size={28} strokeWidth={2} /> },
+                { num: '5', title: 'Publish', desc: 'Share your store with the world and start getting orders!', icon: <Send size={28} strokeWidth={2} /> }
+              ].map((step, idx) => (
+                <div key={idx} className="flex-fill text-center position-relative z-10" style={{ maxWidth: '320px', margin: '0 auto', width: '100%' }}>
+                  
+                  {/* Premium Step Node */}
+                  <div className="mx-auto rounded-circle d-flex align-items-center justify-content-center mb-4 position-relative" 
+                       style={{ 
+                         width: 64, height: 64, 
+                         background: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)',
+                         color: 'white',
+                         border: '6px solid white',
+                         fontSize: '1.4rem',
+                         fontWeight: '900',
+                         boxShadow: '0 8px 25px rgba(234,88,12,0.35)',
+                         transition: 'transform 0.3s ease'
+                       }}>
+                    {step.num}
+                  </div>
+                  
+                  {/* Ultra-Premium Card Content */}
+                  <div className="p-4 rounded-4 position-relative d-flex flex-column align-items-center justify-content-start" 
+                       style={{ 
+                         background: 'linear-gradient(145deg, #ffffff 0%, #f8fafc 100%)',
+                         boxShadow: '0 20px 50px rgba(15,23,42,0.06), inset 0 2px 0 rgba(255,255,255,0.6)',
+                         border: '1px solid rgba(226,232,240,0.8)',
+                         minHeight: '210px',
+                         transform: 'translateY(0)',
+                         transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+                       }}
+                       onMouseEnter={(e) => { 
+                         e.currentTarget.style.transform = 'translateY(-8px) scale(1.02)'; 
+                         e.currentTarget.style.boxShadow = '0 30px 60px rgba(234,88,12,0.12), inset 0 2px 0 rgba(255,255,255,0.8)'; 
+                         e.currentTarget.style.borderColor = 'rgba(234,88,12,0.3)'; 
+                       }}
+                       onMouseLeave={(e) => { 
+                         e.currentTarget.style.transform = 'translateY(0) scale(1)'; 
+                         e.currentTarget.style.boxShadow = '0 20px 50px rgba(15,23,42,0.06), inset 0 2px 0 rgba(255,255,255,0.6)'; 
+                         e.currentTarget.style.borderColor = 'rgba(226,232,240,0.8)'; 
+                       }}
+                  >
+                    <div className="mb-4 position-relative mt-2">
+                      {/* Decorative glow behind icon */}
+                      <div className="position-absolute rounded-circle" style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 60, height: 60, background: 'radial-gradient(circle, rgba(234,88,12,0.15) 0%, transparent 70%)', zIndex: 0 }}></div>
+                      <div className="position-relative z-10 d-flex align-items-center justify-content-center rounded-circle shadow-sm" style={{ width: 56, height: 56, background: '#fff', border: '1px solid rgba(234,88,12,0.15)', color: '#ea580c' }}>
+                        {step.icon}
+                      </div>
+                    </div>
+                    <h4 className="fs-5 fw-bolder mb-1 text-dark" style={{ letterSpacing: '-0.02em' }}>{step.title}</h4>
+                    <p className="fs-7 text-muted mt-2 mb-0" style={{ lineHeight: 1.5 }}>{step.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 

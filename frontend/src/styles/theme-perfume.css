@@ -120,7 +120,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: rgba(0, 0, 0, 0.5); /* dark overlay */
+  background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.3) 100%); /* Much brighter, more colorful overlay */
   z-index: 2;
   text-align: center;
 }
@@ -129,6 +129,7 @@
   font-size: 3rem;
   color: #fff;
   margin-bottom: 1rem;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.5);
 }
 
 .theme-perfume .hero-cta {
