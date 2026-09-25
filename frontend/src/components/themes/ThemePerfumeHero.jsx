@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom';
 export default function ThemePerfumeHero() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const slides = [
-    '/images/bright_perfume_floral.png',
-    '/images/perfume-hero-floral-3.png',
-    '/images/perfume-freeze-in-flames.png',
-    '/images/bright_fleur_oceane.png'
+    '/images/bright_perfume_floral.webp',
+    '/images/perfume-hero-floral-3.webp',
+    '/images/perfume-freeze-in-flames.webp',
+    '/images/bright_fleur_oceane.webp'
   ];
 
   useEffect(() => {
@@ -41,6 +41,8 @@ export default function ThemePerfumeHero() {
               <img
                 src={slide}
                 alt="Perfume hero slide"
+                width="1024"
+                height="1024"
                 loading={index === 0 ? "eager" : "lazy"}
                 fetchPriority={index === 0 ? "high" : undefined}
                 decoding="async"
