@@ -3237,7 +3237,7 @@ export default function StoreOwnerDashboard() {
                               <span className="text-muted fs-8">
                                 {sub.autopay_enabled 
                                   ? "Your subscription will renew automatically." 
-                                  : "You are paying manually each cycle."}
+                                  : "AutoPay is currently disabled. Enable AutoPay to automatically renew your Toastkart subscription."}
                               </span>
                             </div>
                             <div>

@@ -149,18 +149,36 @@ class SubscriptionController extends Controller
             return response()->json(['message' => 'Unauthenticated'], 401);
         }
 
-        // Get the active subscription
-        $subscription = Subscription::where('user_id', $user->id)
-            ->where('status', 'active')
-            ->orderBy('id', 'desc')
-            ->first();
+        $subscription = null;
 
-        if (!$subscription) {
-            return response()->json(['success' => false, 'message' => 'No active subscription found to enable AutoPay.'], 400);
-        }
+        if ($request->has('plan') && $request->has('billing_cycle')) {
+            $plan = $request->input('plan');
+            $billingCycle = $request->input('billing_cycle');
+            $amountInPaise = $this->plans[$billingCycle][$plan];
 
-        if ($subscription->autopay_enabled) {
-            return response()->json(['success' => false, 'message' => 'AutoPay is already enabled.'], 400);
+            $subscription = Subscription::create([
+                'user_id' => $user->id,
+                'plan' => $plan,
+                'billing_cycle' => $billingCycle,
+                'amount' => $amountInPaise,
+                'currency' => 'INR',
+                'status' => 'pending',
+                'autopay_enabled' => false,
+            ]);
+        } else {
+            // Fallback for Dashboard (existing active subscription)
+            $subscription = Subscription::where('user_id', $user->id)
+                ->where('status', 'active')
+                ->orderBy('id', 'desc')
+                ->first();
+
+            if (!$subscription) {
+                return response()->json(['success' => false, 'message' => 'No active subscription found to enable AutoPay.'], 400);
+            }
+
+            if ($subscription->autopay_enabled) {
+                return response()->json(['success' => false, 'message' => 'AutoPay is already enabled.'], 400);
+            }
         }
 
         // Map internal plan to Razorpay Plan ID
@@ -253,11 +271,21 @@ class SubscriptionController extends Controller
 
             // Only mark AutoPay active if Razorpay says it's active or authenticated
             if (in_array($rzpSubscription['status'], ['active', 'authenticated'])) {
-                $subscription->update([
+                $updates = [
                     'autopay_enabled' => true,
                     'payment_mode' => 'autopay',
-                    'billing_status' => $rzpSubscription['status']
-                ]);
+                    'billing_status' => $rzpSubscription['status'],
+                    'razorpay_payment_id' => $fields['razorpay_payment_id'],
+                    'razorpay_signature' => $fields['razorpay_signature']
+                ];
+
+                if ($subscription->status === 'pending') {
+                    $updates['status'] = 'active';
+                    $updates['start_date'] = now();
+                    $updates['expiry_date'] = $subscription->billing_cycle === 'yearly' ? now()->addYear() : now()->addMonth();
+                }
+
+                $subscription->update($updates);
             } else {
                 $subscription->update([
                     'billing_status' => $rzpSubscription['status']

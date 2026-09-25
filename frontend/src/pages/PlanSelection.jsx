@@ -61,79 +61,152 @@ export default function PlanSelection() {
     return () => {};
   }, []);
 
-  const handleSelectPlan = async (planId) => {
+  const [selectedPlanModal, setSelectedPlanModal] = useState(null);
+  const [enableAutoPay, setEnableAutoPay] = useState(false);
+  const [billingCycle, setBillingCycle] = useState('monthly');
+
+  const handleSelectPlan = (planId) => {
     if (!isRazorpayLoaded) {
       setError('Razorpay is still loading. Please wait a moment and try again.');
       return;
     }
-    
+    setSelectedPlanModal(planId);
+    setEnableAutoPay(false);
+    setBillingCycle('monthly');
+  };
+
+  const handleProceedToPayment = async () => {
     setLoading(true);
     setError('');
 
     try {
-      const orderRes = await api.post('/subscriptions/order', {
-        plan: planId,
-        billing_cycle: 'monthly', // the design only has monthly pricing
-      });
+      if (enableAutoPay) {
+        // AutoPay Flow
+        const res = await api.post('/subscriptions/autopay/create', {
+          plan: selectedPlanModal,
+          billing_cycle: billingCycle,
+        });
 
-      if (!orderRes.data.success) {
-        throw new Error(orderRes.data.message || 'Failed to create order');
-      }
+        if (!res.data.success) {
+          throw new Error(res.data.message || 'Failed to initialize AutoPay');
+        }
 
-      const { order_id, amount, currency } = orderRes.data;
+        const options = {
+          key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+          subscription_id: res.data.subscription_id,
+          name: 'ToastKart',
+          description: `AutoPay - ${selectedPlanModal.charAt(0).toUpperCase() + selectedPlanModal.slice(1)} Plan (${billingCycle})`,
+          image: 'https://www.toastkart.com/favicon.png',
+          handler: async function (response) {
+            try {
+              setLoading(true);
+              const verifyRes = await api.post('/subscriptions/autopay/verify', {
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_subscription_id: response.razorpay_subscription_id,
+                razorpay_signature: response.razorpay_signature,
+              });
 
-      const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID, 
-        amount: amount,
-        currency: currency,
-        name: 'ToastKart',
-        description: `${planId.charAt(0).toUpperCase() + planId.slice(1)} Plan (monthly)`,
-        image: 'https://www.toastkart.com/favicon.png', 
-        order_id: order_id,
-        handler: async function (response) {
-          try {
-            setLoading(true);
-            const verifyRes = await api.post('/subscriptions/verify', {
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature,
-            });
-
-            if (verifyRes.data.success) {
-              await refreshUser(); 
-              navigate('/owner/dashboard');
-            } else {
-              setError(verifyRes.data.message || 'Payment verification failed.');
+              if (verifyRes.data.success) {
+                await refreshUser();
+                alert('AutoPay enabled successfully. Your subscription will renew automatically according to your selected billing cycle.');
+                navigate('/owner/dashboard');
+              } else {
+                setError(verifyRes.data.message || 'AutoPay verification failed.');
+                setLoading(false);
+              }
+            } catch (err) {
+              setError('Failed to verify AutoPay. Please contact support.');
               setLoading(false);
             }
-          } catch (err) {
-            setError('Error verifying payment. Please contact support if amount was deducted.');
-            setLoading(false);
-          }
-        },
-        prefill: {
-          name: user?.name || '',
-          email: user?.email || '',
-          ...(user?.phone ? { contact: user.phone } : {}),
-        },
-        theme: {
-          color: '#ff5a1f',
-        },
-        modal: {
-          ondismiss: function () {
-            setLoading(false);
           },
-        },
-      };
+          prefill: {
+            name: user?.name || '',
+            email: user?.email || '',
+            ...(user?.phone ? { contact: user.phone } : {}),
+          },
+          theme: {
+            color: '#ff5a1f',
+          },
+          modal: {
+            ondismiss: function () {
+              setLoading(false);
+            },
+          },
+        };
 
-      const rzp = new window.Razorpay(options);
-      
-      rzp.on('payment.failed', function (response) {
-        setError(response.error.description || 'Payment failed.');
-        setLoading(false);
-      });
+        const rzp = new window.Razorpay(options);
+        rzp.on('payment.failed', function (response) {
+          setError(response.error.description || 'AutoPay setup failed.');
+          setLoading(false);
+        });
+        rzp.open();
 
-      rzp.open();
+      } else {
+        // Normal One-Time Payment Flow
+        const orderRes = await api.post('/subscriptions/order', {
+          plan: selectedPlanModal,
+          billing_cycle: billingCycle,
+        });
+
+        if (!orderRes.data.success) {
+          throw new Error(orderRes.data.message || 'Failed to create order');
+        }
+
+        const { order_id, amount, currency } = orderRes.data;
+
+        const options = {
+          key: import.meta.env.VITE_RAZORPAY_KEY_ID, 
+          amount: amount,
+          currency: currency,
+          name: 'ToastKart',
+          description: `${selectedPlanModal.charAt(0).toUpperCase() + selectedPlanModal.slice(1)} Plan (${billingCycle})`,
+          image: 'https://www.toastkart.com/favicon.png', 
+          order_id: order_id,
+          handler: async function (response) {
+            try {
+              setLoading(true);
+              const verifyRes = await api.post('/subscriptions/verify', {
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+              });
+
+              if (verifyRes.data.success) {
+                await refreshUser(); 
+                navigate('/owner/dashboard');
+              } else {
+                setError(verifyRes.data.message || 'Payment verification failed.');
+                setLoading(false);
+              }
+            } catch (err) {
+              setError('Error verifying payment. Please contact support if amount was deducted.');
+              setLoading(false);
+            }
+          },
+          prefill: {
+            name: user?.name || '',
+            email: user?.email || '',
+            ...(user?.phone ? { contact: user.phone } : {}),
+          },
+          theme: {
+            color: '#ff5a1f',
+          },
+          modal: {
+            ondismiss: function () {
+              setLoading(false);
+            },
+          },
+        };
+
+        const rzp = new window.Razorpay(options);
+        
+        rzp.on('payment.failed', function (response) {
+          setError(response.error.description || 'Payment failed.');
+          setLoading(false);
+        });
+
+        rzp.open();
+      }
     } catch (err) {
       setError(err.response?.data?.message || err.message || 'An error occurred while setting up the payment.');
       setLoading(false);
@@ -352,6 +425,66 @@ export default function PlanSelection() {
           <p>SELL . GROW . BEYOND</p>
         </div>
       </div>
+
+      {/* Selected Plan Confirmation Modal */}
+      {selectedPlanModal && (
+        <div className="position-fixed top-0 bottom-0 start-0 end-0 bg-dark bg-opacity-75 d-flex align-items-center justify-content-center p-3" style={{ zIndex: 1050 }}>
+          <div className="bg-white rounded-3 shadow w-100 p-4" style={{ maxWidth: 420 }}>
+            <div className="d-flex align-items-center justify-content-between mb-3 border-bottom pb-3">
+              <h3 className="fs-5 font-bold mb-0 text-capitalize">{selectedPlanModal} Plan</h3>
+              <button onClick={() => setSelectedPlanModal(null)} className="btn btn-sm p-0 border-0 bg-transparent" style={{ color: "#6d7175" }}>✕</button>
+            </div>
+            
+            <div className="mb-4 text-center">
+              <div className="fs-1 fw-bold" style={{ color: '#ff5a1f' }}>
+                ₹{selectedPlanModal === 'basic' ? 1 : selectedPlanModal === 'growth' ? 999 : 1999}
+              </div>
+              <div className="text-muted">/ month</div>
+            </div>
+
+            <div className="mb-3">
+              <label className="fw-semibold mb-2">Billing Cycle</label>
+              <select 
+                className="form-select" 
+                value={billingCycle} 
+                onChange={(e) => setBillingCycle(e.target.value)}
+              >
+                <option value="monthly">Monthly</option>
+                <option value="yearly">Yearly</option>
+              </select>
+            </div>
+
+            <div className="mb-4">
+              <div className="form-check p-3 bg-light rounded border">
+                <input 
+                  type="checkbox" 
+                  className="form-check-input mt-1" 
+                  id="enableAutoPayCheck" 
+                  checked={enableAutoPay} 
+                  onChange={(e) => setEnableAutoPay(e.target.checked)}
+                />
+                <label className="form-check-label fw-bold ms-2 cursor-pointer" htmlFor="enableAutoPayCheck">
+                  Enable AutoPay
+                </label>
+                {enableAutoPay && (
+                  <p className="fs-7 text-muted mt-2 mb-0 ms-2">
+                    Your subscription will automatically renew {billingCycle === 'monthly' ? 'monthly' : 'yearly'}.
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <button 
+              className="btn w-100 py-2 fw-bold text-white" 
+              style={{ backgroundColor: '#ff5a1f', borderRadius: '8px' }}
+              onClick={handleProceedToPayment}
+              disabled={loading}
+            >
+              Continue to Payment
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
