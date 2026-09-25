@@ -204,7 +204,7 @@ export default function PlanSelection() {
             <h2>Basic</h2>
             <p>Perfect for getting started</p>
             <div className="card-price">
-              <span className="currency">₹</span>799<span className="period">/month</span>
+              <span className="currency">₹</span>1<span className="period">/month</span>
             </div>
           </div>
           
