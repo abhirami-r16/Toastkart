@@ -10,9 +10,10 @@ export default function PaymentGateway() {
   const { cartItems, cartTotal, clearCart, storeId } = useStorefrontCart();
   const { user } = useStorefrontAuth();
   
-  const [paymentMethod, setPaymentMethod] = useState('upi');
+  const [paymentMethod, setPaymentMethod] = useState('razorpay');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderSuccess, setOrderSuccess] = useState(false);
+  const [isRazorpayLoaded, setIsRazorpayLoaded] = useState(false);
 
   const shippingData = location.state?.shippingData;
 
@@ -22,6 +23,18 @@ export default function PaymentGateway() {
     return '/storefront';
   };
   const basePath = getBasePath();
+
+  useEffect(() => {
+    if (window.Razorpay) {
+      setIsRazorpayLoaded(true);
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.async = true;
+    script.onload = () => setIsRazorpayLoaded(true);
+    document.body.appendChild(script);
+  }, []);
 
   useEffect(() => {
     if (!shippingData && !orderSuccess) {
@@ -61,8 +74,7 @@ export default function PaymentGateway() {
 
   if (!shippingData) return null;
 
-  const handlePayment = async (e) => {
-    e.preventDefault();
+  const placeOrder = async () => {
     setIsSubmitting(true);
 
     const orderPayload = {
@@ -114,90 +126,54 @@ export default function PaymentGateway() {
     clearCart();
   };
 
+  const handlePayment = async (e) => {
+    e.preventDefault();
+    if (paymentMethod === 'razorpay') {
+      if (!isRazorpayLoaded) {
+        alert('Razorpay is still loading. Please wait.');
+        return;
+      }
+      setIsSubmitting(true);
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_dummykey12345', 
+        amount: Math.round(cartTotal * 100),
+        currency: 'INR',
+        name: 'Store Checkout',
+        description: 'Order Payment',
+        handler: async function (response) {
+          await placeOrder();
+        },
+        prefill: {
+          name: shippingData?.firstName || '',
+          email: user?.email || '',
+          contact: shippingData?.phone || '',
+        },
+        theme: {
+          color: '#fb641b',
+        },
+        modal: {
+          ondismiss: function () {
+            setIsSubmitting(false);
+          },
+        },
+      };
+      const rzp = new window.Razorpay(options);
+      rzp.on('payment.failed', function (response) {
+        alert(response.error.description || 'Payment failed.');
+        setIsSubmitting(false);
+      });
+      rzp.open();
+    } else {
+      await placeOrder();
+    }
+  };
+
   return (
     <div className="storefront-container py-5">
-      <h1 className="fs-2 font-bold mb-4">Payment Gateway</h1>
 
-      <div className="row g-5">
-        <div className="col-lg-7">
-          <div className="bg-white rounded shadow-sm border border-light p-4 mb-4">
-            <h3 className="fs-5 fw-bold mb-4">Select Payment Method</h3>
-            <form id="payment-form" onSubmit={handlePayment}>
-              <div className="d-flex flex-column gap-3">
-                
-                {/* UPI Option */}
-                <label className={`border rounded p-3 cursor-pointer d-flex align-items-center gap-3 ${paymentMethod === 'upi' ? 'border-primary bg-primary bg-opacity-10' : ''}`}>
-                  <input 
-                    type="radio" 
-                    name="paymentMethod" 
-                    value="upi" 
-                    checked={paymentMethod === 'upi'} 
-                    onChange={() => setPaymentMethod('upi')} 
-                    className="form-check-input mt-0"
-                  />
-                  <div>
-                    <div className="fw-bold fs-7">UPI (GPay, PhonePe, Paytm)</div>
-                    <div className="fs-8 text-secondary">Pay directly from your bank account</div>
-                  </div>
-                </label>
-
-                {paymentMethod === 'upi' && (
-                  <div className="mt-2 p-4 bg-light rounded border text-center">
-                    <div className="mb-3">
-                      <div style={{width: 150, height: 150, margin: '0 auto'}} className="bg-white border p-2 mb-2 d-flex align-items-center justify-content-center">
-                        <svg viewBox="0 0 24 24" width="100%" height="100%" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><rect x="7" y="7" width="3" height="3"></rect><rect x="14" y="7" width="3" height="3"></rect><rect x="7" y="14" width="3" height="3"></rect><rect x="14" y="14" width="3" height="3"></rect></svg>
-                      </div>
-                      <p className="fs-8 fw-semibold mb-1">Scan to Pay</p>
-                      <p className="fs-8 text-secondary">Or enter UPI ID below</p>
-                    </div>
-                    <div>
-                      <input type="text" className="form-control text-center" placeholder="yourname@upi" />
-                    </div>
-                  </div>
-                )}
-
-                {/* Credit Card Option */}
-                <label className={`border rounded p-3 cursor-pointer d-flex align-items-center gap-3 ${paymentMethod === 'card' ? 'border-primary bg-primary bg-opacity-10' : ''}`}>
-                  <input 
-                    type="radio" 
-                    name="paymentMethod" 
-                    value="card" 
-                    checked={paymentMethod === 'card'} 
-                    onChange={() => setPaymentMethod('card')} 
-                    className="form-check-input mt-0"
-                  />
-                  <div>
-                    <div className="fw-bold fs-7">Credit / Debit Card</div>
-                    <div className="fs-8 text-secondary">Secure online card payment</div>
-                  </div>
-                </label>
-
-                {paymentMethod === 'card' && (
-                  <div className="mt-2 p-4 bg-light rounded border">
-                    <div className="mb-3">
-                      <label className="form-label fs-8 text-secondary fw-semibold">Card Number</label>
-                      <input type="text" className="form-control" placeholder="0000 0000 0000 0000" maxLength="19" required />
-                    </div>
-                    <div className="row g-3">
-                      <div className="col-6">
-                        <label className="form-label fs-8 text-secondary fw-semibold">Expiry Date</label>
-                        <input type="text" className="form-control" placeholder="MM/YY" maxLength="5" required />
-                      </div>
-                      <div className="col-6">
-                        <label className="form-label fs-8 text-secondary fw-semibold">CVV</label>
-                        <input type="password" className="form-control" placeholder="123" maxLength="4" required />
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-              </div>
-            </form>
-          </div>
-        </div>
-
-        <div className="col-lg-5">
-          <div className="bg-white rounded shadow-sm border border-light p-4 position-sticky" style={{ top: 100 }}>
+      <div className="row justify-content-center">
+        <div className="col-lg-6 col-md-8">
+          <div className="bg-white rounded shadow-sm border border-light p-4">
             <h3 className="fs-5 fw-bold mb-4">Order Summary</h3>
             <div className="d-flex flex-column gap-3 mb-4">
               {cartItems.map((item, idx) => (
@@ -241,8 +217,8 @@ export default function PaymentGateway() {
             </div>
             <div className="d-flex flex-column gap-3 mt-4">
               <button 
-                type="submit" 
-                form="payment-form"
+                type="button" 
+                onClick={handlePayment}
                 className="btn w-100 py-3 fw-bold text-white fs-6" 
                 style={{ backgroundColor: '#fb641b' }}
                 disabled={isSubmitting}
