@@ -18,7 +18,7 @@ const ThemeGiftHero = React.lazy(() => import('../../components/themes/ThemeGift
 const ThemePerfumeHero = React.lazy(() => import('../../components/themes/ThemePerfumeHero'));
 const ThemeDefaultHero = React.lazy(() => import('../../components/themes/ThemeDefaultHero'));
 
-export default function StorefrontHome({ storeData, products, categories = [] }) {
+export default function StorefrontHome({ storeData, products, categories = [], loading }) {
   const { requireAuth } = useStorefrontAuth();
   const location = useLocation();
 
@@ -535,20 +535,27 @@ export default function StorefrontHome({ storeData, products, categories = [] })
             </div>
           );
         })
-      ) : (
-        <div
-          className="storefront-empty-state"
-          style={{
-            padding: '60px 20px',
-            textAlign: 'center',
-          }}
-        >
-          <h2>Welcome to {storeData.name}</h2>
+      ) : loading ? (
+          <div className="storefront-loading-section" style={{ padding: '60px 20px', textAlign: 'center' }}>
+            <div className="spinner-border text-primary" role="status" style={{ width: '2rem', height: '2rem' }}>
+              <span className="visually-hidden">Loading products...</span>
+            </div>
+            <p className="mt-3 text-muted">Loading products...</p>
+          </div>
+        ) : (
+          <div
+            className="storefront-empty-state"
+            style={{
+              padding: '60px 20px',
+              textAlign: 'center',
+            }}
+          >
+            <h2>Welcome to {storeData.name}</h2>
 
-          <p>
-            This store doesn't have any collections or products yet.
-          </p>
-        </div>
+            <p>
+              This store doesn't have any collections or products yet.
+            </p>
+          </div>
       )}
 
       {/* Video Section for Perfume Theme */}

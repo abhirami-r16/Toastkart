@@ -16,11 +16,27 @@ const MyOrders = React.lazy(() => import('./MyOrders'));
 import '../../styles/storefront.css';
 
 export default function StorefrontApp({ subdomain }) {
-  const [storeData, setStoreData] = useState(null);
+  const { slug } = useParams();
+  const [storeData, setStoreData] = useState(() => {
+    // Generate a temporary store data to render the shell immediately
+    const cleanSub = subdomain || slug || 'store';
+    const name = cleanSub.charAt(0).toUpperCase() + cleanSub.slice(1).replace(/-/g, ' ').replace('store', 'Store');
+    let category = 'General Retail';
+    if (cleanSub.includes('perfume')) category = 'perfumes';
+    else if (cleanSub.includes('jewelry')) category = 'jewelry';
+    else if (cleanSub.includes('beauty') || cleanSub.includes('glow')) category = 'beauty';
+    else if (cleanSub.includes('home') || cleanSub.includes('decor')) category = 'home & living';
+    else if (cleanSub.includes('grocery')) category = 'grocery';
+    else if (cleanSub.includes('fashion') || cleanSub.includes('margas')) category = 'fashion & apparel';
+    else if (cleanSub.includes('electronic')) category = 'electronics';
+    else if (cleanSub.includes('footwear')) category = 'footwear';
+    else if (cleanSub.includes('gift')) category = 'gift';
+    
+    return { id: 'loading', name, subdomain: cleanSub, category, loading: true };
+  });
   const [storeProducts, setStoreProducts] = useState([]);
   const [storeCategories, setStoreCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { slug } = useParams();
   const tenantId = subdomain || slug;
 
   // Fetch all required data (store, products, categories)
@@ -129,7 +145,7 @@ if (!foundStore) {
       } else {
         const generatedName =
           subdomain.charAt(0).toUpperCase() + subdomain.slice(1).replace('store', ' Store');
-        setStoreData({ id: 'dummy-store-id', name: generatedName, subdomain });
+        setStoreData({ id: 'dummy-store-id', name: generatedName, subdomain, category: storeData?.category || 'General Retail' });
       }
 
       // ----- Products -----
@@ -271,17 +287,7 @@ if (!foundStore) {
     };
   }, [fetchStoreData]);
 
-  if (loading) {
-    return (
-      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh', backgroundColor: '#fdfdfd' }}>
-        <div className="spinner-border text-primary" role="status" style={{ width: '3rem', height: '3rem' }}>
-          <span className="visually-hidden">Loading...</span>
-        </div>
-      </div>
-    );
-  }
-
-  if (!storeData) {
+  if (!loading && !storeData) {
     return (
       <div className="storefront-not-found">
         <h2>Store Not Found</h2>
@@ -306,11 +312,11 @@ if (!foundStore) {
             <Routes>
               <Route
                 path="/"
-                element={<StorefrontLayout storeData={storeData} categories={storeCategories} products={storeProducts} />}
+                element={<StorefrontLayout storeData={storeData} categories={storeCategories} products={storeProducts} loading={loading} />}
               >
                 <Route
                 index
-                element={<StorefrontHome storeData={storeData} products={storeProducts} categories={storeCategories} />}
+                element={<StorefrontHome storeData={storeData} products={storeProducts} categories={storeCategories} loading={loading} />}
               />
               <Route path="product/:id" element={<ProductDetail storeData={storeData} products={storeProducts} />} />
               <Route path="cart" element={<Cart />} />
