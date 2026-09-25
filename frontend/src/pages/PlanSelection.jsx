@@ -277,7 +277,7 @@ export default function PlanSelection() {
             <h2>Basic</h2>
             <p>Perfect for getting started</p>
             <div className="card-price">
-              <span className="currency">₹</span>1<span className="period">/month</span>
+              <span className="currency">₹</span>799<span className="period">/month</span>
             </div>
           </div>
           
@@ -437,7 +437,7 @@ export default function PlanSelection() {
             
             <div className="mb-4 text-center">
               <div className="fs-1 fw-bold" style={{ color: '#ff5a1f' }}>
-                ₹{selectedPlanModal === 'basic' ? 1 : selectedPlanModal === 'growth' ? 999 : 1999}
+                ₹{selectedPlanModal === 'basic' ? 799 : selectedPlanModal === 'growth' ? 999 : 1999}
               </div>
               <div className="text-muted">/ month</div>
             </div>
