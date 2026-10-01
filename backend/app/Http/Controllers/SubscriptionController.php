@@ -11,7 +11,7 @@ class SubscriptionController extends Controller
 {
     private $plans = [
         'monthly' => [
-            'basic' => 1000,
+            'basic' => 79900,
             'growth' => 99900,
             'pro' => 199900,
         ],

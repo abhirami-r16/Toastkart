@@ -843,7 +843,7 @@ export default function PlanSelection() {
               <span className="currency">
                 ₹
               </span>
-              10
+              799
               <span className="period">
                 /month
               </span>
@@ -1245,7 +1245,7 @@ export default function PlanSelection() {
               >
                 ₹
                 {selectedPlanModal === 'basic'
-                  ? 10
+                  ? 799
                   : selectedPlanModal === 'growth'
                     ? 999
                     : 1999}
