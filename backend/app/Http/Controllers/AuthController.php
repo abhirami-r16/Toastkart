@@ -6,6 +6,11 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
+use App\Mail\RegistrationSuccessful;
+use App\Mail\GoogleSignInNotification;
+use Google_Client;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -54,6 +59,12 @@ class AuthController extends Controller
 
         $user->load('stores');
         $token = $user->createToken('shopify_token')->plainTextToken;
+
+        try {
+            Mail::to($user->email)->send(new RegistrationSuccessful($user->name));
+        } catch (\Exception $e) {
+            Log::error('Failed to send registration email: ' . $e->getMessage());
+        }
 
         return response()->json([
             'user' => $user,
@@ -105,6 +116,68 @@ class AuthController extends Controller
 
         $token = $user->createToken('shopify_token')->plainTextToken;
         $user->load(['stores', 'activeSubscription']);
+
+        return response()->json([
+            'user' => $user,
+            'token' => $token,
+            'message' => 'Login successful',
+        ]);
+    }
+
+    public function googleLogin(Request $request)
+    {
+        $fields = $request->validate([
+            'id_token' => 'required|string',
+            'role' => 'nullable|string'
+        ]);
+
+        $client = new Google_Client(['client_id' => env('GOOGLE_CLIENT_ID')]);
+        $payload = $client->verifyIdToken($fields['id_token']);
+
+        if (!$payload) {
+            return response()->json(['message' => 'Invalid Google token'], 401);
+        }
+
+        $email = $payload['email'];
+        $name = $payload['name'];
+        $googleId = $payload['sub'];
+        $role = $fields['role'] ?? 'owner';
+
+        // Check if user exists by email
+        $user = User::where('email', $email)->first();
+
+
+        if ($user) {
+            // Update auth provider if they previously registered via email
+            if (!$user->google_id) {
+                $user->google_id = $googleId;
+                $user->auth_provider = 'google';
+                $user->save();
+            }
+        } else {
+            // Register new user
+            $user = User::create([
+                'name' => $name,
+                'email' => $email,
+                'password' => Hash::make(Str::random(24)), // Random password for google users
+                'role' => $role,
+                'google_id' => $googleId,
+                'auth_provider' => 'google'
+            ]);
+        }
+
+        try {
+            Mail::to($payload['email'])
+                ->send(new GoogleSignInNotification($user));
+        } catch (\Throwable $e) {
+            Log::error('Toastkart Google sign-in email failed', [
+                'user_id' => $user->id,
+                'error' => $e->getMessage(),
+            ]);
+        }
+
+        $user->load(['stores', 'activeSubscription']);
+        $token = $user->createToken('shopify_token')->plainTextToken;
 
         return response()->json([
             'user' => $user,

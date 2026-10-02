@@ -21,6 +21,7 @@ Route::get('/health', function () {
 // Authentication Routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/auth/google', [AuthController::class, 'googleLogin']);
 Route::post('/logout', [AuthController::class, 'logout']);
 Route::get('/me', [AuthController::class, 'me']);
 Route::post('/update-password', [AuthController::class, 'updatePassword']);
@@ -37,6 +38,11 @@ Route::post('/stores', [StoreController::class, 'store']);
 Route::get('/stores/{id}', [StoreController::class, 'show']);
 Route::put('/stores/{id}', [StoreController::class, 'update']);
 Route::delete('/stores/{id}', [StoreController::class, 'destroy']);
+
+// AI Builder
+Route::post('/ai-builder/generate', [\App\Http\Controllers\AIBuilderController::class, 'generate']);
+Route::post('/ai-builder/extract-profile', [\App\Http\Controllers\AIBuilderController::class, 'extractStoreProfile']);
+Route::delete('/ai-builder/{id}', [\App\Http\Controllers\AIBuilderController::class, 'destroy']);
 
 // Categories
 Route::get('/categories', [CategoryController::class, 'index']);

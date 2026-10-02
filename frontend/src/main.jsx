@@ -15,6 +15,8 @@ const getSubdomain = () => {
 
 const subdomain = getSubdomain();
 
+import { GoogleOAuthProvider } from "@react-oauth/google";
+
 if (subdomain) {
   // Storefront visitors NEVER load AppRoutes or AuthContext!
   const StorefrontApp = React.lazy(() => import('./pages/Storefront/StorefrontApp'));
@@ -32,9 +34,11 @@ if (subdomain) {
   const AppRoutes = React.lazy(() => import("./routes/AppRoutes"));
   ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
-      <Suspense fallback={<div className="d-flex justify-content-center align-items-center vh-100"><div className="spinner-border text-primary"></div></div>}>
-        <AppRoutes />
-      </Suspense>
+      <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+        <Suspense fallback={<div className="d-flex justify-content-center align-items-center vh-100"><div className="spinner-border text-primary"></div></div>}>
+          <AppRoutes />
+        </Suspense>
+      </GoogleOAuthProvider>
     </React.StrictMode>
   );
 }

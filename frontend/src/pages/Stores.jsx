@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useStore } from '../context/StoreContext';
 import { useAuth } from '../context/AuthContext';
 import {
@@ -29,6 +29,7 @@ export default function Stores() {
   const { user } = useAuth();
   const currentStore = activeStore || myStore;
   const location = useLocation();
+  const navigate = useNavigate();
   // Determine which stores to display: admin sees all, manager sees own only
   const displayStores = user && user.role === 'admin' ? stores : stores.filter(s => s.user_id === user?.id);
 
@@ -53,7 +54,8 @@ export default function Stores() {
     timezone: 'America/New_York',
     ownerName: '',
     logo: '',
-    banner: ''
+    banner: '',
+    ai_prompt: ''
   });
 
   useEffect(() => {
@@ -79,7 +81,8 @@ export default function Stores() {
         timezone: currentStore.timezone || 'America/New_York',
         ownerName: currentStore.ownerName || 'Store Owner',
         logo: currentStore.logo || '',
-        banner: currentStore.banner || ''
+        banner: currentStore.banner || '',
+        ai_prompt: ''
       });
     }
 
@@ -93,6 +96,13 @@ export default function Stores() {
 
   const handleCreateStoreSubmit = async (e) => {
     e.preventDefault();
+
+    // Check if the user has an active plan before creating a store (Flow 4)
+    if (user?.auth_provider === 'google' && !user?.activeSubscription) {
+      navigate('/plans?redirect=create-store');
+      return;
+    }
+
     setLoading(true);
     const res = await createStore(formData);
     setLoading(false);
@@ -376,10 +386,18 @@ export default function Stores() {
                     style={{ background: '#161310', border: `1px solid rgba(212, 175, 55, 0.2)` }}
                   >
                     <option value="Fashion & Apparel">Fashion & Apparel</option>
-                    <option value="Home & Living">Home & Living</option>
+                    <option value="Jewellery">Jewellery</option>
                     <option value="Beauty & Cosmetics">Beauty & Cosmetics</option>
-                    <option value="Jewelry & Luxury">Jewelry & Luxury</option>
+                    <option value="Home & Living">Home & Living</option>
+                    <option value="Perfumes">Perfumes</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Groceries">Groceries</option>
+                    <option value="Gift & Novelty">Gift & Novelty</option>
+                    <option value="Watches">Watches</option>
+                    <option value="Footwear">Footwear</option>
+                    <option value="E-flyer">E-flyer</option>
                     <option value="General Retail">General Retail</option>
+                    <option value="Other">Other</option>
                   </select>
                 </div>
 
@@ -543,6 +561,28 @@ export default function Stores() {
 
       {/* TAB 5: CREATE STORE FORM */}
       {activeTab === 'create' && (
+        user?.auth_provider === 'google' && !user?.activeSubscription ? (
+          <div className="grid lg:grid-cols-12 gap-6">
+            <div className="lg:col-span-8 lg:col-start-3 rounded-2xl p-8 flex flex-col items-center justify-center text-center mx-auto mt-8 w-full" style={{ background: '#0f0e0c', border: `1px solid rgba(212, 175, 55, 0.3)`, minHeight: '300px' }}>
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4" style={{ background: 'rgba(212, 175, 55, 0.1)', color: '#d4af37' }}>
+                <Sparkles size={32} />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-3">Subscription Required</h3>
+              <p className="text-sm mb-6 max-w-md" style={{ color: '#a99f80' }}>
+                You need an active plan to access premium features like <strong style={{ color: '#d4af37' }}>Create Store</strong>.
+                <br /><br />
+                Select a plan to instantly unlock this feature and start building your brand.
+              </p>
+              <button
+                onClick={() => navigate('/plans?redirect=create-store')}
+                className="px-6 py-3 rounded-xl text-xs font-bold shadow-md"
+                style={{ background: `linear-gradient(135deg, ${GOLD_DEEP}, ${GOLD})`, color: INK }}
+              >
+                Select Plan
+              </button>
+            </div>
+          </div>
+        ) : (
         <div className="grid lg:grid-cols-12 gap-6">
           <div className="lg:col-span-8 lg:col-start-3">
             <form onSubmit={handleCreateStoreSubmit} className="rounded-2xl p-6 flex flex-col gap-4 mx-auto" style={{ background: '#0f0e0c', border: `1px solid rgba(212, 175, 55, 0.18)` }}>
@@ -550,12 +590,28 @@ export default function Stores() {
                 <PlusCircle size={18} style={{ color: GOLD }} /> Create New Store
               </h3>
 
+              <div className="p-4 rounded-xl mb-2" style={{ background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, rgba(212, 175, 55, 0.15) 100%)', border: `1px solid rgba(212, 175, 55, 0.3)` }}>
+                <h4 className="text-sm font-bold text-white flex items-center gap-2 mb-2">
+                  <Sparkles size={16} style={{ color: GOLD }} /> AI Auto-Build (Optional)
+                </h4>
+                <p className="text-xs mb-3" style={{ color: '#a99f80' }}>
+                  Describe your dream store in plain English. The AI will automatically extract the name, category, create products, and set up the design! You can leave the fields below empty if you use this.
+                </p>
+                <textarea
+                  rows={3}
+                  value={formData.ai_prompt}
+                  onChange={(e) => setFormData({ ...formData, ai_prompt: e.target.value })}
+                  placeholder="e.g. Create a luxury watch store called ChronoCraft. We sell premium watches for men and women..."
+                  className="w-full p-3 rounded-lg text-sm outline-none text-white"
+                  style={{ background: '#161310', border: `1px solid rgba(212, 175, 55, 0.3)` }}
+                />
+              </div>
+
               <div className="overflow-hidden rounded-xl border" style={{ borderColor: 'rgba(212, 175, 55, 0.16)' }}>
                 <div className="grid md:grid-cols-2 gap-0">
                   <div className="border-b border-r p-3" style={{ borderColor: 'rgba(212, 175, 55, 0.14)' }}>
-                    <label className="text-[11px] font-semibold uppercase tracking-wide block mb-2" style={{ color: '#8a7a4d' }}>Store Name *</label>
+                    <label className="text-[11px] font-semibold uppercase tracking-wide block mb-2" style={{ color: '#8a7a4d' }}>Store Name</label>
                     <input
-                      required
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value, slug: e.target.value.toLowerCase().replace(/[^a-z0-9]/g, '-'), subdomain: e.target.value.toLowerCase().replace(/[^a-z0-9]/g, '-') })}
                       placeholder="e.g. Margas Luxury Boutique"
@@ -582,10 +638,18 @@ export default function Stores() {
                       style={{ background: '#161310', border: `1px solid rgba(212, 175, 55, 0.2)` }}
                     >
                       <option value="Fashion & Apparel">Fashion & Apparel</option>
-                      <option value="Home & Living">Home & Living</option>
+                      <option value="Jewellery">Jewellery</option>
                       <option value="Beauty & Cosmetics">Beauty & Cosmetics</option>
-                      <option value="Jewelry & Luxury">Jewelry & Luxury</option>
+                      <option value="Home & Living">Home & Living</option>
+                      <option value="Perfumes">Perfumes</option>
+                      <option value="Electronics">Electronics</option>
+                      <option value="Groceries">Groceries</option>
+                      <option value="Gift & Novelty">Gift & Novelty</option>
+                      <option value="Watches">Watches</option>
+                      <option value="Footwear">Footwear</option>
+                      <option value="E-flyer">E-flyer</option>
                       <option value="General Retail">General Retail</option>
+                      <option value="Other">Other</option>
                     </select>
                   </div>
                   <div className="border-b p-3" style={{ borderColor: 'rgba(212, 175, 55, 0.14)' }}>
@@ -692,6 +756,7 @@ export default function Stores() {
             </form>
           </div>
         </div>
+      )
       )}
     </div>
   );

@@ -90,6 +90,46 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Google Login using Laravel backend
+  const googleLogin = async (idToken) => {
+    try {
+      const res = await api.post('/auth/google', {
+        id_token: idToken,
+      });
+
+      const { user, token } = res.data;
+
+      if (!token) {
+        return {
+          success: false,
+          message: 'Login failed: authentication token was not returned.',
+        };
+      }
+
+      localStorage.setItem('toastkart_token', token);
+      localStorage.setItem('toastkart_user', JSON.stringify(user));
+      localStorage.setItem('toastkart_last_user_id', user.id);
+
+      setUser(user);
+
+      return {
+        success: true,
+        user,
+      };
+    } catch (err) {
+      console.error('Google login failed:', err);
+
+      const message =
+        err.response?.data?.message ||
+        'Google authentication failed. Please try again.';
+
+      return {
+        success: false,
+        message,
+      };
+    }
+  };
+
   // Register using Laravel backend
   const register = async (
     name,
@@ -188,6 +228,7 @@ export const AuthProvider = ({ children }) => {
         user,
         loading,
         login,
+        googleLogin,
         register,
         logout,
         updatePassword,

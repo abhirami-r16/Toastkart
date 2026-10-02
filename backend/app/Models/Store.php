@@ -47,6 +47,11 @@ class Store extends Model
         return $this->hasMany(Order::class);
     }
 
+    public function aiConfigurations()
+    {
+        return $this->hasMany(AiStoreConfiguration::class)->orderBy('id', 'desc');
+    }
+
     public function settings()
     {
         return $this->hasMany(Setting::class);

@@ -16,7 +16,9 @@ export default function AIStoreBuilder({
 activeStore,
 categoriesList,
 productsList,
-onBack
+onBack,
+user,
+setShowPlanRequiredModal
 }) {
 const { createStore, setActiveStore } = useStore();
 
@@ -69,6 +71,10 @@ const [isAiCreating, setIsAiCreating] = useState(false);
 const handleGenerate = async (e) => {
 e.preventDefault();
 
+if (user?.auth_provider === 'google' && !user?.activeSubscription) {
+  if (setShowPlanRequiredModal) setShowPlanRequiredModal(true);
+  return;
+}
 
 if (!prompt.trim()) return;
 
@@ -203,6 +209,10 @@ try {
   const handleAiCreateStore = async (e) => {
   e.preventDefault();
 
+  if (user?.auth_provider === 'google' && !user?.activeSubscription) {
+    if (setShowPlanRequiredModal) setShowPlanRequiredModal(true);
+    return;
+  }
 
 if (!aiStorePrompt.trim()) return;
 

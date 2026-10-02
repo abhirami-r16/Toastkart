@@ -13,6 +13,7 @@ import {
   PlusCircle, Edit3, Globe, Copy, ExternalLink, CreditCard
 } from "lucide-react";
 import ToastKartLogo from "../components/ToastKartLogo";
+import AIStoreBuilder from "../components/AIStoreBuilder";
 import "../styles/dashboard-premium.css";
 
 const getSizesForCategory = (productCategory, storeCategory) => {
@@ -80,6 +81,7 @@ const initialStoresData = [
 const ownerLinks = [
   { key: "dashboard", label: "Dashboard", icon: LayoutDashboard },
   { key: "stores", label: "My Store", icon: StoreIcon },
+  { key: "ai-builder", label: "AI Builder", icon: Sparkles },
   { key: "categories", label: "Collections", icon: Tag },
   { key: "products", label: "Products", icon: Package },
   { key: "orders", label: "Orders", icon: ShoppingCart },
@@ -709,6 +711,7 @@ export default function StoreOwnerDashboard() {
   const [showInlineCategoryForm, setShowInlineCategoryForm] = useState(false);
   const [showInlineProductForm, setShowInlineProductForm] = useState(false);
   // Store Modals State & Forms
+  const [showPlanRequiredModal, setShowPlanRequiredModal] = useState(false);
   const [showCreateStoreModal, setShowCreateStoreModal] = useState(false);
   const [showEditStoreModal, setShowEditStoreModal] = useState(false);
   const [showDeleteStoreModal, setShowDeleteStoreModal] = useState(false);
@@ -747,6 +750,12 @@ export default function StoreOwnerDashboard() {
 
   // Store CRUD Handlers
   const openCreateStoreModal = () => {
+    // Check if the user has an active plan before creating a store (Flow 4)
+    if (user?.auth_provider === 'google' && !user?.activeSubscription) {
+      setShowPlanRequiredModal('create-store');
+      return;
+    }
+
     setStoreForm({
       name: "",
       subdomain: "",
@@ -762,8 +771,27 @@ export default function StoreOwnerDashboard() {
     setActive("stores");
   };
 
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const action = searchParams.get('action');
+    if (action) {
+      if (action === 'create-store') {
+        openCreateStoreModal();
+      } else if (action === 'categories' || action === 'ai-builder' || action === 'products') {
+        setActive(action);
+      }
+      // Remove the query param to prevent re-triggering on reload
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, []); // Run once on mount
+
   const handleCreateStoreSubmit = async (e) => {
     e.preventDefault();
+    if (user?.auth_provider === 'google' && !user?.activeSubscription) {
+      setShowPlanRequiredModal('create-store');
+      return;
+    }
+
     if (!storeForm.name.trim()) return;
 
     const subdomain = storeForm.subdomain.trim() || storeForm.name.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-");
@@ -965,12 +993,30 @@ export default function StoreOwnerDashboard() {
 
   // Category CRUD Handlers
   const openAddCategoryModal = () => {
+    if (user?.auth_provider === 'google' && !user?.activeSubscription) {
+      setShowPlanRequiredModal('categories');
+      return;
+    }
     setEditingCategory(null);
     setCategoryForm({ name: "", description: "", featured: false });
     setShowCategoryModal(true);
   };
 
+  const openInlineCategoryForm = () => {
+    if (user?.auth_provider === 'google' && !user?.activeSubscription) {
+      setShowPlanRequiredModal('categories');
+      return;
+    }
+    setEditingCategory(null);
+    setCategoryForm({ name: "", description: "", featured: false });
+    setShowInlineCategoryForm(true);
+  };
+
   const openEditCategoryModal = (cat) => {
+    if (user?.auth_provider === 'google' && !user?.activeSubscription) {
+      setShowPlanRequiredModal('categories');
+      return;
+    }
     setEditingCategory(cat);
     setCategoryForm({
       name: cat.name || "",
@@ -988,6 +1034,10 @@ export default function StoreOwnerDashboard() {
 
   const handleCategorySubmit = async (e) => {
     e.preventDefault();
+    if (user?.auth_provider === 'google' && !user?.activeSubscription) {
+      setShowPlanRequiredModal('categories');
+      return;
+    }
     if (!categoryForm.name.trim()) return;
 
     const slug = categoryForm.name.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -1108,11 +1158,28 @@ export default function StoreOwnerDashboard() {
   };
 
   const openAddProductModal = () => {
+    if (user?.auth_provider === 'google' && !user?.activeSubscription) {
+      setShowPlanRequiredModal('products');
+      return;
+    }
     resetProductForm();
     setShowAddProduct(true);
   };
 
+  const openInlineProductForm = () => {
+    if (user?.auth_provider === 'google' && !user?.activeSubscription) {
+      setShowPlanRequiredModal('products');
+      return;
+    }
+    setShowInlineProductForm(true);
+    resetProductForm();
+  };
+
   const openEditProductModal = (product) => {
+    if (user?.auth_provider === 'google' && !user?.activeSubscription) {
+      setShowPlanRequiredModal('products');
+      return;
+    }
     setEditingProduct(product);
     setNewProd({
       name: product.name || "",
@@ -1425,6 +1492,10 @@ export default function StoreOwnerDashboard() {
               const Icon = item.icon;
               const isActive = active === item.key;
               const handleClick = () => {
+                if ((item.key === 'categories' || item.key === 'ai-builder') && user?.auth_provider === 'google' && !user?.activeSubscription) {
+                  setShowPlanRequiredModal('products');
+                  return;
+                }
                 setActive(item.key);
               };
               return (
@@ -2289,6 +2360,14 @@ export default function StoreOwnerDashboard() {
                             <option value="Jewellery">Jewellery</option>
                             <option value="Beauty & Cosmetics">Beauty & Cosmetics</option>
                             <option value="Home & Living">Home & Living</option>
+                            <option value="Perfumes">Perfumes</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Groceries">Groceries</option>
+                            <option value="Gift & Novelty">Gift & Novelty</option>
+                            <option value="Watches">Watches</option>
+                            <option value="Footwear">Footwear</option>
+                            <option value="E-flyer">E-flyer</option>
+                            <option value="Other">Other</option>
                           </select>
                         </div>
                         <div className="col-6">
@@ -2369,6 +2448,13 @@ export default function StoreOwnerDashboard() {
                               <option value="Beauty & Cosmetics">Beauty & Cosmetics</option>
                               <option value="Home & Living">Home & Living</option>
                               <option value="Perfumes">Perfumes</option>
+                              <option value="Electronics">Electronics</option>
+                              <option value="Groceries">Groceries</option>
+                              <option value="Gift & Novelty">Gift & Novelty</option>
+                              <option value="Watches">Watches</option>
+                              <option value="Footwear">Footwear</option>
+                              <option value="E-flyer">E-flyer</option>
+                              <option value="Other">Other</option>
                             </select>
                           </div>
                           <div className="col-6">
@@ -2533,11 +2619,7 @@ export default function StoreOwnerDashboard() {
                         <span className="fs-9 fw-semibold" style={{ color: "#6d7175", fontSize: "0.7rem" }}>• Store ID #{activeStore.id}</span>
                       </div>
                       <button
-                        onClick={() => {
-                          setEditingCategory(null);
-                          setCategoryForm({ name: "", description: "", featured: false });
-                          setShowInlineCategoryForm(true);
-                        }}
+                        onClick={openInlineCategoryForm}
                         className="btn btn-sm d-flex align-items-center justify-content-center gap-1 fw-bold flex-shrink-0 px-2 px-sm-3"
                         style={{ background: "#1c2226", color: "#fff", borderRadius: "6px", fontSize: "0.75rem" }}
                       >
@@ -2609,7 +2691,7 @@ export default function StoreOwnerDashboard() {
                           <Tag size={32} style={{ color: "#c9cccf", marginBottom: 10 }} />
                           <p className="fs-8 mb-2" style={{ color: "#6d7175" }}>No collections found for Store ID #{activeStore.id}</p>
                           <button
-                            onClick={() => { setShowInlineCategoryForm(true); setEditingCategory(null); setCategoryForm({ name: "", description: "", featured: false }); }}
+                            onClick={openInlineCategoryForm}
                             className="btn btn-sm fw-bold"
                             style={{ background: "#FF5722", color: "#fff", borderRadius: "6px" }}
                           >
@@ -2950,7 +3032,7 @@ export default function StoreOwnerDashboard() {
                           <Package size={32} style={{ color: "#c9cccf", marginBottom: 10 }} />
                           <p className="fs-8 mb-2" style={{ color: "#6d7175" }}>No products found for Store ID #{activeStore.id}</p>
                           <button
-                            onClick={() => { setShowInlineProductForm(true); resetProductForm(); }}
+                            onClick={openInlineProductForm}
                             className="btn btn-sm fw-bold"
                             style={{ background: "#FF5722", color: "#fff", borderRadius: "6px" }}
                           >
@@ -3064,12 +3146,52 @@ export default function StoreOwnerDashboard() {
                     )}
                   </div>
 
+                  {/* AI STORE BUILDER CTA */}
+                  <div className="mt-4 p-5 border rounded-3 text-center position-relative overflow-hidden" style={{ background: "linear-gradient(135deg, #f6f8fd 0%, #f1f5f9 100%)", borderColor: "#dfe3e8" }}>
+                    <div className="position-absolute top-0 start-0 w-100 h-100 opacity-25" style={{ background: "radial-gradient(circle at top right, #4facfe, transparent 50%), radial-gradient(circle at bottom left, #00f2fe, transparent 50%)", pointerEvents: 'none' }}></div>
+                    <div className="position-relative z-index-1">
+                      <div className="mx-auto mb-3 d-flex align-items-center justify-content-center bg-white rounded-circle shadow-sm" style={{ width: 64, height: 64, color: '#00f2fe' }}>
+                        <Sparkles size={32} />
+                      </div>
+                      <h4 className="fs-4 fw-bold mb-2" style={{ color: "#202223" }}>Build a Website using AI</h4>
+                      <p className="fs-7 text-muted mx-auto mb-4" style={{ maxWidth: 600 }}>
+                        Turn your products and collections into a stunning, colorful, and highly attractive online storefront instantly. Our AI analyzes your category and inventory to generate a bespoke website design tailored for you.
+                      </p>
+                      <button 
+                        onClick={() => {
+                          if (user?.auth_provider === 'google' && !user?.activeSubscription) {
+                            setShowPlanRequiredModal('ai-builder');
+                          } else {
+                            setActive('ai-builder');
+                          }
+                        }}
+                        className="btn btn-lg fw-bold px-5 py-3 text-white shadow"
+                        style={{ background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', borderRadius: '30px', transition: 'all 0.3s ease' }}
+                      >
+                        <Sparkles size={20} className="me-2" />
+                        Generate with AI
+                      </button>
+                    </div>
+                  </div>
+
                 </>
               )}
             </div>
           )}
 
-
+          {/* MODULE: AI BUILDER */}
+          {active === "ai-builder" && (
+            <div className="d-flex flex-column gap-3">
+              <AIStoreBuilder 
+                activeStore={activeStore}
+                categoriesList={categoriesList}
+                productsList={productsList}
+                onBack={() => setActive('stores')}
+                user={user}
+                setShowPlanRequiredModal={setShowPlanRequiredModal}
+              />
+            </div>
+          )}
 
 
           {/* MODULE: DISCOUNTS (DUMMY) */}
@@ -3815,6 +3937,43 @@ export default function StoreOwnerDashboard() {
                 </button>
                 <button onClick={handleDeleteStoreExecute} className="btn btn-danger btn-sm px-3 py-2">
                   Delete Store
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* PLAN REQUIRED MODAL */}
+      {showPlanRequiredModal && (
+        <div className="position-fixed top-0 bottom-0 start-0 end-0 bg-dark bg-opacity-75 d-flex align-items-center justify-content-center p-3" style={{ zIndex: 1060 }}>
+          <div className="gold-panel w-100 rounded-3 shadow-sm border p-4" style={{ maxWidth: 450, borderColor: "rgba(212,175,55,0.2)" }}>
+            <div className="d-flex align-items-center justify-content-between mb-3 border-bottom pb-3" style={{ borderColor: "rgba(212,175,55,0.2)" }}>
+              <h3 className="fs-5 font-bold mb-0 d-flex align-items-center gap-2 text-warning">
+                <Sparkles size={20} /> Subscription Required
+              </h3>
+              <button onClick={() => setShowPlanRequiredModal(false)} className="btn btn-sm text-muted p-0 border-0 bg-transparent">✕</button>
+            </div>
+            
+            <div className="py-2">
+              <p className="fs-7 mb-4 text-white">
+                To create a store, add collections, or add products, please select a plan and complete the payment for this account.
+                <br /><br />
+                Select a plan to instantly unlock these features and grow your business.
+              </p>
+              
+              <div className="d-flex align-items-center justify-content-end gap-3 mt-4">
+                <button onClick={() => setShowPlanRequiredModal(false)} className="btn btn-sm text-muted px-3 py-2 border-0 bg-transparent" style={{ fontWeight: "600" }}>
+                  Cancel
+                </button>
+                <button 
+                  onClick={() => {
+                    setShowPlanRequiredModal(false);
+                    navigate(`/plans?redirect=${typeof showPlanRequiredModal === 'string' ? showPlanRequiredModal : 'dashboard'}`);
+                  }} 
+                  className="btn btn-gold-primary btn-sm px-4 py-2 fw-bold"
+                >
+                  Select Plan
                 </button>
               </div>
             </div>

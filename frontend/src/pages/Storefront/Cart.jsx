@@ -24,7 +24,7 @@ export default function Cart() {
           </div>
           <h2 className="fs-3 font-bold mb-3">Your cart is empty</h2>
           <p className="text-secondary mb-4">Looks like you haven't added anything to your cart yet.</p>
-          <button className="btn btn-primary px-4 py-2" onClick={() => navigate(basePath)}>
+          <button className="btn btn-primary px-4 py-2" onClick={() => navigate(-1)}>
             Continue Shopping
           </button>
         </div>
@@ -33,13 +33,13 @@ export default function Cart() {
   }
 
   const handleCheckout = () => {
-    navigate(`${basePath}/checkout`);
+    navigate({ pathname: `${basePath}/checkout`, search: window.location.search });
   };
 
   return (
     <div className="storefront-container py-5">
       <div className="d-flex align-items-center mb-4">
-        <button onClick={() => navigate(basePath)} className="btn btn-link text-dark p-0 me-3 d-flex align-items-center justify-content-center">
+        <button onClick={() => navigate(-1)} className="btn btn-link text-dark p-0 me-3 d-flex align-items-center justify-content-center">
           <ArrowLeft size={28} />
         </button>
         <h1 className="fs-2 font-bold m-0">Shopping Cart</h1>
@@ -119,7 +119,7 @@ export default function Cart() {
             <div className="mt-4 pt-3">
               <button 
                 className="btn btn-link text-decoration-none text-secondary d-flex align-items-center gap-2 p-0"
-                onClick={() => navigate(basePath)}
+                onClick={() => navigate(-1)}
               >
                 <ArrowLeft size={16} /> Continue Shopping
               </button>

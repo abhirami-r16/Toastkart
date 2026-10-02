@@ -20,7 +20,7 @@ export default function Wishlist() {
   return (
     <div className="storefront-container py-5 min-vh-100">
       <div className="d-flex align-items-center mb-4">
-        <button onClick={() => navigate(basePath)} className="btn btn-link text-dark p-0 me-3 d-flex align-items-center justify-content-center">
+        <button onClick={() => navigate(-1)} className="btn btn-link text-dark p-0 me-3 d-flex align-items-center justify-content-center">
           <ArrowLeft size={28} />
         </button>
         <h1 className="fs-2 font-bold m-0">My Wishlist</h1>
@@ -30,7 +30,7 @@ export default function Wishlist() {
         <div className="storefront-product-grid">
           {wishlistItems.map(product => (
             <div key={product.id} className="storefront-product-card position-relative">
-              <Link to={`${basePath}/product/${product.id}`} className="text-decoration-none text-dark d-block">
+              <Link to={{ pathname: `${basePath}/product/${product.id}`, search: window.location.search }} className="text-decoration-none text-dark d-block">
                 <div className="storefront-product-image-container position-relative">
                   {product.compare_price && Number(product.compare_price) > Number(product.price) && (
                     <div className="storefront-discount-badge">
@@ -98,7 +98,7 @@ export default function Wishlist() {
           </div>
           <h2 className="fs-4 fw-bold mb-3">Your wishlist is empty</h2>
           <p className="text-secondary mb-4">Save items that you like in your wishlist. Review them anytime and easily move them to the cart.</p>
-          <Link to={basePath} className="btn btn-primary px-4 py-2">
+          <Link to={{ pathname: basePath, search: window.location.search }} className="btn btn-primary px-4 py-2">
             Explore Products
           </Link>
         </div>

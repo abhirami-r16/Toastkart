@@ -26,7 +26,7 @@ export default function StorefrontLayout({ storeData, categories = [], products 
 
   const theme = resolveStoreTheme(storeData);
 
-  const isEflyer = theme === 'theme-eflyer';
+  const isEflyer = false; // User requested modern layout for all themes
 
   const [themeLoaded, setThemeLoaded] = useState(false);
 
@@ -124,7 +124,7 @@ export default function StorefrontLayout({ storeData, categories = [], products 
             <div className="eflyer-banner-wrapper">
               <header className="eflyer-header" style={{ backgroundColor: (!isHome || searchQuery) ? '#eab41f' : 'transparent', paddingBottom: '10px' }}>
                 <div className="eflyer-middle-bar">
-                  <Link to={basePath} className="eflyer-logo">
+                  <Link to={{ pathname: basePath, search: location.search }} className="eflyer-logo">
                     {storeData?.name || 'Eflyer'}
                   </Link>
                 </div>
@@ -162,13 +162,13 @@ export default function StorefrontLayout({ storeData, categories = [], products 
                         <Menu size={26} />
                       </button>
 
-                      <Link to={`${basePath}/wishlist`} className="eflyer-action-btn position-relative">
+                      <Link to={{ pathname: `${basePath}/wishlist`, search: location.search }} className="eflyer-action-btn position-relative">
                         <Heart size={24} />
                       </Link>
-                      <Link to={`${basePath}/orders`} className="eflyer-action-btn position-relative d-none d-md-flex" title="My Orders">
+                      <Link to={{ pathname: `${basePath}/orders`, search: location.search }} className="eflyer-action-btn position-relative d-none d-md-flex" title="My Orders">
                         <Package size={24} />
                       </Link>
-                      <Link to={`${basePath}/cart`} className="eflyer-action-btn position-relative">
+                      <Link to={{ pathname: `${basePath}/cart`, search: location.search }} className="eflyer-action-btn position-relative">
                         <ShoppingCart size={24} />
                         {cartCount > 0 && (
                           <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style={{ fontSize: '0.65rem' }}>
@@ -203,7 +203,7 @@ export default function StorefrontLayout({ storeData, categories = [], products 
                     </div>
                     <div className="storefront-mobile-menu-body text-dark">
                       <Link
-                        to={basePath}
+                        to={{ pathname: basePath, search: location.search }}
                         className="storefront-mobile-nav-item text-dark"
                         onClick={() => setIsCategoryOpen(false)}
                       >
@@ -234,10 +234,10 @@ export default function StorefrontLayout({ storeData, categories = [], products 
                           <div className="storefront-mobile-nav-item text-primary" style={{ borderBottom: 'none' }}>
                             Hi, {user.name}
                           </div>
-                          <Link to={`${basePath}/orders`} className="storefront-mobile-nav-item text-dark" onClick={() => setIsCategoryOpen(false)}>
+                          <Link to={{ pathname: `${basePath}/orders`, search: location.search }} className="storefront-mobile-nav-item text-dark" onClick={() => setIsCategoryOpen(false)}>
                             <Package size={16} className="me-2" /> My Orders
                           </Link>
-                          <Link to={`${basePath}/wishlist`} className="storefront-mobile-nav-item text-dark" onClick={() => setIsCategoryOpen(false)}>
+                          <Link to={{ pathname: `${basePath}/wishlist`, search: location.search }} className="storefront-mobile-nav-item text-dark" onClick={() => setIsCategoryOpen(false)}>
                             <Heart size={16} className="me-2" /> Wishlist
                           </Link>
                           <button
@@ -301,7 +301,7 @@ export default function StorefrontLayout({ storeData, categories = [], products 
                 <Menu size={24} />
               </button>
 
-              <div className="storefront-logo hexashop-logo ms-4" onClick={() => navigate(basePath)} style={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '55vw' }}>
+              <div className="storefront-logo hexashop-logo ms-4" onClick={() => navigate({ pathname: basePath, search: location.search })} style={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '55vw', cursor: 'pointer' }}>
                 {storeData?.logo_url ? (
                   <img src={storeData.logo_url} alt={storeData.name} className="storefront-logo-img" />
                 ) : (
@@ -363,7 +363,7 @@ export default function StorefrontLayout({ storeData, categories = [], products 
 
             {/* Desktop Navigation */}
             <nav className="hexashop-nav d-none d-lg-flex">
-              <Link to={basePath} className="hexashop-nav-item">Home</Link>
+              <Link to={{ pathname: basePath, search: location.search }} className="hexashop-nav-item">Home</Link>
               {activeCategories && activeCategories.map(cat => (
                 <a
                   key={cat.id || cat.name}
@@ -391,13 +391,13 @@ export default function StorefrontLayout({ storeData, categories = [], products 
                 </button>
               )}
 
-              <Link to={`${basePath}/wishlist`} className="hexashop-icon-btn text-decoration-none">
+              <Link to={{ pathname: `${basePath}/wishlist`, search: location.search }} className="hexashop-icon-btn text-decoration-none">
                 <Heart size={20} />
               </Link>
-              <Link to={`${basePath}/orders`} className="hexashop-icon-btn text-decoration-none d-none d-md-block" title="Orders">
+              <Link to={{ pathname: `${basePath}/orders`, search: location.search }} className="hexashop-icon-btn text-decoration-none d-none d-md-block" title="Orders">
                 <Package size={20} />
               </Link>
-              <Link to={`${basePath}/cart`} className="hexashop-icon-btn text-decoration-none position-relative">
+              <Link to={{ pathname: `${basePath}/cart`, search: location.search }} className="hexashop-icon-btn text-decoration-none position-relative">
                 <ShoppingCart size={20} />
                 {cartCount > 0 && (
                   <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark" style={{ fontSize: '0.65rem' }}>
@@ -420,7 +420,7 @@ export default function StorefrontLayout({ storeData, categories = [], products 
                 </div>
                 <div className="storefront-mobile-menu-body">
                   <Link
-                    to={basePath}
+                    to={{ pathname: basePath, search: location.search }}
                     className="storefront-mobile-nav-item"
                     onClick={() => setIsCategoryOpen(false)}
                   >
@@ -451,10 +451,10 @@ export default function StorefrontLayout({ storeData, categories = [], products 
                       <div className="storefront-mobile-nav-item text-primary" style={{ borderBottom: 'none' }}>
                         Hi, {user.name}
                       </div>
-                      <Link to={`${basePath}/orders`} className="storefront-mobile-nav-item" onClick={() => setIsCategoryOpen(false)}>
+                      <Link to={{ pathname: `${basePath}/orders`, search: location.search }} className="storefront-mobile-nav-item" onClick={() => setIsCategoryOpen(false)}>
                         <Package size={16} className="me-2" /> My Orders
                       </Link>
-                      <Link to={`${basePath}/wishlist`} className="storefront-mobile-nav-item" onClick={() => setIsCategoryOpen(false)}>
+                      <Link to={{ pathname: `${basePath}/wishlist`, search: location.search }} className="storefront-mobile-nav-item" onClick={() => setIsCategoryOpen(false)}>
                         <Heart size={16} className="me-2" /> Wishlist
                       </Link>
                       <button

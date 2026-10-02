@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import useSEO from '../hooks/useSEO';
 import { Eye, EyeOff } from 'lucide-react';
 import ToastKartLogo from '../components/ToastKartLogo';
+import { GoogleLogin } from '@react-oauth/google';
 
 const goslotRegisterStyles = `
   .goslot-login-bg {
@@ -179,7 +180,7 @@ const goslotRegisterStyles = `
 `;
 
 export default function Register() {
-  const { register } = useAuth();
+  const { register, googleLogin } = useAuth();
   const navigate = useNavigate();
 
   const [name, setName] = useState('');
@@ -190,6 +191,58 @@ export default function Register() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const [googleCredential, setGoogleCredential] = useState(null);
+  const [googleAccountInfo, setGoogleAccountInfo] = useState(null);
+
+  const decodeJwt = (token) => {
+    try {
+      return JSON.parse(atob(token.split('.')[1]));
+    } catch (e) {
+      return null;
+    }
+  };
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    if (!credentialResponse?.credential) {
+      setError('Google authentication token was not received.');
+      return;
+    }
+    
+    const decoded = decodeJwt(credentialResponse.credential);
+    if (decoded) {
+      setGoogleAccountInfo(decoded);
+      setGoogleCredential(credentialResponse.credential);
+      setError('');
+    } else {
+      setError('Invalid Google token');
+    }
+  };
+
+  const handleGoogleError = () => {
+    setError('Google Registration Failed');
+  };
+
+  const confirmGoogleLogin = async () => {
+    if (!googleCredential) return;
+    setLoading(true);
+    setError('');
+    try {
+      const res = await googleLogin(googleCredential);
+      if (res.success) {
+        navigate('/owner/dashboard');
+      } else {
+        setError(res.message || 'Google registration failed');
+      }
+    } catch (err) {
+      console.error('Google registration failed:', err);
+      setError('Google authentication failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
 
   useSEO({ title: 'Create Account - ToastKart', description: 'Join the ToastKart Ecosystem' });
 
@@ -225,7 +278,7 @@ export default function Register() {
 
     const res = await register(name, email, phone, password, 'owner');
     if (res.success) {
-      setSuccess('Successfully registered! Redirecting to login...');
+      setSuccess('Registration successful! A confirmation email has been sent to your registered email address.');
       setTimeout(() => {
         navigate('/login');
       }, 2000);
@@ -275,7 +328,39 @@ export default function Register() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit}>
+          {googleAccountInfo ? (
+            <div className="text-center pt-2 pb-4">
+              <h5 className="mb-3 fw-bold">Continue with Google</h5>
+              <div className="mb-4">
+                <img src={googleAccountInfo.picture} alt="Profile" className="rounded-circle mb-2" style={{width: '60px', height: '60px'}} onError={(e) => e.target.style.display='none'} />
+                <p className="mb-0 fw-semibold">{googleAccountInfo.name}</p>
+                <p className="text-muted fs-7 mb-0">{googleAccountInfo.email}</p>
+              </div>
+              <p className="fs-7 text-muted mb-4">
+                This Google account will be used to sign in to Toastkart.
+              </p>
+              <button
+                type="button"
+                className="goslot-btn-green w-100 mb-3"
+                onClick={confirmGoogleLogin}
+                disabled={loading}
+              >
+                {loading ? 'Continuing...' : 'Continue'}
+              </button>
+              <button
+                type="button"
+                className="btn btn-link text-decoration-none text-muted p-0 fs-7"
+                onClick={() => {
+                  setGoogleAccountInfo(null);
+                  setGoogleCredential(null);
+                }}
+                disabled={loading}
+              >
+                Cancel
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit}>
             {/* Role selector removed as per requirements */}
 
             <div className="mb-3">
@@ -366,15 +451,13 @@ export default function Register() {
             
             <div className="goslot-divider">OR</div>
             
-            <button type="button" className="goslot-btn-google">
-              <svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
-                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-              </svg>
-              Continue with Google
-            </button>
+            <div className="d-flex justify-content-center">
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={handleGoogleError}
+                useOneTap={false}
+              />
+            </div>
 
             <div className="text-center mt-4 pt-3 border-top">
               <span className="text-muted fs-7">Already have an account? </span>
@@ -383,6 +466,7 @@ export default function Register() {
               </NavLink>
             </div>
           </form>
+          )}
         </div>
       </div>
     </div>

@@ -44,7 +44,17 @@ export default function PlanSelection() {
         user.active_subscription ||
         user.activeSubscription
       ) {
-        navigate('/owner/dashboard', { replace: true });
+        const searchParams = new URLSearchParams(window.location.search);
+        const redirect = searchParams.get('redirect');
+        if (redirect === 'create-store') {
+          navigate('/owner/dashboard?action=create-store', { replace: true });
+        } else if (redirect === 'categories') {
+          navigate('/owner/dashboard?action=categories', { replace: true });
+        } else if (redirect === 'ai-builder') {
+          navigate('/owner/dashboard?action=ai-builder', { replace: true });
+        } else {
+          navigate('/owner/dashboard', { replace: true });
+        }
       }
     }
   }, [user, loading, navigate]);

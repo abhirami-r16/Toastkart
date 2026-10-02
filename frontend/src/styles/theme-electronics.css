@@ -2,9 +2,9 @@
    Theme: Electronics (Modern/Tech)
    ========================================================================== */
 .theme-electronics.storefront-body {
-  background-color: #0d1117 !important; /* Tech Dark Mode */
+  background-color: #f6f8fa !important; /* Light Tech Mode */
   font-family: 'Space Grotesk', 'Roboto', sans-serif !important;
-  color: #c9d1d9;
+  color: #1c2128;
 }
 
 /* Tech Hero Section */
@@ -38,7 +38,7 @@
 .theme-electronics .tech-hero-overlay {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: linear-gradient(135deg, rgba(13,17,23,0.9) 0%, rgba(13,17,23,0.3) 100%);
+  background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.2) 100%);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -47,10 +47,10 @@
 
 .theme-electronics .tech-hero-title {
   font-size: 50px;
-  color: #fff;
+  color: #000;
   font-weight: 700;
   margin-bottom: 20px;
-  text-shadow: 0 0 20px rgba(0, 195, 255, 0.5);
+  text-shadow: 0 0 20px rgba(0, 195, 255, 0.3);
 }
 
 .theme-electronics .tech-btn {
@@ -76,8 +76,8 @@
 
 /* Tech Product Cards */
 .theme-electronics .storefront-product-card {
-  background: #161b22;
-  border: 1px solid #30363d;
+  background: #ffffff;
+  border: 1px solid #eaeaea;
   border-radius: 12px;
   padding: 15px;
   transition: all 0.3s ease;
@@ -90,12 +90,12 @@
 }
 
 .theme-electronics .storefront-product-image-container {
-  background: #0d1117;
+  background: #f6f8fa;
   border-radius: 8px;
 }
 
 .theme-electronics .storefront-product-title {
-  color: #fff;
+  color: #1c2128;
   font-weight: 600;
 }
 

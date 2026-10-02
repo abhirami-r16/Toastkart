@@ -16,7 +16,7 @@ try {
         'item' => [
             'name' => 'ToastKart Basic Plan (Monthly)',
             'description' => 'Basic Plan - Monthly AutoPay',
-            'amount' => 1000,
+            'amount' => 79900,
             'currency' => 'INR'
         ]
     ];
