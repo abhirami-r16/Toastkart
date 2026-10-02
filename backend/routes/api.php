@@ -12,12 +12,21 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\GmailOAuthController;
 
 // Public Health Check
 Route::get('/health', function () {
     return response()->json(['status' => 'ok', 'app' => 'ToastKart API']);
 });
+Route::get('/google-mail/connect', [
+    GmailOAuthController::class,
+    'connect'
+]);
 
+Route::get('/google-mail/callback', [
+    GmailOAuthController::class,
+    'callback'
+]);
 // Authentication Routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
