@@ -1,0 +1,78 @@
+.theme-home-wrapper {
+  font-family: 'Inter', sans-serif;
+  color: #333;
+}
+
+.home-hero .btn:hover {
+  background-color: #6d5b43 !important;
+  transition: all 0.3s ease;
+}
+
+.category-circle:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.category-circle {
+  transition: all 0.3s ease;
+}
+
+.promo-banner:hover img {
+  transform: scale(1.05);
+}
+.promo-banner img {
+  transition: all 0.5s ease;
+}
+
+/* For product cards in home theme */
+.storefront-home-theme-card {
+  border: none !important;
+  background-color: #fcfcfc !important;
+}
+
+.storefront-home-theme-card .storefront-product-image-container {
+  background-color: #f5f4f0 !important;
+  padding: 20px;
+  border-radius: 4px;
+}
+
+.storefront-home-theme-card .add-to-cart-btn {
+  background-color: #e6e2db !important;
+  color: #333 !important;
+  font-weight: bold;
+  font-size: 13px !important;
+  border-radius: 2px !important;
+  border: none !important;
+  transition: all 0.3s ease;
+}
+
+.storefront-home-theme-card .add-to-cart-btn:hover {
+  background-color: #d1ccbc !important;
+}
+
+.storefront-home-theme-card .storefront-product-title {
+  font-weight: bold;
+  font-size: 16px;
+  font-family: 'Georgia', serif;
+  margin-top: 15px;
+}
+
+.storefront-home-theme-card .storefront-product-price {
+  font-weight: bold;
+  color: #333;
+}
+
+.storefront-home-theme-card .storefront-product-original-price {
+  color: #999;
+  text-decoration: line-through;
+  font-size: 13px;
+  margin-left: 8px;
+}
+
+.rating-stars {
+  color: #ffd700;
+  font-size: 12px;
+  margin-top: 4px;
+  margin-bottom: 10px;
+}
