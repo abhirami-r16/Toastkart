@@ -27,7 +27,7 @@ export default function ProductDetail({ storeData, products }) {
     return (
       <div className="storefront-container py-5 text-center">
         <h2 className="fs-3 font-bold mb-3">Product not found</h2>
-        <button className="btn btn-outline-secondary mt-3" onClick={() => navigate(basePath)}>
+        <button className="btn btn-outline-secondary mt-3" onClick={() => navigate(-1)}>
           Back to Store
         </button>
       </div>
@@ -41,8 +41,8 @@ export default function ProductDetail({ storeData, products }) {
   const productSizes = product.size 
     ? String(product.size).toUpperCase().split(',').map(s => s.trim()).filter(Boolean) 
     : [];
-  // Keep only exact ml sizes (e.g., "100ml", "150ml")
-  const displaySizes = productSizes.filter(sz => /\d+\s*ML/i.test(sz));
+  // Keep all sizes for all products
+  const displaySizes = productSizes;
 
   React.useEffect(() => {
     window.scrollTo(0, 0);
@@ -167,7 +167,7 @@ export default function ProductDetail({ storeData, products }) {
     <div className="storefront-container py-5 px-3 px-md-4">
       <button 
         className="btn btn-link text-decoration-none text-secondary mb-4 d-flex align-items-center gap-2 p-0"
-        onClick={() => navigate(basePath)}
+        onClick={() => navigate(-1)}
       >
         <ArrowLeft size={16} /> Back to Store
       </button>
@@ -296,8 +296,8 @@ export default function ProductDetail({ storeData, products }) {
                   return (
                     <button
                       key={idx}
-                      className={`btn border fw-bold d-flex align-items-center justify-content-center ${isSelected ? 'border-dark bg-dark text-white' : 'bg-white text-dark'} ${!isAvailable ? 'opacity-50 text-decoration-line-through' : ''}`}
-                      style={{ width: '48px', height: '48px', borderRadius: '8px' }}
+                      className={`btn border fw-bold d-flex align-items-center justify-content-center px-3 ${isSelected ? 'border-dark bg-dark text-white' : 'bg-white text-dark'} ${!isAvailable ? 'opacity-50 text-decoration-line-through' : ''}`}
+                      style={{ minWidth: '48px', height: '48px', borderRadius: '8px' }}
                       disabled={!isAvailable}
                       onClick={() => setSelectedSize(sz)}
                       title={!isAvailable ? 'Out of stock' : 'In stock'}
