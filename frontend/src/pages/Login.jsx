@@ -182,6 +182,12 @@ export default function Login() {
     e.preventDefault();
     setError('');
 
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    if (!emailRegex.test(email)) {
+      setError('Please enter a valid Gmail address ending with @gmail.com');
+      return;
+    }
+
     if (newPassword !== confirmPassword) {
       setError('Passwords do not match.');
       return;
@@ -201,6 +207,13 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    if (!emailRegex.test(email)) {
+      setError('Please enter a valid Gmail address ending with @gmail.com');
+      return;
+    }
+
     setLoading(true);
 
     const res = await login(email, password);
@@ -215,7 +228,7 @@ export default function Login() {
       if (userRole === 'admin') {
         navigate('/admin/dashboard');
       } else {
-        navigate('/plans');
+        navigate('/owner/dashboard');
       }
     } else {
       setError(res.message || 'Authentication failed. Please verify your credentials.');

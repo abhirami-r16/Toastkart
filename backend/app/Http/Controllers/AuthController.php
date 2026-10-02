@@ -14,12 +14,14 @@ class AuthController extends Controller
     {
         $fields = $request->validate([
             'name' => 'required|string',
-            'email' => 'required|string|email|unique:users,email',
+            'email' => ['required', 'string', 'email', 'regex:/^[a-zA-Z0-9._%+-]+@gmail\.com$/', 'unique:users,email'],
             'phone' => 'nullable|string|max:15',
             'password' => 'required|string|min:6',
             'role' => 'nullable|string',
             'store_name' => 'nullable|string|max:255',
             'store_description' => 'nullable|string',
+        ], [
+            'email.regex' => 'Please enter a valid Gmail address ending with @gmail.com'
         ]);
 
         $role = $fields['role'] ?? 'owner';
@@ -62,8 +64,10 @@ class AuthController extends Controller
     public function updatePassword(Request $request)
     {
         $fields = $request->validate([
-            'email' => 'required|string|email',
+            'email' => ['required', 'string', 'email', 'regex:/^[a-zA-Z0-9._%+-]+@gmail\.com$/'],
             'new_password' => 'required|string|min:6'
+        ], [
+            'email.regex' => 'Please enter a valid Gmail address ending with @gmail.com'
         ]);
 
         $user = User::where('email', $fields['email'])->first();
@@ -85,8 +89,10 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $fields = $request->validate([
-            'email' => 'required|string|email',
+            'email' => ['required', 'string', 'email', 'regex:/^[a-zA-Z0-9._%+-]+@gmail\.com$/'],
             'password' => 'required|string'
+        ], [
+            'email.regex' => 'Please enter a valid Gmail address ending with @gmail.com'
         ]);
 
         $user = User::where('email', $fields['email'])->first();

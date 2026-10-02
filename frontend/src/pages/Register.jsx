@@ -214,6 +214,13 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    if (!emailRegex.test(email)) {
+      setError('Please enter a valid Gmail address ending with @gmail.com');
+      return;
+    }
+
     setLoading(true);
 
     const res = await register(name, email, phone, password, 'owner');
