@@ -1,3 +1,4 @@
+
 <?php
 
 namespace App\Services;
@@ -73,7 +74,24 @@ class GmailService
             Gmail::GMAIL_SEND,
         ]);
 
-        $this->client->refreshToken($refreshToken);
+        // Exchange the existing refresh token for a fresh access token.
+        $token = $this->client->fetchAccessTokenWithRefreshToken(
+            $refreshToken
+        );
+
+        if (isset($token['error'])) {
+            throw new \RuntimeException(
+                $token['error_description'] ?? $token['error']
+            );
+        }
+
+        if (empty($token['access_token'])) {
+            throw new \RuntimeException(
+                'Gmail access token was not returned.'
+            );
+        }
+
+        $this->client->setAccessToken($token);
 
         $rawMessage =
             "From: Toastkart <" .
@@ -106,3 +124,4 @@ class GmailService
         ];
     }
 }
+
