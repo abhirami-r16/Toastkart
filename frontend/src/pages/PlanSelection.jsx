@@ -1244,15 +1244,21 @@ export default function PlanSelection() {
                 }}
               >
                 ₹
-                {selectedPlanModal === 'basic'
-                  ? 799
-                  : selectedPlanModal === 'growth'
-                    ? 999
-                    : 1999}
+                {billingCycle === 'monthly'
+                  ? selectedPlanModal === 'basic'
+                    ? 799
+                    : selectedPlanModal === 'growth'
+                      ? 999
+                      : '1,999'
+                  : selectedPlanModal === 'basic'
+                    ? '7,999'
+                    : selectedPlanModal === 'growth'
+                      ? '9,999'
+                      : '19,999'}
               </div>
 
               <div className="text-muted">
-                / month
+                / {billingCycle === 'monthly' ? 'month' : 'year'}
               </div>
 
             </div>
