@@ -17,6 +17,8 @@ const ThemeGroceryHero = React.lazy(() => import('../../components/themes/ThemeG
 const ThemeGiftHero = React.lazy(() => import('../../components/themes/ThemeGiftHero'));
 const ThemePerfumeHero = React.lazy(() => import('../../components/themes/ThemePerfumeHero'));
 const ThemeDefaultHero = React.lazy(() => import('../../components/themes/ThemeDefaultHero'));
+const ThemeHomeFooter = React.lazy(() => import('../../components/themes/ThemeHomeFooter'));
+const AIStoreRenderer = React.lazy(() => import('../../components/AIStoreRenderer'));
 
 export default function StorefrontHome({ storeData, products, categories = [], loading }) {
   const { requireAuth } = useStorefrontAuth();
@@ -236,7 +238,7 @@ export default function StorefrontHome({ storeData, products, categories = [], l
           {displayItems.map((product, idx) => (
             <div
               key={`${product.id}-${idx}`}
-              className="storefront-product-card position-relative"
+              className={`storefront-product-card position-relative ${theme === 'theme-home' ? 'storefront-home-theme-card' : ''}`}
             >
               <Link
                 to={`${basePath}/product/${product.id}`}
@@ -312,6 +314,10 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                       <div className="storefront-product-title">
                         {product.name}
                       </div>
+
+                      {theme === 'theme-home' && (
+                        <div className="rating-stars">★★★★★ <span className="text-muted" style={{fontSize: '11px'}}>(128)</span></div>
+                      )}
 
                       <div className="storefront-product-price-row">
                         {product.compare_price &&
@@ -412,7 +418,7 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                     className={`btn w-100 fw-bold d-flex align-items-center justify-content-center gap-2 add-to-cart-btn ${theme !== 'theme-default'
                         ? 'theme-cart-btn'
                         : ''
-                      }`}
+                      } ${theme === 'theme-home' ? 'text-uppercase' : ''}`}
                     style={
                       theme !== 'theme-default'
                         ? {}
@@ -454,22 +460,172 @@ export default function StorefrontHome({ storeData, products, categories = [], l
     );
   };
 
+  const isAiPreview = new URLSearchParams(location.search).get('preview_ai') === 'true';
+  const configId = new URLSearchParams(location.search).get('config_id');
+  const aiConfigs = storeData?.ai_configurations || storeData?.aiConfigurations;
+  const hasAiConfig = aiConfigs && aiConfigs.length > 0;
+  
+  let aiConfig = null;
+  if (hasAiConfig && (isAiPreview || aiConfigs[0].status === 'published')) {
+    const configObj = configId ? aiConfigs.find(c => String(c.id) === String(configId)) || aiConfigs[0] : aiConfigs[0];
+    try {
+      aiConfig = typeof configObj.configuration === 'string' ? JSON.parse(configObj.configuration) : configObj.configuration;
+    } catch (e) { console.error('Failed to parse AI configuration', e); }
+  }
+
+  const aiStyleObj = useMemo(() => {
+    if (!aiConfig) return {};
+    return {
+      '--theme-primary': aiConfig?.colors?.primary || '#1c2226',
+      '--theme-secondary': aiConfig?.colors?.secondary || '#f1f2f4',
+      '--theme-bg': aiConfig?.colors?.background || '#ffffff',
+      '--theme-text': aiConfig?.colors?.text || '#202223',
+      '--theme-accent': aiConfig?.colors?.accent || '#FF5722',
+      '--theme-surface': aiConfig?.colors?.surface || '#ffffff',
+      '--theme-btn-bg': aiConfig?.colors?.buttonBackground || aiConfig?.colors?.primary || '#1c2226',
+      '--theme-btn-text': aiConfig?.colors?.buttonText || '#ffffff',
+      '--theme-border': aiConfig?.colors?.border || '#e9ecef',
+      '--theme-hover': aiConfig?.colors?.hover || aiConfig?.colors?.secondary || '#e63a61',
+      '--theme-heading-font': aiConfig?.typography?.headingFont || 'Inter, sans-serif',
+      '--theme-body-font': aiConfig?.typography?.bodyFont || 'Inter, sans-serif',
+      '--theme-border-radius': aiConfig?.style?.borderRadius || '12px'
+    };
+  }, [aiConfig]);
+
+  const renderAiHero = () => {
+    if (!aiConfig || !aiConfig.sections) return null;
+    const heroSection = aiConfig.sections.find(s => s.type === 'hero');
+    if (!heroSection) return null;
+    
+    const hasImages = aiConfig?.style?.heroImages && Array.isArray(aiConfig.style.heroImages) && aiConfig.style.heroImages.length > 0;
+    const imagesToRender = hasImages ? aiConfig.style.heroImages : (aiConfig?.style?.heroImage ? [aiConfig.style.heroImage] : []);
+
+    return (
+      <div className="d-flex align-items-center justify-content-center text-center p-5 mb-5 position-relative overflow-hidden" 
+        style={{ 
+          minHeight: '60vh', 
+          color: 'var(--theme-bg)',
+          borderBottomLeftRadius: 'var(--theme-border-radius)',
+          borderBottomRightRadius: 'var(--theme-border-radius)'
+        }}>
+        
+        {imagesToRender.length > 0 ? imagesToRender.map((img, i) => {
+            const imageUrl = img.startsWith('http')
+              ? img
+              : `${import.meta.env.VITE_API_BASE_URL?.replace('/api', '') || 'http://localhost:8000'}${img}`;
+
+            return (
+              <div 
+                key={i}
+                className="position-absolute w-100 h-100 top-0 start-0"
+                style={{
+                  backgroundImage: `url(${imageUrl})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  opacity: i === 0 ? 1 : 0,
+                  zIndex: 0
+                }}
+              />
+            );
+        }) : (
+            <div 
+              className="position-absolute w-100 h-100 top-0 start-0"
+              style={{
+                background: `linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-secondary) 100%)`,
+                zIndex: 0
+              }}
+            />
+        )}
+
+        <div className="position-absolute w-100 h-100 top-0 start-0" style={{ background: 'rgba(0, 0, 0, 0.4)', zIndex: 1 }}></div>
+        <div className="ai-hero-text-container" style={{ position: 'relative', maxWidth: 800, zIndex: 100 }}>
+          <h1 className="display-3 fw-bold mb-4" style={{ color: '#ffffff', textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}>
+            {heroSection.title || storeData.name}
+          </h1>
+          <p className="lead mb-4" style={{ color: '#ffffff', textShadow: '0 1px 5px rgba(0,0,0,0.8)' }}>
+            {heroSection.subtitle || storeData.description}
+          </p>
+          <div className="d-flex gap-3 justify-content-center mt-4">
+            <a href="#shop" className="btn btn-lg fw-bold px-5 py-3 shadow" style={{ background: 'var(--theme-accent)', color: '#ffffff', borderRadius: 'var(--theme-border-radius)', border: 'none' }}>
+              {heroSection.cta || 'Shop Now'}
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <div className="storefront-home">
+    <div className="storefront-home" style={aiStyleObj}>
+      {aiConfig && (
+        <style>{`
+          .storefront-home, .storefront-body, .storefront-main-content {
+            background-color: #ffffff !important;
+            color: var(--theme-text) !important;
+            font-family: var(--theme-body-font) !important;
+          }
+          .storefront-home h1, .storefront-home h2, .storefront-home h3, .storefront-home h4 {
+            font-family: var(--theme-heading-font) !important;
+          }
+          /* Force solid headers that don't overlap the AI hero banner */
+          .storefront-header, .eflyer-header, .hexashop-header {
+            background-color: var(--theme-surface) !important;
+            position: sticky !important;
+            top: 0;
+            z-index: 1000 !important;
+          }
+          .eflyer-header {
+            position: relative !important; /* Eflyer absolute positioning fix */
+          }
+          .eflyer-banner-wrapper {
+            background: none !important;
+          }
+          /* Ensure text/icons contrast correctly on the surface background */
+          .eflyer-logo, .eflyer-action-btn, .eflyer-welcome-text, .eflyer-hamburger-icon {
+            color: var(--theme-text) !important;
+            background-color: transparent !important;
+          }
+          .eflyer-hamburger-icon {
+            background-color: var(--theme-text) !important;
+          }
+          .card, .storefront-product-card {
+            background-color: #ffffff !important;
+            color: #2b2a29 !important;
+            border-radius: var(--theme-border-radius) !important;
+            ${aiConfig?.style?.cardStyle ? `box-shadow: ${aiConfig.style.cardStyle} !important; border: none !important;` : `border: 1px solid var(--theme-border) !important;`}
+          }
+          .storefront-product-card .storefront-product-title,
+          .storefront-product-card .storefront-product-price {
+            color: #2b2a29 !important;
+          }
+          .storefront-view-all-btn, .btn, .btn-primary {
+            background-color: var(--theme-btn-bg) !important;
+            color: var(--theme-btn-text) !important;
+            border-radius: var(--theme-border-radius) !important;
+            border-color: var(--theme-btn-bg) !important;
+          }
+          .storefront-view-all-btn:hover, .btn:hover, .btn-primary:hover {
+            background-color: var(--theme-hover) !important;
+            border-color: var(--theme-hover) !important;
+          }
+        `}</style>
+      )}
+
       {!searchQuery && (
         <React.Suspense fallback={null}>
-          {theme === 'theme-eflyer' && <ThemeEflyerHero eflyerSlide={eflyerSlide} />}
-          {theme === 'theme-hexashop' && <ThemeHexashopHero />}
-          {theme === 'theme-jewelry' && <ThemeJewelryHero jewelrySlide={jewelrySlide} />}
-          {theme === 'theme-beauty' && <ThemeBeautyHero beautySlide={beautySlide} />}
-          {theme === 'theme-home' && <ThemeHomeHero aranozSlide={aranozSlide} />}
-          {theme === 'theme-electronics' && <ThemeElectronicsHero />}
-          {theme === 'theme-footwear' && <ThemeFootwearHero />}
-          {theme === 'theme-grocery' && <ThemeGroceryHero />}
-          {theme === 'theme-gift' && <ThemeGiftHero />}
-          {theme === 'theme-perfume' && <ThemePerfumeHero />}
-          {!['theme-eflyer', 'theme-hexashop', 'theme-jewelry', 'theme-beauty', 'theme-home', 'theme-electronics', 'theme-footwear', 'theme-grocery', 'theme-gift', 'theme-perfume'].includes(theme) && (
-            <ThemeDefaultHero />
+          {aiConfig ? renderAiHero() : (
+            <>
+              {theme === 'theme-eflyer' && <ThemeEflyerHero eflyerSlide={eflyerSlide} />}
+              {theme === 'theme-hexashop' && <ThemeHexashopHero />}
+              {theme === 'theme-jewelry' && <ThemeJewelryHero jewelrySlide={jewelrySlide} />}
+              {theme === 'theme-beauty' && <ThemeBeautyHero beautySlide={beautySlide} />}
+              {theme === 'theme-home' && <ThemeHomeHero aranozSlide={aranozSlide} />}
+              {theme === 'theme-electronics' && <ThemeElectronicsHero />}
+              {theme === 'theme-footwear' && <ThemeFootwearHero />}
+              {theme === 'theme-grocery' && <ThemeGroceryHero />}
+              {theme === 'theme-gift' && <ThemeGiftHero />}
+              {theme === 'theme-perfume' && <ThemePerfumeHero />}
+            </>
           )}
         </React.Suspense>
       )}
@@ -512,12 +668,17 @@ export default function StorefrontHome({ storeData, products, categories = [], l
               key={cat.id || cat.name}
               className="storefront-section scroll-mt"
             >
-              <div className="storefront-section-header">
+              <div className="storefront-section-header align-items-end mb-4">
                 {theme === 'theme-perfume' ? (
                   <h3 style={{ textTransform: 'uppercase', letterSpacing: '1px', fontSize: '2rem' }}>
                     <span style={{ fontWeight: 'bold' }}>DISCOVER </span>
                     <span className="perfume-highlight" style={{ fontWeight: 'bold' }}>{cat.name}</span>
                   </h3>
+                ) : theme === 'theme-home' ? (
+                  <div>
+                    <div className="text-uppercase text-muted fw-bold mb-1" style={{ fontSize: '11px', letterSpacing: '1px' }}>Bestsellers</div>
+                    <h2 className="fw-bold m-0" style={{ fontFamily: 'Georgia, serif' }}>Our Most Loved Furniture</h2>
+                  </div>
                 ) : (
                   <h3>
                     {cat.isCustom
@@ -546,16 +707,23 @@ export default function StorefrontHome({ storeData, products, categories = [], l
           <div
             className="storefront-empty-state"
             style={{
-              padding: '60px 20px',
+              padding: '80px 20px',
               textAlign: 'center',
             }}
           >
-            <h2>Welcome to {storeData.name}</h2>
-
-            <p>
-              This store doesn't have any collections or products yet.
+            <div className="text-uppercase text-muted fw-bold mb-2" style={{ fontSize: '11px', letterSpacing: '2px' }}>Welcome To Our Store</div>
+            <h2 className="fw-bold mb-3" style={{ fontFamily: 'Georgia, serif', fontSize: '2.5rem', color: '#1a1a1a' }}>Discover {storeData.name}</h2>
+            <p className="text-muted" style={{ fontSize: '1.1rem', maxWidth: '500px', margin: '0 auto', lineHeight: '1.6' }}>
+              There are no products yet. We are currently curating our collection of beautiful, thoughtfully designed pieces. Please check back soon.
             </p>
           </div>
+      )}
+
+      {/* Footer sections for Nordic Theme */}
+      {theme === 'theme-home' && !searchQuery && (
+        <React.Suspense fallback={null}>
+          <ThemeHomeFooter />
+        </React.Suspense>
       )}
 
       {/* Video Section for Perfume Theme */}
