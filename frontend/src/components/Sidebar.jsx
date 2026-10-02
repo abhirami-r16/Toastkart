@@ -15,7 +15,8 @@ import {
   TrendingUp,
   Ticket,
   Globe,
-  CreditCard
+  CreditCard,
+  Sparkles
 } from 'lucide-react';
 
 export const ownerLinks = [
@@ -25,6 +26,7 @@ export const ownerLinks = [
   { key: "products", label: "Products", path: "/products", icon: Package },
   { key: "orders", label: "Orders", path: "/orders", icon: ShoppingCart },
   { key: "customers", label: "Customers", path: "/customers", icon: Users },
+  { key: "ai_builder", label: "AI Builder", path: "/owner/ai-builder", icon: Sparkles },
   { key: "bundles", label: "Bundles", path: "#", icon: Boxes },
   { key: "analytics", label: "Analytics", path: "#", icon: TrendingUp },
   { key: "discounts", label: "Discounts", path: "#", icon: Ticket },
