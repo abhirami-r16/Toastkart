@@ -1,4 +1,3 @@
-
 <?php
 
 namespace App\Services;
@@ -74,7 +73,10 @@ class GmailService
             Gmail::GMAIL_SEND,
         ]);
 
-        // Exchange the existing refresh token for a fresh access token.
+        /*
+         * Exchange the existing refresh token
+         * for a fresh OAuth access token.
+         */
         $token = $this->client->fetchAccessTokenWithRefreshToken(
             $refreshToken
         );
@@ -124,4 +126,3 @@ class GmailService
         ];
     }
 }
-
