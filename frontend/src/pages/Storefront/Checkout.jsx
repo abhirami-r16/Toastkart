@@ -77,12 +77,16 @@ export default function Checkout() {
                   }} onChange={handleInputChange} />
                 </div>
                 <div className="col-12">
-                  <label className="form-label fs-8 text-secondary fw-semibold">Street Address</label>
+                  <label className="form-label fs-8 text-secondary fw-semibold">Home Address</label>
                   <input type="text" className="form-control" name="address" required onChange={handleInputChange} />
                 </div>
                 <div className="col-12">
                   <label className="form-label fs-8 text-secondary fw-semibold">City</label>
                   <input type="text" className="form-control" name="city" required onChange={handleInputChange} />
+                </div>
+                <div className="col-12">
+                  <label className="form-label fs-8 text-secondary fw-semibold">Pincode</label>
+                  <input type="text" className="form-control" name="zip" required onChange={handleInputChange} />
                 </div>
               </div>
             </form>

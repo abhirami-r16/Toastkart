@@ -606,9 +606,9 @@ export default function StoreOwnerDashboard() {
             order_number: o.order_number || o.id,
             customer: o.customer_name || 'Customer',
             email: o.customer_email || '',
-            total: typeof o.total_amount === 'number' ? `$${o.total_amount.toFixed(2)}` : o.total_amount,
+            total: (o.total_amount || o.total) ? (String(o.total_amount || o.total).startsWith('$') ? String(o.total_amount || o.total) : `$${Number(String(o.total_amount || o.total).replace(/[^0-9.]/g, "")).toFixed(2)}`) : '',
             status: o.status || 'Pending',
-            pay: o.payment_status || 'Paid',
+            pay: o.payment_method === 'cod' ? 'COD' : (o.payment_method === 'razorpay' ? 'Paid' : (o.payment_status || o.payment_method || 'Paid')),
             date: o.created_at || new Date().toISOString(),
             items: o.items || []
           }));
@@ -628,10 +628,11 @@ export default function StoreOwnerDashboard() {
               store_id: o.store_id,
               order_number: o.id,
               customer: o.customer_name || 'Customer',
-              email: o.customer_email || '',
-              total: typeof o.total_amount === 'number' ? `$${o.total_amount.toFixed(2)}` : (o.total_amount ? `$${Number(o.total_amount).toFixed(2)}` : ''),
+              email: o.customer_email || o.email || '',
+              shipping_address: o.shipping_address || o.address || '',
+              total: (o.total_amount || o.total) ? `$${Number(String(o.total_amount || o.total).replace(/[^0-9.]/g, "")).toFixed(2)}` : '',
               status: o.status || 'Pending',
-              pay: 'Paid',
+              pay: o.payment_method === 'cod' ? 'COD' : (o.payment_method === 'razorpay' ? 'Paid' : (o.payment_method || 'Paid')),
               date: o.created_at || new Date().toISOString(),
               items: o.items || []
             }));
@@ -657,10 +658,10 @@ export default function StoreOwnerDashboard() {
 
   // Derive customers ONLY from this store's orders — never show customers from other stores
   const derivedCustomers = React.useMemo(() => {
-    // If backend returned scoped customers, use them directly
-    if (customersList && customersList.length > 0) {
-      return customersList;
-    }
+
+
+
+
     // Fallback: build from real orders that belong to this store
     const storeId = activeStore?.id;
     const map = {};
@@ -680,24 +681,42 @@ export default function StoreOwnerDashboard() {
             name,
             email,
             phone: o.customer_phone || "N/A",
+            address: o.shipping_address || o.address || "Address not provided",
             orders: 0,
             spentNum: 0,
             orderedProducts: [],
             recentOrder: o.id,
+            totalItems: 0,
             tier: "New"
           };
         }
         map[key].orders += 1;
         const numVal = parseFloat(String(o.total || o.total_amount || "").replace(/[^0-9.]/g, "")) || 0;
         map[key].spentNum += numVal;
-        if (o.items && !map[key].orderedProducts.includes(o.items)) {
-          map[key].orderedProducts.push(o.items);
+        let itemsArr = [];
+        if (Array.isArray(o.items)) {
+          itemsArr = o.items;
+        } else if (typeof o.items === 'string') {
+          itemsArr = [{ product_name: o.items, quantity: 1 }];
+        } else if (typeof o.items === 'object' && o.items !== null) {
+          itemsArr = [o.items];
         }
+        
+        itemsArr.forEach(i => {
+          const pName = i.product_name || i.name || 'Item';
+          const qty = parseInt(i.quantity, 10) || 1;
+          map[key].totalItems += qty;
+          if (!map[key].orderedProducts.includes(pName)) {
+            map[key].orderedProducts.push(pName);
+          }
+        });
+
+
       });
 
     return Object.values(map).map(c => ({
       ...c,
-      spent: `$${c.spentNum.toFixed(2)}`,
+      spent: `₹${c.spentNum.toFixed(2)}`,
       tier: c.orders >= 3 || c.spentNum > 300 ? "VIP" : c.orders > 1 ? "Regular" : "New"
     }));
   }, [realOrders, customersList, activeStore?.id]);
@@ -1683,13 +1702,13 @@ export default function StoreOwnerDashboard() {
                         <th className="border-0">Items</th>
                         <th className="border-0">Total</th>
                         <th className="border-0">Status</th>
-                        <th className="border-0 text-end">Invoice</th>
+
                       </tr>
                     </thead>
                     <tbody>
                       {realOrders.length === 0 ? (
                         <tr>
-                          <td colSpan="6" className="text-center py-4 fs-8" style={{ color: "#6d7175" }}>No recent orders yet.</td>
+                          <td colSpan="5" className="text-center py-4 fs-8" style={{ color: "#6d7175" }}>No recent orders yet.</td>
                         </tr>
                       ) : (
                         realOrders.map((o) => (
@@ -1712,11 +1731,11 @@ export default function StoreOwnerDashboard() {
                                 {o.status}
                               </span>
                             </td>
-                            <td className="border-0 text-end">
-                              <button onClick={() => setInvoiceModalOrder(o)} className="btn btn-sm btn-light border fs-8 py-1 px-2" style={{ color: "#6d7175" }}>
-                                Invoice
-                              </button>
-                            </td>
+
+
+
+
+
                           </tr>
                         ))
                       )}
@@ -1985,7 +2004,7 @@ export default function StoreOwnerDashboard() {
                           <th className="border-0 py-3">Payment</th>
                           <th className="border-0 py-3">Total Amount</th>
                           <th className="border-0 py-3">Status</th>
-                          <th className="border-0 text-end pe-4 py-3">Invoice</th>
+
                         </tr>
                       </thead>
                       <tbody>
@@ -2013,11 +2032,11 @@ export default function StoreOwnerDashboard() {
                                 <option value="Cancelled">Cancelled</option>
                               </select>
                             </td>
-                            <td className="border-0 text-end pe-4">
-                              <button onClick={() => setInvoiceModalOrder(o)} className="btn btn-sm btn-light border fs-8 py-1 px-2" style={{ color: "#6d7175" }}>
-                                Invoice
-                              </button>
-                            </td>
+
+
+
+
+
                           </tr>
                         ))}
                       </tbody>
@@ -2093,12 +2112,14 @@ export default function StoreOwnerDashboard() {
                       <table className="table table-hover mb-0 align-middle border-0">
                         <thead>
                           <tr className="fs-8 fw-semibold" style={{ color: "#6d7175", borderBottom: "1px solid #dfe3e8" }}>
-                            <th className="border-0 ps-4 py-3">Customer Name</th>
+                            <th className="border-0 ps-4 py-3">Customer Info</th>
+                            <th className="border-0 py-3">Address</th>
                             <th className="border-0 py-3">Ordered Products</th>
-                            <th className="border-0 py-3">Total Orders</th>
-                            <th className="border-0 py-3">Total Spent</th>
-                            <th className="border-0 py-3">Tier</th>
-                            <th className="border-0 text-end pe-4 py-3">Actions</th>
+
+                            <th className="border-0 py-3 text-center">Total Orders</th>
+                            <th className="border-0 py-3">Total Price (INR)</th>
+
+
                           </tr>
                         </thead>
                         <tbody>
@@ -2128,9 +2149,12 @@ export default function StoreOwnerDashboard() {
                                       </div>
                                       <div>
                                         <div style={{ color: "#202223" }}>{c.name}</div>
-                                        <div className="fs-8" style={{ color: "#6d7175" }}>{c.id}</div>
+                                        <div className="fs-8" style={{ color: "#6d7175" }}>{c.email}</div>
                                       </div>
                                     </div>
+                                  </td>
+                                  <td className="border-0 fs-8" style={{ color: "#6d7175", maxWidth: 200, whiteSpace: "normal" }}>
+                                    {c.address}
                                   </td>
                                   <td className="border-0" style={{ maxWidth: 300 }}>
                                     <div className="d-flex flex-wrap gap-1">
@@ -2145,28 +2169,29 @@ export default function StoreOwnerDashboard() {
                                       )}
                                     </div>
                                   </td>
-                                  <td className="border-0 fw-semibold" style={{ color: "#202223" }}>{c.orders} orders</td>
+
+                                  <td className="border-0 fw-semibold text-center" style={{ color: "#202223" }}>{c.orders}</td>
                                   <td className="border-0 fw-bold" style={{ color: "#202223" }}>{c.spent}</td>
-                                  <td className="border-0">
-                                    <span style={{
-                                      background: c.tier === "VIP" ? "#fef08a" : "#e1e3e5",
-                                      color: c.tier === "VIP" ? "#854d0e" : "#202223",
-                                      padding: "2px 8px",
-                                      borderRadius: "12px",
-                                      fontSize: "0.75rem",
-                                      fontWeight: "600"
-                                    }}>
-                                      {c.tier}
-                                    </span>
-                                  </td>
-                                  <td className="border-0 text-end pe-4">
-                                    <button
-                                      onClick={() => setSelectedCustomerModal(c)}
-                                      className="btn btn-sm btn-light border fs-8 py-1 px-2 d-inline-flex align-items-center gap-1" style={{ color: "#6d7175" }}
-                                    >
-                                      <Eye size={13} /> View
-                                    </button>
-                                  </td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                                 </tr>
                               ))
                           )}

@@ -12,7 +12,7 @@ export default function PaymentGateway() {
   
   const shippingData = location.state?.shippingData;
 
-  const [paymentMethod, setPaymentMethod] = useState(shippingData?.paymentMethod === 'cod' ? 'cod' : 'razorpay');
+  const [paymentMethod, setPaymentMethod] = useState('upi');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [isRazorpayLoaded, setIsRazorpayLoaded] = useState(false);
@@ -24,17 +24,7 @@ export default function PaymentGateway() {
   };
   const basePath = getBasePath();
 
-  useEffect(() => {
-    if (window.Razorpay) {
-      setIsRazorpayLoaded(true);
-      return;
-    }
-    const script = document.createElement('script');
-    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-    script.async = true;
-    script.onload = () => setIsRazorpayLoaded(true);
-    document.body.appendChild(script);
-  }, []);
+
 
   useEffect(() => {
     if (!shippingData && !orderSuccess) {
@@ -82,7 +72,7 @@ export default function PaymentGateway() {
       customer_name: shippingData.firstName,
       customer_email: user?.email || 'guest@example.com',
       customer_phone: shippingData.phone,
-      shipping_address: `${shippingData.address}, ${shippingData.city}`,
+      shipping_address: `${shippingData.address}, ${shippingData.city} - ${shippingData.zip}`,
       payment_method: paymentMethod,
       items: cartItems.map(item => ({
         product_id: item.id,
@@ -108,8 +98,10 @@ export default function PaymentGateway() {
           store_id: storeId,
           customer: orderPayload.customer_name,
           email: orderPayload.customer_email,
+          shipping_address: orderPayload.shipping_address,
           total: cartTotal.toFixed(2),
           status: 'Pending',
+          payment_method: paymentMethod,
           date: new Date().toISOString(),
           items: cartItems.map(item => ({
              product_id: item.id,
@@ -134,44 +126,7 @@ export default function PaymentGateway() {
 
   const handlePayment = async (e) => {
     e.preventDefault();
-    if (paymentMethod === 'razorpay') {
-      if (!isRazorpayLoaded) {
-        alert('Razorpay is still loading. Please wait.');
-        return;
-      }
-      setIsSubmitting(true);
-      const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_dummykey12345', 
-        amount: Math.round(cartTotal * 100),
-        currency: 'INR',
-        name: 'Store Checkout',
-        description: 'Order Payment',
-        handler: async function (response) {
-          await placeOrder();
-        },
-        prefill: {
-          name: shippingData?.firstName || '',
-          email: user?.email || '',
-          contact: shippingData?.phone || '',
-        },
-        theme: {
-          color: '#fb641b',
-        },
-        modal: {
-          ondismiss: function () {
-            setIsSubmitting(false);
-          },
-        },
-      };
-      const rzp = new window.Razorpay(options);
-      rzp.on('payment.failed', function (response) {
-        alert(response.error.description || 'Payment failed.');
-        setIsSubmitting(false);
-      });
-      rzp.open();
-    } else {
-      await placeOrder();
-    }
+    await placeOrder();
   };
 
   return (
@@ -221,6 +176,47 @@ export default function PaymentGateway() {
               <span>Total</span>
               <span>₹{cartTotal.toFixed(2)}</span>
             </div>
+
+            {/* Payment Method Selector */}
+            <div className="mb-4">
+              <h4 className="fs-6 fw-bold mb-3">Select Payment Method</h4>
+              <div className="d-flex gap-3 mb-3">
+                <label className="d-flex align-items-center gap-2 cursor-pointer p-2 border rounded flex-grow-1">
+                  <input type="radio" name="paymentMethod" value="upi" checked={paymentMethod === 'upi'} onChange={() => setPaymentMethod('upi')} />
+                  <span>UPI</span>
+                </label>
+                <label className="d-flex align-items-center gap-2 cursor-pointer p-2 border rounded flex-grow-1">
+                  <input type="radio" name="paymentMethod" value="card" checked={paymentMethod === 'card'} onChange={() => setPaymentMethod('card')} />
+                  <span>Credit / Debit Card</span>
+                </label>
+              </div>
+
+              {paymentMethod === 'upi' && (
+                <div className="p-3 bg-light rounded border">
+                  <label className="form-label fs-7 fw-semibold">UPI ID</label>
+                  <input type="text" className="form-control" placeholder="e.g. username@upi" />
+                  <div className="form-text fs-8">A payment request will be sent to your UPI app.</div>
+                </div>
+              )}
+
+              {paymentMethod === 'card' && (
+                <div className="p-3 bg-light rounded border">
+                  <label className="form-label fs-7 fw-semibold">Card Number</label>
+                  <input type="text" className="form-control mb-2" placeholder="XXXX XXXX XXXX XXXX" maxLength="19" />
+                  <div className="d-flex gap-2">
+                    <div className="w-50">
+                      <label className="form-label fs-7 fw-semibold">Expiry Date</label>
+                      <input type="text" className="form-control" placeholder="MM/YY" maxLength="5" />
+                    </div>
+                    <div className="w-50">
+                      <label className="form-label fs-7 fw-semibold">CVV</label>
+                      <input type="password" className="form-control" placeholder="***" maxLength="4" />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
             <div className="d-flex flex-column gap-3 mt-4">
               <button 
                 type="button" 
@@ -229,7 +225,7 @@ export default function PaymentGateway() {
                 style={{ backgroundColor: '#fb641b' }}
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Processing...' : paymentMethod === 'cod' ? 'Confirm Order' : `Pay ₹${cartTotal.toFixed(2)} securely`}
+                {isSubmitting ? 'Processing...' : 'Confirm Order'}
               </button>
             </div>
           </div>
