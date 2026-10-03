@@ -10,12 +10,12 @@ export default function PaymentGateway() {
   const { cartItems, cartTotal, clearCart, storeId } = useStorefrontCart();
   const { user } = useStorefrontAuth();
   
-  const [paymentMethod, setPaymentMethod] = useState('razorpay');
+  const shippingData = location.state?.shippingData;
+
+  const [paymentMethod, setPaymentMethod] = useState(shippingData?.paymentMethod === 'cod' ? 'cod' : 'razorpay');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [isRazorpayLoaded, setIsRazorpayLoaded] = useState(false);
-
-  const shippingData = location.state?.shippingData;
 
   const getBasePath = () => {
     const p = window.location.pathname;
@@ -63,7 +63,7 @@ export default function PaymentGateway() {
             </div>
           </div>
           <h2 className="fs-3 font-bold mb-3">Order Placed Successfully!</h2>
-          <p className="text-secondary mb-4">Your order has been confirmed. You will receive an email shortly.</p>
+          <p className="text-secondary mb-4">Your order has been confirmed.</p>
           <button className="btn btn-primary mt-3" onClick={() => navigate(basePath)}>
             Continue Shopping
           </button>
@@ -94,9 +94,13 @@ export default function PaymentGateway() {
 
     try {
       const { default: api } = await import('../../api/axios');
-      await api.post('/orders', orderPayload);
-    } catch (err) {
-      console.warn("Backend API failed, saving to local mock DB", err);
+      try {
+        await api.post('/orders', orderPayload);
+      } catch (err) {
+        console.warn("Backend API failed, continuing with local mock DB", err);
+      }
+      
+      // Always save to local storage so device guests can see their orders
       try {
         const existing = JSON.parse(localStorage.getItem('aureum_owner_orders') || '[]');
         const mockOrder = {
@@ -119,6 +123,8 @@ export default function PaymentGateway() {
         existing.unshift(mockOrder);
         localStorage.setItem('aureum_owner_orders', JSON.stringify(existing));
       } catch (e) {}
+    } catch (e) {
+      console.error(e);
     }
 
     setIsSubmitting(false);
@@ -223,7 +229,7 @@ export default function PaymentGateway() {
                 style={{ backgroundColor: '#fb641b' }}
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Processing...' : `Pay ₹${cartTotal.toFixed(2)} securely`}
+                {isSubmitting ? 'Processing...' : paymentMethod === 'cod' ? 'Confirm Order' : `Pay ₹${cartTotal.toFixed(2)} securely`}
               </button>
             </div>
           </div>

@@ -47,9 +47,11 @@ export default function Checkout() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const [paymentAction, setPaymentAction] = useState('online');
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    navigate(`${basePath}/payment`, { state: { shippingData: formData } });
+    navigate(`${basePath}/payment`, { state: { shippingData: { ...formData, paymentMethod: paymentAction } } });
   };
 
   return (
@@ -68,7 +70,11 @@ export default function Checkout() {
                 </div>
                 <div className="col-12">
                   <label className="form-label fs-8 text-secondary fw-semibold">Phone Number</label>
-                  <input type="tel" className="form-control" name="phone" required onChange={handleInputChange} />
+                  <input type="tel" className="form-control" name="phone" required pattern="\d{10}" maxLength="10" title="Please enter exactly 10 digits" onKeyPress={(e) => {
+                    if (!/[0-9]/.test(e.key)) {
+                      e.preventDefault();
+                    }
+                  }} onChange={handleInputChange} />
                 </div>
                 <div className="col-12">
                   <label className="form-label fs-8 text-secondary fw-semibold">Street Address</label>
@@ -132,10 +138,20 @@ export default function Checkout() {
               <button 
                 type="submit" 
                 form="checkout-form"
+                onClick={() => setPaymentAction('online')}
                 className="btn w-100 py-3 fw-bold text-white fs-6" 
                 style={{ backgroundColor: '#fb641b' }}
               >
                 Proceed to Payment
+              </button>
+              <button 
+                type="submit" 
+                form="checkout-form"
+                onClick={() => setPaymentAction('cod')}
+                className="btn w-100 py-3 fw-bold text-white fs-6 mt-3" 
+                style={{ backgroundColor: '#fb641b' }}
+              >
+                Cash on Delivery
               </button>
 
             </div>

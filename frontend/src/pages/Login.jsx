@@ -215,7 +215,7 @@ export default function Login() {
   const [resetSent, setResetSent] = useState(false);
 
   useSEO({
-    title: 'Log in to GoSlot Store',
+    title: 'Login into Toastkart',
     description: 'Access your centralized merchant dashboard',
   });
 
@@ -250,7 +250,12 @@ export default function Login() {
     try {
       const res = await googleLogin(googleCredential);
       if (res.success) {
-        navigate('/owner/dashboard');
+        const hasActivePlan = res.user?.active_subscription || res.user?.activeSubscription;
+        if (hasActivePlan) {
+          navigate('/owner/dashboard');
+        } else {
+          navigate('/plans');
+        }
       } else {
         setError(res.message || 'Google login failed');
       }
@@ -323,7 +328,12 @@ export default function Login() {
       if (userRole === 'admin') {
         navigate('/admin/dashboard');
       } else {
-        navigate('/plans');
+        const hasActivePlan = res.user?.active_subscription || res.user?.activeSubscription;
+        if (hasActivePlan) {
+          navigate('/owner/dashboard');
+        } else {
+          navigate('/plans');
+        }
       }
     } else {
       setError(
@@ -397,7 +407,7 @@ export default function Login() {
             >
               {isForgotPassword
                 ? 'Reset Password'
-                : 'Log in to ToastKart'}
+                : 'Login into Toastkart'}
             </h1>
 
             <p className="text-muted fs-6 mb-0">

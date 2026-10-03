@@ -184,7 +184,7 @@ export default function Stores() {
               style={{ background: 'rgba(212, 175, 55, 0.12)', color: GOLD_LIGHT, border: `1px solid rgba(212, 175, 55, 0.2)` }}
             >
               <Sparkles size={13} style={{ color: GOLD }} />
-              <span>AUREUM EXECUTIVE MERCHANT SUITE</span>
+              <span>TOASTKART MERCHANT SUITE</span>
             </div>
 
             <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white">

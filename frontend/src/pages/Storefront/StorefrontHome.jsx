@@ -420,15 +420,23 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                         : ''
                       } ${theme === 'theme-home' ? 'text-uppercase' : ''}`}
                     style={
-                      theme !== 'theme-default'
+                      theme === 'theme-home'
+                        ? {
+                            backgroundColor: '#e83e8c', // Pink
+                            color: '#fff',
+                            border: 'none',
+                            fontSize: '0.85rem',
+                            padding: '8px',
+                          }
+                        : theme !== 'theme-default'
                         ? {}
                         : {
-                          backgroundColor: '#ff9f00',
-                          color: '#fff',
-                          border: 'none',
-                          fontSize: '0.85rem',
-                          padding: '8px',
-                        }
+                            backgroundColor: '#ff9f00',
+                            color: '#fff',
+                            border: 'none',
+                            fontSize: '0.85rem',
+                            padding: '8px',
+                          }
                     }
                     onClick={(e) => {
                       e.preventDefault();
@@ -598,15 +606,24 @@ export default function StorefrontHome({ storeData, products, categories = [], l
           .storefront-product-card .storefront-product-price {
             color: #2b2a29 !important;
           }
-          .storefront-view-all-btn, .btn, .btn-primary {
+          .storefront-view-all-btn, .btn:not(.add-to-cart-btn), .btn-primary:not(.add-to-cart-btn) {
             background-color: var(--theme-btn-bg) !important;
             color: var(--theme-btn-text) !important;
             border-radius: var(--theme-border-radius) !important;
             border-color: var(--theme-btn-bg) !important;
           }
-          .storefront-view-all-btn:hover, .btn:hover, .btn-primary:hover {
+          .add-to-cart-btn {
+            background-color: #e83e8c !important;
+            color: #ffffff !important;
+            border-color: #e83e8c !important;
+          }
+          .storefront-view-all-btn:hover, .btn:not(.add-to-cart-btn):hover, .btn-primary:not(.add-to-cart-btn):hover {
             background-color: var(--theme-hover) !important;
             border-color: var(--theme-hover) !important;
+          }
+          .add-to-cart-btn:hover {
+            background-color: #d81b60 !important;
+            border-color: #d81b60 !important;
           }
         `}</style>
       )}

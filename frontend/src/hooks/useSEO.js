@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 export default function useSEO({ title, description, keywords }) {
   useEffect(() => {
     // Title
-    const appTitle = 'AUREUM Commerce';
+    const appTitle = 'ToastKart';
     document.title = title ? `${title} | ${appTitle}` : appTitle;
 
     // Meta Description
