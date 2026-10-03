@@ -41,11 +41,19 @@ return [
     ],
 
     'cloudflare' => [
-    'account_id' => env('CLOUDFLARE_ACCOUNT_ID'),
-    'api_token' => env('CLOUDFLARE_API_TOKEN'),
-    'image_model' => env(
-        'CLOUDFLARE_IMAGE_MODEL',
-        '@cf/black-forest-labs/flux-1-schnell'
-    ),
-],
+        'account_id' => env('CLOUDFLARE_ACCOUNT_ID'),
+        'api_token' => env('CLOUDFLARE_API_TOKEN'),
+        'image_model' => env(
+            'CLOUDFLARE_IMAGE_MODEL',
+            '@cf/black-forest-labs/flux-1-schnell'
+        ),
+    ],
+
+    'gmail' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'refresh_token' => env('GOOGLE_REFRESH_TOKEN'),
+        'redirect_uri' => env('GOOGLE_REDIRECT_URI', 'http://localhost:8000/api/auth/google/callback'),
+        'sender_email' => env('GOOGLE_SENDER_EMAIL', 'mail.toastkart@gmail.com'),
+    ],
 ];
