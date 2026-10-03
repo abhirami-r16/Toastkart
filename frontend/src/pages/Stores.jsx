@@ -98,7 +98,7 @@ export default function Stores() {
     e.preventDefault();
 
     // Check if the user has an active plan before creating a store (Flow 4)
-    if (user?.auth_provider === 'google' && !user?.activeSubscription) {
+    if (!user?.activeSubscription) {
       navigate('/plans?redirect=create-store');
       return;
     }
@@ -561,7 +561,7 @@ export default function Stores() {
 
       {/* TAB 5: CREATE STORE FORM */}
       {activeTab === 'create' && (
-        user?.auth_provider === 'google' && !user?.activeSubscription ? (
+        !user?.activeSubscription ? (
           <div className="grid lg:grid-cols-12 gap-6">
             <div className="lg:col-span-8 lg:col-start-3 rounded-2xl p-8 flex flex-col items-center justify-center text-center mx-auto mt-8 w-full" style={{ background: '#0f0e0c', border: `1px solid rgba(212, 175, 55, 0.3)`, minHeight: '300px' }}>
               <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4" style={{ background: 'rgba(212, 175, 55, 0.1)', color: '#d4af37' }}>

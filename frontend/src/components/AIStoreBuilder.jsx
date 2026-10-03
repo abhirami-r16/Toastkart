@@ -71,7 +71,7 @@ const [isAiCreating, setIsAiCreating] = useState(false);
 const handleGenerate = async (e) => {
 e.preventDefault();
 
-if (user?.auth_provider === 'google' && !user?.activeSubscription) {
+if (!user?.activeSubscription) {
   if (setShowPlanRequiredModal) setShowPlanRequiredModal(true);
   return;
 }
@@ -209,7 +209,7 @@ try {
   const handleAiCreateStore = async (e) => {
   e.preventDefault();
 
-  if (user?.auth_provider === 'google' && !user?.activeSubscription) {
+  if (!user?.activeSubscription) {
     if (setShowPlanRequiredModal) setShowPlanRequiredModal(true);
     return;
   }

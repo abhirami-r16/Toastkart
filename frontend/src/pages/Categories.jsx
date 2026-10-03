@@ -166,7 +166,7 @@ export default function Categories() {
     }
   };
 
-  if (user?.auth_provider === 'google' && !user?.activeSubscription) {
+  if (!user?.activeSubscription) {
     return (
       <div className="container-fluid p-5 d-flex flex-column justify-content-center align-items-center text-center" style={{ minHeight: '60vh' }}>
         <div className="p-5 bg-white rounded shadow-sm border w-100" style={{ maxWidth: 500 }}>

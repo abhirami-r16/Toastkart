@@ -751,7 +751,7 @@ export default function StoreOwnerDashboard() {
   // Store CRUD Handlers
   const openCreateStoreModal = () => {
     // Check if the user has an active plan before creating a store (Flow 4)
-    if (user?.auth_provider === 'google' && !user?.activeSubscription) {
+    if (!user?.activeSubscription) {
       setShowPlanRequiredModal('create-store');
       return;
     }
@@ -787,7 +787,7 @@ export default function StoreOwnerDashboard() {
 
   const handleCreateStoreSubmit = async (e) => {
     e.preventDefault();
-    if (user?.auth_provider === 'google' && !user?.activeSubscription) {
+    if (!user?.activeSubscription) {
       setShowPlanRequiredModal('create-store');
       return;
     }
@@ -993,7 +993,7 @@ export default function StoreOwnerDashboard() {
 
   // Category CRUD Handlers
   const openAddCategoryModal = () => {
-    if (user?.auth_provider === 'google' && !user?.activeSubscription) {
+    if (!user?.activeSubscription) {
       setShowPlanRequiredModal('categories');
       return;
     }
@@ -1003,7 +1003,7 @@ export default function StoreOwnerDashboard() {
   };
 
   const openInlineCategoryForm = () => {
-    if (user?.auth_provider === 'google' && !user?.activeSubscription) {
+    if (!user?.activeSubscription) {
       setShowPlanRequiredModal('categories');
       return;
     }
@@ -1013,7 +1013,7 @@ export default function StoreOwnerDashboard() {
   };
 
   const openEditCategoryModal = (cat) => {
-    if (user?.auth_provider === 'google' && !user?.activeSubscription) {
+    if (!user?.activeSubscription) {
       setShowPlanRequiredModal('categories');
       return;
     }
@@ -1034,7 +1034,7 @@ export default function StoreOwnerDashboard() {
 
   const handleCategorySubmit = async (e) => {
     e.preventDefault();
-    if (user?.auth_provider === 'google' && !user?.activeSubscription) {
+    if (!user?.activeSubscription) {
       setShowPlanRequiredModal('categories');
       return;
     }
@@ -1158,7 +1158,7 @@ export default function StoreOwnerDashboard() {
   };
 
   const openAddProductModal = () => {
-    if (user?.auth_provider === 'google' && !user?.activeSubscription) {
+    if (!user?.activeSubscription) {
       setShowPlanRequiredModal('products');
       return;
     }
@@ -1167,7 +1167,7 @@ export default function StoreOwnerDashboard() {
   };
 
   const openInlineProductForm = () => {
-    if (user?.auth_provider === 'google' && !user?.activeSubscription) {
+    if (!user?.activeSubscription) {
       setShowPlanRequiredModal('products');
       return;
     }
@@ -1176,7 +1176,7 @@ export default function StoreOwnerDashboard() {
   };
 
   const openEditProductModal = (product) => {
-    if (user?.auth_provider === 'google' && !user?.activeSubscription) {
+    if (!user?.activeSubscription) {
       setShowPlanRequiredModal('products');
       return;
     }
@@ -1492,7 +1492,7 @@ export default function StoreOwnerDashboard() {
               const Icon = item.icon;
               const isActive = active === item.key;
               const handleClick = () => {
-                if ((item.key === 'categories' || item.key === 'ai-builder') && user?.auth_provider === 'google' && !user?.activeSubscription) {
+                if ((item.key === 'categories' || item.key === 'ai-builder') && !user?.activeSubscription) {
                   setShowPlanRequiredModal('products');
                   return;
                 }
@@ -3159,7 +3159,7 @@ export default function StoreOwnerDashboard() {
                       </p>
                       <button 
                         onClick={() => {
-                          if (user?.auth_provider === 'google' && !user?.activeSubscription) {
+                          if (!user?.activeSubscription) {
                             setShowPlanRequiredModal('ai-builder');
                           } else {
                             setActive('ai-builder');

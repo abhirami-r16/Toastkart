@@ -230,12 +230,7 @@ export default function Register() {
     try {
       const res = await googleLogin(googleCredential);
       if (res.success) {
-        const hasActivePlan = res.user?.active_subscription || res.user?.activeSubscription;
-        if (hasActivePlan) {
-          navigate('/owner/dashboard');
-        } else {
-          navigate('/plans');
-        }
+        navigate('/owner/dashboard');
       } else {
         setError(res.message || 'Google registration failed');
       }
