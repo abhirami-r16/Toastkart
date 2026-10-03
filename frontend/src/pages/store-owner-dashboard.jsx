@@ -3963,7 +3963,7 @@ export default function StoreOwnerDashboard() {
               </p>
               
               <div className="d-flex align-items-center justify-content-end gap-3 mt-4">
-                <button onClick={() => setShowPlanRequiredModal(false)} className="btn btn-sm text-muted px-3 py-2 border-0 bg-transparent" style={{ fontWeight: "600" }}>
+                <button onClick={() => setShowPlanRequiredModal(false)} className="btn btn-sm px-4 py-2 fw-bold" style={{ background: 'linear-gradient(135deg, #d4af37, #8a6d1f)', color: '#050505', border: 'none' }}>
                   Cancel
                 </button>
                 <button 
@@ -3971,9 +3971,9 @@ export default function StoreOwnerDashboard() {
                     setShowPlanRequiredModal(false);
                     navigate(`/plans?redirect=${typeof showPlanRequiredModal === 'string' ? showPlanRequiredModal : 'dashboard'}`);
                   }} 
-                  className="btn btn-gold-primary btn-sm px-4 py-2 fw-bold"
+                  className="btn btn-sm px-4 py-2 fw-bold" style={{ background: 'linear-gradient(135deg, #d4af37, #8a6d1f)', color: '#050505', border: 'none' }}
                 >
-                  Select Plan
+                  Pay Now
                 </button>
               </div>
             </div>

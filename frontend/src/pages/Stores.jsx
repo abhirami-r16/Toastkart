@@ -578,7 +578,7 @@ export default function Stores() {
                 className="px-6 py-3 rounded-xl text-xs font-bold shadow-md"
                 style={{ background: `linear-gradient(135deg, ${GOLD_DEEP}, ${GOLD})`, color: INK }}
               >
-                Select Plan
+                Pay Now
               </button>
             </div>
           </div>
