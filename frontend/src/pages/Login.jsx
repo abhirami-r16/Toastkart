@@ -323,12 +323,7 @@ export default function Login() {
       if (userRole === 'admin') {
         navigate('/admin/dashboard');
       } else {
-        const hasActivePlan = res.user?.active_subscription || res.user?.activeSubscription;
-        if (hasActivePlan) {
-          navigate('/owner/dashboard');
-        } else {
-          navigate('/plans');
-        }
+        navigate('/owner/dashboard');
       }
     } else {
       setError(

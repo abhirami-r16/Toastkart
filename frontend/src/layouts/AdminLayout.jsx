@@ -38,15 +38,15 @@ export default function AdminLayout() {
   };
 
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', 'dark');
+    document.documentElement.setAttribute('data-theme', 'light');
   }, []);
 
   return (
     <div
       className="store-manager-layout d-flex"
       style={{
-        background: '#050505',
-        color: '#f6f1e4',
+        background: '#f1f2f4',
+        color: '#202223',
         minHeight: '100vh'
       }}
     >
@@ -59,8 +59,8 @@ export default function AdminLayout() {
         <header
           className="store-topbar"
           style={{
-            background: '#050505',
-            borderBottom: '1px solid rgba(212,175,55,0.18)'
+            background: '#ffffff',
+            borderBottom: '1px solid #dfe3e8'
           }}
         >
           <div className="d-flex align-items-center gap-3 flex-wrap">
@@ -74,11 +74,11 @@ export default function AdminLayout() {
                   }
                   style={({ isActive }) => ({
                     background: isActive
-                      ? 'rgba(212,175,55,0.16)'
+                      ? 'rgba(255,87,34,0.1)'
                       : 'transparent',
-                    color: isActive ? '#f3d675' : '#8a7a4d',
+                    color: isActive ? '#FF5722' : '#454f5b',
                     border: isActive
-                      ? '1px solid rgba(212,175,55,0.28)'
+                      ? '1px solid rgba(255,87,34,0.2)'
                       : '1px solid transparent'
                   })}
                 >
@@ -98,7 +98,7 @@ export default function AdminLayout() {
                   height="16"
                   viewBox="0 0 24 24"
                   fill="none"
-                  stroke="#8a7a4d"
+                  stroke="#6d7175"
                   strokeWidth="2"
                 >
                   <circle cx="11" cy="11" r="8"></circle>
@@ -117,9 +117,9 @@ export default function AdminLayout() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 style={{
-                  background: '#0e0d0b',
-                  color: '#ffffff',
-                  borderColor: 'rgba(212,175,55,0.2)'
+                  background: '#f1f2f4',
+                  color: '#202223',
+                  borderColor: '#dfe3e8'
                 }}
               />
             </form>
@@ -135,10 +135,11 @@ export default function AdminLayout() {
               }
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn-sm d-flex align-items-center gap-2 px-3 py-1.5 rounded-pill text-white border"
+              className="btn btn-sm d-flex align-items-center gap-2 px-3 py-1.5 rounded-pill fw-bold border"
               style={{
-                background: 'rgba(212,175,55,0.15)',
-                borderColor: 'rgba(212,175,55,0.3)',
+                background: 'rgba(255,87,34,0.05)',
+                borderColor: 'rgba(255,87,34,0.2)',
+                color: '#FF5722',
                 fontSize: '0.8rem'
               }}
             >
@@ -156,23 +157,23 @@ export default function AdminLayout() {
                 <div
                   className="w-8 h-8 rounded-circle d-flex align-items-center justify-content-center text-xs fw-bold"
                   style={{
-                    background:
-                      'linear-gradient(135deg, #d4af37, #8a6d1f)',
-                    color: '#050505'
+                    background: '#ebebeb',
+                    color: '#202223',
+                    border: '1px solid #dfe3e8'
                   }}
                 >
                   {profileInitial}
                 </div>
 
-                <span className="user-name text-white fs-7 font-semibold">
+                <span className="user-name fs-7 font-semibold" style={{ color: "#334155" }}>
                   {displayName}
                 </span>
               </div>
 
-              <ul className="dropdown-menu dropdown-menu-end shadow border border-amber-500/20 bg-dark text-white rounded-3 mt-2">
+              <ul className="dropdown-menu dropdown-menu-end shadow border-0 bg-white rounded-3 mt-2">
                 <li>
-                  <div className="dropdown-header text-white-75">
-                    <div className="fw-bold text-warning fs-7">
+                  <div className="dropdown-header">
+                    <div className="fw-bold text-dark fs-7">
                       {displayName}
                     </div>
 
@@ -188,7 +189,8 @@ export default function AdminLayout() {
 
                 <li>
                   <NavLink
-                    className="dropdown-item text-white fs-7"
+                    className="dropdown-item fs-7"
+                    style={{ color: "#202223" }}
                     to="/settings"
                   >
                     ⚙️ Settings
@@ -211,7 +213,7 @@ export default function AdminLayout() {
         {/* Main Body View */}
         <main
           className="p-4 flex-grow-1 overflow-y-auto"
-          style={{ background: '#050505' }}
+          style={{ background: '#f1f2f4' }}
         >
           <Outlet />
         </main>

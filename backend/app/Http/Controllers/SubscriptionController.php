@@ -22,6 +22,15 @@ class SubscriptionController extends Controller
         ]
     ];
 
+    public function index(Request $request)
+    {
+        $subscriptions = Subscription::with('user:id,name,email')
+            ->whereNotIn('status', ['pending', 'failed'])
+            ->orderBy('id', 'desc')
+            ->get();
+        return response()->json($subscriptions);
+    }
+
     public function createOrder(Request $request)
     {
         $fields = $request->validate([

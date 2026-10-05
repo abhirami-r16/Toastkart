@@ -90,7 +90,9 @@ try {
    */
   if (!store || !store.id) {
     const createRes = await createStore({
-      ai_prompt: prompt
+      ai_prompt: prompt,
+      user_id: user?.id,
+      owner_name: user?.name
     });
 
     if (!createRes.success || !createRes.store) {
@@ -268,7 +270,9 @@ try {
       .toLowerCase()
       .replace(/[^a-z0-9]/g, '-'),
     status: 'Active',
-    currency: 'USD'
+    currency: 'USD',
+    user_id: user?.id,
+    owner_name: user?.name
   };
 
   const createRes =

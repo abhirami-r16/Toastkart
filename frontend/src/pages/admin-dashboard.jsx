@@ -9,9 +9,9 @@ import {
   LayoutDashboard, Store, Users, Boxes, Tag, CreditCard, FileText,
   Settings, Bell, Search, TrendingUp, TrendingDown, DollarSign,
   Clock, LogOut, Crown, Activity, Package, CheckCircle, AlertTriangle,
-  Plus, Trash2, Eye, Shield, RefreshCw, Download, Check, X, ShieldAlert,
   Server, Zap, Globe, Sliders
 } from "lucide-react";
+import ToastKartLogo from "../components/ToastKartLogo";
 import "../styles/dashboard-premium.css";
 
 
@@ -23,10 +23,7 @@ const adminLinks = [
   { key: "dashboard", label: "Overview", icon: LayoutDashboard },
   { key: "stores", label: "Stores", icon: Store },
   { key: "users", label: "Users", icon: Users },
-  { key: "categories", label: "Categories", icon: Tag },
-  { key: "analytics", label: "Analytics", icon: Activity },
-  { key: "reports", label: "Reports", icon: Activity },
-  { key: "settings", label: "Settings", icon: Settings },
+  { key: "payments", label: "Payments", icon: CreditCard },
 ];
 
 const platformRevenue = [
@@ -88,6 +85,7 @@ function AdminDashboardContent() {
   const [productsList, setProductsList] = useState([]);
   const [ordersList, setOrdersList] = useState([]);
   const [payoutsList, setPayoutsList] = useState([]);
+  const [subscriptionsList, setSubscriptionsList] = useState([]);
 
   // Modals
   // Fetch data from API on mount
@@ -135,6 +133,12 @@ function AdminDashboardContent() {
         setOrdersList([]);
       });
     // Assuming payouts are separate endpoint; keep existing if needed
+    api.get('/subscriptions')
+      .then(res => setSubscriptionsList(res.data || []))
+      .catch(err => {
+        console.error('Error fetching subscriptions', err);
+        setSubscriptionsList([]);
+      });
   }, []);
 
   const normalizeAdminProduct = (product) => {
@@ -203,6 +207,7 @@ function AdminDashboardContent() {
       status: store?.status || 'Active',
       domain: store?.domain || store?.subdomain || 'n/a',
       gmv: store?.gmv || store?.total_revenue || store?.revenue || '$0.00',
+      email: store?.user?.email || store?.owner?.email || store?.email || store?.owner_email || 'N/A',
     };
   };
 
@@ -425,10 +430,7 @@ function AdminDashboardContent() {
         <div>
           {/* Brand Header */}
           <div className="d-flex align-items-center gap-2 p-2 mb-3 border-bottom" style={{ borderColor: "#dfe3e8", paddingBottom: "1rem" }}>
-            <div className="brand-icon-box" style={{ background: "#ffffff", border: "1px solid #dfe3e8", color: "#202223", width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 8, fontWeight: "bold" }}>
-              A
-            </div>
-            <span className="brand-title fs-5 fw-bolder tracking-wide" style={{ color: "#202223", letterSpacing: "2px" }}>AUREUM</span>
+            <ToastKartLogo width={160} height={32} />
           </div>
 
           {/* Role Subtitle */}
@@ -447,15 +449,15 @@ function AdminDashboardContent() {
                   onClick={() => setActive(item.key)}
                   className={`sidebar-link d-flex align-items-center gap-3 p-2.5 rounded-3 border-0 transition-all ${isActive ? "active" : ""}`}
                   style={{
-                    background: isActive ? "rgba(0,127,95,0.1)" : "transparent",
-                    color: isActive ? "#007f5f" : "#454f5b",
+                    background: isActive ? "rgba(255,87,34,0.1)" : "transparent",
+                    color: isActive ? "#FF5722" : "#454f5b",
                     fontWeight: isActive ? "bold" : "600",
-                    borderLeft: isActive ? "3px solid #007f5f" : "3px solid transparent",
+                    borderLeft: isActive ? "3px solid #FF5722" : "3px solid transparent",
                     textAlign: "left"
                   }}
                 >
-                  <Icon size={18} style={{ color: isActive ? "#007f5f" : "#6d7175" }} />
-                  <span style={{ color: isActive ? "#007f5f" : "#454f5b" }}>{item.label}</span>
+                  <Icon size={18} style={{ color: isActive ? "#FF5722" : "#6d7175" }} />
+                  <span style={{ color: isActive ? "#FF5722" : "#454f5b" }}>{item.label}</span>
                 </button>
               );
             })}
@@ -487,7 +489,7 @@ function AdminDashboardContent() {
             <div className="topbar-icon-btn">
               <Bell size={16} />
             </div>
-            <div className="w-8 h-8 rounded-circle d-flex align-items-center justify-center font-bold text-xs" style={{ background: `linear-gradient(135deg, $"#007f5f", #8a6d1f)`, color: "#050505" }}>
+            <div className="w-8 h-8 rounded-circle d-flex align-items-center justify-center font-bold text-xs" style={{ background: `linear-gradient(135deg, $"#FF5722", #8a6d1f)`, color: "#050505" }}>
               SA
             </div>
           </div>
@@ -561,15 +563,15 @@ function AdminDashboardContent() {
                       <AreaChart data={platformRevenue}>
                         <defs>
                           <linearGradient id="adminRevGrad" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="#007f5f" stopOpacity={0.45} />
-                            <stop offset="100%" stopColor="#007f5f" stopOpacity={0.0} />
+                            <stop offset="0%" stopColor="#FF5722" stopOpacity={0.45} />
+                            <stop offset="100%" stopColor="#FF5722" stopOpacity={0.0} />
                           </linearGradient>
                         </defs>
                         <CartesianGrid strokeDasharray="3 3" stroke="#dfe3e8" vertical={false} />
                         <XAxis dataKey="m" tick={{ fontSize: 11, fill: "#8a7a4d" }} axisLine={false} tickLine={false} />
                         <YAxis tick={{ fontSize: 11, fill: "#8a7a4d" }} axisLine={false} tickLine={false} />
                         <Tooltip contentStyle={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: 8, fontSize: 12, color: "#202223" }} />
-                        <Area type="monotone" dataKey="v" stroke="#007f5f" strokeWidth={2.5} fill="url(#adminRevGrad)" />
+                        <Area type="monotone" dataKey="v" stroke="#FF5722" strokeWidth={2.5} fill="url(#adminRevGrad)" />
                       </AreaChart>
                     </ResponsiveContainer>
                   </div>
@@ -584,7 +586,7 @@ function AdminDashboardContent() {
                         <XAxis type="number" hide />
                         <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fill: "#8a7a4d" }} axisLine={false} tickLine={false} width={90} />
                         <Tooltip contentStyle={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: 8, fontSize: 12, color: "#202223" }} />
-                        <Bar dataKey="v" fill="#007f5f" radius={[0, 4, 4, 0]} barSize={16} />
+                        <Bar dataKey="v" fill="#FF5722" radius={[0, 4, 4, 0]} barSize={16} />
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
@@ -741,6 +743,9 @@ function AdminDashboardContent() {
                       <tr className="text-secondary fs-8">
                         <th>Store ID</th>
                         <th>Store Name</th>
+                        <th>Category</th>
+                        <th>Owner Name</th>
+                        <th>Email ID</th>
                         <th>Status</th>
                         <th className="text-end">Action</th>
                       </tr>
@@ -750,14 +755,23 @@ function AdminDashboardContent() {
                         <tr key={s.id}>
                           <td className="fs-8 text-secondary">STR-{s.id}</td>
                           <td className="fw-bold text-warning">{s.name}</td>
+                          <td className="fs-8 text-secondary">{s.category}</td>
+                          <td className="fs-8 text-secondary">{s.owner}</td>
+                          <td className="fs-8 text-secondary">{s.email}</td>
                           <td>
                             <span className={s.status === "Active" ? "badge bg-success text-white" : s.status === "Pending" ? "badge bg-warning text-dark" : "badge bg-danger text-white"}>
                               {s.status}
                             </span>
                           </td>
                           <td className="text-end">
-                            <button onClick={() => handleStoreStatusToggle(s.id, s.status)} className="btn btn-sm btn-outline-warning fs-8 py-1 px-2">
-                              {s.status === "Active" ? "Suspend" : "Approve"}
+
+                            <button onClick={async () => {
+                              if(window.confirm('Are you sure you want to delete this store?')){
+                                setStoresList(prev => prev.map(store => store.id === s.id ? { ...store, status: 'Deleted' } : store));
+                                try { await api.put(`/stores/${s.id}`, { status: 'Deleted' }); } catch (e) {}
+                              }
+                            }} className="btn btn-sm btn-outline-danger fs-8 py-1 px-2">
+                              Delete
                             </button>
                           </td>
                         </tr>
@@ -1231,6 +1245,72 @@ function AdminDashboardContent() {
                   </div>
                   <button type="submit" className="btn btn-gold-primary py-2 mt-2">Save Global Configuration</button>
                 </form>
+              </div>
+            </div>
+          )}
+
+          {active === "payments" && (
+            <div className="d-flex flex-column gap-4 fade-in">
+              <div className="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div className="card-header bg-white border-bottom p-4 d-flex justify-content-between align-items-center">
+                  <h5 className="mb-0 fw-bold d-flex align-items-center gap-2 text-dark">
+                    <CreditCard size={20} className="text-primary" /> Payments & Subscriptions
+                  </h5>
+                </div>
+                <div className="card-body p-0 table-responsive">
+                  <table className="table table-hover align-middle mb-0">
+                    <thead className="table-light text-secondary text-uppercase fs-9 tracking-wider">
+                      <tr>
+                        <th className="ps-4">Txn ID</th>
+                        <th>User Details</th>
+                        <th>Plan</th>
+                        <th>Amount</th>
+                        <th>Type</th>
+                        <th>Billing Cycle</th>
+                        <th>Registered Date</th>
+                        <th className="text-end pe-4">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {subscriptionsList.map((sub) => (
+                        <tr key={sub.id}>
+                          <td className="ps-4 fs-8 text-secondary">
+                            {sub.razorpay_payment_id || `SUB-${sub.id}`}
+                          </td>
+                          <td>
+                            <div className="fw-bold text-dark">{sub.user?.name || 'Unknown User'}</div>
+                            <div className="fs-8 text-secondary">{sub.user?.email || 'N/A'}</div>
+                          </td>
+                          <td className="fs-8 text-capitalize fw-bold text-primary">{sub.plan}</td>
+                          <td className="fw-bold text-dark">{sub.currency} {(sub.amount / 100).toFixed(2)}</td>
+                          <td className="fs-8 text-secondary">
+                            {sub.autopay_enabled ? 'Auto-pay' : 'Manual'}
+                          </td>
+                          <td className="fs-8 text-secondary text-capitalize">{sub.billing_cycle}</td>
+                          <td>
+                            <div className="fs-8 text-secondary">{sub.start_date ? new Date(sub.start_date).toLocaleDateString() : (sub.created_at ? new Date(sub.created_at).toLocaleDateString() : 'N/A')}</div>
+                          </td>
+                          <td className="text-end pe-4">
+                            <span className={`badge ${
+                              sub.status === 'active' ? 'bg-success text-white' :
+                              sub.status === 'pending' ? 'bg-warning text-dark' :
+                              sub.status === 'failed' ? 'bg-danger text-white' : 'bg-secondary text-white'
+                            }`}>
+                              {sub.status.toUpperCase()}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                      {subscriptionsList.length === 0 && (
+                        <tr>
+                          <td colSpan="8" className="text-center py-5 text-muted">
+                            No payments or subscriptions found.
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           )}

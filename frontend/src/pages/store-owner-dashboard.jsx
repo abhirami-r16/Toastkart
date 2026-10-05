@@ -220,9 +220,7 @@ export default function StoreOwnerDashboard() {
   const { user, loading } = useAuth();
   
   useEffect(() => {
-    // if (!loading && user && user.role === 'owner' && !user.active_subscription && !user.activeSubscription) {
-    //   navigate('/plans');
-    // }
+    // Redirect logic removed. Users stay on dashboard but get the modal.
   }, [user, loading, navigate]);
   
   const [active, setActive] = useState(() => {
@@ -770,7 +768,7 @@ export default function StoreOwnerDashboard() {
   // Store CRUD Handlers
   const openCreateStoreModal = () => {
     // Check if the user has an active plan before creating a store (Flow 4)
-    if (!user?.activeSubscription) {
+    if (!user?.activeSubscription && !user?.active_subscription) {
       setShowPlanRequiredModal('create-store');
       return;
     }
@@ -806,7 +804,7 @@ export default function StoreOwnerDashboard() {
 
   const handleCreateStoreSubmit = async (e) => {
     e.preventDefault();
-    if (!user?.activeSubscription) {
+    if (!user?.activeSubscription && !user?.active_subscription) {
       setShowPlanRequiredModal('create-store');
       return;
     }
@@ -1012,7 +1010,7 @@ export default function StoreOwnerDashboard() {
 
   // Category CRUD Handlers
   const openAddCategoryModal = () => {
-    if (!user?.activeSubscription) {
+    if (!user?.activeSubscription && !user?.active_subscription) {
       setShowPlanRequiredModal('categories');
       return;
     }
@@ -1022,7 +1020,7 @@ export default function StoreOwnerDashboard() {
   };
 
   const openInlineCategoryForm = () => {
-    if (!user?.activeSubscription) {
+    if (!user?.activeSubscription && !user?.active_subscription) {
       setShowPlanRequiredModal('categories');
       return;
     }
@@ -1032,7 +1030,7 @@ export default function StoreOwnerDashboard() {
   };
 
   const openEditCategoryModal = (cat) => {
-    if (!user?.activeSubscription) {
+    if (!user?.activeSubscription && !user?.active_subscription) {
       setShowPlanRequiredModal('categories');
       return;
     }
@@ -1053,7 +1051,7 @@ export default function StoreOwnerDashboard() {
 
   const handleCategorySubmit = async (e) => {
     e.preventDefault();
-    if (!user?.activeSubscription) {
+    if (!user?.activeSubscription && !user?.active_subscription) {
       setShowPlanRequiredModal('categories');
       return;
     }
@@ -1177,7 +1175,7 @@ export default function StoreOwnerDashboard() {
   };
 
   const openAddProductModal = () => {
-    if (!user?.activeSubscription) {
+    if (!user?.activeSubscription && !user?.active_subscription) {
       setShowPlanRequiredModal('products');
       return;
     }
@@ -1186,7 +1184,7 @@ export default function StoreOwnerDashboard() {
   };
 
   const openInlineProductForm = () => {
-    if (!user?.activeSubscription) {
+    if (!user?.activeSubscription && !user?.active_subscription) {
       setShowPlanRequiredModal('products');
       return;
     }
@@ -1195,7 +1193,7 @@ export default function StoreOwnerDashboard() {
   };
 
   const openEditProductModal = (product) => {
-    if (!user?.activeSubscription) {
+    if (!user?.activeSubscription && !user?.active_subscription) {
       setShowPlanRequiredModal('products');
       return;
     }
@@ -1511,8 +1509,9 @@ export default function StoreOwnerDashboard() {
               const Icon = item.icon;
               const isActive = active === item.key;
               const handleClick = () => {
-                if ((item.key === 'categories' || item.key === 'ai-builder') && !user?.activeSubscription) {
-                  setShowPlanRequiredModal('products');
+                const allowedUnpaid = ['dashboard', 'stores'];
+                if (!allowedUnpaid.includes(item.key) && !user?.activeSubscription && !user?.active_subscription) {
+                  setShowPlanRequiredModal(item.key);
                   return;
                 }
                 setActive(item.key);
@@ -1591,8 +1590,9 @@ export default function StoreOwnerDashboard() {
           </div>
         </header>
 
-        {/* MAIN BODY AREA */}
+                {/* MAIN BODY AREA */}
         <main className="p-4 flex-grow-1 overflow-y-auto" style={{ background: "#f1f2f4" }}>
+          
           {/* MODULE 1: DASHBOARD OVERVIEW */}
           {active === "dashboard" && (
             <div className="d-flex flex-column gap-4">
@@ -3184,7 +3184,7 @@ export default function StoreOwnerDashboard() {
                       </p>
                       <button 
                         onClick={() => {
-                          if (!user?.activeSubscription) {
+                          if (!user?.activeSubscription && !user?.active_subscription) {
                             setShowPlanRequiredModal('ai-builder');
                           } else {
                             setActive('ai-builder');
@@ -4009,4 +4009,12 @@ export default function StoreOwnerDashboard() {
     </div>
   );
 }
+
+
+
+
+
+
+
+
 

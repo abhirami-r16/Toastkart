@@ -25,7 +25,7 @@ class StoreController extends Controller
     }
     public function index(Request $request)
     {
-        $query = Store::with(['user:id,name', 'aiConfigurations'])
+        $query = Store::with(['user:id,name,email', 'aiConfigurations'])
             ->withCount(['products', 'categories', 'orders']);
 
         // Filter by user_id if provided

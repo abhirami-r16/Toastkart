@@ -92,6 +92,7 @@ Route::get('/orders/{id}', [OrderController::class, 'show']);
 Route::put('/orders/{id}/status', [OrderController::class, 'updateStatus']);
 
 // Subscriptions
+Route::get('/subscriptions', [\App\Http\Controllers\SubscriptionController::class, 'index']);
 Route::post('/subscriptions/order', [\App\Http\Controllers\SubscriptionController::class, 'createOrder'])->middleware('auth:sanctum');
 Route::post('/subscriptions/verify', [\App\Http\Controllers\SubscriptionController::class, 'verifyPayment'])->middleware('auth:sanctum');
 
