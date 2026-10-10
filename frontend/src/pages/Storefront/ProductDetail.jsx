@@ -23,22 +23,13 @@ export default function ProductDetail({ storeData, products }) {
   };
   const basePath = getBasePath();
 
-  if (!product) {
-    return (
-      <div className="storefront-container py-5 text-center">
-        <h2 className="fs-3 font-bold mb-3">Product not found</h2>
-        <button className="btn btn-outline-secondary mt-3" onClick={() => navigate(-1)}>
-          Back to Store
-        </button>
-      </div>
-    );
-  }
+  // The product not found check has been moved down below the hooks to avoid React error #310
 
-  const categoryName = typeof product.category === 'object' ? product.category.name : product.category;
-  const inWishlist = isInWishlist(product.id);
+  const categoryName = product && typeof product.category === 'object' ? product.category.name : product?.category;
+  const inWishlist = product ? isInWishlist(product.id) : false;
 
   // Size calculation
-  const productSizes = product.size 
+  const productSizes = product?.size 
     ? String(product.size).toUpperCase().split(',').map(s => s.trim()).filter(Boolean) 
     : [];
   // Keep all sizes for all products
@@ -56,11 +47,12 @@ export default function ProductDetail({ storeData, products }) {
   }, [productSizes, selectedSize]);
 
   // Color calculation
-  const productColors = product.color 
+  const productColors = product?.color 
     ? String(product.color).split(',').map(c => c.trim()).filter(Boolean)
     : [];
 
   const parsedImages = React.useMemo(() => {
+    if (!product) return [];
     let imgs = [];
     if (typeof product.images === 'string') {
       try { imgs = JSON.parse(product.images); } catch(e) {}
@@ -103,7 +95,7 @@ export default function ProductDetail({ storeData, products }) {
     }
     
     return normalizedImgs;
-  }, [product.images, product.color, product.image, product.image_url]);
+  }, [product?.images, product?.color, product?.image, product?.image_url]);
 
   const [activeImage, setActiveImage] = React.useState('');
   const [isFading, setIsFading] = React.useState(false);
@@ -122,21 +114,23 @@ export default function ProductDetail({ storeData, products }) {
   };
 
   React.useEffect(() => {
-    setActiveImage(normalizeProductImage(parsedImages[0]?.url || product.image || product.image_url, product.name));
-  }, [product.id, parsedImages, product.image, product.image_url, product.name]);
+    if (product) {
+      setActiveImage(normalizeProductImage(parsedImages[0]?.url || product.image || product.image_url, product.name));
+    }
+  }, [product?.id, parsedImages, product?.image, product?.image_url, product?.name]);
 
   // Set default color and handle image sync
   React.useEffect(() => {
     if (productColors.length > 0 && !selectedColor) {
       setSelectedColor(productColors[0]);
     }
-    if (selectedColor && parsedImages.length > 0) {
+    if (product && selectedColor && parsedImages.length > 0) {
       const match = parsedImages.find(img => img.color && img.color.toLowerCase().trim() === selectedColor.toLowerCase().trim());
       if (match) {
         setActiveImage(normalizeProductImage(match.url, product.name));
       }
     }
-  }, [productColors, selectedColor, parsedImages, product.name]);
+  }, [productColors, selectedColor, parsedImages, product?.name]);
 
   const handleAddToCart = () => {
     addToCart({ ...product, selectedSize, selectedColor }, 1);
@@ -162,6 +156,17 @@ export default function ProductDetail({ storeData, products }) {
     const prevImg = parsedImages[prevIndex];
     changeImageWithFade(prevImg.url, prevImg.color);
   };
+
+  if (!product) {
+    return (
+      <div className="storefront-container py-5 text-center">
+        <h2 className="fs-3 font-bold mb-3">Product not found</h2>
+        <button className="btn btn-outline-secondary mt-3" onClick={() => navigate(-1)}>
+          Back to Store
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="storefront-container py-5 px-3 px-md-4">

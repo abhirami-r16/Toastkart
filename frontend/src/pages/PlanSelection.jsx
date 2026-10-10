@@ -97,7 +97,7 @@ export default function PlanSelection() {
   // ------------------------------------------------------------
   const [selectedPlanModal, setSelectedPlanModal] = useState(null);
   const [enableAutoPay, setEnableAutoPay] = useState(false);
-  const [billingCycle, setBillingCycle] = useState('monthly');
+  const [billingCycle, setBillingCycle] = useState('yearly');
 
   // ------------------------------------------------------------
   // SELECT PLAN
@@ -113,7 +113,7 @@ export default function PlanSelection() {
     setError('');
     setSelectedPlanModal(planId);
     setEnableAutoPay(false);
-    setBillingCycle('monthly');
+    setBillingCycle('yearly');
   };
 
   // ------------------------------------------------------------
@@ -853,9 +853,9 @@ export default function PlanSelection() {
               <span className="currency">
                 ₹
               </span>
-              799
+              7,999
               <span className="period">
-                /month
+                /year
               </span>
             </div>
 
@@ -936,10 +936,10 @@ export default function PlanSelection() {
                 ₹
               </span>
 
-              999
+              9,999
 
               <span className="period">
-                /month
+                /year
               </span>
 
             </div>
@@ -1027,10 +1027,10 @@ export default function PlanSelection() {
                 ₹
               </span>
 
-              1,999
+              19,999
 
               <span className="period">
-                /month
+                /year
               </span>
 
             </div>
@@ -1273,7 +1273,7 @@ export default function PlanSelection() {
 
             </div>
 
-            <div className="mb-3">
+            {/* <div className="mb-3">
 
               <label className="fw-semibold mb-2">
                 Billing Cycle
@@ -1299,7 +1299,7 @@ export default function PlanSelection() {
 
               </select>
 
-            </div>
+            </div> */}
 
             <div className="mb-4">
 

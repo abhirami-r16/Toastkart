@@ -227,10 +227,10 @@ export default function StoreOwnerDashboard() {
     try {
       const saved = localStorage.getItem("aureum_owner_stores");
       const currentUserId = parseInt(localStorage.getItem('toastkart_last_user_id')) || 1;
-      if (!saved) return "stores";
+      if (!saved) return "dashboard"; // changed from "stores" to "dashboard" to prevent unpaid access
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed) && !parsed.some(s => s.user_id === currentUserId || (!s.user_id && currentUserId === 1))) {
-        return "stores";
+        return "dashboard"; // changed from "stores" to "dashboard" to prevent unpaid access
       }
     } catch(e) {}
     return "dashboard";
@@ -789,18 +789,23 @@ export default function StoreOwnerDashboard() {
   };
 
   useEffect(() => {
+    if (loading) return;
     const searchParams = new URLSearchParams(window.location.search);
     const action = searchParams.get('action');
     if (action) {
       if (action === 'create-store') {
         openCreateStoreModal();
-      } else if (action === 'categories' || action === 'ai-builder' || action === 'products') {
-        setActive(action);
+      } else if (action === 'categories' || action === 'ai-builder' || action === 'products' || action === 'stores') {
+        if (!user?.activeSubscription && !user?.active_subscription) {
+          setShowPlanRequiredModal(action);
+        } else {
+          setActive(action);
+        }
       }
       // Remove the query param to prevent re-triggering on reload
       window.history.replaceState({}, document.title, window.location.pathname);
     }
-  }, []); // Run once on mount
+  }, [user, loading]); // Run when user is available
 
   const handleCreateStoreSubmit = async (e) => {
     e.preventDefault();
@@ -1509,7 +1514,7 @@ export default function StoreOwnerDashboard() {
               const Icon = item.icon;
               const isActive = active === item.key;
               const handleClick = () => {
-                const allowedUnpaid = ['dashboard', 'stores'];
+                const allowedUnpaid = ['dashboard'];
                 if (!allowedUnpaid.includes(item.key) && !user?.activeSubscription && !user?.active_subscription) {
                   setShowPlanRequiredModal(item.key);
                   return;
@@ -1562,7 +1567,7 @@ export default function StoreOwnerDashboard() {
           </div>
           <div className="d-flex align-items-center gap-3">
             <a
-              href={`${window.location.protocol}//${window.location.host}/store/${activeStore?.slug || activeStore?.subdomain || activeStore?.name?.toLowerCase().replace(/\s+/g, '') || 'teststore1'}`}
+              href={`${import.meta.env.VITE_FRONTEND_URL || 'https://www.toastkart.com'}/store/${activeStore?.slug || activeStore?.subdomain || activeStore?.name?.toLowerCase().replace(/\s+/g, '') || 'teststore1'}`}
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-sm d-flex align-items-center gap-2 px-3 py-1.5 rounded-pill border fw-bold"
@@ -1691,7 +1696,13 @@ export default function StoreOwnerDashboard() {
               <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", padding: "20px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
                 <div className="d-flex align-items-center justify-content-between mb-3">
                   <h3 className="fs-6 font-bold mb-0" style={{ color: "#202223" }}>Recent Orders</h3>
-                  <button className="btn btn-link fs-8 p-0 text-decoration-none fw-semibold" style={{ color: "#FF5722" }} onClick={() => setActive("orders")}>View All</button>
+                  <button className="btn btn-link fs-8 p-0 text-decoration-none fw-semibold" style={{ color: "#FF5722" }} onClick={() => {
+                    if (!user?.activeSubscription && !user?.active_subscription) {
+                      setShowPlanRequiredModal("orders");
+                    } else {
+                      setActive("orders");
+                    }
+                  }}>View All</button>
                 </div>
                 <div className="table-responsive">
                   <table className="table table-hover mb-0 align-middle border-0">
@@ -2321,7 +2332,7 @@ export default function StoreOwnerDashboard() {
                                         <Tag size={14} />
                                       </div>
                                       <a
-                                        href={`${window.location.protocol}//${window.location.host}/store/${activeStore?.slug || activeStore?.subdomain || activeStore?.name?.toLowerCase().replace(/\s+/g, '') || 'teststore1'}/#${cat.name.toLowerCase().includes('women') ? 'women' : cat.name.toLowerCase().includes('men') ? 'men' : cat.name.toLowerCase().includes('kid') ? 'kids' : cat.name.toLowerCase().includes('accessories') ? 'accessories' : cat.name.toLowerCase().includes('tv') ? 'tv-appliances' : 'electronics'}`}
+                                        href={`${import.meta.env.VITE_FRONTEND_URL || 'https://www.toastkart.com'}/store/${activeStore?.slug || activeStore?.subdomain || activeStore?.name?.toLowerCase().replace(/\s+/g, '') || 'teststore1'}/#${cat.name.toLowerCase().includes('women') ? 'women' : cat.name.toLowerCase().includes('men') ? 'men' : cat.name.toLowerCase().includes('kid') ? 'kids' : cat.name.toLowerCase().includes('accessories') ? 'accessories' : cat.name.toLowerCase().includes('tv') ? 'tv-appliances' : 'electronics'}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="text-decoration-underline"
@@ -2555,8 +2566,8 @@ export default function StoreOwnerDashboard() {
                                     ID&nbsp;#{activeStore.id}
                                   </span>
                                 </div>
-                                <a href={`${window.location.protocol}//${window.location.host}/store/${activeStore.slug || activeStore.subdomain}`} target="_blank" rel="noopener noreferrer" className="fs-8 fw-semibold text-decoration-none d-block text-break" style={{ color: "#FF5722", wordBreak: "break-all" }}>
-                                  {`${window.location.protocol}//${window.location.host}/store/${activeStore.slug || activeStore.subdomain}`}
+                                <a href={`${import.meta.env.VITE_FRONTEND_URL || 'https://www.toastkart.com'}/store/${activeStore.slug || activeStore.subdomain}`} target="_blank" rel="noopener noreferrer" className="fs-8 fw-semibold text-decoration-none d-block text-break" style={{ color: "#FF5722", wordBreak: "break-all" }}>
+                                  {`${import.meta.env.VITE_FRONTEND_URL || 'https://www.toastkart.com'}/store/${activeStore.slug || activeStore.subdomain}`}
                                 </a>
                               </div>
                               <span style={{ background: "#FFE0D0", color: "#FF5722", padding: "2px 8px", borderRadius: "12px", fontSize: "0.75rem", fontWeight: "600" }}>🟢 {activeStore.status || "Active"}</span>
@@ -3211,7 +3222,13 @@ export default function StoreOwnerDashboard() {
                 activeStore={activeStore}
                 categoriesList={categoriesList}
                 productsList={productsList}
-                onBack={() => setActive('stores')}
+                onBack={() => {
+                  if (!user?.activeSubscription && !user?.active_subscription) {
+                    setShowPlanRequiredModal('stores');
+                  } else {
+                    setActive('stores');
+                  }
+                }}
                 user={user}
                 setShowPlanRequiredModal={setShowPlanRequiredModal}
               />

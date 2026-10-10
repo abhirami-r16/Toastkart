@@ -17,9 +17,9 @@ export default function HomeTemplates() {
         </div>
         <div className="d-flex flex-column pt-4">
           {[
-            { title: "Fashion Theme", url: "https://themewagon.github.io/eflyer/", img: null, desc: "Vibrant and modern aesthetic for apparel and boutiques." },
+            { title: "Fashion Theme", url: null, img: "/eflyer-full.jpg", desc: "Vibrant and modern aesthetic for apparel and boutiques." },
             { title: "Beauty & Cosmetics", url: null, img: "/beauty-template.webp", desc: "Elegant and clean layouts for skincare and makeup brands." },
-            { title: "Home & Living", url: "https://themewagon.github.io/aranoz/", img: null, desc: "Warm and inviting design for furniture and home decor stores." },
+            { title: "Home & Living", url: null, img: "/aranoz-template.jpg", desc: "Warm and inviting design for furniture and home decor stores." },
             { title: "Jewelry & Luxury", url: null, img: "/jewelry-template.webp", desc: "Premium, luxurious aesthetic for fine jewelry and accessories." }
           ].map((t, i) => (
             <div key={i} className={`row align-items-center mb-5 pb-4`}>

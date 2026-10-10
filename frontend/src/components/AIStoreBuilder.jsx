@@ -172,7 +172,7 @@ try {
      * the old activeStore value.
      */
     setSuccessUrl(
-      `${window.location.protocol}//${window.location.host}/store/${
+      `${import.meta.env.VITE_FRONTEND_URL || 'https://www.toastkart.com'}/store/${
         store.slug || store.subdomain || 'demo'
       }?preview_ai=true`
     );
@@ -331,7 +331,7 @@ try {
   }
 
   setSuccessUrl(
-    `${window.location.protocol}//${window.location.host}/store/${
+    `${import.meta.env.VITE_FRONTEND_URL || 'https://www.toastkart.com'}/store/${
       newStore.slug ||
       newStore.subdomain ||
       'demo'
@@ -684,8 +684,8 @@ height: 40
         {aiConfigs.map((cfg) => {
           const storeForCfg = cfg.storeObj || activeStore;
           const url = `${
-            window.location.protocol
-          }//${window.location.host}/store/${
+            import.meta.env.VITE_FRONTEND_URL || 'https://www.toastkart.com'
+          }/store/${
             storeForCfg?.slug ||
             storeForCfg?.subdomain ||
             'demo'
