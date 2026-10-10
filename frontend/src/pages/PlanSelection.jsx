@@ -97,7 +97,7 @@ export default function PlanSelection() {
   // ------------------------------------------------------------
   const [selectedPlanModal, setSelectedPlanModal] = useState(null);
   const [enableAutoPay, setEnableAutoPay] = useState(false);
-  const [billingCycle, setBillingCycle] = useState('yearly');
+  const [billingCycle, setBillingCycle] = useState('monthly');
 
   // ------------------------------------------------------------
   // SELECT PLAN
@@ -113,7 +113,7 @@ export default function PlanSelection() {
     setError('');
     setSelectedPlanModal(planId);
     setEnableAutoPay(false);
-    setBillingCycle('yearly');
+    setBillingCycle('monthly');
   };
 
   // ------------------------------------------------------------
@@ -853,9 +853,9 @@ export default function PlanSelection() {
               <span className="currency">
                 ₹
               </span>
-              7,999
+              799
               <span className="period">
-                /year
+                /month
               </span>
             </div>
 
@@ -936,10 +936,10 @@ export default function PlanSelection() {
                 ₹
               </span>
 
-              9,999
+              999
 
               <span className="period">
-                /year
+                /month
               </span>
 
             </div>
@@ -1027,10 +1027,10 @@ export default function PlanSelection() {
                 ₹
               </span>
 
-              19,999
+              1,999
 
               <span className="period">
-                /year
+                /month
               </span>
 
             </div>

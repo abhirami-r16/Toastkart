@@ -59,7 +59,7 @@ export default function HomePricing() {
             <h2>Basic</h2>
             <p>Perfect for getting started</p>
             <div className="card-price">
-              <span className="currency">₹</span>7,999<span className="period">/year</span>
+              <span className="currency">₹</span>799<span className="period">/month</span>
             </div>
           </div>
           
@@ -85,7 +85,7 @@ export default function HomePricing() {
             <h2>Growth</h2>
             <p>Best for growing businesses</p>
             <div className="card-price">
-              <span className="currency">₹</span>9,999<span className="period">/year</span>
+              <span className="currency">₹</span>999<span className="period">/month</span>
             </div>
           </div>
           
@@ -112,7 +112,7 @@ export default function HomePricing() {
             <h2>Pro</h2>
             <p>For established businesses</p>
             <div className="card-price">
-              <span className="currency">₹</span>19,999<span className="period">/year</span>
+              <span className="currency">₹</span>1,999<span className="period">/month</span>
             </div>
           </div>
           
