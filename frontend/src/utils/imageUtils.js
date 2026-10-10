@@ -5,10 +5,16 @@ export const normalizeProductImage = (rawUrl, productName = "", size = 800) => {
   }
   let cleanUrl = rawUrl.trim();
 
+  const envUrl = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL;
+  const backendUrl = envUrl ? envUrl.replace(/\/api\/?$/, '') : 'http://localhost:8000';
+
+  // Fix hardcoded localhost urls if we are in production
+  if (cleanUrl.startsWith('http://localhost:8000') && backendUrl !== 'http://localhost:8000') {
+    cleanUrl = cleanUrl.replace('http://localhost:8000', backendUrl);
+  }
+
   // If the image is a relative path to Laravel storage, prepend the backend URL
   if (cleanUrl.startsWith('/storage/') || cleanUrl.startsWith('storage/')) {
-    const envUrl = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL;
-    const backendUrl = envUrl ? envUrl.replace(/\/api\/?$/, '') : 'http://localhost:8000';
     if (!cleanUrl.startsWith('/')) {
       cleanUrl = '/' + cleanUrl;
     }
