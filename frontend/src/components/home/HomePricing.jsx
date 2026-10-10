@@ -112,7 +112,7 @@ export default function HomePricing() {
             <h2>Pro</h2>
             <p>For established businesses</p>
             <div className="card-price">
-              <span className="currency">₹</span>1,9,999<span className="period">/year</span>
+              <span className="currency">₹</span>19,999<span className="period">/year</span>
             </div>
           </div>
           
