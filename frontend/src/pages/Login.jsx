@@ -314,9 +314,7 @@ export default function Login() {
     if (res.success) {
       let userRole = 'owner';
 
-      if (email === 'admin@gmail.com' && password === 'admin') {
-        userRole = 'admin';
-      } else if (res.user?.role === 'admin') {
+      if (email === 'admin@gmail.com' || res.user?.role === 'admin') {
         userRole = 'admin';
       }
 
