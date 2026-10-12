@@ -217,14 +217,16 @@ function AdminDashboardContent() {
       if (!saved) return [];
       const parsed = JSON.parse(saved);
       if (!Array.isArray(parsed)) return [];
-      return parsed.map((store) => normalizeAdminStore({
-        ...store,
-        store_name: store.name || store.store_name,
-        slug: store.slug || store.subdomain || (store.name || 'store').toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-        subdomain: store.subdomain || store.slug || (store.name || 'store').toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-        category: store.category || store.category_name || 'General',
-        owner_name: store.owner_name || store.owner || '',
-      }));
+      return parsed
+        .filter((store) => store.status !== 'Deleted')
+        .map((store) => normalizeAdminStore({
+          ...store,
+          store_name: store.name || store.store_name,
+          slug: store.slug || store.subdomain || (store.name || 'store').toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+          subdomain: store.subdomain || store.slug || (store.name || 'store').toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+          category: store.category || store.category_name || 'General',
+          owner_name: store.owner_name || store.owner || '',
+        }));
     } catch (err) {
       console.debug('Failed to load local owner stores for admin view', err);
       return [];
@@ -232,7 +234,9 @@ function AdminDashboardContent() {
   };
 
   const mergeStoresWithLocal = (backendStores = []) => {
-    const backendNormalized = Array.isArray(backendStores) ? backendStores.map(normalizeAdminStore) : [];
+    const backendNormalized = Array.isArray(backendStores)
+      ? backendStores.filter((s) => s.status !== 'Deleted').map(normalizeAdminStore)
+      : [];
     const localStores = loadLocalOwnerStores();
     const seen = new Set();
     const merged = [...backendNormalized];
@@ -243,6 +247,7 @@ function AdminDashboardContent() {
     });
 
     localStores.forEach((store) => {
+      if (store.status === 'Deleted') return;
       const key = store.id ? `id:${store.id}` : `${store.name}-${store.owner}`.toLowerCase();
       if (!seen.has(key)) {
         merged.push(store);
@@ -250,7 +255,7 @@ function AdminDashboardContent() {
       }
     });
 
-    return merged;
+    return merged.filter((s) => s.status !== 'Deleted');
   };
 
   const loadLocalOwnerProducts = (ownerFilter = null) => {
@@ -610,7 +615,7 @@ function AdminDashboardContent() {
                       </tr>
                     </thead>
                     <tbody>
-                      {storesList.map((s) => (
+                      {storesList.filter(s => s.status !== 'Deleted').map((s) => (
                         <tr key={s.id}>
                           <td className="fw-bold text-warning">{s.name}</td>
                           <td className="fs-8 text-secondary">{s.category}</td>
@@ -734,7 +739,7 @@ function AdminDashboardContent() {
             <div className="d-flex flex-column gap-3">
               <div className="d-flex align-items-center justify-content-between">
                 <h2 className="fs-4 font-bold text-dark mb-0">Registered Stores</h2>
-                <span className="badge bg-warning text-dark">{storesList.length} Total Stores</span>
+                <span className="badge bg-warning text-dark">{storesList.filter(s => s.status !== 'Deleted').length} Total Stores</span>
               </div>
               <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", padding: "20px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
                 <div className="table-responsive">
@@ -751,7 +756,7 @@ function AdminDashboardContent() {
                       </tr>
                     </thead>
                     <tbody>
-                      {storesList.map((s) => (
+                      {storesList.filter(s => s.status !== 'Deleted').map((s) => (
                         <tr key={s.id}>
                           <td className="fs-8 text-secondary">STR-{s.id}</td>
                           <td className="fw-bold text-warning">{s.name}</td>
@@ -767,8 +772,20 @@ function AdminDashboardContent() {
 
                             <button onClick={async () => {
                               if(window.confirm('Are you sure you want to delete this store?')){
-                                setStoresList(prev => prev.map(store => store.id === s.id ? { ...store, status: 'Deleted' } : store));
-                                try { await api.put(`/stores/${s.id}`, { status: 'Deleted' }); } catch (e) {}
+                                setStoresList(prev => prev.filter(store => store.id !== s.id));
+                                try {
+                                  await api.delete(`/stores/${s.id}`);
+                                } catch (e) {
+                                  try { await api.put(`/stores/${s.id}`, { status: 'Deleted' }); } catch (err) {}
+                                }
+                                try {
+                                  const saved = localStorage.getItem('aureum_owner_stores');
+                                  if (saved) {
+                                    const parsed = JSON.parse(saved);
+                                    const filtered = parsed.filter(store => store.id !== s.id);
+                                    localStorage.setItem('aureum_owner_stores', JSON.stringify(filtered));
+                                  }
+                                } catch (e) {}
                               }
                             }} className="btn btn-sm btn-outline-danger fs-8 py-1 px-2">
                               Delete
@@ -990,48 +1007,7 @@ function AdminDashboardContent() {
             </div>
           )}
 
-          {/* MODULE 8: PAYMENTS & PAYOUTS */}
-          {active === "payments" && (
-            <div className="d-flex flex-column gap-3">
-              <h2 className="fs-4 font-bold text-dark mb-0">Merchant Payouts & Transfers</h2>
-              <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", padding: "20px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
-                <div className="table-responsive">
-                  <table className="table table-light table-hover mb-0 align-middle">
-                    <thead>
-                      <tr className="text-secondary fs-8">
-                        <th>Payout ID</th>
-                        <th>Store</th>
-                        <th>Merchant</th>
-                        <th>Payout Amount</th>
-                        <th>Platform Fee</th>
-                        <th>Status</th>
-                        <th className="text-end">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {payoutsList.map((p) => (
-                        <tr key={p.id}>
-                          <td className="fs-8 text-secondary">{p.id}</td>
-                          <td className="fw-bold text-warning">{p.store}</td>
-                          <td>{p.owner}</td>
-                          <td className="fw-bold text-dark">{p.amount}</td>
-                          <td className="text-warning fs-8">{p.fee}</td>
-                          <td><span className={p.status === "Processed" ? "badge bg-success text-white" : "badge bg-warning text-dark"}>{p.status}</span></td>
-                          <td className="text-end">
-                            {p.status === "Pending" && (
-                              <button onClick={() => handlePayoutProcess(p.id)} className="btn btn-sm btn-gold-primary fs-8 py-1 px-2">
-                                Process Transfer
-                              </button>
-                            )}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          )}
+
 
           {/* MODULE 8: ANALYTICS */}
           {active === "analytics" && (
@@ -1064,7 +1040,7 @@ function AdminDashboardContent() {
                 <div className="col-6 col-lg-3">
                   <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", padding: "16px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
                     <div className="fs-8 text-secondary mb-1">Active Stores</div>
-                    <div className="fs-5 font-bold text-dark">{storesList.length}</div>
+                    <div className="fs-5 font-bold text-dark">{storesList.filter(s => s.status !== 'Deleted').length}</div>
                     <div className="fs-8 text-success font-semibold mt-1">Healthy merchant base</div>
                   </div>
                 </div>
@@ -1126,7 +1102,7 @@ function AdminDashboardContent() {
                   <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", padding: "20px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
                     <h3 className="fs-6 font-bold text-dark mb-3">Top Merchant Performance</h3>
                     <div className="d-flex flex-column gap-2">
-                      {storesList.slice(0, 4).map((store, index) => (
+                      {storesList.filter(s => s.status !== 'Deleted').slice(0, 4).map((store, index) => (
                         <div key={store.id} className="d-flex align-items-center justify-content-between rounded-2 p-2" style={{ background: "rgba(212,175,55,0.08)", border: "1px solid #dfe3e8" }}>
                           <div>
                             <div className="fw-semibold text-dark">{store.name}</div>

@@ -208,7 +208,7 @@ export default function Register() {
       setError('Google authentication token was not received.');
       return;
     }
-    
+
     const decoded = decodeJwt(credentialResponse.credential);
     if (decoded) {
       setGoogleAccountInfo(decoded);
@@ -278,7 +278,7 @@ export default function Register() {
 
     const res = await register(name, email, phone, password, 'owner');
     if (res.success) {
-      setSuccess('Registration successful! A confirmation email has been sent to your registered email address.');
+      setSuccess('Registration successful!.');
       setTimeout(() => {
         navigate('/login');
       }, 2000);
@@ -291,20 +291,20 @@ export default function Register() {
   return (
     <div className="goslot-login-bg">
       <style dangerouslySetInnerHTML={{ __html: goslotRegisterStyles }} />
-      
+
       {/* Top Navigation */}
       <nav className="goslot-nav container-xl mx-auto">
         <div className="d-flex align-items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
           <ToastKartLogo width={160} />
         </div>
-        
+
         <div className="goslot-nav-links">
           <a href="/" className="text-decoration-none text-dark">Home</a>
           <a href="/#features" className="text-decoration-none text-dark">Features</a>
           <a href="/portfolio" className="text-decoration-none text-dark">Portfolio</a>
           <a href="/#about" className="text-decoration-none text-dark">About</a>
         </div>
-        
+
         <button onClick={() => navigate('/login')} className="d-none d-sm-block goslot-btn-green" style={{ width: 'auto', padding: '0.5rem 1.5rem' }}>
           Login
         </button>
@@ -332,7 +332,7 @@ export default function Register() {
             <div className="text-center pt-2 pb-4">
               <h5 className="mb-3 fw-bold">Continue with Google</h5>
               <div className="mb-4">
-                <img src={googleAccountInfo.picture} alt="Profile" className="rounded-circle mb-2" style={{width: '60px', height: '60px'}} onError={(e) => e.target.style.display='none'} />
+                <img src={googleAccountInfo.picture} alt="Profile" className="rounded-circle mb-2" style={{ width: '60px', height: '60px' }} onError={(e) => e.target.style.display = 'none'} />
                 <p className="mb-0 fw-semibold">{googleAccountInfo.name}</p>
                 <p className="text-muted fs-7 mb-0">{googleAccountInfo.email}</p>
               </div>
@@ -361,111 +361,111 @@ export default function Register() {
             </div>
           ) : (
             <form onSubmit={handleSubmit}>
-            {/* Role selector removed as per requirements */}
+              {/* Role selector removed as per requirements */}
 
-            <div className="mb-3">
-              <label className="goslot-label">FULL NAME</label>
-              <input
-                type="text"
-                className="goslot-input"
-                required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="John Doe"
-              />
-            </div>
+              <div className="mb-3">
+                <label className="goslot-label">FULL NAME</label>
+                <input
+                  type="text"
+                  className="goslot-input"
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="John Doe"
+                />
+              </div>
 
-            <div className="mb-3">
-              <label className="goslot-label">EMAIL ADDRESS</label>
-              <input
-                type="email"
-                className="goslot-input"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@example.com"
-              />
-            </div>
+              <div className="mb-3">
+                <label className="goslot-label">EMAIL ADDRESS</label>
+                <input
+                  type="email"
+                  className="goslot-input"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="admin@example.com"
+                />
+              </div>
 
-            <div className="mb-3">
-              <label className="goslot-label">PHONE NUMBER</label>
-              <input
-                type="tel"
-                className="goslot-input"
-                required
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="10-digit phone number"
-                pattern="[0-9]{10}"
-                maxLength="10"
-              />
-            </div>
+              <div className="mb-3">
+                <label className="goslot-label">PHONE NUMBER</label>
+                <input
+                  type="tel"
+                  className="goslot-input"
+                  required
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="10-digit phone number"
+                  pattern="[0-9]{10}"
+                  maxLength="10"
+                />
+              </div>
 
-            <div className="mb-4">
-              <div className="d-flex justify-content-between align-items-center">
-                <label className="goslot-label mb-0">PASSWORD</label>
+              <div className="mb-4">
+                <div className="d-flex justify-content-between align-items-center">
+                  <label className="goslot-label mb-0">PASSWORD</label>
+                  {password && (
+                    <span className="fs-8 fw-bold" style={{ color: strength.color }}>
+                      {strength.label}
+                    </span>
+                  )}
+                </div>
+                <div className="position-relative mt-2">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    className="goslot-input"
+                    style={{ paddingRight: '2.75rem' }}
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                  />
+                  <button
+                    type="button"
+                    className="position-absolute border-0 bg-transparent"
+                    style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', color: '#6b7280' }}
+                    onClick={() => setShowPassword(!showPassword)}
+                    tabIndex={-1}
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
+
                 {password && (
-                  <span className="fs-8 fw-bold" style={{ color: strength.color }}>
-                    {strength.label}
-                  </span>
+                  <div className="strength-bar-container">
+                    <div
+                      className="strength-bar-fill"
+                      style={{ width: `${strength.score}%`, backgroundColor: strength.color }}
+                    />
+                  </div>
                 )}
               </div>
-              <div className="position-relative mt-2">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  className="goslot-input"
-                  style={{ paddingRight: '2.75rem' }}
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
+
+              <button
+                type="submit"
+                className="goslot-btn-green mb-2"
+                disabled={loading}
+              >
+                {loading ? 'Creating Account...' : 'Register'}
+              </button>
+
+              <div className="goslot-divider">OR</div>
+
+              <div className="d-flex justify-content-center">
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={handleGoogleError}
+                  useOneTap={false}
                 />
-                <button
-                  type="button"
-                  className="position-absolute border-0 bg-transparent"
-                  style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', color: '#6b7280' }}
-                  onClick={() => setShowPassword(!showPassword)}
-                  tabIndex={-1}
-                >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
               </div>
-              
-              {password && (
-                <div className="strength-bar-container">
-                  <div 
-                    className="strength-bar-fill"
-                    style={{ width: `${strength.score}%`, backgroundColor: strength.color }}
-                  />
-                </div>
-              )}
-            </div>
 
-            <button 
-              type="submit" 
-              className="goslot-btn-green mb-2"
-              disabled={loading}
-            >
-              {loading ? 'Creating Account...' : 'Register'}
-            </button>
-            
-            <div className="goslot-divider">OR</div>
-            
-            <div className="d-flex justify-content-center">
-              <GoogleLogin
-                onSuccess={handleGoogleSuccess}
-                onError={handleGoogleError}
-                useOneTap={false}
-              />
-            </div>
-
-            <div className="text-center mt-4 pt-3 border-top">
-              <span className="text-muted fs-7">Already have an account? </span>
-              <NavLink to="/login" className="text-decoration-none fw-bold" style={{ color: '#FF5722' }}>
-                Sign In Here
-              </NavLink>
-            </div>
-          </form>
+              <div className="text-center mt-4 pt-3 border-top">
+                <span className="text-muted fs-7">Already have an account? </span>
+                <NavLink to="/login" className="text-decoration-none fw-bold" style={{ color: '#FF5722' }}>
+                  Sign In Here
+                </NavLink>
+              </div>
+            </form>
           )}
         </div>
       </div>

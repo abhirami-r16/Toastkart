@@ -33,6 +33,8 @@ class StoreController extends Controller
             $query->where('user_id', $request->user_id);
         }
 
+        $query->where('status', '!=', 'Deleted');
+
         $stores = $query->orderBy('id', 'desc')->get();
 
         $storesWithOwnerName = $stores->map(function ($store) {
