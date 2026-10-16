@@ -262,8 +262,6 @@ export default function StoreOwnerDashboard() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   
-  const hasActiveSub = Boolean(user?.active_subscription || user?.activeSubscription);
-  const isPrivileged = user?.role === 'admin' || user?.email === 'admin@gmail.com';
   const [showPlanRequiredModal, setShowPlanRequiredModal] = useState(false);
 
   useEffect(() => {
@@ -272,11 +270,8 @@ export default function StoreOwnerDashboard() {
         navigate('/login', { replace: true });
         return;
       }
-      if (!isPrivileged && !hasActiveSub) {
-        setShowPlanRequiredModal(true);
-      }
     }
-  }, [user, loading, hasActiveSub, isPrivileged, navigate]);
+  }, [user, loading, navigate]);
   
   const [active, setActive] = useState(() => {
     try {
@@ -842,10 +837,6 @@ export default function StoreOwnerDashboard() {
 
   // Store CRUD Handlers
   const openCreateStoreModal = () => {
-    if (!hasActiveSub && !isPrivileged) {
-      setShowPlanRequiredModal('create-store');
-      return;
-    }
 
     setStoreForm({
       name: "",
@@ -1579,10 +1570,6 @@ export default function StoreOwnerDashboard() {
               const Icon = item.icon;
               const isActive = active === item.key;
               const handleClick = () => {
-                if (item.key !== 'dashboard' && !hasActiveSub && !isPrivileged) {
-                  setShowPlanRequiredModal(item.key);
-                  return;
-                }
                 setActive(item.key);
               };
               return (
@@ -3973,50 +3960,6 @@ export default function StoreOwnerDashboard() {
         </div>
       )}
 
-
-      {/* PLAN REQUIRED MODAL */}
-      {showPlanRequiredModal && (
-        <div className="position-fixed top-0 bottom-0 start-0 end-0 bg-dark bg-opacity-75 d-flex align-items-center justify-content-center p-3" style={{ zIndex: 1060 }}>
-          <div className="rounded-4 shadow-lg p-4" style={{ maxWidth: 460, width: "100%", background: "#373a40", border: "1px solid rgba(255, 255, 255, 0.2)", borderRadius: "12px" }}>
-            <div className="d-flex align-items-center justify-content-between mb-3 border-bottom pb-3" style={{ borderColor: "rgba(255, 255, 255, 0.15)" }}>
-              <h3 className="fs-5 fw-bold mb-0 d-flex align-items-center gap-2 text-warning">
-                <Sparkles size={20} /> Subscription Required
-              </h3>
-              <button onClick={() => setShowPlanRequiredModal(false)} className="btn btn-sm text-secondary p-0 border-0 bg-transparent" style={{ fontSize: "1.2rem", lineHeight: 1 }}>✕</button>
-            </div>
-            
-            <div className="py-2">
-              <p className="fs-7 mb-4 text-white" style={{ lineHeight: "1.6" }}>
-                To create a store, add collections, or add products, please select a plan and complete the payment for this account.
-                <br /><br />
-                Select a plan to instantly unlock these features and grow your business.
-              </p>
-              
-              <div className="d-flex align-items-center justify-content-end gap-3 mt-4">
-                <button 
-                  type="button"
-                  onClick={() => setShowPlanRequiredModal(false)} 
-                  className="btn btn-sm px-4 py-2 fw-bold" 
-                  style={{ background: '#c89b2b', color: '#1a1a1a', border: 'none', borderRadius: '6px' }}
-                >
-                  Cancel
-                </button>
-                <button 
-                  type="button"
-                  onClick={() => {
-                    setShowPlanRequiredModal(false);
-                    navigate(`/plans?redirect=${typeof showPlanRequiredModal === 'string' ? showPlanRequiredModal : 'dashboard'}`);
-                  }} 
-                  className="btn btn-sm px-4 py-2 fw-bold" 
-                  style={{ background: 'linear-gradient(135deg, #e5a823, #c88a1b)', color: '#1a1a1a', border: 'none', borderRadius: '6px' }}
-                >
-                  Pay Now
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
     </div>
   );

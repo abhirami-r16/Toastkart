@@ -37,15 +37,9 @@ export default function AdminLayout() {
     }
   };
 
-  const hasActiveSub = Boolean(user?.active_subscription || user?.activeSubscription);
-  const isPrivileged = user?.role === 'admin' || user?.email === 'admin@gmail.com';
-
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', 'light');
-    if (user && !isPrivileged && !hasActiveSub) {
-      navigate('/plans?redirect=' + encodeURIComponent(location.pathname.replace(/^\//, '')), { replace: true });
-    }
-  }, [user, isPrivileged, hasActiveSub, navigate, location.pathname]);
+  }, []);
 
   return (
     <div

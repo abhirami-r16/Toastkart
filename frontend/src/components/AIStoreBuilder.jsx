@@ -71,10 +71,7 @@ const [isAiCreating, setIsAiCreating] = useState(false);
 const handleGenerate = async (e) => {
 e.preventDefault();
 
-if (!user?.activeSubscription) {
-  if (setShowPlanRequiredModal) setShowPlanRequiredModal(true);
-  return;
-}
+
 
 if (!prompt.trim()) return;
 
@@ -211,10 +208,7 @@ try {
   const handleAiCreateStore = async (e) => {
   e.preventDefault();
 
-  if (!user?.activeSubscription) {
-    if (setShowPlanRequiredModal) setShowPlanRequiredModal(true);
-    return;
-  }
+
 
 if (!aiStorePrompt.trim()) return;
 
