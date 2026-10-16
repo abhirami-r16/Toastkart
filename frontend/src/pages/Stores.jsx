@@ -97,12 +97,6 @@ export default function Stores() {
   const handleCreateStoreSubmit = async (e) => {
     e.preventDefault();
 
-    // Check if the user has an active plan before creating a store (Flow 4)
-    if (!user?.activeSubscription) {
-      navigate('/plans?redirect=create-store');
-      return;
-    }
-
     setLoading(true);
     const res = await createStore(formData);
     setLoading(false);
@@ -561,28 +555,6 @@ export default function Stores() {
 
       {/* TAB 5: CREATE STORE FORM */}
       {activeTab === 'create' && (
-        !user?.activeSubscription ? (
-          <div className="grid lg:grid-cols-12 gap-6">
-            <div className="lg:col-span-8 lg:col-start-3 rounded-2xl p-8 flex flex-col items-center justify-center text-center mx-auto mt-8 w-full" style={{ background: '#0f0e0c', border: `1px solid rgba(212, 175, 55, 0.3)`, minHeight: '300px' }}>
-              <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4" style={{ background: 'rgba(212, 175, 55, 0.1)', color: '#d4af37' }}>
-                <Sparkles size={32} />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-3">Subscription Required</h3>
-              <p className="text-sm mb-6 max-w-md" style={{ color: '#a99f80' }}>
-                You need an active plan to access premium features like <strong style={{ color: '#d4af37' }}>Create Store</strong>.
-                <br /><br />
-                Select a plan to instantly unlock this feature and start building your brand.
-              </p>
-              <button
-                onClick={() => navigate('/plans?redirect=create-store')}
-                className="px-6 py-3 rounded-xl text-xs font-bold shadow-md"
-                style={{ background: `linear-gradient(135deg, ${GOLD_DEEP}, ${GOLD})`, color: INK }}
-              >
-                Pay Now
-              </button>
-            </div>
-          </div>
-        ) : (
         <div className="grid lg:grid-cols-12 gap-6">
           <div className="lg:col-span-8 lg:col-start-3">
             <form onSubmit={handleCreateStoreSubmit} className="rounded-2xl p-6 flex flex-col gap-4 mx-auto" style={{ background: '#0f0e0c', border: `1px solid rgba(212, 175, 55, 0.18)` }}>
@@ -756,7 +728,6 @@ export default function Stores() {
             </form>
           </div>
         </div>
-      )
       )}
     </div>
   );

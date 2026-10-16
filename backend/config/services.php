@@ -56,4 +56,12 @@ return [
         'redirect_uri' => env('GOOGLE_REDIRECT_URI', 'http://localhost:8000/api/auth/google/callback'),
         'sender_email' => env('GOOGLE_SENDER_EMAIL', 'mail.toastkart@gmail.com'),
     ],
+    'reefapi' => [
+        'api_key' => env('REEFAPI_API_KEY'),
+    ],
+    'apify' => [
+        'token' => env('APIFY_API_TOKEN'),
+        'actor' => env('APIFY_MEESHO_ACTOR', 'easyapi~meesho-product-search-scraper'),
+        'timeout' => (int) env('APIFY_TIMEOUT', 12),
+    ],
 ];

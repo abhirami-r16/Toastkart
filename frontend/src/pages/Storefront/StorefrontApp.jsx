@@ -166,7 +166,7 @@ if (!foundStore) {
         }
       } else {
         // Fetch products and categories concurrently only if they aren't already provided
-        const productsUrl = storeId ? `/products?store_id=${storeId}` : '/products';
+        const productsUrl = storeId ? `/products?store_id=${storeId}&is_active=1` : '/products?is_active=1';
         const categoriesUrl = storeId ? `/categories?store_id=${storeId}` : '/categories';
 
         const [productsResult, categoriesResult] = await Promise.allSettled([
@@ -205,6 +205,7 @@ if (!foundStore) {
 
       if (fetchedProducts.length > 0) {
         currentStoreProducts = fetchedProducts.filter(p => {
+          if (p.is_active === false || p.is_active === 0) return false;
           const pStoreId = p.store_id ?? p.store?.id ?? p.storeId ?? null;
           const pStoreSlug = p.store?.slug ?? p.store?.subdomain ?? p.store_subdomain ?? p.store_slug ?? null;
           const pStoreSubdomain = p.store?.subdomain ?? p.store_subdomain ?? pStoreSlug ?? null;

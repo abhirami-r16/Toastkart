@@ -899,10 +899,13 @@ export default function Products() {
                           }}
                         >
                           {formatPrice
-                            ? formatPrice(prod.price)
-                            : `$${Number(
-                                prod.price
-                              ).toFixed(2)}`}
+                            ? formatPrice(prod.price, prod)
+                            : (() => {
+                                const clean = String(prod.price || '').replace(/^[$\s₹]+/, '');
+                                const n = parseFloat(clean);
+                                if (isNaN(n)) return prod.price;
+                                return Number.isInteger(n) ? `₹${n}` : `₹${n.toFixed(2)}`;
+                              })()}
                         </td>
 
                         <td className="py-2 font-bold text-xs">

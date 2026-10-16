@@ -232,7 +232,21 @@ export default function Categories() {
                     <tr key={cat.id}>
                       <td className="fw-bold text-dark">{cat.name}</td>
                       <td className="text-muted fs-7">/{cat.slug}</td>
-                      <td className="text-secondary fs-7">{cat.description || '—'}</td>
+                      <td className="text-secondary fs-7">
+                        {cat.description ? (
+                          cat.description
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => handleOpenEdit(cat)}
+                            className="btn btn-sm btn-link p-0 text-decoration-none fs-7 fw-semibold"
+                            style={{ color: "#FF5722" }}
+                            title="Click to add a description"
+                          >
+                            + Add description
+                          </button>
+                        )}
+                      </td>
                       <td>
                         <span className="badge badge-shopify-info">
                           {cat.products_count ?? 0} Products
@@ -294,7 +308,22 @@ export default function Categories() {
                   </div>
 
                   <div className="mb-3">
-                    <label className="form-label fw-semibold fs-7">Description</label>
+                    <div className="d-flex align-items-center justify-content-between mb-1">
+                      <label className="form-label fw-semibold fs-7 mb-0">Description</label>
+                      {name && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const trimmedName = name.trim();
+                            setDescription(`Explore our curated collection of ${trimmedName.toLowerCase()}, crafted with quality materials and elegant designs for everyday and special occasions.`);
+                          }}
+                          className="btn btn-link btn-sm p-0 fs-8 text-decoration-none fw-bold"
+                          style={{ color: "#FF5722" }}
+                        >
+                          ✨ Auto-generate
+                        </button>
+                      )}
+                    </div>
                     <textarea
                       className="form-control"
                       rows="3"

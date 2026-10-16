@@ -57,7 +57,7 @@ class AuthController extends Controller
             ]);
         }
 
-        $user->load('stores');
+        $user->load(['stores', 'activeSubscription']);
         $token = $user->createToken('shopify_token')->plainTextToken;
 
         try {
@@ -172,7 +172,7 @@ class AuthController extends Controller
         } catch (\Throwable $e) {
             Log::error('Toastkart Google sign-in email failed', [
                 'user_id' => $user->id,
-                'error' => $e->getMessage(),
+                'error' => get_class($e),
             ]);
         }
 

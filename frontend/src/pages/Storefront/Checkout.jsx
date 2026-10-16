@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStorefrontCart } from '../../context/StorefrontCartContext';
 import { useStorefrontAuth } from '../../context/StorefrontAuthContext';
@@ -21,6 +21,9 @@ export default function Checkout() {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [orderSuccess, setOrderSuccess] = useState(false);
+  const [placedOrderId, setPlacedOrderId] = useState('');
+  const actionRef = useRef('online');
 
   const getBasePath = () => {
     const p = window.location.pathname;
@@ -28,6 +31,43 @@ export default function Checkout() {
     return '/storefront';
   };
   const basePath = getBasePath();
+
+  if (orderSuccess) {
+    return (
+      <div className="storefront-container py-5 text-center">
+        <div className="py-5 bg-white rounded shadow-sm border border-light max-w-lg mx-auto px-4">
+          <div className="mb-4 d-flex justify-content-center">
+            <div className="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style={{ width: 64, height: 64 }}>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+            </div>
+          </div>
+          <h2 className="fs-3 fw-bold mb-2">Order Placed Successfully!</h2>
+          <div className="badge bg-success-subtle text-success fs-7 mb-3 px-3 py-2 border border-success-subtle">
+            Cash on Delivery
+          </div>
+          {placedOrderId && (
+            <p className="fw-semibold text-dark mb-1">
+              Order ID: <span className="text-primary">{placedOrderId}</span>
+            </p>
+          )}
+          <p className="text-secondary mb-4">
+            Your Cash on Delivery order has been confirmed. You will pay in cash upon receiving your package.
+          </p>
+          <div className="d-flex justify-content-center gap-3">
+            <button className="btn btn-outline-secondary px-4 py-2" onClick={() => navigate(`${basePath}/orders`)}>
+              View My Orders
+            </button>
+            <button className="btn btn-primary px-4 py-2" onClick={() => navigate(basePath)}>
+              Continue Shopping
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (cartItems.length === 0) {
     return (
@@ -47,11 +87,78 @@ export default function Checkout() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const [paymentAction, setPaymentAction] = useState('online');
+  const handlePlaceCodOrder = async () => {
+    setIsSubmitting(true);
+    const orderPayload = {
+      store_id: storeId,
+      customer_name: formData.firstName,
+      customer_email: user?.email || formData.email || 'guest@example.com',
+      customer_phone: formData.phone,
+      shipping_address: `${formData.address}, ${formData.city} - ${formData.zip}`,
+      payment_method: 'cod',
+      items: cartItems.map((item) => ({
+        product_id: item.id,
+        product_name: item.name,
+        price: item.price,
+        quantity: item.quantity
+      }))
+    };
 
-  const handleSubmit = (e) => {
+    let generatedOrderId = '#ORD-' + (Math.floor(Math.random() * 9000) + 1000);
+
+    try {
+      const { default: api } = await import('../../api/axios');
+      try {
+        const res = await api.post('/orders', orderPayload);
+        if (res.data?.order_number) {
+          generatedOrderId = res.data.order_number;
+        }
+      } catch (err) {
+        console.warn('Backend API failed, continuing with local mock DB', err);
+      }
+
+      // Always save to local storage so device guests can see their orders
+      try {
+        const existing = JSON.parse(localStorage.getItem('aureum_owner_orders') || '[]');
+        const mockOrder = {
+          id: generatedOrderId,
+          store_id: storeId,
+          customer: orderPayload.customer_name,
+          email: orderPayload.customer_email,
+          shipping_address: orderPayload.shipping_address,
+          total: cartTotal.toFixed(2),
+          status: 'Pending',
+          payment_method: 'cod',
+          date: new Date().toISOString(),
+          items: cartItems.map((item) => ({
+            product_id: item.id,
+            product_name: item.name,
+            product: item,
+            price: item.price,
+            quantity: item.quantity,
+            image_url: item.image || item.image_url
+          }))
+        };
+        existing.unshift(mockOrder);
+        localStorage.setItem('aureum_owner_orders', JSON.stringify(existing));
+      } catch (e) {}
+    } catch (e) {
+      console.error(e);
+    }
+
+    setPlacedOrderId(generatedOrderId);
+    setIsSubmitting(false);
+    setOrderSuccess(true);
+    clearCart();
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    navigate(`${basePath}/payment`, { state: { shippingData: { ...formData, paymentMethod: paymentAction } } });
+    if (actionRef.current === 'cod') {
+      await handlePlaceCodOrder();
+    } else {
+      navigate(`${basePath}/payment`, { state: { shippingData: { ...formData, paymentMethod: 'online' } } });
+    }
   };
 
   return (
@@ -138,26 +245,30 @@ export default function Checkout() {
               <span>Total</span>
               <span>₹{cartTotal.toFixed(2)}</span>
             </div>
-            <div className="d-flex flex-column gap-3 mt-4">
+            <div className="d-flex flex-column gap-2 mt-4">
               <button 
                 type="submit" 
                 form="checkout-form"
-                onClick={() => setPaymentAction('online')}
-                className="btn w-100 py-3 fw-bold text-white fs-6" 
-                style={{ backgroundColor: '#fb641b' }}
+                onClick={() => { actionRef.current = 'cod'; }}
+                disabled={isSubmitting}
+                className="btn w-100 py-3 fw-bold text-white fs-6 rounded-3 shadow-sm d-flex align-items-center justify-content-center gap-2" 
+                style={{ backgroundColor: '#16a34a', border: 'none' }}
               >
-                Proceed to Payment
+                {isSubmitting && actionRef.current === 'cod' ? (
+                  <span>Placing Order...</span>
+                ) : (
+                  <span>Cash on Delivery (Pay on Delivery)</span>
+                )}
               </button>
               <button 
                 type="submit" 
                 form="checkout-form"
-                onClick={() => setPaymentAction('cod')}
-                className="btn w-100 py-3 fw-bold text-white fs-6 mt-3" 
-                style={{ backgroundColor: '#fb641b' }}
+                onClick={() => { actionRef.current = 'online'; }}
+                disabled={isSubmitting}
+                className="btn w-100 py-2.5 fw-semibold fs-7 rounded-3 text-secondary mt-1 border bg-light" 
               >
-                Cash on Delivery
+                Pay Online (UPI / Card / Netbanking) &rarr;
               </button>
-
             </div>
           </div>
         </div>

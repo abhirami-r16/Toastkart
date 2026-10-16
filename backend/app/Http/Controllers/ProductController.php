@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\MeeshoProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -45,6 +46,10 @@ class ProductController extends Controller
 
         if ($request->has('category_id') && $request->category_id) {
             $query->where('category_id', $request->category_id);
+        }
+
+        if ($request->has('is_active')) {
+            $query->where('is_active', filter_var($request->is_active, FILTER_VALIDATE_BOOLEAN));
         }
 
         if ($request->has('search') && $request->search) {
@@ -210,6 +215,19 @@ class ProductController extends Controller
         }
 
         $product->update($validated);
+
+        if (array_key_exists('price', $validated)) {
+            $meeshoProduct = MeeshoProduct::where('product_id', $product->id)->first();
+            if ($meeshoProduct) {
+                $sellingPrice = (float) $product->price;
+                $margin = round($sellingPrice - (float) $meeshoProduct->source_price - (float) $meeshoProduct->estimated_shipping, 2);
+                $meeshoProduct->update([
+                    'selling_price' => $sellingPrice,
+                    'margin_amount' => $margin,
+                    'margin_percentage' => $sellingPrice > 0 ? round(($margin / $sellingPrice) * 100, 2) : 0,
+                ]);
+            }
+        }
 
         return response()->json($product->load(['category', 'store']));
     }

@@ -19,7 +19,6 @@ const Register = React.lazy(() => import('../pages/Register'));
 const StoreOwnerDashboard = React.lazy(() => import('../pages/store-owner-dashboard'));
 const CustomerDashboard = React.lazy(() => import('../pages/customer-dashboard'));
 const AdminDashboard = React.lazy(() => import('../pages/admin-dashboard'));
-const PlanSelection = React.lazy(() => import('../pages/PlanSelection'));
 const AdminLayout = React.lazy(() => import('../layouts/AdminLayout'));
 const StoresPage = React.lazy(() => import('../pages/Stores'));
 const CategoriesPage = React.lazy(() => import('../pages/Categories'));
@@ -35,6 +34,7 @@ const StorefrontApp = React.lazy(() => import('../pages/Storefront/StorefrontApp
 const PortfolioBuilder = React.lazy(() => import('../pages/PortfolioBuilder'));
 const PortfolioView = React.lazy(() => import('../pages/PortfolioView'));
 const WhatsappWidget = React.lazy(() => import('../components/WhatsappWidget'));
+const PlanSelection = React.lazy(() => import('../pages/PlanSelection'));
 
 const StorefrontWrapper = () => {
   const { slug } = useParams();
@@ -122,12 +122,6 @@ function AppRoutes() {
                 element={<PortfolioView />}
               />
 
-              {/* Subscription Plans Route */}
-              <Route
-                path="/plans"
-                element={<PlanSelection />}
-              />
-
               {/* Authentication Routes */}
               <Route
                 path="/login"
@@ -137,6 +131,11 @@ function AppRoutes() {
               <Route
                 path="/register"
                 element={<Register />}
+              />
+
+              <Route
+                path="/plans"
+                element={<PlanSelection />}
               />
 
               {/* Dashboard Routes */}

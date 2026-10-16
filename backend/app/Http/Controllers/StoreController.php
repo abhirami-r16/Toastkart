@@ -279,7 +279,10 @@ Output ONLY a JSON object (no markdown) with this structure:
     {
         $store = Store::with([
             'categories:id,store_id,name,slug',
-            'products:id,store_id,category_id,name,slug,price,compare_price,image,description,images,size,color,status,stock_quantity',
+            'products' => function ($query) {
+                $query->where('is_active', true)
+                    ->select('id', 'store_id', 'category_id', 'name', 'slug', 'price', 'compare_price', 'image', 'description', 'images', 'size', 'color', 'status', 'stock_quantity', 'is_active');
+            },
             'products.category:id,name',
             'aiConfigurations'
         ])

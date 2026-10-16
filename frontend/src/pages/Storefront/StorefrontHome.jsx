@@ -116,6 +116,7 @@ export default function StorefrontHome({ storeData, products, categories = [], l
       categoriesToRender.push({
         id: cat.id,
         name: cat.name,
+        description: cat.description || '',
         slug:
           cat.slug ||
           String(cat.name || '')
@@ -660,6 +661,12 @@ export default function StorefrontHome({ storeData, products, categories = [], l
       ) : categoriesToRender.length > 0 ? (
         categoriesToRender.map((cat) => {
           const catProducts = filteredProducts.filter((p) => {
+            if (p.category_id && cat.id && String(p.category_id) === String(cat.id)) {
+              return true;
+            }
+            if (p.category && typeof p.category === 'object' && p.category.id && cat.id && String(p.category.id) === String(cat.id)) {
+              return true;
+            }
             const pCat = String(
               (p.category && typeof p.category === 'object'
                 ? p.category.name
@@ -686,23 +693,30 @@ export default function StorefrontHome({ storeData, products, categories = [], l
               className="storefront-section scroll-mt"
             >
               <div className="storefront-section-header align-items-end mb-4">
-                {theme === 'theme-perfume' ? (
-                  <h3 style={{ textTransform: 'uppercase', letterSpacing: '1px', fontSize: '2rem' }}>
-                    <span style={{ fontWeight: 'bold' }}>DISCOVER </span>
-                    <span className="perfume-highlight" style={{ fontWeight: 'bold' }}>{cat.name}</span>
-                  </h3>
-                ) : theme === 'theme-home' ? (
-                  <div>
-                    <div className="text-uppercase text-muted fw-bold mb-1" style={{ fontSize: '11px', letterSpacing: '1px' }}>Bestsellers</div>
-                    <h2 className="fw-bold m-0" style={{ fontFamily: 'Georgia, serif' }}>Our Most Loved Furniture</h2>
-                  </div>
-                ) : (
-                  <h3>
-                    {cat.isCustom
-                      ? `Best of ${cat.name}`
-                      : `Trending in ${cat.name}`}
-                  </h3>
-                )}
+                <div>
+                  {theme === 'theme-perfume' ? (
+                    <h3 style={{ textTransform: 'uppercase', letterSpacing: '1px', fontSize: '2rem' }}>
+                      <span style={{ fontWeight: 'bold' }}>DISCOVER </span>
+                      <span className="perfume-highlight" style={{ fontWeight: 'bold' }}>{cat.name}</span>
+                    </h3>
+                  ) : theme === 'theme-home' ? (
+                    <div>
+                      <div className="text-uppercase text-muted fw-bold mb-1" style={{ fontSize: '11px', letterSpacing: '1px' }}>Bestsellers</div>
+                      <h2 className="fw-bold m-0" style={{ fontFamily: 'Georgia, serif' }}>Our Most Loved Furniture</h2>
+                    </div>
+                  ) : (
+                    <h3 className="mb-0">
+                      {cat.isCustom
+                        ? `Best of ${cat.name}`
+                        : `Trending in ${cat.name}`}
+                    </h3>
+                  )}
+                  {cat.description && (
+                    <p className="text-muted mt-1 mb-0 fs-7" style={{ maxWidth: 640 }}>
+                      {cat.description}
+                    </p>
+                  )}
+                </div>
 
                 <button className="storefront-view-all-btn">
                   VIEW ALL

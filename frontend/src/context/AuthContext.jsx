@@ -34,11 +34,15 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('toastkart_user', JSON.stringify(res.data));
         localStorage.setItem('toastkart_last_user_id', res.data.id);
       } catch (err) {
-        console.error('Authentication check failed:', err);
-
-        localStorage.removeItem('toastkart_token');
-        localStorage.removeItem('toastkart_user');
-        setUser(null);
+        const status = err.response?.status;
+        if (import.meta.env.DEV) {
+          console.warn('Authentication check failed:', status || 'network error');
+        }
+        if (status === 401) {
+          localStorage.removeItem('toastkart_token');
+          localStorage.removeItem('toastkart_user');
+          setUser(null);
+        }
       } finally {
         setLoading(false);
       }
@@ -75,7 +79,7 @@ export const AuthProvider = ({ children }) => {
         user,
       };
     } catch (err) {
-      console.error('Login failed:', err);
+      if (import.meta.env.DEV) console.warn('Login failed:', err.response?.status || 'network error');
 
       const message =
         err.response?.data?.message ||
@@ -117,7 +121,7 @@ export const AuthProvider = ({ children }) => {
         user,
       };
     } catch (err) {
-      console.error('Google login failed:', err);
+      if (import.meta.env.DEV) console.warn('Google login failed:', err.response?.status || 'network error');
 
       const message =
         err.response?.data?.message ||
@@ -153,7 +157,7 @@ export const AuthProvider = ({ children }) => {
 
       const res = await api.post('/register', payload);
 
-      const { user, token } = res.data;
+      const { user } = res.data;
 
       // Registration successful, return without auto-logging in
       return {
@@ -161,7 +165,7 @@ export const AuthProvider = ({ children }) => {
         user,
       };
     } catch (err) {
-      console.error('Registration failed:', err);
+      if (import.meta.env.DEV) console.warn('Registration failed:', err.response?.status || 'network error');
 
       const message =
         err.response?.data?.message ||
@@ -185,7 +189,7 @@ export const AuthProvider = ({ children }) => {
       });
       return { success: true, message: res.data.message };
     } catch (err) {
-      console.error('Update password failed:', err);
+      if (import.meta.env.DEV) console.warn('Update password failed:', err.response?.status || 'network error');
       const message =
         err.response?.data?.message ||
         'Failed to update password. Please try again.';
@@ -202,7 +206,7 @@ export const AuthProvider = ({ children }) => {
         await api.post('/logout');
       }
     } catch (err) {
-      console.error('Logout request failed:', err);
+      if (import.meta.env.DEV) console.warn('Logout request failed:', err.response?.status || 'network error');
     } finally {
       localStorage.removeItem('toastkart_token');
       localStorage.removeItem('toastkart_user');
@@ -218,7 +222,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('toastkart_user', JSON.stringify(res.data));
       return res.data;
     } catch (err) {
-      console.error('Refresh user failed:', err);
+      if (import.meta.env.DEV) console.warn('Refresh user failed:', err.response?.status || 'network error');
     }
   };
 

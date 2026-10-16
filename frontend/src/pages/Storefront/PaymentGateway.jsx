@@ -12,7 +12,7 @@ export default function PaymentGateway() {
   
   const shippingData = location.state?.shippingData;
 
-  const [paymentMethod, setPaymentMethod] = useState('upi');
+  const [paymentMethod, setPaymentMethod] = useState(shippingData?.paymentMethod === 'cod' ? 'cod' : 'upi');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [isRazorpayLoaded, setIsRazorpayLoaded] = useState(false);
@@ -23,8 +23,6 @@ export default function PaymentGateway() {
     return '/storefront';
   };
   const basePath = getBasePath();
-
-
 
   useEffect(() => {
     if (!shippingData && !orderSuccess) {
@@ -46,17 +44,31 @@ export default function PaymentGateway() {
   if (orderSuccess) {
     return (
       <div className="storefront-container py-5 text-center">
-        <div className="py-5 bg-white rounded shadow-sm border border-light max-w-lg mx-auto">
+        <div className="py-5 bg-white rounded shadow-sm border border-light max-w-lg mx-auto px-4">
           <div className="mb-4 d-flex justify-content-center">
             <div className="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style={{ width: 64, height: 64 }}>
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
             </div>
           </div>
-          <h2 className="fs-3 font-bold mb-3">Order Placed Successfully!</h2>
-          <p className="text-secondary mb-4">Your order has been confirmed.</p>
-          <button className="btn btn-primary mt-3" onClick={() => navigate(basePath)}>
-            Continue Shopping
-          </button>
+          <h2 className="fs-3 font-bold mb-2">Order Placed Successfully!</h2>
+          {paymentMethod === 'cod' ? (
+            <>
+              <div className="badge bg-success-subtle text-success fs-7 mb-3 px-3 py-2 border border-success-subtle">
+                Cash on Delivery
+              </div>
+              <p className="text-secondary mb-4">Your Cash on Delivery order has been confirmed. You will pay in cash upon receiving your package.</p>
+            </>
+          ) : (
+            <p className="text-secondary mb-4">Your order has been confirmed.</p>
+          )}
+          <div className="d-flex justify-content-center gap-3">
+            <button className="btn btn-outline-secondary px-4 py-2" onClick={() => navigate(`${basePath}/orders`)}>
+              View Orders
+            </button>
+            <button className="btn btn-primary px-4 py-2" onClick={() => navigate(basePath)}>
+              Continue Shopping
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -180,14 +192,18 @@ export default function PaymentGateway() {
             {/* Payment Method Selector */}
             <div className="mb-4">
               <h4 className="fs-6 fw-bold mb-3">Select Payment Method</h4>
-              <div className="d-flex gap-3 mb-3">
-                <label className="d-flex align-items-center gap-2 cursor-pointer p-2 border rounded flex-grow-1">
+              <div className="d-flex gap-2 mb-3 flex-wrap">
+                <label className={`d-flex align-items-center gap-2 cursor-pointer p-2 border rounded flex-grow-1 ${paymentMethod === 'upi' ? 'border-primary bg-light' : ''}`}>
                   <input type="radio" name="paymentMethod" value="upi" checked={paymentMethod === 'upi'} onChange={() => setPaymentMethod('upi')} />
-                  <span>UPI</span>
+                  <span className="fw-semibold fs-7">UPI</span>
                 </label>
-                <label className="d-flex align-items-center gap-2 cursor-pointer p-2 border rounded flex-grow-1">
+                <label className={`d-flex align-items-center gap-2 cursor-pointer p-2 border rounded flex-grow-1 ${paymentMethod === 'card' ? 'border-primary bg-light' : ''}`}>
                   <input type="radio" name="paymentMethod" value="card" checked={paymentMethod === 'card'} onChange={() => setPaymentMethod('card')} />
-                  <span>Credit / Debit Card</span>
+                  <span className="fw-semibold fs-7">Credit / Debit Card</span>
+                </label>
+                <label className={`d-flex align-items-center gap-2 cursor-pointer p-2 border rounded flex-grow-1 ${paymentMethod === 'cod' ? 'border-success bg-light' : ''}`}>
+                  <input type="radio" name="paymentMethod" value="cod" checked={paymentMethod === 'cod'} onChange={() => setPaymentMethod('cod')} />
+                  <span className="fw-semibold fs-7 text-success">Cash on Delivery</span>
                 </label>
               </div>
 
@@ -215,17 +231,28 @@ export default function PaymentGateway() {
                   </div>
                 </div>
               )}
+
+              {paymentMethod === 'cod' && (
+                <div className="p-3 bg-light rounded border border-success-subtle">
+                  <div className="fw-semibold fs-7 text-dark mb-1 d-flex align-items-center gap-1.5 text-success">
+                    <span>&#10003;</span> Cash on Delivery Selected
+                  </div>
+                  <div className="text-secondary fs-8">
+                    Pay with cash when your shipment arrives at your doorstep. No advance payment required.
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="d-flex flex-column gap-3 mt-4">
               <button 
                 type="button" 
                 onClick={handlePayment}
-                className="btn w-100 py-3 fw-bold text-white fs-6" 
-                style={{ backgroundColor: '#fb641b' }}
+                className="btn w-100 py-3 fw-bold text-white fs-6 rounded-3 shadow-sm" 
+                style={{ backgroundColor: paymentMethod === 'cod' ? '#16a34a' : '#fb641b', border: 'none' }}
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Processing...' : 'Confirm Order'}
+                {isSubmitting ? 'Processing...' : (paymentMethod === 'cod' ? 'Confirm COD Order' : 'Confirm Order')}
               </button>
             </div>
           </div>

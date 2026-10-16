@@ -1,221 +1,207 @@
+/* =========================================
+   Plans.css — Pricing Page Styles
+   Used by: Plans.jsx & HomePricing.jsx
+   ========================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap');
+
+/* ---- Wrapper ---- */
 .pricing-page-wrapper {
-  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
-  background-color: #f8faff;
   min-height: 100vh;
-  padding-bottom: 2rem;
+  background: #f9fafb;
+  font-family: 'Inter', sans-serif;
   color: #111827;
+  padding: 3rem 1.5rem 4rem;
 }
 
+/* ---- Header ---- */
 .pricing-header {
   text-align: center;
-  padding: 4rem 1rem 2rem;
+  max-width: 700px;
+  margin: 0 auto 3rem;
 }
 
 .pricing-header h1 {
+  font-size: 2.4rem;
   font-weight: 800;
-  font-size: 3rem;
-  margin-bottom: 0.5rem;
-  color: #0f172a;
+  line-height: 1.2;
+  margin-bottom: 0.75rem;
+  color: #111827;
 }
 
-.pricing-header h1 .brand-text {
+.pricing-header .brand-text {
   color: #ff5a1f;
 }
 
-.pricing-header p {
-  font-size: 1.1rem;
+.pricing-header > p {
+  font-size: 1.05rem;
   color: #6b7280;
   margin-bottom: 1.5rem;
 }
 
+/* ---- Doodle ---- */
+.business-online-doodle {
+  position: absolute;
+  top: -10px;
+  right: 5%;
+  width: 140px;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .business-online-doodle {
+    display: none;
+  }
+}
+
+/* ---- Badges ---- */
 .pricing-badges {
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-  font-size: 0.9rem;
-  color: #6b7280;
-  font-weight: 500;
-}
-
-.pricing-badges .badge-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.pricing-badges .badge-item svg {
-  color: #ff5a1f;
-}
-
-.pricing-cards-container {
-  display: flex;
   justify-content: center;
-  gap: 1.5rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-  align-items: stretch;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.badge-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #374151;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+/* ---- Pricing Cards ---- */
+.pricing-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.75rem;
+  max-width: 1100px;
+  margin: 0 auto 2.5rem;
 }
 
 .pricing-card {
-  background: #ffffff;
-  border-radius: 20px;
-  padding: 2.5rem 2rem;
-  width: 100%;
-  max-width: 360px;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+  position: relative;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 1.25rem;
+  padding: 2rem 1.75rem;
   display: flex;
   flex-direction: column;
-  position: relative;
-  border: 1px solid #f3f4f6;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .pricing-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.08);
 }
 
 .pricing-card.popular {
-  border: 2px solid #ff5a1f;
-  transform: scale(1.03);
-  box-shadow: 0 20px 25px -5px rgba(255, 90, 31, 0.15);
+  border-color: #ff5a1f;
+  box-shadow: 0 6px 24px rgba(255,90,31,0.15);
 }
 
-.pricing-card.popular:hover {
-  transform: scale(1.03) translateY(-5px);
-}
-
+/* ---- Popular Tag ---- */
 .popular-tag {
   position: absolute;
-  top: -15px;
+  top: -14px;
   left: 50%;
   transform: translateX(-50%);
   background: #ff5a1f;
-  color: white;
-  padding: 0.4rem 1.2rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
+  color: #fff;
+  font-size: 0.7rem;
   font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.3rem 1rem;
+  border-radius: 999px;
+  white-space: nowrap;
 }
 
-.card-title-section {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
+/* ---- Card Title Section ---- */
 .card-title-section h2 {
-  font-weight: 800;
-  font-size: 2rem;
-  margin-bottom: 0.25rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
   color: #111827;
 }
 
-.card-title-section p {
+.card-title-section > p {
+  font-size: 0.85rem;
   color: #6b7280;
-  font-size: 0.95rem;
   margin-bottom: 1rem;
 }
 
 .card-price {
-  font-size: 3rem;
+  font-size: 2.4rem;
   font-weight: 800;
   color: #111827;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  line-height: 1;
+  margin: 0.5rem 0 1.25rem;
 }
 
 .card-price .currency {
-  font-size: 2.5rem;
-  margin-right: 2px;
+  font-size: 1.3rem;
+  vertical-align: super;
+  font-weight: 600;
 }
 
 .card-price .period {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #6b7280;
-  margin-left: 4px;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #9ca3af;
+  margin-left: 0.15rem;
 }
 
-.setup-fee-box {
-  background: #fdfbf7;
-  border: 1px dashed #e5e7eb;
-  border-radius: 12px;
-  padding: 1rem;
-  margin-bottom: 2rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.pricing-card.popular .setup-fee-box {
-  background: #fff8f5;
-  border-color: #ffd8cc;
-}
-
-.setup-fee-icon {
-  color: #ff5a1f;
-  flex-shrink: 0;
-}
-
-.setup-fee-text {
-  font-size: 0.85rem;
-  color: #4b5563;
-  text-align: left;
-}
-
-.setup-fee-text .price {
-  font-weight: 700;
-  color: #111827;
-  display: block;
-  font-size: 1rem;
-}
-
-.setup-fee-text .optional {
-  color: #6b7280;
-}
-
+/* ---- Features List ---- */
 .features-list {
   list-style: none;
   padding: 0;
-  margin: 0 0 2rem 0;
-  flex-grow: 1;
+  margin: 0 0 1.75rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
 }
 
 .features-list li {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
-  font-size: 0.95rem;
+  gap: 0.5rem;
+  font-size: 0.88rem;
   color: #374151;
-  font-weight: 500;
 }
 
 .features-list li svg {
-  color: #ff5a1f;
+  color: #22c55e;
   flex-shrink: 0;
 }
 
+/* ---- Buttons ---- */
 .btn-get-started {
   width: 100%;
-  padding: 0.875rem;
-  border-radius: 12px;
-  font-weight: 700;
-  font-size: 1rem;
-  text-align: center;
-  transition: all 0.2s ease;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.75rem;
+  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+  border: 2px solid #ff5a1f;
+  margin-top: auto;
+}
+
+.btn-get-started:active {
+  transform: scale(0.98);
 }
 
 .btn-outline {
-  background: white;
-  border: 2px solid #ff5a1f;
+  background: transparent;
   color: #ff5a1f;
 }
 
@@ -225,75 +211,75 @@
 
 .btn-solid {
   background: #ff5a1f;
-  border: 2px solid #ff5a1f;
-  color: white;
+  color: #fff;
 }
 
 .btn-solid:hover {
-  background: #e04512;
-  border-color: #e04512;
+  background: #e84e18;
 }
 
+/* ---- Info Boxes ---- */
 .info-boxes-container {
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-  max-width: 1200px;
-  margin: 3rem auto 2rem;
-  padding: 0 1rem;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+  max-width: 1100px;
+  margin: 0 auto 2.5rem;
 }
 
 .info-box {
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 1.5rem;
   display: flex;
   align-items: flex-start;
   gap: 1rem;
-  flex: 1;
-  min-width: 300px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  padding: 1.25rem 1.5rem;
+  transition: box-shadow 0.2s ease;
+}
+
+.info-box:hover {
+  box-shadow: 0 6px 20px rgba(0,0,0,0.07);
 }
 
 .info-icon-wrapper {
-  background: #fff5f2;
-  border-radius: 50%;
-  width: 48px;
-  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 0.75rem;
+  background: #fff5f2;
   color: #ff5a1f;
   flex-shrink: 0;
 }
 
 .info-icon-wrapper.green {
   background: #f0fdf4;
-  color: #22c55e;
+  color: #16a34a;
 }
 
 .info-content h3 {
-  font-size: 1rem;
-  font-weight: 700;
-  margin-bottom: 0.25rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
   color: #111827;
 }
 
 .info-content p {
-  font-size: 0.85rem;
+  font-size: 0.83rem;
   color: #6b7280;
-  margin: 0;
   line-height: 1.5;
+  margin: 0;
 }
 
+/* ---- Pricing Footer ---- */
 .pricing-footer {
-  max-width: 1200px;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding-top: 2rem;
   border-top: 1px solid #e5e7eb;
   display: flex;
-  justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
   gap: 1rem;
@@ -301,34 +287,33 @@
 
 .trust-badges {
   display: flex;
-  gap: 2rem;
   flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
 }
 
 .trust-badge {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #6b7280;
+  gap: 0.4rem;
+  font-size: 0.83rem;
+  font-weight: 500;
+  color: #374151;
 }
 
 .trust-badge svg {
-  color: #4b5563;
+  color: #ff5a1f;
 }
 
+/* ---- Footer Logo ---- */
 .footer-logo {
-  text-align: right;
+  margin-left: auto;
 }
 
 .footer-logo .logo-text {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 800;
   color: #111827;
-  display: flex;
-  align-items: center;
-  gap: 2px;
 }
 
 .footer-logo .logo-text span {
@@ -337,30 +322,27 @@
 
 .footer-logo p {
   font-size: 0.7rem;
+  letter-spacing: 0.12em;
   color: #9ca3af;
   margin: 0;
-  letter-spacing: 0.05em;
 }
 
-.business-online-doodle {
-  position: absolute;
-  right: 15%;
-  top: 4rem;
-  width: 140px;
-  transform: rotate(5deg);
-}
+/* ---- Responsive ---- */
+@media (max-width: 640px) {
+  .pricing-header h1 {
+    font-size: 1.75rem;
+  }
 
-@media (max-width: 992px) {
   .pricing-cards-container {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .pricing-card {
-    max-width: 100%;
+    grid-template-columns: 1fr;
   }
 
-  .business-online-doodle {
-    display: none;
+  .pricing-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footer-logo {
+    margin-left: 0;
   }
 }

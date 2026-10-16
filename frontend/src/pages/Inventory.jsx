@@ -293,7 +293,12 @@ export default function Inventory() {
                       </td>
                       <td className="py-3 font-mono text-xs" style={{ color: GOLD }}>{prod.sku}</td>
                       <td className="py-3 font-bold" style={{ color: GOLD_LIGHT }}>
-                        {formatPrice ? formatPrice(prod.price) : `$${Number(prod.price).toFixed(2)}`}
+                        {formatPrice ? formatPrice(prod.price, prod) : (() => {
+                          const clean = String(prod.price || '').replace(/^[$\s₹]+/, '');
+                          const n = parseFloat(clean);
+                          if (isNaN(n)) return prod.price;
+                          return Number.isInteger(n) ? `₹${n}` : `₹${n.toFixed(2)}`;
+                        })()}
                       </td>
                       <td className="py-3">
                         <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold ${isOut ? 'bg-red-500/15 text-red-400 border border-red-500/30' : isLow ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30' : 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'}`}>

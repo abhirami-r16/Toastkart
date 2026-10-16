@@ -31,8 +31,8 @@ Route::get('/google-mail/callback', [
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/auth/google', [AuthController::class, 'googleLogin']);
-Route::post('/logout', [AuthController::class, 'logout']);
-Route::get('/me', [AuthController::class, 'me']);
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+Route::get('/me', [AuthController::class, 'me'])->middleware('auth:sanctum');
 Route::post('/update-password', [AuthController::class, 'updatePassword']);
 // Dashboard
 Route::get('/dashboard', [DashboardController::class, 'index']);
@@ -103,3 +103,29 @@ Route::post('/subscriptions/autopay/cancel', [\App\Http\Controllers\Subscription
 
 // Webhook
 Route::post('/webhooks/razorpay', [\App\Http\Controllers\RazorpayWebhookController::class, 'handleWebhook']);
+
+
+// Meesho Dropshipping & Reselling Routes (Authenticated Store Owner Only)
+Route::prefix('meesho')->middleware('auth:sanctum')->group(function () {
+    Route::get('/status', [\App\Http\Controllers\MeeshoController::class, 'getStatus']);
+    Route::post('/reefapi/test', [\App\Http\Controllers\MeeshoController::class, 'testReefApiConnection']);
+    Route::post('/apify/test', [\App\Http\Controllers\MeeshoController::class, 'testApifyConnection']);
+    Route::post('/connect', [\App\Http\Controllers\MeeshoController::class, 'connect']);
+    Route::post('/disconnect', [\App\Http\Controllers\MeeshoController::class, 'disconnect']);
+    Route::get('/catalog', [\App\Http\Controllers\MeeshoController::class, 'getCatalog']);
+    Route::get('/provider-categories', [\App\Http\Controllers\MeeshoController::class, 'getProviderCategories']);
+    Route::get('/search', [\App\Http\Controllers\MeeshoController::class, 'searchCatalog']);
+    Route::get('/product/{id}', [\App\Http\Controllers\MeeshoController::class, 'getProductDetail']);
+    Route::get('/categories', [\App\Http\Controllers\MeeshoController::class, 'getStoreCategories']);
+    Route::post('/import', [\App\Http\Controllers\MeeshoController::class, 'importProduct']);
+    Route::get('/products', [\App\Http\Controllers\MeeshoController::class, 'getResellingProducts']);
+    Route::put('/products/{id}/price', [\App\Http\Controllers\MeeshoController::class, 'updatePrice']);
+    Route::post('/products/{id}/sync', [\App\Http\Controllers\MeeshoController::class, 'syncProduct']);
+    Route::post('/sync-all', [\App\Http\Controllers\MeeshoController::class, 'syncAllProducts']);
+    Route::get('/orders', [\App\Http\Controllers\MeeshoController::class, 'getOrders']);
+    Route::post('/orders/create-from-toastkart', [\App\Http\Controllers\MeeshoController::class, 'mapOrder']);
+    Route::post('/orders/{id}/process', [\App\Http\Controllers\MeeshoController::class, 'processSupplierOrder']);
+    Route::put('/orders/{id}/tracking', [\App\Http\Controllers\MeeshoController::class, 'updateTracking']);
+    Route::post('/orders/{id}/return', [\App\Http\Controllers\MeeshoController::class, 'handleReturn']);
+    Route::get('/logs', [\App\Http\Controllers\MeeshoController::class, 'getLogs']);
+});

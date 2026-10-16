@@ -29,6 +29,7 @@ class Product extends Model
 
     protected $casts = [
         'images' => 'array',
+        'is_active' => 'boolean',
     ];
 
     public function store()

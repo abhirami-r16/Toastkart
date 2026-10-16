@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import ToastKartLogo from "../components/ToastKartLogo";
 import AIStoreBuilder from "../components/AIStoreBuilder";
+import MeeshoDropshippingView from "../components/meesho/MeeshoDropshippingView";
 import "../styles/dashboard-premium.css";
 
 const getSizesForCategory = (productCategory, storeCategory) => {
@@ -84,10 +85,10 @@ const ownerLinks = [
   { key: "ai-builder", label: "AI Builder", icon: Sparkles },
   { key: "categories", label: "Collections", icon: Tag },
   { key: "products", label: "Products", icon: Package },
+  { key: "meesho-dropshipping", label: "Meesho Dropshipping", icon: Truck },
   { key: "orders", label: "Orders", icon: ShoppingCart },
   { key: "customers", label: "Customers", icon: Users },
   { key: "discounts", label: "Discounts", icon: Percent },
-  { key: "billing", label: "Billing", icon: CreditCard },
 ];
 
 const salesTrendDaily = [
@@ -213,15 +214,69 @@ const normalizeProductImage = (rawUrl, productName = "") => {
   return cleanUrl;
 };
 
-const emptyProductForm = { name: "", sku: "", price: "", compare_price: "", discount_percentage: "", category: "Apparel", stock: "", description: "", image: "", images: [], color: "", size: "" };
+const getColorHex = (c) => {
+  if (!c) return '#94a3b8';
+  const str = String(c).toLowerCase();
+  if (str.includes('dark green')) return '#064e3b';
+  if (str.includes('olive')) return '#556b2f';
+  if (str.includes('green') || str.includes('mint')) return '#10b981';
+  if (str.includes('navy')) return '#1e3a8a';
+  if (str.includes('blue') || str.includes('sky')) return '#3b82f6';
+  if (str.includes('black')) return '#18181b';
+  if (str.includes('white')) return '#ffffff';
+  if (str.includes('red') || str.includes('maroon') || str.includes('crimson') || str.includes('wine')) return '#ef4444';
+  if (str.includes('pink') || str.includes('peach')) return '#ec4899';
+  if (str.includes('yellow') || str.includes('mustard')) return '#eab308';
+  if (str.includes('gold')) return '#d4af37';
+  if (str.includes('silver')) return '#cbd5e1';
+  if (str.includes('grey') || str.includes('gray') || str.includes('charcoal')) return '#64748b';
+  if (str.includes('purple') || str.includes('lavender')) return '#8b5cf6';
+  if (str.includes('orange') || str.includes('rust') || str.includes('coral')) return '#f97316';
+  if (str.includes('brown')) return '#78350f';
+  if (str.includes('beige') || str.includes('cream') || str.includes('khaki')) return '#d4c5b9';
+  return '#94a3b8';
+};
+
+const resolveProductColor = (product) => {
+  if (product?.color && String(product.color).trim()) return String(product.color).trim();
+  const text = `${product?.name || ''} ${product?.description || ''}`;
+  const keywords = [
+    'Black & White', 'Black and White', 'Navy Blue', 'Royal Blue', 'Sky Blue', 'Light Blue',
+    'Dark Green', 'Olive Green', 'Teal Green', 'Bottle Green', 'Mint Green', 'Baby Pink',
+    'Rose Gold', 'Mustard Yellow', 'Wine Maroon', 'Off White', 'Pure White', 'Jet Black',
+    'Black', 'White', 'Blue', 'Red', 'Green', 'Yellow', 'Pink', 'Gold', 'Maroon', 'Teal',
+    'Purple', 'Orange', 'Grey', 'Gray', 'Silver', 'Beige', 'Cream', 'Brown', 'Rust',
+    'Multicolor', 'Multi'
+  ];
+  for (const k of keywords) {
+    if (new RegExp(`\\b${k.replace(/&/g, '(&|and)')}\\b`, 'i').test(text)) {
+      return k;
+    }
+  }
+  return null;
+};
+
+const emptyProductForm = { name: "", sku: "", price: "", compare_price: "", discount_percentage: "", category: "Apparel", stock: "", description: "", image: "", images: [], color: "", size: "", is_active: true };
 
 export default function StoreOwnerDashboard() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   
+  const hasActiveSub = Boolean(user?.active_subscription || user?.activeSubscription);
+  const isPrivileged = user?.role === 'admin' || user?.email === 'admin@gmail.com';
+  const [showPlanRequiredModal, setShowPlanRequiredModal] = useState(false);
+
   useEffect(() => {
-    // Redirect logic removed. Users stay on dashboard but get the modal.
-  }, [user, loading, navigate]);
+    if (!loading) {
+      if (!user) {
+        navigate('/login', { replace: true });
+        return;
+      }
+      if (!isPrivileged && !hasActiveSub) {
+        setShowPlanRequiredModal(true);
+      }
+    }
+  }, [user, loading, hasActiveSub, isPrivileged, navigate]);
   
   const [active, setActive] = useState(() => {
     try {
@@ -281,6 +336,7 @@ export default function StoreOwnerDashboard() {
   }, [customersList]);
 
   const [productsList, setProductsList] = useState([]);
+  const [productReloadVersion, setProductReloadVersion] = useState(0);
 
   const [ordersList, setOrdersList] = useState(() => {
     const saved = localStorage.getItem("aureum_owner_orders");
@@ -294,6 +350,7 @@ export default function StoreOwnerDashboard() {
   });
 
   const [categoriesList, setCategoriesList] = useState([]);
+  const [categoryReloadVersion, setCategoryReloadVersion] = useState(0);
 
   const [storesList, setStoresList] = useState(() => {
     const saved = localStorage.getItem("aureum_owner_stores");
@@ -402,7 +459,25 @@ export default function StoreOwnerDashboard() {
   }, [storesList, currentUserId, user]);
 
   const activeStore = ownerStores.find((s) => String(s.id) === String(selectedStoreId)) || ownerStores[0];
-  const currencySymbol = activeStore?.currency ? (activeStore.currency.match(/\((.*?)\)/)?.[1] || '$') : '$';
+  const currencySymbol = (() => {
+    const curr = activeStore?.currency || '';
+    if (curr.includes('₹') || curr.toUpperCase().includes('INR')) return '₹';
+    if (curr.includes('$') || curr.toUpperCase().includes('USD')) return '$';
+    const match = curr.match(/\((.*?)\)/);
+    if (match) return match[1];
+    return '₹';
+  })();
+
+  const formatProductPrice = (priceVal, prod = null) => {
+    if (priceVal == null || priceVal === '') return '';
+    const isMeesho = prod?.sku?.startsWith('MSH-') || prod?.meesho_product_id;
+    const sym = isMeesho ? '₹' : currencySymbol;
+    const cleanStr = String(priceVal).replace(/^[$\s₹A-Za-z]+/, '').trim();
+    const num = parseFloat(cleanStr);
+    if (isNaN(num)) return String(priceVal);
+    const formattedNumber = Number.isInteger(num) ? String(num) : num.toFixed(2);
+    return `${sym}${formattedNumber}`;
+  };
 
   const hasRealStore = useMemo(() => {
     return storesList.some((s) => s.user_id === currentUserId || (!s.user_id && currentUserId === 1));
@@ -569,10 +644,11 @@ export default function StoreOwnerDashboard() {
             name: p.name,
             sku: p.sku || `SKU-${Math.floor(Math.random() * 900 + 100)}`,
             category: p.category?.name || p.category || "Uncategorized",
-            price: typeof p.price === "number" ? `${currencySymbol}${p.price.toFixed(2)}` : p.price,
-            compare_price: typeof p.compare_price === "number" ? `${currencySymbol}${p.compare_price.toFixed(2)}` : p.compare_price,
+            price: formatProductPrice(p.price, p),
+            compare_price: p.compare_price != null && p.compare_price !== '' ? formatProductPrice(p.compare_price, p) : null,
             stock: p.stock_quantity ?? p.stock ?? 0,
             status: p.status || (p.stock_quantity > 0 ? "In Stock" : "Out of Stock"),
+            is_active: p.is_active !== false && p.is_active !== 0,
             image: p.image || getFallbackImageByName(p.name),
             images: p.images || [],
             description: p.description || "",
@@ -588,7 +664,7 @@ export default function StoreOwnerDashboard() {
     };
 
     loadStoreProducts();
-  }, [activeStore?.id, currentUserId, currentOwnerEmail, ownerMeta]);
+  }, [activeStore?.id, currentUserId, currentOwnerEmail, ownerMeta, productReloadVersion]);
 
   // Load orders from backend
   useEffect(() => {
@@ -728,7 +804,6 @@ export default function StoreOwnerDashboard() {
   const [showInlineCategoryForm, setShowInlineCategoryForm] = useState(false);
   const [showInlineProductForm, setShowInlineProductForm] = useState(false);
   // Store Modals State & Forms
-  const [showPlanRequiredModal, setShowPlanRequiredModal] = useState(false);
   const [showCreateStoreModal, setShowCreateStoreModal] = useState(false);
   const [showEditStoreModal, setShowEditStoreModal] = useState(false);
   const [showDeleteStoreModal, setShowDeleteStoreModal] = useState(false);
@@ -767,8 +842,7 @@ export default function StoreOwnerDashboard() {
 
   // Store CRUD Handlers
   const openCreateStoreModal = () => {
-    // Check if the user has an active plan before creating a store (Flow 4)
-    if (!user?.activeSubscription && !user?.active_subscription) {
+    if (!hasActiveSub && !isPrivileged) {
       setShowPlanRequiredModal('create-store');
       return;
     }
@@ -796,11 +870,7 @@ export default function StoreOwnerDashboard() {
       if (action === 'create-store') {
         openCreateStoreModal();
       } else if (action === 'categories' || action === 'ai-builder' || action === 'products' || action === 'stores') {
-        if (!user?.activeSubscription && !user?.active_subscription) {
-          setShowPlanRequiredModal(action);
-        } else {
-          setActive(action);
-        }
+        setActive(action);
       }
       // Remove the query param to prevent re-triggering on reload
       window.history.replaceState({}, document.title, window.location.pathname);
@@ -809,10 +879,6 @@ export default function StoreOwnerDashboard() {
 
   const handleCreateStoreSubmit = async (e) => {
     e.preventDefault();
-    if (!user?.activeSubscription && !user?.active_subscription) {
-      setShowPlanRequiredModal('create-store');
-      return;
-    }
 
     if (!storeForm.name.trim()) return;
 
@@ -962,12 +1028,16 @@ export default function StoreOwnerDashboard() {
         const res = await api.get(`/categories?store_id=${activeStore.id}`);
         if (res.data && Array.isArray(res.data)) {
           // Map backend data and preserve local meta for scoping
-          setCategoriesList(res.data.map((category) => ({
+          const mapped = res.data.map((category) => ({
             ...category,
             user_id: currentUserId,
             owner_email: currentOwnerEmail,
             store_id: category.store_id ?? activeStore?.id ?? null,
-          })));
+          }));
+          setCategoriesList(mapped);
+          try {
+            localStorage.setItem("aureum_owner_categories", JSON.stringify(mapped));
+          } catch (e) {}
         } else {
           setCategoriesList([]);
         }
@@ -1002,7 +1072,26 @@ export default function StoreOwnerDashboard() {
 
     fetchCategories();
     fetchCustomers();
-  }, [activeStore?.id, currentUserId]);
+  }, [activeStore?.id, currentUserId, categoryReloadVersion]);
+
+  // Synchronize state when categories are created or products are imported from Meesho workflow
+  useEffect(() => {
+    const handleCategoryCreated = () => {
+      setCategoryReloadVersion((v) => v + 1);
+    };
+    const handleProductImported = () => {
+      setProductReloadVersion((v) => v + 1);
+      setCategoryReloadVersion((v) => v + 1);
+    };
+
+    window.addEventListener('toastkart:category-created', handleCategoryCreated);
+    window.addEventListener('toastkart:product-imported', handleProductImported);
+
+    return () => {
+      window.removeEventListener('toastkart:category-created', handleCategoryCreated);
+      window.removeEventListener('toastkart:product-imported', handleProductImported);
+    };
+  }, []);
 
   const showToast = (msg) => {
     setCategoryToast(msg);
@@ -1015,30 +1104,18 @@ export default function StoreOwnerDashboard() {
 
   // Category CRUD Handlers
   const openAddCategoryModal = () => {
-    if (!user?.activeSubscription && !user?.active_subscription) {
-      setShowPlanRequiredModal('categories');
-      return;
-    }
     setEditingCategory(null);
     setCategoryForm({ name: "", description: "", featured: false });
     setShowCategoryModal(true);
   };
 
   const openInlineCategoryForm = () => {
-    if (!user?.activeSubscription && !user?.active_subscription) {
-      setShowPlanRequiredModal('categories');
-      return;
-    }
     setEditingCategory(null);
     setCategoryForm({ name: "", description: "", featured: false });
     setShowInlineCategoryForm(true);
   };
 
   const openEditCategoryModal = (cat) => {
-    if (!user?.activeSubscription && !user?.active_subscription) {
-      setShowPlanRequiredModal('categories');
-      return;
-    }
     setEditingCategory(cat);
     setCategoryForm({
       name: cat.name || "",
@@ -1056,10 +1133,6 @@ export default function StoreOwnerDashboard() {
 
   const handleCategorySubmit = async (e) => {
     e.preventDefault();
-    if (!user?.activeSubscription && !user?.active_subscription) {
-      setShowPlanRequiredModal('categories');
-      return;
-    }
     if (!categoryForm.name.trim()) return;
 
     const slug = categoryForm.name.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -1180,28 +1253,16 @@ export default function StoreOwnerDashboard() {
   };
 
   const openAddProductModal = () => {
-    if (!user?.activeSubscription && !user?.active_subscription) {
-      setShowPlanRequiredModal('products');
-      return;
-    }
     resetProductForm();
     setShowAddProduct(true);
   };
 
   const openInlineProductForm = () => {
-    if (!user?.activeSubscription && !user?.active_subscription) {
-      setShowPlanRequiredModal('products');
-      return;
-    }
     setShowInlineProductForm(true);
     resetProductForm();
   };
 
   const openEditProductModal = (product) => {
-    if (!user?.activeSubscription && !user?.active_subscription) {
-      setShowPlanRequiredModal('products');
-      return;
-    }
     setEditingProduct(product);
     setNewProd({
       name: product.name || "",
@@ -1216,6 +1277,7 @@ export default function StoreOwnerDashboard() {
       images: Array.isArray(product.images) ? product.images.map(img => typeof img === 'string' ? { url: img, color: '' } : img) : (product.image ? [{ url: product.image, color: '' }] : []),
       color: product.color || "",
       size: product.size || "",
+      is_active: product.is_active !== false && product.is_active !== 0,
     });
     setShowAddProduct(true);
   };
@@ -1264,7 +1326,7 @@ export default function StoreOwnerDashboard() {
       description: newProd.description?.trim() || "",
       image: normalizeProductImage(newProd.images?.[0]?.url || newProd.image, newProd.name),
       images: newProd.images?.length > 0 ? newProd.images.map(img => ({ ...img, url: normalizeProductImage(img.url, newProd.name) })) : (newProd.image ? [{ url: normalizeProductImage(newProd.image, newProd.name), color: '' }] : []),
-      is_active: true,
+      is_active: newProd.is_active !== false,
       store_name: activeStore?.name || ownerMeta.store_name || "Owner Store",
       store_slug: activeStore?.slug || ownerMeta.store_slug || activeStoreSlug,
       store_subdomain: activeStore?.subdomain || ownerMeta.store_subdomain || activeStoreSlug,
@@ -1294,8 +1356,8 @@ export default function StoreOwnerDashboard() {
         name: p.name,
         sku: p.sku,
         category: p.category?.name || p.category || newProd.category,
-        price: typeof p.price === 'number' ? `${currencySymbol}${p.price.toFixed(2)}` : p.price,
-        compare_price: typeof p.compare_price === 'number' ? `${currencySymbol}${p.compare_price.toFixed(2)}` : p.compare_price,
+        price: formatProductPrice(p.price, p),
+        compare_price: p.compare_price != null && p.compare_price !== '' ? formatProductPrice(p.compare_price, p) : null,
         stock: p.stock_quantity ?? normalizedStock,
         status: p.status || status,
         image: p.image || normalizeProductImage(newProd.images?.[0]?.url || newProd.image, newProd.name),
@@ -1303,6 +1365,7 @@ export default function StoreOwnerDashboard() {
         description: p.description || newProd.description || "",
         color: p.color || newProd.color || null,
         size: p.size || newProd.size || null,
+        is_active: p.is_active === undefined ? newProd.is_active : p.is_active !== false && p.is_active !== 0,
       };
     };
 
@@ -1395,6 +1458,8 @@ export default function StoreOwnerDashboard() {
       </div>
     );
   }
+
+
 
   return (
     <div style={{ background: "#f1f2f4", color: "#202223", minHeight: "100vh" }} className="d-flex w-100">
@@ -1514,8 +1579,7 @@ export default function StoreOwnerDashboard() {
               const Icon = item.icon;
               const isActive = active === item.key;
               const handleClick = () => {
-                const allowedUnpaid = ['dashboard'];
-                if (!allowedUnpaid.includes(item.key) && !user?.activeSubscription && !user?.active_subscription) {
+                if (item.key !== 'dashboard' && !hasActiveSub && !isPrivileged) {
                   setShowPlanRequiredModal(item.key);
                   return;
                 }
@@ -1696,13 +1760,7 @@ export default function StoreOwnerDashboard() {
               <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", padding: "20px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
                 <div className="d-flex align-items-center justify-content-between mb-3">
                   <h3 className="fs-6 font-bold mb-0" style={{ color: "#202223" }}>Recent Orders</h3>
-                  <button className="btn btn-link fs-8 p-0 text-decoration-none fw-semibold" style={{ color: "#FF5722" }} onClick={() => {
-                    if (!user?.activeSubscription && !user?.active_subscription) {
-                      setShowPlanRequiredModal("orders");
-                    } else {
-                      setActive("orders");
-                    }
-                  }}>View All</button>
+                  <button className="btn btn-link fs-8 p-0 text-decoration-none fw-semibold" style={{ color: "#FF5722" }} onClick={() => setActive("orders")}>View All</button>
                 </div>
                 <div className="table-responsive">
                   <table className="table table-hover mb-0 align-middle border-0">
@@ -1788,10 +1846,11 @@ export default function StoreOwnerDashboard() {
                       <thead>
                         <tr className="fs-8 fw-semibold" style={{ color: "#6d7175", borderBottom: "1px solid #dfe3e8" }}>
                           <th className="border-0 ps-4 py-3">Product</th>
-                          <th className="border-0 py-3">Color</th>
-                          <th className="border-0 py-3">Size</th>
+                          <th className="border-0 py-3" style={{ minWidth: 110, whiteSpace: "nowrap" }}>Color</th>
+                          <th className="border-0 py-3" style={{ minWidth: 120 }}>Size</th>
                           <th className="border-0 py-3">Price</th>
                           <th className="border-0 py-3">Status</th>
+                          <th className="border-0 py-3">Visibility</th>
                           <th className="border-0 py-3">Inventory</th>
                           <th className="border-0 py-3">Collection</th>
                           <th className="border-0 text-end pe-4 py-3">Actions</th>
@@ -1815,8 +1874,38 @@ export default function StoreOwnerDashboard() {
                                 <span className="fw-semibold fs-7" style={{ color: "#202223" }}>{p.name}</span>
                               </div>
                             </td>
-                            <td className="border-0 py-2 fs-7" style={{ color: "#6d7175" }}>{p.color || "—"}</td>
-                            <td className="border-0 py-2 fs-7" style={{ color: "#6d7175" }}>{p.size || "—"}</td>
+                            <td className="border-0 py-2 fs-7" style={{ whiteSpace: "nowrap" }}>
+                              {(() => {
+                                const displayColor = resolveProductColor(p);
+                                if (!displayColor) return <span className="text-muted fs-8">—</span>;
+                                const isLight = ['white', 'off white', 'cream', 'beige', 'silver'].some(l => displayColor.toLowerCase().includes(l));
+                                return (
+                                  <span
+                                    className="d-inline-flex align-items-center gap-1.5 px-2 py-0.5 rounded-pill border fs-8 fw-semibold"
+                                    style={{
+                                      backgroundColor: "#f8fafc",
+                                      borderColor: "#e2e8f0",
+                                      color: "#1e293b",
+                                      boxShadow: "0 1px 2px rgba(0,0,0,0.03)"
+                                    }}
+                                  >
+                                    <span
+                                      className="rounded-circle border"
+                                      style={{
+                                        width: 10,
+                                        height: 10,
+                                        backgroundColor: getColorHex(displayColor),
+                                        borderColor: isLight ? "#cbd5e1" : "transparent",
+                                        flexShrink: 0,
+                                        display: "inline-block"
+                                      }}
+                                    />
+                                    <span>{displayColor}</span>
+                                  </span>
+                                );
+                              })()}
+                            </td>
+                            <td className="border-0 py-2 fs-7" style={{ color: "#6d7175", maxWidth: 220 }}>{p.size || "—"}</td>
                             <td className="border-0 py-2">
                               <div className="d-flex flex-column">
                                 <div className="d-flex align-items-baseline gap-1">
@@ -1857,6 +1946,11 @@ export default function StoreOwnerDashboard() {
                                 fontWeight: "600"
                               }}>
                                 {p.status === "In Stock" ? "Active" : p.status}
+                              </span>
+                            </td>
+                            <td className="border-0">
+                              <span className={`badge ${p.is_active ? "bg-success" : "bg-secondary"}`}>
+                                {p.is_active ? "Published" : p.sku?.startsWith("MSH-") ? "Staging draft" : "Draft"}
                               </span>
                             </td>
                             <td className="border-0">
@@ -2343,7 +2437,21 @@ export default function StoreOwnerDashboard() {
                                       </a>
                                     </div>
                                   </td>
-                                  <td className="border-0 fs-8" style={{ color: "#6d7175", maxWidth: 260 }}>{cat.description || "—"}</td>
+                                  <td className="border-0 fs-8" style={{ color: "#6d7175", maxWidth: 260 }}>
+                                    {cat.description ? (
+                                      cat.description
+                                    ) : (
+                                      <button
+                                        type="button"
+                                        onClick={() => openEditCategoryModal(cat)}
+                                        className="btn btn-sm btn-link p-0 text-decoration-none fs-8 fw-semibold"
+                                        style={{ color: "#FF5722" }}
+                                        title="Click to add a description"
+                                      >
+                                        + Add description
+                                      </button>
+                                    )}
+                                  </td>
                                   <td className="border-0">
                                     {cat.featured ? (
                                       <span style={{ background: "#fef08a", color: "#854d0e", padding: "2px 8px", borderRadius: "12px", fontSize: "0.75rem", fontWeight: "600" }}>⭐ Featured</span>
@@ -2687,7 +2795,23 @@ export default function StoreOwnerDashboard() {
               </div>
 
               <div>
-                <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Description</label>
+                <div className="d-flex align-items-center justify-content-between mb-1">
+                  <label className="fs-8 fw-semibold mb-0" style={{ color: "#454f5b" }}>Description</label>
+                  {categoryForm.name && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const name = categoryForm.name.trim();
+                        const generated = `Explore our curated collection of ${name.toLowerCase()}, crafted with quality materials and elegant designs for everyday and special occasions.`;
+                        setCategoryForm(prev => ({ ...prev, description: generated }));
+                      }}
+                      className="btn btn-link btn-sm p-0 fs-9 text-decoration-none fw-bold"
+                      style={{ color: "#FF5722" }}
+                    >
+                      ✨ Auto-generate
+                    </button>
+                  )}
+                </div>
                 <textarea
                   rows="3"
                   value={categoryForm.description}
@@ -2740,6 +2864,7 @@ export default function StoreOwnerDashboard() {
                           <thead>
                             <tr className="fs-8 fw-semibold" style={{ color: "#6d7175", background: "#f9fafb", borderBottom: "1px solid #e4e5e7" }}>
                               <th className="border-0 ps-4 py-2">Collection Name</th>
+                              <th className="border-0 py-2">Description</th>
                               <th className="border-0 py-2">Slug</th>
                               <th className="border-0 py-2">Products</th>
                               <th className="border-0 text-end pe-4 py-2">Actions</th>
@@ -2756,13 +2881,24 @@ export default function StoreOwnerDashboard() {
                                     >
                                       {(cat.name || "C").charAt(0).toUpperCase()}
                                     </div>
-                                    <div>
-                                      <div className="fw-semibold fs-7" style={{ color: "#202223" }}>{cat.name}</div>
-                                      {cat.description && (
-                                        <div className="text-truncate" style={{ color: "#6d7175", maxWidth: 220, fontSize: "0.7rem" }}>{cat.description}</div>
-                                      )}
-                                    </div>
+                                    <div className="fw-semibold fs-7" style={{ color: "#202223" }}>{cat.name}</div>
                                   </div>
+                                </td>
+                                <td className="border-0 py-2 fs-8" style={{ color: "#6d7175", maxWidth: 240 }}>
+                                  {cat.description ? (
+                                    <span title={cat.description} className="d-inline-block text-truncate" style={{ maxWidth: 240 }}>
+                                      {cat.description}
+                                    </span>
+                                  ) : (
+                                    <button
+                                      type="button"
+                                      onClick={() => { setEditingCategory(cat); setCategoryForm({ name: cat.name, description: "", featured: !!cat.featured }); setShowCategoryModal(true); }}
+                                      className="btn btn-sm btn-link p-0 text-decoration-none fs-8 fw-semibold"
+                                      style={{ color: "#FF5722" }}
+                                    >
+                                      + Add description
+                                    </button>
+                                  )}
                                 </td>
                                 <td className="border-0 py-2">
                                   <code style={{ background: "#f1f2f4", padding: "1px 6px", borderRadius: 4, fontSize: "0.72rem", color: "#454f5b" }}>
@@ -2857,6 +2993,11 @@ export default function StoreOwnerDashboard() {
                 <div className="col-4">
                   <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Stock</label>
                   <input type="number" min="0" value={newProd.stock} onChange={(e) => setNewProd({ ...newProd, stock: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="10" />
+                  <div className="form-check mt-2">
+                    <input className="form-check-input" type="checkbox" id="product-publish" checked={newProd.is_active !== false && newProd.is_active !== 0} onChange={(e) => setNewProd({ ...newProd, is_active: e.target.checked })} />
+                    <label className="form-check-label fs-8" htmlFor="product-publish">Show on storefront</label>
+                  </div>
+                  <small className="text-muted fs-9">Review staging imports before publishing.</small>
                 </div>
                 <div className="col-8">
                   <div className="row g-2">
@@ -2888,6 +3029,14 @@ export default function StoreOwnerDashboard() {
                           );
                         })}
                       </div>
+                      <input
+                        type="text"
+                        value={newProd.color || ""}
+                        onChange={(e) => setNewProd({ ...newProd, color: e.target.value })}
+                        placeholder="Exact color (e.g. Dark Green, Black & White, White)"
+                        className="form-control form-control-sm mt-1"
+                        style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc", fontSize: "12px" }}
+                      />
                     </div>
                     <div className="col-12 mt-2">
                       <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Sizes</label>
@@ -3194,13 +3343,7 @@ export default function StoreOwnerDashboard() {
                         Turn your products and collections into a stunning, colorful, and highly attractive online storefront instantly. Our AI analyzes your category and inventory to generate a bespoke website design tailored for you.
                       </p>
                       <button 
-                        onClick={() => {
-                          if (!user?.activeSubscription && !user?.active_subscription) {
-                            setShowPlanRequiredModal('ai-builder');
-                          } else {
-                            setActive('ai-builder');
-                          }
-                        }}
+                        onClick={() => setActive('ai-builder')}
                         className="btn btn-lg fw-bold px-5 py-3 text-white shadow"
                         style={{ background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', borderRadius: '30px', transition: 'all 0.3s ease' }}
                       >
@@ -3222,15 +3365,8 @@ export default function StoreOwnerDashboard() {
                 activeStore={activeStore}
                 categoriesList={categoriesList}
                 productsList={productsList}
-                onBack={() => {
-                  if (!user?.activeSubscription && !user?.active_subscription) {
-                    setShowPlanRequiredModal('stores');
-                  } else {
-                    setActive('stores');
-                  }
-                }}
+                onBack={() => setActive('stores')}
                 user={user}
-                setShowPlanRequiredModal={setShowPlanRequiredModal}
               />
             </div>
           )}
@@ -3327,190 +3463,12 @@ export default function StoreOwnerDashboard() {
               })()}
             </div>
           )}
-          {active === "billing" && (
-            <div className="d-flex flex-column gap-3">
-              <div className="d-flex align-items-center justify-content-between">
-                <div>
-                  <h2 className="fs-4 font-bold mb-0" style={{ color: "#202223" }}>Billing & Subscription</h2>
-                  <p className="fs-8 mb-0" style={{ color: "#6d7175" }}>Manage your plan, payments, and AutoPay.</p>
-                </div>
-              </div>
-              
-              {(() => {
-                const sub = user?.active_subscription || user?.activeSubscription;
-                if (!sub) {
-                  return (
-                    <div className="alert alert-warning">
-                      No active subscription found. Please select a plan.
-                      <div className="mt-2">
-                        <button onClick={() => navigate('/plans')} className="btn btn-warning btn-sm">View Plans</button>
-                      </div>
-                    </div>
-                  );
-                }
 
-                const isFailed = sub.billing_status === 'failed' || sub.status === 'failed' || sub.status === 'expired';
-                
-                return (
-                  <div className="row g-3 mt-2">
-                    <div className="col-12 col-md-6">
-                      <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }} className="p-4 h-100">
-                        <h3 className="fs-6 font-bold mb-3 d-flex align-items-center gap-2">
-                          <CreditCard size={18} /> Current Plan
-                        </h3>
-                        <div className="mb-2">
-                          <span className="text-muted fs-8">Plan:</span> <strong className="text-capitalize fs-7">{sub.plan} ({sub.billing_cycle})</strong>
-                        </div>
-                        <div className="mb-2">
-                          <span className="text-muted fs-8">Amount:</span> <strong className="fs-7">₹{sub.amount / 100}</strong>
-                        </div>
-                        <div className="mb-2">
-                          <span className="text-muted fs-8">Status:</span> 
-                          <span className={`badge ms-2 ${isFailed ? 'bg-danger' : 'bg-success'}`}>
-                            {sub.billing_status || sub.status}
-                          </span>
-                        </div>
-                        <div className="mb-2">
-                          <span className="text-muted fs-8">Expiry Date:</span> <span className="fs-7">{new Date(sub.expiry_date).toLocaleDateString()}</span>
-                        </div>
-                        {sub.next_billing_date && (
-                          <div className="mb-2">
-                            <span className="text-muted fs-8">Next Billing:</span> <span className="fs-7 fw-bold">{new Date(sub.next_billing_date).toLocaleDateString()}</span>
-                          </div>
-                        )}
-
-                        {isFailed && (
-                          <div className="mt-4 pt-3 border-top">
-                            <p className="text-danger fs-8 fw-semibold mb-2">Automatic payment failed or subscription expired. Please pay manually to restore access.</p>
-                            <button onClick={() => navigate('/plans')} className="btn btn-primary btn-sm px-4">Pay Manually</button>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="col-12 col-md-6">
-                      <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }} className="p-4 h-100">
-                        <h3 className="fs-6 font-bold mb-3 d-flex align-items-center gap-2">
-                          <RefreshCw size={18} /> AutoPay Configuration
-                        </h3>
-                        
-                        <div className="mb-3">
-                          <div className="d-flex align-items-center justify-content-between p-3 rounded bg-light border">
-                            <div>
-                              <strong className="d-block fs-7">AutoPay Status</strong>
-                              <span className="text-muted fs-8">
-                                {sub.autopay_enabled 
-                                  ? "Your subscription will renew automatically." 
-                                  : "AutoPay is currently disabled. Enable AutoPay to automatically renew your Toastkart subscription."}
-                              </span>
-                            </div>
-                            <div>
-                              {sub.autopay_enabled ? (
-                                <span className="badge bg-success px-3 py-2 fs-7">ON</span>
-                              ) : (
-                                <span className="badge bg-secondary px-3 py-2 fs-7">OFF</span>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="mt-4">
-                          {sub.autopay_enabled ? (
-                            <button 
-                              onClick={async (e) => {
-                                const btn = e.currentTarget;
-                                btn.disabled = true;
-                                btn.textContent = 'Processing...';
-                                if (window.confirm('Are you sure you want to cancel AutoPay? Your current access will remain until expiry.')) {
-                                  try {
-                                    await api.post('/subscriptions/autopay/cancel');
-                                    alert('AutoPay has been cancelled successfully.');
-                                    window.location.reload();
-                                  } catch(e) {
-                                    alert(e.response?.data?.message || 'Failed to cancel AutoPay');
-                                    btn.disabled = false;
-                                    btn.textContent = 'Cancel AutoPay';
-                                  }
-                                } else {
-                                  btn.disabled = false;
-                                  btn.textContent = 'Cancel AutoPay';
-                                }
-                              }}
-                              className="btn btn-outline-danger btn-sm w-100"
-                            >
-                              Cancel AutoPay
-                            </button>
-                          ) : (
-                            <button 
-                              onClick={async (e) => {
-                                const btn = e.currentTarget;
-                                btn.disabled = true;
-                                btn.textContent = 'Setting up AutoPay...';
-                                try {
-                                  // First get the subscription authorization ID from backend
-                                  const res = await api.post('/subscriptions/autopay/create');
-                                  if (res.data.success) {
-                                    // Open Razorpay Checkout for recurring payment mandate
-                                    const options = {
-                                      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-                                      subscription_id: res.data.subscription_id,
-                                      name: 'ToastKart',
-                                      description: 'Enable AutoPay',
-                                      handler: async function (response) {
-                                        try {
-                                          const verifyRes = await api.post('/subscriptions/autopay/verify', {
-                                            razorpay_payment_id: response.razorpay_payment_id,
-                                            razorpay_subscription_id: response.razorpay_subscription_id,
-                                            razorpay_signature: response.razorpay_signature
-                                          });
-                                          if (verifyRes.data.success) {
-                                            alert('AutoPay enabled successfully!');
-                                            window.location.reload();
-                                          } else {
-                                            alert(verifyRes.data.message || 'AutoPay verification failed.');
-                                            btn.disabled = false;
-                                            btn.textContent = 'Enable AutoPay';
-                                          }
-                                        } catch (err) {
-                                          alert('Failed to verify AutoPay. Please contact support.');
-                                          btn.disabled = false;
-                                          btn.textContent = 'Enable AutoPay';
-                                        }
-                                      },
-                                      modal: {
-                                        ondismiss: function() {
-                                          btn.disabled = false;
-                                          btn.textContent = 'Enable AutoPay';
-                                        }
-                                      }
-                                    };
-                                    
-                                    const rzp = new window.Razorpay(options);
-                                    rzp.on('payment.failed', function (response) {
-                                      alert(response.error.description || 'Payment failed.');
-                                      btn.disabled = false;
-                                      btn.textContent = 'Enable AutoPay';
-                                    });
-                                    rzp.open();
-                                  }
-                                } catch(err) {
-                                  alert(err.response?.data?.message || 'Failed to setup AutoPay');
-                                  btn.disabled = false;
-                                  btn.textContent = 'Enable AutoPay';
-                                }
-                              }}
-                              className="btn btn-primary btn-sm w-100"
-                            >
-                              Enable AutoPay
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })()}
-            </div>
+          {active === "meesho-dropshipping" && (
+            <MeeshoDropshippingView activeStore={activeStore} onGoToProducts={() => {
+              setActive("products");
+              setProductReloadVersion((version) => version + 1);
+            }} />
           )}
         </main>
       </div>
@@ -3554,6 +3512,11 @@ export default function StoreOwnerDashboard() {
                 <div className="col-4">
                   <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Stock</label>
                   <input type="number" min="0" value={newProd.stock} onChange={(e) => setNewProd({ ...newProd, stock: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="10" />
+                  <div className="form-check mt-2">
+                    <input className="form-check-input" type="checkbox" id="inline-product-publish" checked={newProd.is_active !== false && newProd.is_active !== 0} onChange={(e) => setNewProd({ ...newProd, is_active: e.target.checked })} />
+                    <label className="form-check-label fs-8" htmlFor="inline-product-publish">Show on storefront</label>
+                  </div>
+                  <small className="text-muted fs-9">Review staging imports before publishing.</small>
                 </div>
                 <div className="col-8">
                   <div className="row g-2">
@@ -3585,6 +3548,14 @@ export default function StoreOwnerDashboard() {
                           );
                         })}
                       </div>
+                      <input
+                        type="text"
+                        value={newProd.color || ""}
+                        onChange={(e) => setNewProd({ ...newProd, color: e.target.value })}
+                        placeholder="Exact color (e.g. Dark Green, Black & White, White)"
+                        className="form-control form-control-sm mt-1"
+                        style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc", fontSize: "12px" }}
+                      />
                     </div>
                     <div className="col-12 mt-2">
                       <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Sizes</label>
@@ -3813,7 +3784,23 @@ export default function StoreOwnerDashboard() {
               </div>
 
               <div>
-                <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Description</label>
+                <div className="d-flex align-items-center justify-content-between mb-1">
+                  <label className="fs-8 fw-semibold mb-0" style={{ color: "#454f5b" }}>Description</label>
+                  {categoryForm.name && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const name = categoryForm.name.trim();
+                        const generated = `Explore our curated collection of ${name.toLowerCase()}, crafted with quality materials and elegant designs for everyday and special occasions.`;
+                        setCategoryForm(prev => ({ ...prev, description: generated }));
+                      }}
+                      className="btn btn-link btn-sm p-0 fs-9 text-decoration-none fw-bold"
+                      style={{ color: "#FF5722" }}
+                    >
+                      ✨ Auto-generate
+                    </button>
+                  )}
+                </div>
                 <textarea
                   rows="3"
                   value={categoryForm.description}
@@ -3986,34 +3973,42 @@ export default function StoreOwnerDashboard() {
         </div>
       )}
 
+
       {/* PLAN REQUIRED MODAL */}
       {showPlanRequiredModal && (
         <div className="position-fixed top-0 bottom-0 start-0 end-0 bg-dark bg-opacity-75 d-flex align-items-center justify-content-center p-3" style={{ zIndex: 1060 }}>
-          <div className="gold-panel w-100 rounded-3 shadow-sm border p-4" style={{ maxWidth: 450, borderColor: "rgba(212,175,55,0.2)" }}>
-            <div className="d-flex align-items-center justify-content-between mb-3 border-bottom pb-3" style={{ borderColor: "rgba(212,175,55,0.2)" }}>
-              <h3 className="fs-5 font-bold mb-0 d-flex align-items-center gap-2 text-warning">
+          <div className="rounded-4 shadow-lg p-4" style={{ maxWidth: 460, width: "100%", background: "#373a40", border: "1px solid rgba(255, 255, 255, 0.2)", borderRadius: "12px" }}>
+            <div className="d-flex align-items-center justify-content-between mb-3 border-bottom pb-3" style={{ borderColor: "rgba(255, 255, 255, 0.15)" }}>
+              <h3 className="fs-5 fw-bold mb-0 d-flex align-items-center gap-2 text-warning">
                 <Sparkles size={20} /> Subscription Required
               </h3>
-              <button onClick={() => setShowPlanRequiredModal(false)} className="btn btn-sm text-muted p-0 border-0 bg-transparent">✕</button>
+              <button onClick={() => setShowPlanRequiredModal(false)} className="btn btn-sm text-secondary p-0 border-0 bg-transparent" style={{ fontSize: "1.2rem", lineHeight: 1 }}>✕</button>
             </div>
             
             <div className="py-2">
-              <p className="fs-7 mb-4 text-white">
+              <p className="fs-7 mb-4 text-white" style={{ lineHeight: "1.6" }}>
                 To create a store, add collections, or add products, please select a plan and complete the payment for this account.
                 <br /><br />
                 Select a plan to instantly unlock these features and grow your business.
               </p>
               
               <div className="d-flex align-items-center justify-content-end gap-3 mt-4">
-                <button onClick={() => setShowPlanRequiredModal(false)} className="btn btn-sm px-4 py-2 fw-bold" style={{ background: 'linear-gradient(135deg, #d4af37, #8a6d1f)', color: '#050505', border: 'none' }}>
+                <button 
+                  type="button"
+                  onClick={() => setShowPlanRequiredModal(false)} 
+                  className="btn btn-sm px-4 py-2 fw-bold" 
+                  style={{ background: '#c89b2b', color: '#1a1a1a', border: 'none', borderRadius: '6px' }}
+                >
                   Cancel
                 </button>
                 <button 
+                  type="button"
                   onClick={() => {
                     setShowPlanRequiredModal(false);
                     navigate(`/plans?redirect=${typeof showPlanRequiredModal === 'string' ? showPlanRequiredModal : 'dashboard'}`);
                   }} 
-                  className="btn btn-sm px-4 py-2 fw-bold" style={{ background: 'linear-gradient(135deg, #d4af37, #8a6d1f)', color: '#050505', border: 'none' }}
+                  className="btn btn-sm px-4 py-2 fw-bold" 
+                  style={{ background: 'linear-gradient(135deg, #e5a823, #c88a1b)', color: '#1a1a1a', border: 'none', borderRadius: '6px' }}
                 >
                   Pay Now
                 </button>
