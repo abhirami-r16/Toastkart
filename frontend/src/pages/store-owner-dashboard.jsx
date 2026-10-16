@@ -264,14 +264,27 @@ export default function StoreOwnerDashboard() {
   
   const [showPlanRequiredModal, setShowPlanRequiredModal] = useState(false);
 
+  const hasActiveSub = Boolean(
+    user?.active_subscription ||
+    user?.activeSubscription ||
+    (Array.isArray(user?.subscriptions) && user.subscriptions.some(s => s.status === 'active'))
+  );
+  const isPrivileged = Boolean(
+    user?.role === 'admin' ||
+    user?.email === 'admin@gmail.com'
+  );
+
   useEffect(() => {
     if (!loading) {
       if (!user) {
         navigate('/login', { replace: true });
         return;
       }
+      if (!isPrivileged && !hasActiveSub) {
+        setShowPlanRequiredModal(true);
+      }
     }
-  }, [user, loading, navigate]);
+  }, [user, loading, hasActiveSub, isPrivileged, navigate]);
   
   const [active, setActive] = useState(() => {
     try {
@@ -837,6 +850,10 @@ export default function StoreOwnerDashboard() {
 
   // Store CRUD Handlers
   const openCreateStoreModal = () => {
+    if (!hasActiveSub && !isPrivileged) {
+      setShowPlanRequiredModal(true);
+      return;
+    }
 
     setStoreForm({
       name: "",
@@ -859,14 +876,22 @@ export default function StoreOwnerDashboard() {
     const action = searchParams.get('action');
     if (action) {
       if (action === 'create-store') {
-        openCreateStoreModal();
+        if (!hasActiveSub && !isPrivileged) {
+          setShowPlanRequiredModal(true);
+        } else {
+          openCreateStoreModal();
+        }
       } else if (action === 'categories' || action === 'ai-builder' || action === 'products' || action === 'stores') {
-        setActive(action);
+        if (!hasActiveSub && !isPrivileged) {
+          setShowPlanRequiredModal(true);
+        } else {
+          setActive(action);
+        }
       }
       // Remove the query param to prevent re-triggering on reload
       window.history.replaceState({}, document.title, window.location.pathname);
     }
-  }, [user, loading]); // Run when user is available
+  }, [user, loading, hasActiveSub, isPrivileged]); // Run when user is available
 
   const handleCreateStoreSubmit = async (e) => {
     e.preventDefault();
@@ -1095,12 +1120,20 @@ export default function StoreOwnerDashboard() {
 
   // Category CRUD Handlers
   const openAddCategoryModal = () => {
+    if (!hasActiveSub && !isPrivileged) {
+      setShowPlanRequiredModal(true);
+      return;
+    }
     setEditingCategory(null);
     setCategoryForm({ name: "", description: "", featured: false });
     setShowCategoryModal(true);
   };
 
   const openInlineCategoryForm = () => {
+    if (!hasActiveSub && !isPrivileged) {
+      setShowPlanRequiredModal(true);
+      return;
+    }
     setEditingCategory(null);
     setCategoryForm({ name: "", description: "", featured: false });
     setShowInlineCategoryForm(true);
@@ -1244,11 +1277,19 @@ export default function StoreOwnerDashboard() {
   };
 
   const openAddProductModal = () => {
+    if (!hasActiveSub && !isPrivileged) {
+      setShowPlanRequiredModal(true);
+      return;
+    }
     resetProductForm();
     setShowAddProduct(true);
   };
 
   const openInlineProductForm = () => {
+    if (!hasActiveSub && !isPrivileged) {
+      setShowPlanRequiredModal(true);
+      return;
+    }
     setShowInlineProductForm(true);
     resetProductForm();
   };
@@ -1570,6 +1611,10 @@ export default function StoreOwnerDashboard() {
               const Icon = item.icon;
               const isActive = active === item.key;
               const handleClick = () => {
+                if (item.key !== 'dashboard' && !hasActiveSub && !isPrivileged) {
+                  setShowPlanRequiredModal(true);
+                  return;
+                }
                 setActive(item.key);
               };
               return (
@@ -3960,6 +4005,118 @@ export default function StoreOwnerDashboard() {
         </div>
       )}
 
+
+      {/* SUBSCRIPTION REQUIRED MODAL */}
+      {showPlanRequiredModal && (
+        <div
+          className="position-fixed top-0 bottom-0 start-0 end-0 d-flex align-items-center justify-content-center p-3"
+          style={{
+            background: "rgba(0, 0, 0, 0.65)",
+            backdropFilter: "blur(2px)",
+            zIndex: 9999,
+          }}
+          onClick={() => setShowPlanRequiredModal(false)}
+        >
+          <div
+            className="w-100 position-relative shadow-lg"
+            style={{
+              maxWidth: 480,
+              background: "#373a40",
+              border: "1px solid rgba(255, 255, 255, 0.25)",
+              borderRadius: "14px",
+              padding: "28px 30px",
+              boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.6)",
+              color: "#ffffff",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="d-flex align-items-center justify-content-between mb-4">
+              <div className="d-flex align-items-center gap-2">
+                <Sparkles size={22} style={{ color: "#f59e0b" }} />
+                <h3
+                  className="mb-0 fw-bold fs-5"
+                  style={{ color: "#f59e0b", letterSpacing: "0.01em" }}
+                >
+                  Subscription Required
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowPlanRequiredModal(false)}
+                className="btn btn-sm p-0 border-0 bg-transparent"
+                style={{
+                  color: "#9ca3af",
+                  fontSize: "1.25rem",
+                  lineHeight: 1,
+                  cursor: "pointer",
+                  transition: "color 0.2s",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "#ffffff")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "#9ca3af")}
+                aria-label="Close"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Content Body */}
+            <div className="mb-4" style={{ fontSize: "0.93rem", lineHeight: 1.6, color: "#f3f4f6" }}>
+              <p className="mb-3">
+                To create a store, add collections, or add products, please select a plan and complete the payment for this account.
+              </p>
+              <p className="mb-0">
+                Select a plan to instantly unlock these features and grow your business.
+              </p>
+            </div>
+
+            {/* Actions */}
+            <div className="d-flex align-items-center justify-content-end gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setShowPlanRequiredModal(false)}
+                className="btn px-4 py-2 border-0"
+                style={{
+                  backgroundColor: "#c89b2b",
+                  color: "#18181b",
+                  borderRadius: "6px",
+                  fontSize: "0.9rem",
+                  fontWeight: "600",
+                  transition: "opacity 0.2s",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.9")}
+                onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate('/plans?redirect=dashboard')}
+                className="btn px-4 py-2 border-0"
+                style={{
+                  background: "linear-gradient(135deg, #e5a823, #c88a1b)",
+                  color: "#18181b",
+                  borderRadius: "6px",
+                  fontSize: "0.9rem",
+                  fontWeight: "700",
+                  boxShadow: "0 4px 14px rgba(200, 138, 27, 0.35)",
+                  transition: "transform 0.15s, box-shadow 0.15s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-1px)";
+                  e.currentTarget.style.boxShadow = "0 6px 18px rgba(200, 138, 27, 0.45)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "0 4px 14px rgba(200, 138, 27, 0.35)";
+                }}
+              >
+                Pay Now
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );
