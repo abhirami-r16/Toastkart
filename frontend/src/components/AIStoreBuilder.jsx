@@ -17,7 +17,8 @@ activeStore,
 categoriesList,
 productsList,
 onBack,
-user
+user,
+setShowPlanRequiredModal
 }) {
 const { createStore, setActiveStore } = useStore();
 
