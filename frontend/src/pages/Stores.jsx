@@ -45,7 +45,7 @@ export default function Stores() {
     slug: '',
     subdomain: '',
     customDomain: '',
-    currency: 'USD',
+    currency: 'INR',
     description: '',
     status: 'Active',
     email: '',
@@ -72,7 +72,7 @@ export default function Stores() {
         slug: currentStore.slug || '',
         subdomain: currentStore.subdomain || currentStore.slug || '',
         customDomain: currentStore.customDomain || '',
-        currency: currentStore.currency || 'USD',
+        currency: currentStore.currency || 'INR',
         description: currentStore.description || '',
         status: currentStore.status || 'Active',
         email: currentStore.email || 'manager@mybrand.com',
@@ -215,7 +215,7 @@ export default function Stores() {
                 </div>
                 <div>
                   <div className="text-[11px]" style={{ color: '#8a7a4d' }}>Currency</div>
-                  <div className="text-xs font-bold" style={{ color: GOLD_LIGHT }}>{formData.currency || 'USD ($)'}</div>
+                  <div className="text-xs font-bold" style={{ color: GOLD_LIGHT }}>{formData.currency || 'INR (₹)'}</div>
                 </div>
               </div>
             </div>
@@ -278,7 +278,7 @@ export default function Stores() {
 
               <div className="grid grid-cols-3 gap-3 p-4 rounded-xl text-center" style={{ background: '#161310', border: `1px solid rgba(212, 175, 55, 0.15)` }}>
                 <div>
-                  <div className="text-lg font-bold text-white">{currentStore.currency || 'USD'}</div>
+                  <div className="text-lg font-bold text-white">{currentStore.currency || 'INR'}</div>
                   <div className="text-[11px] font-medium" style={{ color: '#8a7a4d' }}>Store Currency</div>
                 </div>
                 <div className="border-x" style={{ borderColor: 'rgba(212, 175, 55, 0.15)' }}>

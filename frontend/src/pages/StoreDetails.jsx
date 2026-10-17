@@ -9,14 +9,14 @@ function StoreForm({ initial, onSave, onCancel }) {
     description: "",
     logo: "",
     banner: "",
-    currency: "USD ($)",
+    currency: "INR (₹)",
     theme: "aureum",
     category: "Fashion",
     status: "Draft",
     seoStatus: "Not Optimized",
     productsCount: 0,
     ordersCount: 0,
-    revenue: "$0.00",
+    revenue: "₹0.00",
   });
 
   useEffect(() => setForm(initial || {
@@ -25,14 +25,14 @@ function StoreForm({ initial, onSave, onCancel }) {
     description: "",
     logo: "",
     banner: "",
-    currency: "USD ($)",
+    currency: "INR (₹)",
     theme: "aureum",
     category: "Fashion",
     status: "Draft",
     seoStatus: "Not Optimized",
     productsCount: 0,
     ordersCount: 0,
-    revenue: "$0.00",
+    revenue: "₹0.00",
   }), [initial]);
 
   const submit = (e) => {

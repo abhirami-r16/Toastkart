@@ -10,7 +10,7 @@ export default function Settings() {
   const [formData, setFormData] = useState({
     name: '',
     logo: '',
-    currency: 'USD',
+    currency: 'INR',
     description: '',
     status: 'Active',
   });
@@ -23,7 +23,7 @@ export default function Settings() {
       setFormData({
         name: activeStore.name || '',
         logo: activeStore.logo || '',
-        currency: activeStore.currency || 'USD',
+        currency: activeStore.currency || 'INR',
         description: activeStore.description || '',
         status: activeStore.status || 'Active',
       });

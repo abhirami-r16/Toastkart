@@ -264,7 +264,7 @@ try {
       .toLowerCase()
       .replace(/[^a-z0-9]/g, '-'),
     status: 'Active',
-    currency: 'USD',
+    currency: 'INR',
     user_id: user?.id,
     owner_name: user?.name
   };

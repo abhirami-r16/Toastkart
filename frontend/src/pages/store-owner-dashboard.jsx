@@ -48,7 +48,7 @@ const initialStoresData = [
     slug: "coastal-threads",
     subdomain: "coastal-threads",
     category: "Fashion & Apparel",
-    currency: "USD ($)",
+    currency: "INR (₹)",
     status: "Active",
     email: "support@coostalthreads.local",
     phone: "+1 (555) 234-5678",
@@ -57,7 +57,7 @@ const initialStoresData = [
     banner: "",
     products_count: 24,
     orders_count: 142,
-    total_revenue: "$18,420.00"
+    total_revenue: "₹18,420.00"
   },
   {
     id: 2,
@@ -66,7 +66,7 @@ const initialStoresData = [
     slug: "aureum-boutique",
     subdomain: "aureum-boutique",
     category: "Jewelry & Luxury",
-    currency: "USD ($)",
+    currency: "INR (₹)",
     status: "Active",
     email: "contact@toastkart.com",
     phone: "+1 (555) 987-6543",
@@ -894,7 +894,7 @@ export default function StoreOwnerDashboard() {
     name: "",
     subdomain: "",
     category: "Fashion & Apparel",
-    currency: "USD ($)",
+    currency: "INR (₹)",
     email: "",
     phone: "",
     description: "",
@@ -917,8 +917,8 @@ export default function StoreOwnerDashboard() {
   const [storeSettings, setStoreSettings] = useState({
     name: "My Merchant Store",
     email: "support@mybrand.local",
-    currency: "USD ($)",
-    shippingFee: "$10.00",
+    currency: "INR (₹)",
+    shippingFee: "₹0.00",
     seoDescription: "Multi-vendor store workspace on ToastKart platform.",
   });
   const [settingsSaved, setSettingsSaved] = useState(false);
@@ -934,7 +934,7 @@ export default function StoreOwnerDashboard() {
       name: "",
       subdomain: "",
       category: "Fashion & Apparel",
-      currency: "USD ($)",
+      currency: "INR (₹)",
       email: "support@mybrand.com",
       phone: "+1 (555) 000-0000",
       description: "",
@@ -1048,7 +1048,7 @@ export default function StoreOwnerDashboard() {
       name: activeStore.name || "",
       subdomain: activeStore.subdomain || activeStore.slug || "",
       category: activeStore.category || "Fashion & Apparel",
-      currency: activeStore.currency || "USD ($)",
+      currency: activeStore.currency || "INR (₹)",
       email: activeStore.email || "",
       phone: activeStore.phone || "",
       description: activeStore.description || "",
@@ -2901,7 +2901,7 @@ export default function StoreOwnerDashboard() {
                           </div>
                           <div className="col-6 col-md-3">
                             <span className="fs-8 d-block mb-1" style={{ color: "#6d7175" }}>Currency</span>
-                            <strong className="fs-7" style={{ color: "#202223" }}>{activeStore.currency || "USD ($)"}</strong>
+                            <strong className="fs-7" style={{ color: "#202223" }}>{activeStore.currency || "INR (₹)"}</strong>
                           </div>
                           <div className="col-6 col-md-3">
                             <span className="fs-8 d-block mb-1" style={{ color: "#6d7175" }}>Owner Name</span>
