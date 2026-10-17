@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import api from '../api/axios';
 import { useAuth } from './AuthContext';
+import { formatINR } from '../utils/currency';
 
 const StoreContext = createContext();
 
@@ -240,29 +241,8 @@ export const StoreProvider = ({ children }) => {
     }
   };
 
-  const formatPrice = (amount, prod = null) => {
-    if (amount == null || amount === '') return '';
-    const cleanStr = String(amount).replace(/^[$\s₹A-Za-z]+/, '').trim();
-    const num = parseFloat(cleanStr);
-    if (isNaN(num)) return String(amount);
-
-    const isMeesho = prod?.sku?.startsWith('MSH-') || prod?.meesho_product_id;
-    if (isMeesho) {
-      return Number.isInteger(num) ? `₹${num}` : `₹${num.toFixed(2)}`;
-    }
-
-    const curr = activeStore?.currency || 'INR';
-    let symbol = '₹';
-    if (curr.includes('₹') || curr.toUpperCase().includes('INR')) symbol = '₹';
-    else if (curr.includes('$') || curr.toUpperCase().includes('USD')) symbol = '$';
-    else if (curr.includes('€') || curr.toUpperCase().includes('EUR')) symbol = '€';
-    else if (curr.includes('£') || curr.toUpperCase().includes('GBP')) symbol = '£';
-    else {
-      const match = curr.match(/\((.*?)\)/);
-      symbol = match ? match[1] : (curr || '₹');
-    }
-
-    return Number.isInteger(num) ? `${symbol}${num}` : `${symbol}${num.toFixed(2)}`;
+  const formatPrice = (amount) => {
+    return formatINR(amount);
   };
 
   // --- Product API Helpers ---
@@ -339,7 +319,7 @@ export const useStore = () => {
       createStore: async () => ({ success: true }),
       updateStore: async () => ({ success: true }),
       deleteStore: async () => ({ success: true }),
-      formatPrice: (val) => `₹${val}`,
+      formatPrice: (val) => formatINR(val),
       setActiveStore: () => {}
     };
   }

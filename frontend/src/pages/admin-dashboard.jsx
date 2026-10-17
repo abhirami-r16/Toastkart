@@ -12,6 +12,7 @@ import {
   Server, Zap, Globe, Sliders
 } from "lucide-react";
 import ToastKartLogo from "../components/ToastKartLogo";
+import { formatINR } from "../utils/currency";
 import "../styles/dashboard-premium.css";
 
 
@@ -206,7 +207,7 @@ function AdminDashboardContent() {
       category: categoryName,
       status: store?.status || 'Active',
       domain: store?.domain || store?.subdomain || 'n/a',
-      gmv: store?.gmv || store?.total_revenue || store?.revenue || '$0.00',
+      gmv: store?.gmv || store?.total_revenue || store?.revenue || '₹0.00',
       email: store?.user?.email || store?.owner?.email || store?.email || store?.owner_email || 'N/A',
     };
   };
@@ -494,7 +495,7 @@ function AdminDashboardContent() {
             <div className="topbar-icon-btn">
               <Bell size={16} />
             </div>
-            <div className="w-8 h-8 rounded-circle d-flex align-items-center justify-center font-bold text-xs" style={{ background: `linear-gradient(135deg, $"#FF5722", #8a6d1f)`, color: "#050505" }}>
+            <div className="w-8 h-8 rounded-circle d-flex align-items-center justify-center font-bold text-xs" style={{ background: `linear-gradient(135deg, #FF5722, #8a6d1f)`, color: "#050505" }}>
               SA
             </div>
           </div>
@@ -512,7 +513,7 @@ function AdminDashboardContent() {
                 <div className="col-6 col-md-4 col-lg-2">
                   <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", padding: "16px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
                     <div className="fs-8 text-secondary mb-1">Platform Revenue</div>
-                    <div className="fs-5 font-bold text-dark">$84,210</div>
+                    <div className="fs-5 font-bold text-dark">₹84,210</div>
                     <div className="fs-8 text-success font-semibold mt-1">+14.2% MTD</div>
                   </div>
                 </div>
@@ -540,7 +541,7 @@ function AdminDashboardContent() {
                 <div className="col-6 col-md-4 col-lg-2">
                   <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", padding: "16px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
                     <div className="fs-8 text-secondary mb-1">Total GMV</div>
-                    <div className="fs-5 font-bold text-dark">$2.48M</div>
+                    <div className="fs-5 font-bold text-dark">₹2.48M</div>
                     <div className="fs-8 text-success font-semibold mt-1">+22.4%</div>
                   </div>
                 </div>
@@ -701,7 +702,7 @@ function AdminDashboardContent() {
                       </div>
                       <div className="d-flex gap-2 align-items-center justify-content-between">
                         <div>
-                          <div className="fw-bold text-warning">{typeof product.price === 'number' ? `$${product.price.toFixed(2)}` : product.price || 'N/A'}</div>
+                          <div className="fw-bold text-warning">{product.price != null ? formatINR(product.price) : 'N/A'}</div>
                           <div className="fs-8 text-dark">{product.store_name || product.store?.name || 'Unknown Store'}</div>
                         </div>
                       </div>
@@ -1026,7 +1027,7 @@ function AdminDashboardContent() {
                 <div className="col-6 col-lg-3">
                   <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", padding: "16px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
                     <div className="fs-8 text-secondary mb-1">Net Revenue</div>
-                    <div className="fs-5 font-bold text-dark">$84,210</div>
+                    <div className="fs-5 font-bold text-dark">₹84,210</div>
                     <div className="fs-8 text-success font-semibold mt-1">+14.2% vs last month</div>
                   </div>
                 </div>
@@ -1047,7 +1048,7 @@ function AdminDashboardContent() {
                 <div className="col-6 col-lg-3">
                   <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", padding: "16px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
                     <div className="fs-8 text-secondary mb-1">Avg. Order Value</div>
-                    <div className="fs-5 font-bold text-dark">$1,840</div>
+                    <div className="fs-5 font-bold text-dark">₹1,840</div>
                     <div className="fs-8 text-emerald-400 font-semibold mt-1">High-value basket</div>
                   </div>
                 </div>
@@ -1172,9 +1173,9 @@ function AdminDashboardContent() {
                 <div className="col-md-6">
                   <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", padding: "20px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
                     <h3 className="fs-6 font-bold text-dark mb-2">Platform Financial Summary</h3>
-                    <div className="fs-7 text-secondary mb-3">Gross GMV processed: <strong className="text-dark">$2,480,000.00</strong></div>
-                    <div className="fs-7 text-secondary mb-3">Platform Net Revenue: <strong className="text-warning">$84,210.00</strong></div>
-                    <div className="fs-7 text-secondary">Active Merchants Payouts: <strong className="text-dark">$2,395,790.00</strong></div>
+                    <div className="fs-7 text-secondary mb-3">Gross GMV processed: <strong className="text-dark">₹2,480,000.00</strong></div>
+                    <div className="fs-7 text-secondary mb-3">Platform Net Revenue: <strong className="text-warning">₹84,210.00</strong></div>
+                    <div className="fs-7 text-secondary">Active Merchants Payouts: <strong className="text-dark">₹2,395,790.00</strong></div>
                   </div>
                 </div>
                 <div className="col-md-6">

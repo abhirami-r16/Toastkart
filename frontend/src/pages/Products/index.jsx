@@ -1,7 +1,7 @@
 const products = [
-  { name: "Aurora Jacket", price: "$89", stock: 24, status: "In Stock" },
-  { name: "Nova Headphones", price: "$149", stock: 10, status: "Low Stock" },
-  { name: "Luma Lamp", price: "$69", stock: 0, status: "Out of Stock" },
+  { name: "Aurora Jacket", price: "₹89", stock: 24, status: "In Stock" },
+  { name: "Nova Headphones", price: "₹149", stock: 10, status: "Low Stock" },
+  { name: "Luma Lamp", price: "₹69", stock: 0, status: "Out of Stock" },
 ];
 
 function ProductsPage() {

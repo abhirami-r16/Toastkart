@@ -1,7 +1,7 @@
 const orders = [
-  { id: "#1001", customer: "Sara Ahmed", total: "$180", status: "Paid" },
-  { id: "#1002", customer: "Imran Malik", total: "$96", status: "Processing" },
-  { id: "#1003", customer: "Zainab Noor", total: "$240", status: "Shipped" },
+  { id: "#1001", customer: "Sara Ahmed", total: "₹180", status: "Paid" },
+  { id: "#1002", customer: "Imran Malik", total: "₹96", status: "Processing" },
+  { id: "#1003", customer: "Zainab Noor", total: "₹240", status: "Shipped" },
 ];
 
 function OrdersPage() {

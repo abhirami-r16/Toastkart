@@ -1,7 +1,7 @@
 const customers = [
-  { name: "Sara Ahmed", email: "sara@example.com", orders: 5, spent: "$320" },
-  { name: "Imran Malik", email: "imran@example.com", orders: 2, spent: "$90" },
-  { name: "Zainab Noor", email: "zainab@example.com", orders: 8, spent: "$640" },
+  { name: "Sara Ahmed", email: "sara@example.com", orders: 5, spent: "₹320" },
+  { name: "Imran Malik", email: "imran@example.com", orders: 2, spent: "₹90" },
+  { name: "Zainab Noor", email: "zainab@example.com", orders: 8, spent: "₹640" },
 ];
 
 function CustomersPage() {

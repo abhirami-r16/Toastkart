@@ -4,6 +4,7 @@ import { Package, Clock, CheckCircle, Truck, Info, ArrowLeft } from 'lucide-reac
 import { useStorefrontAuth } from '../../context/StorefrontAuthContext';
 import { useStorefrontCart } from '../../context/StorefrontCartContext';
 import api from '../../api/axios';
+import { formatINR } from '../../utils/currency';
 
 export default function MyOrders() {
   const { user } = useStorefrontAuth();
@@ -112,7 +113,7 @@ export default function MyOrders() {
       const clean = String(rawVal).replace(/[^0-9.]/g, '');
       const parsed = parseFloat(clean);
       if (!isNaN(parsed) && parsed > 0) {
-        return parsed.toFixed(2);
+        return formatINR(parsed);
       }
     }
 
@@ -123,17 +124,17 @@ export default function MyOrders() {
         const qNum = parseInt(item.quantity, 10) || 1;
         return sum + (pNum * qNum);
       }, 0);
-      if (computed > 0) return computed.toFixed(2);
+      if (computed > 0) return formatINR(computed);
     }
 
-    return '0.00';
+    return formatINR(0);
   };
 
   const formatItemPrice = (price) => {
     if (price == null || price === '' || price === 'NaN') return '';
     const clean = String(price).replace(/[^0-9.]/g, '');
     const num = parseFloat(clean);
-    return isNaN(num) ? '' : num.toFixed(2);
+    return isNaN(num) ? '' : formatINR(num);
   };
 
   return (
@@ -165,7 +166,7 @@ export default function MyOrders() {
                 </div>
                 <div className="d-flex align-items-center gap-3">
                   <div className="fw-bold fs-5">
-                    ₹{getOrderTotal(order)}
+                    {getOrderTotal(order)}
                   </div>
                   <div className={`badge rounded-pill px-3 py-2 fw-semibold d-flex align-items-center gap-1 ${getStatusBadgeClass(order.status)}`}>
                     {getStatusIcon(order.status)}
@@ -188,7 +189,7 @@ export default function MyOrders() {
                       </div>
                       <div>
                         <div className="fs-7 fw-semibold">{item.product?.name || item.name || 'Product Item'}</div>
-                        <div className="text-secondary fs-8">Qty: {item.quantity || 1} {formatItemPrice(item.price) ? `• ₹${formatItemPrice(item.price)}` : ''}</div>
+                        <div className="text-secondary fs-8">Qty: {item.quantity || 1} {formatItemPrice(item.price) ? `• ${formatItemPrice(item.price)}` : ''}</div>
                       </div>
                     </div>
                   ))

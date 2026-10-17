@@ -15,6 +15,7 @@ import {
 import ToastKartLogo from "../components/ToastKartLogo";
 import AIStoreBuilder from "../components/AIStoreBuilder";
 import MeeshoDropshippingView from "../components/meesho/MeeshoDropshippingView";
+import { formatINR, parseNumeric } from "../utils/currency";
 import "../styles/dashboard-premium.css";
 
 const getSizesForCategory = (productCategory, storeCategory) => {
@@ -75,7 +76,7 @@ const initialStoresData = [
     banner: "",
     products_count: 12,
     orders_count: 68,
-    total_revenue: "$9,250.00"
+    total_revenue: "₹9,250.00"
   }
 ];
 
@@ -110,19 +111,19 @@ const initialCategories = [
 ];
 
 const initialProducts = [
-  { id: 1, name: "Linen Kurta", sku: "LK-101", category: "Apparel", price: "$86.00", stock: 45, status: "In Stock", image: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=150" },
-  { id: 2, name: "Brass Diya Set", sku: "BD-204", category: "Home Decor", price: "$42.50", stock: 18, status: "In Stock", image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=150" },
-  { id: 3, name: "Silk Scarf", sku: "SS-309", category: "Accessories", price: "$34.00", stock: 8, status: "Low Stock", image: "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=150" },
-  { id: 4, name: "Clay Vase", sku: "CV-412", category: "Home Decor", price: "$54.00", stock: 0, status: "Out of Stock", image: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=150" },
-  { id: 5, name: "Handwoven Cushion Cover", sku: "HC-502", category: "Textiles", price: "$28.00", stock: 62, status: "In Stock", image: "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=150" },
+  { id: 1, name: "Linen Kurta", sku: "LK-101", category: "Apparel", price: "₹86.00", stock: 45, status: "In Stock", image: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=150" },
+  { id: 2, name: "Brass Diya Set", sku: "BD-204", category: "Home Decor", price: "₹42.50", stock: 18, status: "In Stock", image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=150" },
+  { id: 3, name: "Silk Scarf", sku: "SS-309", category: "Accessories", price: "₹34.00", stock: 8, status: "Low Stock", image: "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=150" },
+  { id: 4, name: "Clay Vase", sku: "CV-412", category: "Home Decor", price: "₹54.00", stock: 0, status: "Out of Stock", image: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=150" },
+  { id: 5, name: "Handwoven Cushion Cover", sku: "HC-502", category: "Textiles", price: "₹28.00", stock: 62, status: "In Stock", image: "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=150" },
 ];
 
 const initialOrders = [
-  { id: "#AU-3021", customer: "Rhea Kapoor", items: "Linen Kurta x1", total: "$86.00", status: "Shipped", date: "2026-07-25", pay: "Stripe" },
-  { id: "#AU-3020", customer: "Naveen Rao", items: "Brass Diya Set x2", total: "$142.50", status: "Processing", date: "2026-07-25", pay: "Razorpay" },
-  { id: "#AU-3019", customer: "Sana Malik", items: "Clay Vase x1", total: "$54.00", status: "Delivered", date: "2026-07-24", pay: "Card" },
-  { id: "#AU-3018", customer: "Om Prakash", items: "Silk Scarf x3, Cushion x2", total: "$210.00", status: "Pending", date: "2026-07-24", pay: "COD" },
-  { id: "#AU-3017", customer: "Ananya Roy", items: "Handwoven Cushion Cover x4", total: "$112.00", status: "Delivered", date: "2026-07-23", pay: "Stripe" },
+  { id: "#AU-3021", customer: "Rhea Kapoor", items: "Linen Kurta x1", total: "₹86.00", status: "Shipped", date: "2026-07-25", pay: "Stripe" },
+  { id: "#AU-3020", customer: "Naveen Rao", items: "Brass Diya Set x2", total: "₹142.50", status: "Processing", date: "2026-07-25", pay: "Razorpay" },
+  { id: "#AU-3019", customer: "Sana Malik", items: "Clay Vase x1", total: "₹54.00", status: "Delivered", date: "2026-07-24", pay: "Card" },
+  { id: "#AU-3018", customer: "Om Prakash", items: "Silk Scarf x3, Cushion x2", total: "₹210.00", status: "Pending", date: "2026-07-24", pay: "COD" },
+  { id: "#AU-3017", customer: "Ananya Roy", items: "Handwoven Cushion Cover x4", total: "₹112.00", status: "Delivered", date: "2026-07-23", pay: "Stripe" },
 ];
 
 const initialInventory = [
@@ -140,7 +141,7 @@ const initialCustomers = [
     email: "rhea@example.com",
     phone: "+1 (555) 234-5678",
     orders: 14,
-    spent: "$1,240.00",
+    spent: "₹1,240.00",
     tier: "VIP",
     joined: "Jan 2026",
     orderedProducts: ["Linen Kurta x1", "Silk Scarf x2", "Handwoven Cushion Cover x1"],
@@ -152,7 +153,7 @@ const initialCustomers = [
     email: "naveen@example.com",
     phone: "+1 (555) 876-5432",
     orders: 6,
-    spent: "$520.00",
+    spent: "₹520.00",
     tier: "Regular",
     joined: "Mar 2026",
     orderedProducts: ["Brass Diya Set x2"],
@@ -164,7 +165,7 @@ const initialCustomers = [
     email: "sana@example.com",
     phone: "+1 (555) 345-6789",
     orders: 9,
-    spent: "$890.00",
+    spent: "₹890.00",
     tier: "VIP",
     joined: "Feb 2026",
     orderedProducts: ["Clay Vase x1", "Silk Scarf x1"],
@@ -176,7 +177,7 @@ const initialCustomers = [
     email: "om@example.com",
     phone: "+1 (555) 987-6543",
     orders: 2,
-    spent: "$210.00",
+    spent: "₹210.00",
     tier: "New",
     joined: "Jul 2026",
     orderedProducts: ["Silk Scarf x3", "Handwoven Cushion Cover x2"],
@@ -188,7 +189,7 @@ const initialCustomers = [
     email: "ananya@example.com",
     phone: "+1 (555) 456-7890",
     orders: 5,
-    spent: "$450.00",
+    spent: "₹450.00",
     tier: "Regular",
     joined: "Apr 2026",
     orderedProducts: ["Handwoven Cushion Cover x4"],
@@ -261,20 +262,47 @@ const emptyProductForm = { name: "", sku: "", price: "", compare_price: "", disc
 export default function StoreOwnerDashboard() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
-  
-  const [showPlanRequiredModal, setShowPlanRequiredModal] = useState(false);
 
-  const hasActiveSub = Boolean(
-    user?.active_subscription ||
-    user?.activeSubscription ||
-    (Array.isArray(user?.subscriptions) && user.subscriptions.some(s => s.status === 'active')) ||
-    user?.role === 'owner' ||
-    user?.role === 'merchant'
-  );
+  const [showPlanRequiredModal, setShowPlanRequiredModal] = useState(() => {
+    try {
+      const saved = localStorage.getItem('toastkart_user');
+      if (saved) {
+        const u = JSON.parse(saved);
+        if (u?.role === 'admin' || u?.email === 'admin@gmail.com') return false;
+        const sub = u?.active_subscription || u?.activeSubscription;
+        if (sub && (sub.status === 'active' || !sub.status)) {
+          if (!sub.expiry_date || new Date(sub.expiry_date).getTime() > Date.now()) {
+            return false;
+          }
+        }
+      }
+    } catch (e) {}
+    return true;
+  });
+
+  const hasActiveSub = useMemo(() => {
+    if (!user) return false;
+    const sub = user.active_subscription || user.activeSubscription;
+    if (sub && (sub.status === 'active' || !sub.status)) {
+      if (sub.expiry_date) {
+        return new Date(sub.expiry_date).getTime() > Date.now();
+      }
+      return true;
+    }
+    if (Array.isArray(user.subscriptions)) {
+      return user.subscriptions.some(s => {
+        if (s.status !== 'active') return false;
+        if (s.expiry_date) {
+          return new Date(s.expiry_date).getTime() > Date.now();
+        }
+        return true;
+      });
+    }
+    return false;
+  }, [user]);
+
   const isPrivileged = Boolean(
     user?.role === 'admin' ||
-    user?.role === 'owner' ||
-    user?.role === 'merchant' ||
     user?.email === 'admin@gmail.com'
   );
 
@@ -286,20 +314,22 @@ export default function StoreOwnerDashboard() {
       }
       if (!isPrivileged && !hasActiveSub) {
         setShowPlanRequiredModal(true);
+      } else {
+        setShowPlanRequiredModal(false);
       }
     }
   }, [user, loading, hasActiveSub, isPrivileged, navigate]);
-  
+
   const [active, setActive] = useState(() => {
     try {
       const saved = localStorage.getItem("aureum_owner_stores");
       const currentUserId = parseInt(localStorage.getItem('toastkart_last_user_id')) || 1;
-      if (!saved) return "dashboard"; // changed from "stores" to "dashboard" to prevent unpaid access
+      if (!saved) return "stores";
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed) && !parsed.some(s => s.user_id === currentUserId || (!s.user_id && currentUserId === 1))) {
-        return "dashboard"; // changed from "stores" to "dashboard" to prevent unpaid access
+        return "stores";
       }
-    } catch(e) {}
+    } catch (e) { }
     return "dashboard";
   });
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -330,10 +360,10 @@ export default function StoreOwnerDashboard() {
       activeStoreSlug.includes(itemStoreSlug) ||
       itemStoreSlug.includes(activeStoreSlug)
     ));
-    
+
     // Strict fallback: if we have a specific storeId we're looking for, the item MUST match by ID, Name, or Slug.
     // We no longer blindly accept items with missing store info if we are scoping to a specific store.
-    const matchesStore = storeId 
+    const matchesStore = storeId
       ? (matchesStoreById || matchesStoreByName || matchesStoreBySlug)
       : (!itemStoreId && !itemStoreName && !itemStoreSlug);
 
@@ -465,7 +495,7 @@ export default function StoreOwnerDashboard() {
         String(store.subdomain) === String(localStore.subdomain) ||
         String(store.name) === String(localStore.name)
       );
-      
+
       const exactIdMatch = merged.some(store => String(store.id) === String(localStore.id));
 
       // Only push the localStore if it doesn't match ANY backend store by ID, Name, Slug, or Subdomain
@@ -475,8 +505,8 @@ export default function StoreOwnerDashboard() {
         // We found a match by name but the ID is different (likely localStore has a timestamp).
         // Let's ensure selectedStoreId updates to the real ID if it was pointing to the timestamp.
         if (String(selectedStoreId) === String(localStore.id)) {
-           setSelectedStoreId(matchedBackendStore.id);
-           localStorage.setItem('toastkart_active_store_id', String(matchedBackendStore.id));
+          setSelectedStoreId(matchedBackendStore.id);
+          localStorage.setItem('toastkart_active_store_id', String(matchedBackendStore.id));
         }
       }
     });
@@ -515,24 +545,11 @@ export default function StoreOwnerDashboard() {
   }, [storesList, currentUserId, user]);
 
   const activeStore = ownerStores.find((s) => String(s.id) === String(selectedStoreId)) || ownerStores[0];
-  const currencySymbol = (() => {
-    const curr = activeStore?.currency || '';
-    if (curr.includes('₹') || curr.toUpperCase().includes('INR')) return '₹';
-    if (curr.includes('$') || curr.toUpperCase().includes('USD')) return '$';
-    const match = curr.match(/\((.*?)\)/);
-    if (match) return match[1];
-    return '₹';
-  })();
+  const currencySymbol = '₹';
 
   const formatProductPrice = (priceVal, prod = null) => {
     if (priceVal == null || priceVal === '') return '';
-    const isMeesho = prod?.sku?.startsWith('MSH-') || prod?.meesho_product_id;
-    const sym = isMeesho ? '₹' : currencySymbol;
-    const cleanStr = String(priceVal).replace(/^[$\s₹A-Za-z]+/, '').trim();
-    const num = parseFloat(cleanStr);
-    if (isNaN(num)) return String(priceVal);
-    const formattedNumber = Number.isInteger(num) ? String(num) : num.toFixed(2);
-    return `${sym}${formattedNumber}`;
+    return formatINR(priceVal);
   };
 
   const hasRealStore = useMemo(() => {
@@ -751,7 +768,7 @@ export default function StoreOwnerDashboard() {
       } catch (err) {
         console.debug("Failed to load store orders from backend", err);
       }
-      
+
       try {
         const localOrders = JSON.parse(localStorage.getItem('aureum_owner_orders') || '[]');
         if (localOrders && localOrders.length > 0) {
@@ -795,7 +812,7 @@ export default function StoreOwnerDashboard() {
             });
           combinedOrders = [...combinedOrders, ...formattedLocal];
         }
-      } catch (err) {}
+      } catch (err) { }
 
       setOrdersList(combinedOrders);
     };
@@ -806,9 +823,9 @@ export default function StoreOwnerDashboard() {
   const realOrders = React.useMemo(() => {
     const dummyNames = ["Rhea Kapoor", "Naveen Rao", "Sana Malik", "Om Prakash", "Ananya Roy"];
     if (!activeStore?.id) return [];
-    
-    return ordersList.filter(o => 
-      !dummyNames.includes(o.customer) && 
+
+    return ordersList.filter(o =>
+      !dummyNames.includes(o.customer) &&
       String(o.store_id) === String(activeStore.id)
     );
   }, [ordersList, activeStore]);
@@ -858,7 +875,7 @@ export default function StoreOwnerDashboard() {
         } else if (typeof o.items === 'object' && o.items !== null) {
           itemsArr = [o.items];
         }
-        
+
         itemsArr.forEach(i => {
           const pName = i.product_name || i.name || 'Item';
           const qty = parseInt(i.quantity, 10) || 1;
@@ -883,7 +900,7 @@ export default function StoreOwnerDashboard() {
   const [invoiceModalOrder, setInvoiceModalOrder] = useState(null);
   const [selectedCustomerModal, setSelectedCustomerModal] = useState(null);
 
-    // Inline Empty State Forms
+  // Inline Empty State Forms
   const [showInlineCategoryForm, setShowInlineCategoryForm] = useState(false);
   const [showInlineProductForm, setShowInlineProductForm] = useState(false);
   // Store Modals State & Forms
@@ -971,6 +988,11 @@ export default function StoreOwnerDashboard() {
   const handleCreateStoreSubmit = async (e) => {
     e.preventDefault();
 
+    if (!hasActiveSub && !isPrivileged) {
+      setShowPlanRequiredModal(true);
+      return;
+    }
+
     if (!storeForm.name.trim()) return;
 
     const subdomain = storeForm.subdomain.trim() || storeForm.name.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-");
@@ -992,7 +1014,7 @@ export default function StoreOwnerDashboard() {
       banner: "",
       products_count: 0,
       orders_count: 0,
-      total_revenue: "$0.00",
+      total_revenue: "₹0.00",
       _unsynced: true,
     };
 
@@ -1043,6 +1065,10 @@ export default function StoreOwnerDashboard() {
   };
 
   const openEditStoreModal = () => {
+    if (!hasActiveSub && !isPrivileged) {
+      setShowPlanRequiredModal(true);
+      return;
+    }
     if (!activeStore) return;
     setStoreForm({
       name: activeStore.name || "",
@@ -1060,6 +1086,10 @@ export default function StoreOwnerDashboard() {
 
   const handleEditStoreSubmit = async (e) => {
     e.preventDefault();
+    if (!hasActiveSub && !isPrivileged) {
+      setShowPlanRequiredModal(true);
+      return;
+    }
     if (!activeStore || !storeForm.name.trim()) return;
 
     const updatedData = {
@@ -1128,7 +1158,7 @@ export default function StoreOwnerDashboard() {
           setCategoriesList(mapped);
           try {
             localStorage.setItem("aureum_owner_categories", JSON.stringify(mapped));
-          } catch (e) {}
+          } catch (e) { }
         } else {
           setCategoriesList([]);
         }
@@ -1215,6 +1245,10 @@ export default function StoreOwnerDashboard() {
   };
 
   const openEditCategoryModal = (cat) => {
+    if (!hasActiveSub && !isPrivileged) {
+      setShowPlanRequiredModal(true);
+      return;
+    }
     setEditingCategory(cat);
     setCategoryForm({
       name: cat.name || "",
@@ -1232,6 +1266,10 @@ export default function StoreOwnerDashboard() {
 
   const handleCategorySubmit = async (e) => {
     e.preventDefault();
+    if (!hasActiveSub && !isPrivileged) {
+      setShowPlanRequiredModal(true);
+      return;
+    }
     if (!categoryForm.name.trim()) return;
 
     const slug = categoryForm.name.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -1370,6 +1408,10 @@ export default function StoreOwnerDashboard() {
   };
 
   const openEditProductModal = (product) => {
+    if (!hasActiveSub && !isPrivileged) {
+      setShowPlanRequiredModal(true);
+      return;
+    }
     setEditingProduct(product);
     setNewProd({
       name: product.name || "",
@@ -1409,6 +1451,10 @@ export default function StoreOwnerDashboard() {
 
   const handleAddProductSubmit = async (e) => {
     e.preventDefault();
+    if (!hasActiveSub && !isPrivileged) {
+      setShowPlanRequiredModal(true);
+      return;
+    }
     const hasImage = newProd.image || (newProd.images && newProd.images.length > 0);
     if (!newProd.name || !newProd.price || !hasImage) {
       alert("Product name, price, and at least one image are required!");
@@ -1512,13 +1558,13 @@ export default function StoreOwnerDashboard() {
   const handleUpdateOrderStatus = async (orderId, newStatus) => {
     // Optimistic UI update
     setOrdersList(prev => prev.map(o => (o.id === orderId || o.raw_id === orderId || o.order_number === orderId) ? { ...o, status: newStatus } : o));
-    
+
     // Also update local storage so storefront sees it instantly if it's a mock order
     try {
       const saved = JSON.parse(localStorage.getItem('aureum_owner_orders') || '[]');
       const updated = saved.map(o => (String(o.id) === String(orderId) || String(o.order_number) === String(orderId) || String(o.backend_id) === String(orderId)) ? { ...o, status: newStatus } : o);
       localStorage.setItem('aureum_owner_orders', JSON.stringify(updated));
-    } catch (e) {}
+    } catch (e) { }
 
     // Check if orderId or raw_id is a real backend ID
     const matchedOrder = ordersList.find(o => o.id === orderId || o.raw_id === orderId || o.order_number === orderId);
@@ -1551,7 +1597,7 @@ export default function StoreOwnerDashboard() {
   };
 
   // Stats Calculations
-  const totalRevenue = "$18,420.00";
+  const totalRevenue = "₹18,420.00";
   const totalOrdersCount = realOrders.length;
   const pendingOrdersCount = realOrders.filter(o => o.status === "Pending" || o.status === "Processing").length;
   const cancelledOrdersCount = realOrders.filter(o => o.status === "Cancelled").length;
@@ -1567,6 +1613,8 @@ export default function StoreOwnerDashboard() {
       </div>
     );
   }
+
+
 
 
 
@@ -1662,6 +1710,10 @@ export default function StoreOwnerDashboard() {
             <select
               value={selectedStoreId || ""}
               onChange={(e) => {
+                if (!hasActiveSub && !isPrivileged) {
+                  setShowPlanRequiredModal(true);
+                  return;
+                }
                 if (e.target.value === "CREATE_NEW") {
                   openCreateStoreModal();
                 } else {
@@ -1688,7 +1740,7 @@ export default function StoreOwnerDashboard() {
               const Icon = item.icon;
               const isActive = active === item.key;
               const handleClick = () => {
-                if (item.key !== 'dashboard' && !hasActiveSub && !isPrivileged) {
+                if (!hasActiveSub && !isPrivileged) {
                   setShowPlanRequiredModal(true);
                   return;
                 }
@@ -1768,9 +1820,9 @@ export default function StoreOwnerDashboard() {
           </div>
         </header>
 
-                {/* MAIN BODY AREA */}
+        {/* MAIN BODY AREA */}
         <main className="p-4 flex-grow-1 overflow-y-auto" style={{ background: "#f1f2f4" }}>
-          
+
           {/* MODULE 1: DASHBOARD OVERVIEW */}
           {active === "dashboard" && (
             <div className="d-flex flex-column gap-4">
@@ -2226,14 +2278,14 @@ export default function StoreOwnerDashboard() {
                           const meeshoItems = (o.meesho_products_list && o.meesho_products_list.length > 0)
                             ? o.meesho_products_list
                             : (Array.isArray(o.items) ? o.items.filter(i => i.product?.meesho_product || i.meesho_product_id).map(i => {
-                                const pId = i.product?.meesho_product?.meesho_product_id || i.meesho_product_id;
-                                return {
-                                  product_name: i.product_name || i.name,
-                                  meesho_product_id: pId,
-                                  meesho_url: (pId && pId.startsWith('http')) ? pId : `https://www.meesho.com/s/p/${pId}`,
-                                  quantity: i.quantity || 1
-                                };
-                              }) : []);
+                              const pId = i.product?.meesho_product?.meesho_product_id || i.meesho_product_id;
+                              return {
+                                product_name: i.product_name || i.name,
+                                meesho_product_id: pId,
+                                meesho_url: (pId && pId.startsWith('http')) ? pId : `https://www.meesho.com/s/p/${pId}`,
+                                quantity: i.quantity || 1
+                              };
+                            }) : []);
                           const hasMeesho = meeshoItems.length > 0;
                           const exactDisplayId = o.order_number || o.id;
 
@@ -2519,8 +2571,8 @@ export default function StoreOwnerDashboard() {
                   <div>
                     <label className="mb-1 fs-8 fw-semibold" style={{ color: "#202223" }}>Currency</label>
                     <select value={storeSettings.currency} onChange={(e) => setStoreSettings({ ...storeSettings, currency: e.target.value })} className="form-select" style={{ border: "1px solid #dfe3e8" }}>
-                      <option value="USD ($)">USD ($)</option>
                       <option value="INR (₹)">INR (₹)</option>
+                      <option value="USD ($)">USD ($)</option>
                       <option value="EUR (€)">EUR (€)</option>
                     </select>
                   </div>
@@ -2673,60 +2725,60 @@ export default function StoreOwnerDashboard() {
           {active === "stores" && (
             <div className="d-flex flex-column gap-4">
               {!hasRealStore ? (
-                  <div className="bg-white w-100 rounded-3 shadow-sm border p-4" style={{ maxWidth: 800, borderColor: "#dfe3e8", margin: "0 auto" }}>
-                    <div className="d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom" style={{ borderColor: "#dfe3e8" }}>
-                      <h3 className="fs-5 font-bold mb-0 d-flex align-items-center gap-2" style={{ color: "#202223" }}>
-                        <PlusCircle size={18} /> Create New Store
-                      </h3>
-                    </div>
-                    <form onSubmit={handleCreateStoreSubmit} className="d-flex flex-column gap-3 fs-7">
-                      <div>
-                        <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Store Name *</label>
-                        <input required value={storeForm.name} onChange={(e) => setStoreForm({ ...storeForm, name: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="e.g. ToastKart Luxury Living" />
-                      </div>
-                      <div className="row g-2">
-                        <div className="col-6">
-                          <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Category</label>
-                          <select value={storeForm.category} onChange={(e) => setStoreForm({ ...storeForm, category: e.target.value })} className="form-select" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}>
-                            <option value="Fashion & Apparel">Fashion & Apparel</option>
-                            <option value="Jewellery">Jewellery</option>
-                            <option value="Beauty & Cosmetics">Beauty & Cosmetics</option>
-                            <option value="Home & Living">Home & Living</option>
-                            <option value="Perfumes">Perfumes</option>
-                            <option value="Electronics">Electronics</option>
-                            <option value="Groceries">Groceries</option>
-                            <option value="Gift & Novelty">Gift & Novelty</option>
-                            <option value="Watches">Watches</option>
-                            <option value="Footwear">Footwear</option>
-                            <option value="E-flyer">E-flyer</option>
-                            <option value="Other">Other</option>
-                          </select>
-                        </div>
-                        <div className="col-6">
-                          <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Currency</label>
-                          <select value={storeForm.currency} onChange={(e) => setStoreForm({ ...storeForm, currency: e.target.value })} className="form-select" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}>
-                            <option value="USD ($)">USD ($)</option>
-                            <option value="EUR (€)">EUR (€)</option>
-                            <option value="INR (₹)">INR (₹)</option>
-                            <option value="GBP (£)">GBP (£)</option>
-                          </select>
-                        </div>
-                      </div>
-                      <div className="row g-2">
-                        <div className="col-12">
-                          <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Owner Name</label>
-                          <input autoComplete="off" name="ownerName_field" value={storeForm.ownerName} onChange={(e) => setStoreForm({ ...storeForm, ownerName: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="Owner Name" />
-                        </div>
-                      </div>
-                      <div>
-                        <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Store Description</label>
-                        <textarea rows="3" value={storeForm.description} onChange={(e) => setStoreForm({ ...storeForm, description: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="Describe store collection & brand story..." />
-                      </div>
-                      <div className="d-flex align-items-center justify-content-end gap-2 pt-3 border-top mt-1" style={{ borderColor: "#dfe3e8" }}>
-                        <button type="submit" className="btn btn-dark btn-sm px-4 py-2" style={{ backgroundColor: "#202223", color: "#ffffff", border: "none" }}>Create Store</button>
-                      </div>
-                    </form>
+                <div className="bg-white w-100 rounded-3 shadow-sm border p-4" style={{ maxWidth: 800, borderColor: "#dfe3e8", margin: "0 auto" }}>
+                  <div className="d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom" style={{ borderColor: "#dfe3e8" }}>
+                    <h3 className="fs-5 font-bold mb-0 d-flex align-items-center gap-2" style={{ color: "#202223" }}>
+                      <PlusCircle size={18} /> Create New Store
+                    </h3>
                   </div>
+                  <form onSubmit={handleCreateStoreSubmit} className="d-flex flex-column gap-3 fs-7">
+                    <div>
+                      <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Store Name *</label>
+                      <input required value={storeForm.name} onChange={(e) => setStoreForm({ ...storeForm, name: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="e.g. ToastKart Luxury Living" />
+                    </div>
+                    <div className="row g-2">
+                      <div className="col-6">
+                        <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Category</label>
+                        <select value={storeForm.category} onChange={(e) => setStoreForm({ ...storeForm, category: e.target.value })} className="form-select" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}>
+                          <option value="Fashion & Apparel">Fashion & Apparel</option>
+                          <option value="Jewellery">Jewellery</option>
+                          <option value="Beauty & Cosmetics">Beauty & Cosmetics</option>
+                          <option value="Home & Living">Home & Living</option>
+                          <option value="Perfumes">Perfumes</option>
+                          <option value="Electronics">Electronics</option>
+                          <option value="Groceries">Groceries</option>
+                          <option value="Gift & Novelty">Gift & Novelty</option>
+                          <option value="Watches">Watches</option>
+                          <option value="Footwear">Footwear</option>
+                          <option value="E-flyer">E-flyer</option>
+                          <option value="Other">Other</option>
+                        </select>
+                      </div>
+                      <div className="col-6">
+                        <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Currency</label>
+                        <select value={storeForm.currency} onChange={(e) => setStoreForm({ ...storeForm, currency: e.target.value })} className="form-select" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}>
+                          <option value="INR (₹)">INR (₹)</option>
+                          <option value="USD ($)">USD ($)</option>
+                          <option value="EUR (€)">EUR (€)</option>
+                          <option value="GBP (£)">GBP (£)</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className="row g-2">
+                      <div className="col-12">
+                        <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Owner Name</label>
+                        <input autoComplete="off" name="ownerName_field" value={storeForm.ownerName} onChange={(e) => setStoreForm({ ...storeForm, ownerName: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="Owner Name" />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Store Description</label>
+                      <textarea rows="3" value={storeForm.description} onChange={(e) => setStoreForm({ ...storeForm, description: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="Describe store collection & brand story..." />
+                    </div>
+                    <div className="d-flex align-items-center justify-content-end gap-2 pt-3 border-top mt-1" style={{ borderColor: "#dfe3e8" }}>
+                      <button type="submit" className="btn btn-dark btn-sm px-4 py-2" style={{ backgroundColor: "#202223", color: "#ffffff", border: "none" }}>Create Store</button>
+                    </div>
+                  </form>
+                </div>
               ) : (
                 <>
                   {/* Executive Store Banner */}
@@ -2792,9 +2844,9 @@ export default function StoreOwnerDashboard() {
                           <div className="col-6">
                             <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Currency</label>
                             <select value={storeForm.currency} onChange={(e) => setStoreForm({ ...storeForm, currency: e.target.value })} className="form-select" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}>
+                              <option value="INR (₹)">INR (₹)</option>
                               <option value="USD ($)">USD ($)</option>
                               <option value="EUR (€)">EUR (€)</option>
-                              <option value="INR (₹)">INR (₹)</option>
                               <option value="GBP (£)">GBP (£)</option>
                             </select>
                           </div>
@@ -2830,111 +2882,111 @@ export default function StoreOwnerDashboard() {
                       </form>
                     </div>
                   ) : (
-                  <div className="row g-3">
-                    <div className="col-12">
-                      <div className="d-flex flex-column gap-4" style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", padding: "24px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
-                        <div className="d-flex align-items-start gap-3">
-                          <div
-                            className="w-16 h-16 rounded-3 d-flex align-items-center justify-content-center fs-4 font-bold flex-shrink-0"
-                            style={{ background: "#f1f2f4", color: "#202223", border: "1px solid #dfe3e8" }}
-                          >
-                            {(activeStore.name || "S").charAt(0).toUpperCase()}
-                          </div>
-                          <div className="flex-grow-1">
-                            <div className="d-flex align-items-center justify-content-between flex-wrap gap-2">
-                              <div>
-                                <div className="d-flex align-items-center gap-2 flex-wrap">
-                                  <h3 className="fs-5 font-bold mb-0" style={{ color: "#202223" }}>{activeStore.name}</h3>
-                                  <span
-                                    title="Store ID in database"
-                                    style={{
-                                      background: "#f1f2f4",
-                                      color: "#454f5b",
-                                      border: "1px solid #dfe3e8",
-                                      padding: "1px 8px",
-                                      borderRadius: "6px",
-                                      fontSize: "0.72rem",
-                                      fontWeight: "700",
-                                      fontFamily: "monospace",
-                                      letterSpacing: "0.03em"
-                                    }}
-                                  >
-                                    ID&nbsp;#{activeStore.id}
-                                  </span>
+                    <div className="row g-3">
+                      <div className="col-12">
+                        <div className="d-flex flex-column gap-4" style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", padding: "24px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
+                          <div className="d-flex align-items-start gap-3">
+                            <div
+                              className="w-16 h-16 rounded-3 d-flex align-items-center justify-content-center fs-4 font-bold flex-shrink-0"
+                              style={{ background: "#f1f2f4", color: "#202223", border: "1px solid #dfe3e8" }}
+                            >
+                              {(activeStore.name || "S").charAt(0).toUpperCase()}
+                            </div>
+                            <div className="flex-grow-1">
+                              <div className="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                                <div>
+                                  <div className="d-flex align-items-center gap-2 flex-wrap">
+                                    <h3 className="fs-5 font-bold mb-0" style={{ color: "#202223" }}>{activeStore.name}</h3>
+                                    <span
+                                      title="Store ID in database"
+                                      style={{
+                                        background: "#f1f2f4",
+                                        color: "#454f5b",
+                                        border: "1px solid #dfe3e8",
+                                        padding: "1px 8px",
+                                        borderRadius: "6px",
+                                        fontSize: "0.72rem",
+                                        fontWeight: "700",
+                                        fontFamily: "monospace",
+                                        letterSpacing: "0.03em"
+                                      }}
+                                    >
+                                      ID&nbsp;#{activeStore.id}
+                                    </span>
+                                  </div>
+                                  <a href={`${import.meta.env.VITE_FRONTEND_URL || 'https://www.toastkart.com'}/store/${activeStore.slug || activeStore.subdomain}`} target="_blank" rel="noopener noreferrer" className="fs-8 fw-semibold text-decoration-none d-block text-break" style={{ color: "#FF5722", wordBreak: "break-all" }}>
+                                    {`${import.meta.env.VITE_FRONTEND_URL || 'https://www.toastkart.com'}/store/${activeStore.slug || activeStore.subdomain}`}
+                                  </a>
                                 </div>
-                                <a href={`${import.meta.env.VITE_FRONTEND_URL || 'https://www.toastkart.com'}/store/${activeStore.slug || activeStore.subdomain}`} target="_blank" rel="noopener noreferrer" className="fs-8 fw-semibold text-decoration-none d-block text-break" style={{ color: "#FF5722", wordBreak: "break-all" }}>
-                                  {`${import.meta.env.VITE_FRONTEND_URL || 'https://www.toastkart.com'}/store/${activeStore.slug || activeStore.subdomain}`}
-                                </a>
+                                <span style={{ background: "#FFE0D0", color: "#FF5722", padding: "2px 8px", borderRadius: "12px", fontSize: "0.75rem", fontWeight: "600" }}>🟢 {activeStore.status || "Active"}</span>
                               </div>
-                              <span style={{ background: "#FFE0D0", color: "#FF5722", padding: "2px 8px", borderRadius: "12px", fontSize: "0.75rem", fontWeight: "600" }}>🟢 {activeStore.status || "Active"}</span>
-                            </div>
-                            <div className="text-muted fs-7 mb-2 line-clamp-2" style={{ minHeight: '40px' }}>
-                              {activeStore.description || "Multi-vendor merchant store workspace on ToastKart platform."}
+                              <div className="text-muted fs-7 mb-2 line-clamp-2" style={{ minHeight: '40px' }}>
+                                {activeStore.description || "Multi-vendor merchant store workspace on ToastKart platform."}
+                              </div>
                             </div>
                           </div>
-                        </div>
 
-                        {/* Specifications Grid */}
-                        <div className="row g-3 pt-3 border-top" style={{ borderColor: "#dfe3e8" }}>
-                          <div className="col-6 col-md-3">
-                            <span className="fs-8 d-block mb-1" style={{ color: "#6d7175" }}>Store ID</span>
-                            <strong className="fs-7 d-flex align-items-center gap-1" style={{ color: "#202223", fontFamily: "monospace" }}>
-                              <span
-                                style={{
-                                  background: "#FFF3E0",
-                                  color: "#FF5722",
-                                  border: "1px solid #c3e9df",
-                                  padding: "2px 10px",
-                                  borderRadius: "6px",
-                                  fontWeight: "700",
-                                  fontSize: "0.85rem",
-                                  letterSpacing: "0.04em"
-                                }}
-                              >
-                                #{activeStore.id}
-                              </span>
-                            </strong>
+                          {/* Specifications Grid */}
+                          <div className="row g-3 pt-3 border-top" style={{ borderColor: "#dfe3e8" }}>
+                            <div className="col-6 col-md-3">
+                              <span className="fs-8 d-block mb-1" style={{ color: "#6d7175" }}>Store ID</span>
+                              <strong className="fs-7 d-flex align-items-center gap-1" style={{ color: "#202223", fontFamily: "monospace" }}>
+                                <span
+                                  style={{
+                                    background: "#FFF3E0",
+                                    color: "#FF5722",
+                                    border: "1px solid #c3e9df",
+                                    padding: "2px 10px",
+                                    borderRadius: "6px",
+                                    fontWeight: "700",
+                                    fontSize: "0.85rem",
+                                    letterSpacing: "0.04em"
+                                  }}
+                                >
+                                  #{activeStore.id}
+                                </span>
+                              </strong>
+                            </div>
+                            <div className="col-6 col-md-3">
+                              <span className="fs-8 d-block mb-1" style={{ color: "#6d7175" }}>Category</span>
+                              <strong className="fs-7" style={{ color: "#202223" }}>{activeStore.category || "General Merchant Store"}</strong>
+                            </div>
+                            <div className="col-6 col-md-3">
+                              <span className="fs-8 d-block mb-1" style={{ color: "#6d7175" }}>Currency</span>
+                              <strong className="fs-7" style={{ color: "#202223" }}>{activeStore.currency || "INR (₹)"}</strong>
+                            </div>
+                            <div className="col-6 col-md-3">
+                              <span className="fs-8 d-block mb-1" style={{ color: "#6d7175" }}>Owner Name</span>
+                              <strong className="fs-7 d-block text-break" style={{ color: "#202223", wordBreak: "break-all" }}>
+                                {activeStore.owner_name || activeStore.ownerName || user?.name || user?.owner_name || "Not Provided"}
+                              </strong>
+                            </div>
                           </div>
-                          <div className="col-6 col-md-3">
-                            <span className="fs-8 d-block mb-1" style={{ color: "#6d7175" }}>Category</span>
-                            <strong className="fs-7" style={{ color: "#202223" }}>{activeStore.category || "General Merchant Store"}</strong>
-                          </div>
-                          <div className="col-6 col-md-3">
-                            <span className="fs-8 d-block mb-1" style={{ color: "#6d7175" }}>Currency</span>
-                            <strong className="fs-7" style={{ color: "#202223" }}>{activeStore.currency || "INR (₹)"}</strong>
-                          </div>
-                          <div className="col-6 col-md-3">
-                            <span className="fs-8 d-block mb-1" style={{ color: "#6d7175" }}>Owner Name</span>
-                            <strong className="fs-7 d-block text-break" style={{ color: "#202223", wordBreak: "break-all" }}>
-                              {activeStore.owner_name || activeStore.ownerName || user?.name || user?.owner_name || "Not Provided"}
-                            </strong>
-                          </div>
-                        </div>
 
-                        {/* Metrics Bar */}
-                        <div className="row g-2 pt-2">
-                          <div className="col-4">
-                            <div className="p-2 rounded-3 text-center h-100 d-flex flex-column justify-content-center" style={{ background: "#f1f2f4", border: "1px solid #dfe3e8", overflow: "hidden" }}>
-                              <div className="fs-5 font-bold" style={{ color: "#202223" }}>{categoriesList.length}</div>
-                              <div className="fs-8 text-truncate" style={{ color: "#6d7175", fontSize: "0.75rem" }}>Collections</div>
+                          {/* Metrics Bar */}
+                          <div className="row g-2 pt-2">
+                            <div className="col-4">
+                              <div className="p-2 rounded-3 text-center h-100 d-flex flex-column justify-content-center" style={{ background: "#f1f2f4", border: "1px solid #dfe3e8", overflow: "hidden" }}>
+                                <div className="fs-5 font-bold" style={{ color: "#202223" }}>{categoriesList.length}</div>
+                                <div className="fs-8 text-truncate" style={{ color: "#6d7175", fontSize: "0.75rem" }}>Collections</div>
+                              </div>
+                            </div>
+                            <div className="col-4">
+                              <div className="p-2 rounded-3 text-center h-100 d-flex flex-column justify-content-center" style={{ background: "#f1f2f4", border: "1px solid #dfe3e8", overflow: "hidden" }}>
+                                <div className="fs-5 font-bold" style={{ color: "#202223" }}>{productsList.length}</div>
+                                <div className="fs-8 text-truncate" style={{ color: "#6d7175", fontSize: "0.75rem" }}>Products</div>
+                              </div>
+                            </div>
+                            <div className="col-4">
+                              <div className="p-2 rounded-3 text-center h-100 d-flex flex-column justify-content-center" style={{ background: "#f1f2f4", border: "1px solid #dfe3e8", overflow: "hidden" }}>
+                                <div className="fs-5 font-bold" style={{ color: "#202223" }}>{realOrders.length}</div>
+                                <div className="fs-8 text-truncate" style={{ color: "#6d7175", fontSize: "0.75rem" }}>Orders</div>
+                              </div>
                             </div>
                           </div>
-                          <div className="col-4">
-                            <div className="p-2 rounded-3 text-center h-100 d-flex flex-column justify-content-center" style={{ background: "#f1f2f4", border: "1px solid #dfe3e8", overflow: "hidden" }}>
-                              <div className="fs-5 font-bold" style={{ color: "#202223" }}>{productsList.length}</div>
-                              <div className="fs-8 text-truncate" style={{ color: "#6d7175", fontSize: "0.75rem" }}>Products</div>
-                            </div>
-                          </div>
-                          <div className="col-4">
-                            <div className="p-2 rounded-3 text-center h-100 d-flex flex-column justify-content-center" style={{ background: "#f1f2f4", border: "1px solid #dfe3e8", overflow: "hidden" }}>
-                              <div className="fs-5 font-bold" style={{ color: "#202223" }}>{realOrders.length}</div>
-                              <div className="fs-8 text-truncate" style={{ color: "#6d7175", fontSize: "0.75rem" }}>Orders</div>
-                            </div>
-                          </div>
-                        </div>
 
-                        {/* Storefront Link Banner Removed */}
-                      </div>
+                          {/* Storefront Link Banner Removed */}
+                        </div>
                       </div>
                     </div>
                   )}
@@ -2955,98 +3007,98 @@ export default function StoreOwnerDashboard() {
                         className="btn btn-sm d-flex align-items-center justify-content-center gap-1 fw-bold flex-shrink-0 px-2 px-sm-3"
                         style={{ background: "#1c2226", color: "#fff", borderRadius: "6px", fontSize: "0.75rem" }}
                       >
-                        <Plus size={14} /> 
+                        <Plus size={14} />
                         Add Collection
                       </button>
                     </div>
 
                     {showInlineCategoryForm ? (
-                        <div className="bg-white p-4" style={{ borderBottom: "1px solid #dfe3e8" }}>
-                          <h4 className="fs-6 font-bold mb-3" style={{ color: "#202223" }}>{editingCategory ? "Edit Collection" : "Create Collection"}</h4>
-                          <form onSubmit={(e) => { handleCategorySubmit(e); setShowInlineCategoryForm(false); }} className="d-flex flex-column gap-3 fs-7">
-                            
-              <div>
-                <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Category Name *</label>
-                <input
-                  required
-                  value={categoryForm.name}
-                  onChange={(e) => setCategoryForm({ ...categoryForm, name: e.target.value })}
-                  className="form-control"
-                  style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
-                  placeholder="e.g. Luxury Handbags"
-                />
-                {categoryForm.name && (
-                  <div className="fs-9 mt-1 fw-medium" style={{ color: "#6d7175" }}>
-                    Slug URL preview: <span style={{ color: "#FF5722" }}>/{categoryForm.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}</span>
-                  </div>
-                )}
-              </div>
+                      <div className="bg-white p-4" style={{ borderBottom: "1px solid #dfe3e8" }}>
+                        <h4 className="fs-6 font-bold mb-3" style={{ color: "#202223" }}>{editingCategory ? "Edit Collection" : "Create Collection"}</h4>
+                        <form onSubmit={(e) => { handleCategorySubmit(e); setShowInlineCategoryForm(false); }} className="d-flex flex-column gap-3 fs-7">
 
-              <div>
-                <div className="d-flex align-items-center justify-content-between mb-1">
-                  <label className="fs-8 fw-semibold mb-0" style={{ color: "#454f5b" }}>Description</label>
-                  {categoryForm.name && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const name = categoryForm.name.trim();
-                        const generated = `Explore our curated collection of ${name.toLowerCase()}, crafted with quality materials and elegant designs for everyday and special occasions.`;
-                        setCategoryForm(prev => ({ ...prev, description: generated }));
-                      }}
-                      className="btn btn-link btn-sm p-0 fs-9 text-decoration-none fw-bold"
-                      style={{ color: "#FF5722" }}
-                    >
-                      ✨ Auto-generate
-                    </button>
-                  )}
-                </div>
-                <textarea
-                  rows="3"
-                  value={categoryForm.description}
-                  onChange={(e) => setCategoryForm({ ...categoryForm, description: e.target.value })}
-                  className="form-control"
-                  style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
-                  placeholder="Summary of products in this category..."
-                />
-              </div>
+                          <div>
+                            <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Category Name *</label>
+                            <input
+                              required
+                              value={categoryForm.name}
+                              onChange={(e) => setCategoryForm({ ...categoryForm, name: e.target.value })}
+                              className="form-control"
+                              style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
+                              placeholder="e.g. Luxury Handbags"
+                            />
+                            {categoryForm.name && (
+                              <div className="fs-9 mt-1 fw-medium" style={{ color: "#6d7175" }}>
+                                Slug URL preview: <span style={{ color: "#FF5722" }}>/{categoryForm.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}</span>
+                              </div>
+                            )}
+                          </div>
 
-              <div className="form-check">
-                <input
-                  type="checkbox"
-                  id="categoryFeaturedCheck"
-                  checked={categoryForm.featured}
-                  onChange={(e) => setCategoryForm({ ...categoryForm, featured: e.target.checked })}
-                  className="form-check-input"
-                />
-                <label htmlFor="categoryFeaturedCheck" className="form-check-label fs-7 cursor-pointer" style={{ color: "#202223" }}>
-                  Feature this category on store homepage & navigation
-                </label>
-              </div>
+                          <div>
+                            <div className="d-flex align-items-center justify-content-between mb-1">
+                              <label className="fs-8 fw-semibold mb-0" style={{ color: "#454f5b" }}>Description</label>
+                              {categoryForm.name && (
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const name = categoryForm.name.trim();
+                                    const generated = `Explore our curated collection of ${name.toLowerCase()}, crafted with quality materials and elegant designs for everyday and special occasions.`;
+                                    setCategoryForm(prev => ({ ...prev, description: generated }));
+                                  }}
+                                  className="btn btn-link btn-sm p-0 fs-9 text-decoration-none fw-bold"
+                                  style={{ color: "#FF5722" }}
+                                >
+                                  ✨ Auto-generate
+                                </button>
+                              )}
+                            </div>
+                            <textarea
+                              rows="3"
+                              value={categoryForm.description}
+                              onChange={(e) => setCategoryForm({ ...categoryForm, description: e.target.value })}
+                              className="form-control"
+                              style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
+                              placeholder="Summary of products in this category..."
+                            />
+                          </div>
 
-              <div className="d-flex align-items-center justify-content-end gap-2 mt-2 pt-3 border-top" style={{ borderColor: "#dfe3e8" }}>
-                <button type="button" onClick={() => setShowInlineCategoryForm(false)} className="btn btn-sm px-3 py-2" style={{ background: "#f1f2f4", color: "#454f5b", border: "1px solid #dfe3e8", borderRadius: "6px", fontWeight: "600" }}>
-                  Cancel
-                </button>
-                <button type="submit" className="btn btn-sm px-4 py-2 text-white fw-bold" style={{ background: "#1c2226", borderRadius: "6px" }}>
-                  {editingCategory ? "Save Changes" : "Create Category"}
-                </button>
-              </div>
-            
-                          </form>
-                        </div>
-                      ) : categoriesList.length === 0 ? (
-                        <div className="text-center py-5 px-4">
-                          <Tag size={32} style={{ color: "#c9cccf", marginBottom: 10 }} />
-                          <p className="fs-8 mb-2" style={{ color: "#6d7175" }}>No collections found for Store ID #{activeStore.id}</p>
-                          <button
-                            onClick={openInlineCategoryForm}
-                            className="btn btn-sm fw-bold"
-                            style={{ background: "#FF5722", color: "#fff", borderRadius: "6px" }}
-                          >
-                            Create First Collection
-                          </button>
-                        </div>
-                      ) : (
+                          <div className="form-check">
+                            <input
+                              type="checkbox"
+                              id="categoryFeaturedCheck"
+                              checked={categoryForm.featured}
+                              onChange={(e) => setCategoryForm({ ...categoryForm, featured: e.target.checked })}
+                              className="form-check-input"
+                            />
+                            <label htmlFor="categoryFeaturedCheck" className="form-check-label fs-7 cursor-pointer" style={{ color: "#202223" }}>
+                              Feature this category on store homepage & navigation
+                            </label>
+                          </div>
+
+                          <div className="d-flex align-items-center justify-content-end gap-2 mt-2 pt-3 border-top" style={{ borderColor: "#dfe3e8" }}>
+                            <button type="button" onClick={() => setShowInlineCategoryForm(false)} className="btn btn-sm px-3 py-2" style={{ background: "#f1f2f4", color: "#454f5b", border: "1px solid #dfe3e8", borderRadius: "6px", fontWeight: "600" }}>
+                              Cancel
+                            </button>
+                            <button type="submit" className="btn btn-sm px-4 py-2 text-white fw-bold" style={{ background: "#1c2226", borderRadius: "6px" }}>
+                              {editingCategory ? "Save Changes" : "Create Category"}
+                            </button>
+                          </div>
+
+                        </form>
+                      </div>
+                    ) : categoriesList.length === 0 ? (
+                      <div className="text-center py-5 px-4">
+                        <Tag size={32} style={{ color: "#c9cccf", marginBottom: 10 }} />
+                        <p className="fs-8 mb-2" style={{ color: "#6d7175" }}>No collections found for Store ID #{activeStore.id}</p>
+                        <button
+                          onClick={openInlineCategoryForm}
+                          className="btn btn-sm fw-bold"
+                          style={{ background: "#FF5722", color: "#fff", borderRadius: "6px" }}
+                        >
+                          Create First Collection
+                        </button>
+                      </div>
+                    ) : (
                       <div className="table-responsive">
                         <table className="table table-hover mb-0 align-middle border-0">
                           <thead>
@@ -3150,254 +3202,254 @@ export default function StoreOwnerDashboard() {
                             <button type="button" onClick={() => setShowInlineProductForm(false)} className="btn btn-sm btn-light border py-1">Cancel</button>
                           </div>
                           <form onSubmit={(e) => { handleAddProductSubmit(e); setShowInlineProductForm(false); }} className="d-flex flex-column gap-2 fs-7">
-                            
-              <div>
-                <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Product Name *</label>
-                <input required value={newProd.name} onChange={(e) => setNewProd({ ...newProd, name: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="e.g. Silk Scarf" />
-              </div>
-              <div className="row g-2">
-                <div className="col-4">
-                  <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Price *</label>
-                  <input required value={newProd.price} onChange={(e) => setNewProd({ ...newProd, price: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder={`${currencySymbol}34.00`} />
-                </div>
-                <div className="col-4">
-                  <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Original Price</label>
-                  <input value={newProd.compare_price || ''} onChange={(e) => setNewProd({ ...newProd, compare_price: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder={`${currencySymbol}50.00`} />
-                </div>
-                <div className="col-4">
-                  <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Discount %</label>
-                  <input type="number" min="0" max="100" value={newProd.discount_percentage || ''} onChange={(e) => {
-                    const discount = e.target.value;
-                    const cp = parseFloat(String(newProd.compare_price).replace(/[^0-9.]/g, ""));
-                    let newPrice = newProd.price;
-                    if (cp && discount) {
-                      newPrice = (cp - (cp * (parseFloat(discount) / 100))).toFixed(2);
-                    }
-                    setNewProd({ ...newProd, discount_percentage: discount, price: newPrice });
-                  }} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="e.g. 20" />
-                </div>
-              </div>
-              <div className="row g-2">
-                <div className="col-4">
-                  <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Stock</label>
-                  <input type="number" min="0" value={newProd.stock} onChange={(e) => setNewProd({ ...newProd, stock: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="10" />
-                  <div className="form-check mt-2">
-                    <input className="form-check-input" type="checkbox" id="product-publish" checked={newProd.is_active !== false && newProd.is_active !== 0} onChange={(e) => setNewProd({ ...newProd, is_active: e.target.checked })} />
-                    <label className="form-check-label fs-8" htmlFor="product-publish">Show on storefront</label>
-                  </div>
-                  <small className="text-muted fs-9">Review staging imports before publishing.</small>
-                </div>
-                <div className="col-8">
-                  <div className="row g-2">
-                    <div className="col-12">
-                      <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Colors</label>
-                      <div className="d-flex flex-wrap gap-1">
-                        {['Red', 'Blue', 'Green', 'Black', 'White', 'Grey', 'Pink', 'Yellow', 'Brown', 'Purple', 'Gold', 'Silver', 'Orange', 'Navy', 'Beige', 'Maroon', 'Olive', 'Cyan', 'Teal', 'Burgundy', 'Peach', 'Mint', 'Rose Gold', 'Copper', 'Bronze', 'Multicolor'].map(c => {
-                          const currentColors = newProd.color ? newProd.color.split(',').map(s=>s.trim()).filter(Boolean) : [];
-                          const isSelected = currentColors.includes(c);
-                          return (
-                            <button
-                              key={c}
-                              type="button"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                if (isSelected) setNewProd({...newProd, color: currentColors.filter(x => x !== c).join(', ')});
-                                else setNewProd({...newProd, color: [...currentColors, c].join(', ')});
-                              }}
-                              className="btn btn-sm"
-                              style={{ 
-                                borderRadius: '12px', padding: '2px 8px', fontSize: '11px',
-                                background: isSelected ? '#1c2226' : '#fff',
-                                color: isSelected ? '#fff' : '#454f5b',
-                                border: `1px solid ${isSelected ? '#1c2226' : '#dfe3e8'}`
-                              }}
-                            >
-                              {c}
-                            </button>
-                          );
-                        })}
-                      </div>
-                      <input
-                        type="text"
-                        value={newProd.color || ""}
-                        onChange={(e) => setNewProd({ ...newProd, color: e.target.value })}
-                        placeholder="Exact color (e.g. Dark Green, Black & White, White)"
-                        className="form-control form-control-sm mt-1"
-                        style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc", fontSize: "12px" }}
-                      />
-                    </div>
-                    <div className="col-12 mt-2">
-                      <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Sizes</label>
-                      <div className="d-flex flex-wrap gap-1">
-                        {getSizesForCategory(newProd.category, activeStore?.category).map(s => {
-                          const currentSizes = newProd.size ? newProd.size.split(',').map(x=>x.trim()).filter(Boolean) : [];
-                          const isSelected = currentSizes.includes(s);
-                          return (
-                            <button
-                              key={s}
-                              type="button"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                if (isSelected) setNewProd({...newProd, size: currentSizes.filter(x => x !== s).join(', ')});
-                                else setNewProd({...newProd, size: [...currentSizes, s].join(', ')});
-                              }}
-                              className="btn btn-sm fw-bold"
-                              style={{ 
-                                borderRadius: '6px', padding: '2px 8px', fontSize: '11px', minWidth: '32px',
-                                background: isSelected ? '#1c2226' : '#fff',
-                                color: isSelected ? '#fff' : '#454f5b',
-                                border: `1px solid ${isSelected ? '#1c2226' : '#dfe3e8'}`
-                              }}
-                            >
-                              {s}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Description</label>
-                <textarea
-                  value={newProd.description || ''}
-                  onChange={(e) => setNewProd({ ...newProd, description: e.target.value })}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      setNewProd({ ...newProd, description: (newProd.description || '') + '\n• ' });
-                    }
-                  }}
-                  onFocus={(e) => {
-                    if (!newProd.description) {
-                      setNewProd({ ...newProd, description: '• ' });
-                    }
-                  }}
-                  rows="3"
-                  className="form-control"
-                  style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
-                  placeholder="• Enter product description (press Enter for new bullet point)"
-                />
-              </div>
-              <div>
-                <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Category</label>
-                <select
-                  value={newProd.category}
-                  onChange={(e) => setNewProd({ ...newProd, category: e.target.value })}
-                  className="form-select"
-                  style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
-                  required
-                >
-                  <option value="">Select a Collection</option>
-                  {categoriesList && categoriesList.map(cat => (
-                    <option key={cat.id || cat.name} value={cat.name}>
-                      {cat.name}
-                    </option>
-                  ))}
-                  <option value="Uncategorized">Uncategorized</option>
-                </select>
-              </div>
-              <div>
-                <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Product Images Upload (Multiple)</label>
-                <div className="mb-3">
-                  <label 
-                    className="position-relative d-flex flex-column align-items-center justify-content-center cursor-pointer w-100" 
-                    style={{ height: 120, background: "#f8f9fa", border: "2px dashed #FF5722", borderRadius: "12px", transition: "all 0.2s" }}
-                    onMouseEnter={(e) => { e.currentTarget.style.background = "#e6f4ea"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.background = "#f8f9fa"; }}
-                  >
-                    <div className="d-flex align-items-center justify-content-center mb-2" style={{ width: 40, height: 40, borderRadius: "50%", background: "#e6f4ea" }}>
-                      <Plus size={24} style={{ color: "#FF5722" }} />
-                    </div>
-                    <span className="fs-8 fw-semibold" style={{ color: "#FF5722" }}>Click here to upload images</span>
-                    <span className="fs-9 mt-1" style={{ color: "#6c757d" }}>Supports JPG, PNG, WEBP files</span>
-                    <input
-                      type="file"
-                      multiple
-                      accept="image/*"
-                      onChange={async (e) => {
-                        const files = Array.from(e.target.files);
-                        if (!files.length) return;
-                        const readers = files.map(file => new Promise((resolve) => {
-                          const reader = new FileReader();
-                          reader.onload = (e) => {
-                            const img = new Image();
-                            img.onload = () => {
-                              const canvas = document.createElement('canvas');
-                              let width = img.width;
-                              let height = img.height;
-                              const maxW = 1024;
-                              if (width > maxW) {
-                                height = Math.round((height * maxW) / width);
-                                width = maxW;
-                              }
-                              canvas.width = width;
-                              canvas.height = height;
-                              const ctx = canvas.getContext('2d');
-                              ctx.drawImage(img, 0, 0, width, height);
-                              resolve(canvas.toDataURL('image/jpeg', 0.7));
-                            };
-                            img.src = e.target.result;
-                          };
-                          reader.readAsDataURL(file);
-                        }));
-                        const results = await Promise.all(readers);
-                        const currentImages = newProd.images?.length > 0 ? newProd.images : (newProd.image ? [{ url: newProd.image, color: '' }] : []);
-                        const newImages = [...currentImages, ...results.map(url => ({ url, color: '' }))];
-                        setNewProd({ ...newProd, images: newImages, image: newImages[0]?.url || '' });
-                        e.target.value = null;
-                      }}
-                      className="d-none"
-                    />
-                  </label>
-                </div>
-                
-                <div className="d-flex flex-wrap gap-3 mt-3">
-                  {(newProd.images?.length > 0 ? newProd.images : (newProd.image ? [{ url: newProd.image, color: '' }] : [])).map((imgObj, idx) => (
-                    <div key={idx} className="position-relative p-2 rounded d-flex flex-column align-items-center" style={{ background: "#f9fafb", border: "1px dashed #dfe3e8" }}>
-                      <img
-                        src={normalizeProductImage(imgObj.url, newProd.name)}
-                        alt={`Preview ${idx}`}
-                        className="rounded object-cover mb-2"
-                        style={{ width: 80, height: 80, border: "1px solid #dfe3e8" }}
-                        onError={(e) => { e.target.src = getFallbackImageByName(newProd.name); }}
-                      />
-                      {newProd.color && (
-                        <select 
-                          className="form-select form-select-sm" 
-                          style={{ fontSize: '0.75rem', padding: '0.1rem 1rem 0.1rem 0.4rem', minWidth: '80px' }}
-                          value={imgObj.color || ''}
-                          onChange={(e) => {
-                            const updatedImages = [...newProd.images];
-                            updatedImages[idx] = { ...updatedImages[idx], color: e.target.value };
-                            setNewProd({ ...newProd, images: updatedImages });
-                          }}
-                        >
-                          <option value="">No Color</option>
-                          {newProd.color.split(',').map(c => c.trim()).filter(Boolean).map(c => (
-                            <option key={c} value={c}>{c}</option>
-                          ))}
-                        </select>
-                      )}
-                      <button 
-                        type="button" 
-                        onClick={() => {
-                           const currentImages = newProd.images?.length > 0 ? newProd.images : (newProd.image ? [{ url: newProd.image, color: '' }] : []);
-                           const updated = currentImages.filter((_, i) => i !== idx);
-                           setNewProd({ ...newProd, images: updated, image: updated[0]?.url || '' });
-                        }}
-                        className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border-0" 
-                        style={{ padding: '0.2rem 0.4rem', cursor: 'pointer' }}
-                      >
-                        ×
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <button type="submit" className="btn text-white w-100 mt-3 py-2 fw-bold" style={{ background: "#1c2226", borderRadius: "8px" }}>{editingProduct ? "Save Changes" : "Add Product"}</button>
-            
+
+                            <div>
+                              <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Product Name *</label>
+                              <input required value={newProd.name} onChange={(e) => setNewProd({ ...newProd, name: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="e.g. Silk Scarf" />
+                            </div>
+                            <div className="row g-2">
+                              <div className="col-4">
+                                <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Price *</label>
+                                <input required value={newProd.price} onChange={(e) => setNewProd({ ...newProd, price: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder={`${currencySymbol}34.00`} />
+                              </div>
+                              <div className="col-4">
+                                <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Original Price</label>
+                                <input value={newProd.compare_price || ''} onChange={(e) => setNewProd({ ...newProd, compare_price: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder={`${currencySymbol}50.00`} />
+                              </div>
+                              <div className="col-4">
+                                <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Discount %</label>
+                                <input type="number" min="0" max="100" value={newProd.discount_percentage || ''} onChange={(e) => {
+                                  const discount = e.target.value;
+                                  const cp = parseFloat(String(newProd.compare_price).replace(/[^0-9.]/g, ""));
+                                  let newPrice = newProd.price;
+                                  if (cp && discount) {
+                                    newPrice = (cp - (cp * (parseFloat(discount) / 100))).toFixed(2);
+                                  }
+                                  setNewProd({ ...newProd, discount_percentage: discount, price: newPrice });
+                                }} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="e.g. 20" />
+                              </div>
+                            </div>
+                            <div className="row g-2">
+                              <div className="col-4">
+                                <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Stock</label>
+                                <input type="number" min="0" value={newProd.stock} onChange={(e) => setNewProd({ ...newProd, stock: e.target.value })} className="form-control" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }} placeholder="10" />
+                                <div className="form-check mt-2">
+                                  <input className="form-check-input" type="checkbox" id="product-publish" checked={newProd.is_active !== false && newProd.is_active !== 0} onChange={(e) => setNewProd({ ...newProd, is_active: e.target.checked })} />
+                                  <label className="form-check-label fs-8" htmlFor="product-publish">Show on storefront</label>
+                                </div>
+                                <small className="text-muted fs-9">Review staging imports before publishing.</small>
+                              </div>
+                              <div className="col-8">
+                                <div className="row g-2">
+                                  <div className="col-12">
+                                    <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Colors</label>
+                                    <div className="d-flex flex-wrap gap-1">
+                                      {['Red', 'Blue', 'Green', 'Black', 'White', 'Grey', 'Pink', 'Yellow', 'Brown', 'Purple', 'Gold', 'Silver', 'Orange', 'Navy', 'Beige', 'Maroon', 'Olive', 'Cyan', 'Teal', 'Burgundy', 'Peach', 'Mint', 'Rose Gold', 'Copper', 'Bronze', 'Multicolor'].map(c => {
+                                        const currentColors = newProd.color ? newProd.color.split(',').map(s => s.trim()).filter(Boolean) : [];
+                                        const isSelected = currentColors.includes(c);
+                                        return (
+                                          <button
+                                            key={c}
+                                            type="button"
+                                            onClick={(e) => {
+                                              e.preventDefault();
+                                              if (isSelected) setNewProd({ ...newProd, color: currentColors.filter(x => x !== c).join(', ') });
+                                              else setNewProd({ ...newProd, color: [...currentColors, c].join(', ') });
+                                            }}
+                                            className="btn btn-sm"
+                                            style={{
+                                              borderRadius: '12px', padding: '2px 8px', fontSize: '11px',
+                                              background: isSelected ? '#1c2226' : '#fff',
+                                              color: isSelected ? '#fff' : '#454f5b',
+                                              border: `1px solid ${isSelected ? '#1c2226' : '#dfe3e8'}`
+                                            }}
+                                          >
+                                            {c}
+                                          </button>
+                                        );
+                                      })}
+                                    </div>
+                                    <input
+                                      type="text"
+                                      value={newProd.color || ""}
+                                      onChange={(e) => setNewProd({ ...newProd, color: e.target.value })}
+                                      placeholder="Exact color (e.g. Dark Green, Black & White, White)"
+                                      className="form-control form-control-sm mt-1"
+                                      style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc", fontSize: "12px" }}
+                                    />
+                                  </div>
+                                  <div className="col-12 mt-2">
+                                    <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Sizes</label>
+                                    <div className="d-flex flex-wrap gap-1">
+                                      {getSizesForCategory(newProd.category, activeStore?.category).map(s => {
+                                        const currentSizes = newProd.size ? newProd.size.split(',').map(x => x.trim()).filter(Boolean) : [];
+                                        const isSelected = currentSizes.includes(s);
+                                        return (
+                                          <button
+                                            key={s}
+                                            type="button"
+                                            onClick={(e) => {
+                                              e.preventDefault();
+                                              if (isSelected) setNewProd({ ...newProd, size: currentSizes.filter(x => x !== s).join(', ') });
+                                              else setNewProd({ ...newProd, size: [...currentSizes, s].join(', ') });
+                                            }}
+                                            className="btn btn-sm fw-bold"
+                                            style={{
+                                              borderRadius: '6px', padding: '2px 8px', fontSize: '11px', minWidth: '32px',
+                                              background: isSelected ? '#1c2226' : '#fff',
+                                              color: isSelected ? '#fff' : '#454f5b',
+                                              border: `1px solid ${isSelected ? '#1c2226' : '#dfe3e8'}`
+                                            }}
+                                          >
+                                            {s}
+                                          </button>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div>
+                              <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Description</label>
+                              <textarea
+                                value={newProd.description || ''}
+                                onChange={(e) => setNewProd({ ...newProd, description: e.target.value })}
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter') {
+                                    e.preventDefault();
+                                    setNewProd({ ...newProd, description: (newProd.description || '') + '\n• ' });
+                                  }
+                                }}
+                                onFocus={(e) => {
+                                  if (!newProd.description) {
+                                    setNewProd({ ...newProd, description: '• ' });
+                                  }
+                                }}
+                                rows="3"
+                                className="form-control"
+                                style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
+                                placeholder="• Enter product description (press Enter for new bullet point)"
+                              />
+                            </div>
+                            <div>
+                              <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Category</label>
+                              <select
+                                value={newProd.category}
+                                onChange={(e) => setNewProd({ ...newProd, category: e.target.value })}
+                                className="form-select"
+                                style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
+                                required
+                              >
+                                <option value="">Select a Collection</option>
+                                {categoriesList && categoriesList.map(cat => (
+                                  <option key={cat.id || cat.name} value={cat.name}>
+                                    {cat.name}
+                                  </option>
+                                ))}
+                                <option value="Uncategorized">Uncategorized</option>
+                              </select>
+                            </div>
+                            <div>
+                              <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Product Images Upload (Multiple)</label>
+                              <div className="mb-3">
+                                <label
+                                  className="position-relative d-flex flex-column align-items-center justify-content-center cursor-pointer w-100"
+                                  style={{ height: 120, background: "#f8f9fa", border: "2px dashed #FF5722", borderRadius: "12px", transition: "all 0.2s" }}
+                                  onMouseEnter={(e) => { e.currentTarget.style.background = "#e6f4ea"; }}
+                                  onMouseLeave={(e) => { e.currentTarget.style.background = "#f8f9fa"; }}
+                                >
+                                  <div className="d-flex align-items-center justify-content-center mb-2" style={{ width: 40, height: 40, borderRadius: "50%", background: "#e6f4ea" }}>
+                                    <Plus size={24} style={{ color: "#FF5722" }} />
+                                  </div>
+                                  <span className="fs-8 fw-semibold" style={{ color: "#FF5722" }}>Click here to upload images</span>
+                                  <span className="fs-9 mt-1" style={{ color: "#6c757d" }}>Supports JPG, PNG, WEBP files</span>
+                                  <input
+                                    type="file"
+                                    multiple
+                                    accept="image/*"
+                                    onChange={async (e) => {
+                                      const files = Array.from(e.target.files);
+                                      if (!files.length) return;
+                                      const readers = files.map(file => new Promise((resolve) => {
+                                        const reader = new FileReader();
+                                        reader.onload = (e) => {
+                                          const img = new Image();
+                                          img.onload = () => {
+                                            const canvas = document.createElement('canvas');
+                                            let width = img.width;
+                                            let height = img.height;
+                                            const maxW = 1024;
+                                            if (width > maxW) {
+                                              height = Math.round((height * maxW) / width);
+                                              width = maxW;
+                                            }
+                                            canvas.width = width;
+                                            canvas.height = height;
+                                            const ctx = canvas.getContext('2d');
+                                            ctx.drawImage(img, 0, 0, width, height);
+                                            resolve(canvas.toDataURL('image/jpeg', 0.7));
+                                          };
+                                          img.src = e.target.result;
+                                        };
+                                        reader.readAsDataURL(file);
+                                      }));
+                                      const results = await Promise.all(readers);
+                                      const currentImages = newProd.images?.length > 0 ? newProd.images : (newProd.image ? [{ url: newProd.image, color: '' }] : []);
+                                      const newImages = [...currentImages, ...results.map(url => ({ url, color: '' }))];
+                                      setNewProd({ ...newProd, images: newImages, image: newImages[0]?.url || '' });
+                                      e.target.value = null;
+                                    }}
+                                    className="d-none"
+                                  />
+                                </label>
+                              </div>
+
+                              <div className="d-flex flex-wrap gap-3 mt-3">
+                                {(newProd.images?.length > 0 ? newProd.images : (newProd.image ? [{ url: newProd.image, color: '' }] : [])).map((imgObj, idx) => (
+                                  <div key={idx} className="position-relative p-2 rounded d-flex flex-column align-items-center" style={{ background: "#f9fafb", border: "1px dashed #dfe3e8" }}>
+                                    <img
+                                      src={normalizeProductImage(imgObj.url, newProd.name)}
+                                      alt={`Preview ${idx}`}
+                                      className="rounded object-cover mb-2"
+                                      style={{ width: 80, height: 80, border: "1px solid #dfe3e8" }}
+                                      onError={(e) => { e.target.src = getFallbackImageByName(newProd.name); }}
+                                    />
+                                    {newProd.color && (
+                                      <select
+                                        className="form-select form-select-sm"
+                                        style={{ fontSize: '0.75rem', padding: '0.1rem 1rem 0.1rem 0.4rem', minWidth: '80px' }}
+                                        value={imgObj.color || ''}
+                                        onChange={(e) => {
+                                          const updatedImages = [...newProd.images];
+                                          updatedImages[idx] = { ...updatedImages[idx], color: e.target.value };
+                                          setNewProd({ ...newProd, images: updatedImages });
+                                        }}
+                                      >
+                                        <option value="">No Color</option>
+                                        {newProd.color.split(',').map(c => c.trim()).filter(Boolean).map(c => (
+                                          <option key={c} value={c}>{c}</option>
+                                        ))}
+                                      </select>
+                                    )}
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const currentImages = newProd.images?.length > 0 ? newProd.images : (newProd.image ? [{ url: newProd.image, color: '' }] : []);
+                                        const updated = currentImages.filter((_, i) => i !== idx);
+                                        setNewProd({ ...newProd, images: updated, image: updated[0]?.url || '' });
+                                      }}
+                                      className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border-0"
+                                      style={{ padding: '0.2rem 0.4rem', cursor: 'pointer' }}
+                                    >
+                                      ×
+                                    </button>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                            <button type="submit" className="btn text-white w-100 mt-3 py-2 fw-bold" style={{ background: "#1c2226", borderRadius: "8px" }}>{editingProduct ? "Save Changes" : "Add Product"}</button>
+
                           </form>
                         </div>
                       ) : (
@@ -3530,7 +3582,7 @@ export default function StoreOwnerDashboard() {
                       <p className="fs-7 text-muted mx-auto mb-4" style={{ maxWidth: 600 }}>
                         Turn your products and collections into a stunning, colorful, and highly attractive online storefront instantly. Our AI analyzes your category and inventory to generate a bespoke website design tailored for you.
                       </p>
-                      <button 
+                      <button
                         onClick={() => setActive('ai-builder')}
                         className="btn btn-lg fw-bold px-5 py-3 text-white shadow"
                         style={{ background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', borderRadius: '30px', transition: 'all 0.3s ease' }}
@@ -3549,7 +3601,7 @@ export default function StoreOwnerDashboard() {
           {/* MODULE: AI BUILDER */}
           {active === "ai-builder" && (
             <div className="d-flex flex-column gap-3">
-              <AIStoreBuilder 
+              <AIStoreBuilder
                 activeStore={activeStore}
                 categoriesList={categoriesList}
                 productsList={productsList}
@@ -3576,7 +3628,7 @@ export default function StoreOwnerDashboard() {
                     const cmp = parseFloat(String(p.compare_price).replace(/[^0-9.]/g, ""));
                     const prc = parseFloat(String(p.price).replace(/[^0-9.]/g, ""));
                     return !isNaN(cmp) && !isNaN(prc) && cmp > prc;
-                  } catch(e) {
+                  } catch (e) {
                     return false;
                   }
                 });
@@ -3610,7 +3662,7 @@ export default function StoreOwnerDashboard() {
                             const prc = parseFloat(String(p.price).replace(/[^0-9.]/g, ""));
                             const discountAmount = cmp - prc;
                             const discountPercentage = Math.round((discountAmount / cmp) * 100);
-                            
+
                             return (
                               <tr key={p.id} style={{ borderBottom: "1px solid #f1f2f4" }}>
                                 <td className="border-0 ps-4 py-3">
@@ -3712,7 +3764,7 @@ export default function StoreOwnerDashboard() {
                       <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Colors</label>
                       <div className="d-flex flex-wrap gap-1">
                         {['Red', 'Blue', 'Green', 'Black', 'White', 'Grey', 'Pink', 'Yellow', 'Brown', 'Purple', 'Gold', 'Silver', 'Orange', 'Navy'].map(c => {
-                          const currentColors = newProd.color ? newProd.color.split(',').map(s=>s.trim()).filter(Boolean) : [];
+                          const currentColors = newProd.color ? newProd.color.split(',').map(s => s.trim()).filter(Boolean) : [];
                           const isSelected = currentColors.includes(c);
                           return (
                             <button
@@ -3720,11 +3772,11 @@ export default function StoreOwnerDashboard() {
                               type="button"
                               onClick={(e) => {
                                 e.preventDefault();
-                                if (isSelected) setNewProd({...newProd, color: currentColors.filter(x => x !== c).join(', ')});
-                                else setNewProd({...newProd, color: [...currentColors, c].join(', ')});
+                                if (isSelected) setNewProd({ ...newProd, color: currentColors.filter(x => x !== c).join(', ') });
+                                else setNewProd({ ...newProd, color: [...currentColors, c].join(', ') });
                               }}
                               className="btn btn-sm"
-                              style={{ 
+                              style={{
                                 borderRadius: '12px', padding: '2px 8px', fontSize: '11px',
                                 background: isSelected ? '#1c2226' : '#fff',
                                 color: isSelected ? '#fff' : '#454f5b',
@@ -3749,7 +3801,7 @@ export default function StoreOwnerDashboard() {
                       <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Sizes</label>
                       <div className="d-flex flex-wrap gap-1">
                         {getSizesForCategory(newProd.category, activeStore?.category).map(s => {
-                          const currentSizes = newProd.size ? newProd.size.split(',').map(x=>x.trim()).filter(Boolean) : [];
+                          const currentSizes = newProd.size ? newProd.size.split(',').map(x => x.trim()).filter(Boolean) : [];
                           const isSelected = currentSizes.includes(s);
                           return (
                             <button
@@ -3757,11 +3809,11 @@ export default function StoreOwnerDashboard() {
                               type="button"
                               onClick={(e) => {
                                 e.preventDefault();
-                                if (isSelected) setNewProd({...newProd, size: currentSizes.filter(x => x !== s).join(', ')});
-                                else setNewProd({...newProd, size: [...currentSizes, s].join(', ')});
+                                if (isSelected) setNewProd({ ...newProd, size: currentSizes.filter(x => x !== s).join(', ') });
+                                else setNewProd({ ...newProd, size: [...currentSizes, s].join(', ') });
                               }}
                               className="btn btn-sm fw-bold"
-                              style={{ 
+                              style={{
                                 borderRadius: '6px', padding: '2px 8px', fontSize: '11px', minWidth: '32px',
                                 background: isSelected ? '#1c2226' : '#fff',
                                 color: isSelected ? '#fff' : '#454f5b',
@@ -3820,8 +3872,8 @@ export default function StoreOwnerDashboard() {
               <div>
                 <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Product Images Upload (Multiple)</label>
                 <div className="mb-3">
-                  <label 
-                    className="position-relative d-flex flex-column align-items-center justify-content-center cursor-pointer w-100" 
+                  <label
+                    className="position-relative d-flex flex-column align-items-center justify-content-center cursor-pointer w-100"
                     style={{ height: 120, background: "#f8f9fa", border: "2px dashed #FF5722", borderRadius: "12px", transition: "all 0.2s" }}
                     onMouseEnter={(e) => { e.currentTarget.style.background = "#e6f4ea"; }}
                     onMouseLeave={(e) => { e.currentTarget.style.background = "#f8f9fa"; }}
@@ -3871,7 +3923,7 @@ export default function StoreOwnerDashboard() {
                     />
                   </label>
                 </div>
-                
+
                 <div className="d-flex flex-wrap gap-3 mt-3">
                   {(newProd.images?.length > 0 ? newProd.images : (newProd.image ? [{ url: newProd.image, color: '' }] : [])).map((imgObj, idx) => (
                     <div key={idx} className="position-relative p-2 rounded d-flex flex-column align-items-center" style={{ background: "#f9fafb", border: "1px dashed #dfe3e8" }}>
@@ -3883,8 +3935,8 @@ export default function StoreOwnerDashboard() {
                         onError={(e) => { e.target.src = getFallbackImageByName(newProd.name); }}
                       />
                       {newProd.color && (
-                        <select 
-                          className="form-select form-select-sm" 
+                        <select
+                          className="form-select form-select-sm"
                           style={{ fontSize: '0.75rem', padding: '0.1rem 1rem 0.1rem 0.4rem', minWidth: '80px' }}
                           value={imgObj.color || ''}
                           onChange={(e) => {
@@ -3899,14 +3951,14 @@ export default function StoreOwnerDashboard() {
                           ))}
                         </select>
                       )}
-                      <button 
-                        type="button" 
+                      <button
+                        type="button"
                         onClick={() => {
-                           const currentImages = newProd.images?.length > 0 ? newProd.images : (newProd.image ? [{ url: newProd.image, color: '' }] : []);
-                           const updated = currentImages.filter((_, i) => i !== idx);
-                           setNewProd({ ...newProd, images: updated, image: updated[0]?.url || '' });
+                          const currentImages = newProd.images?.length > 0 ? newProd.images : (newProd.image ? [{ url: newProd.image, color: '' }] : []);
+                          const updated = currentImages.filter((_, i) => i !== idx);
+                          setNewProd({ ...newProd, images: updated, image: updated[0]?.url || '' });
                         }}
-                        className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border-0" 
+                        className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border-0"
                         style={{ padding: '0.2rem 0.4rem', cursor: 'pointer' }}
                       >
                         ×
@@ -3934,7 +3986,7 @@ export default function StoreOwnerDashboard() {
               <div className="d-flex justify-content-between"><span style={{ color: "#6d7175" }}>Date:</span> <span style={{ color: "#202223" }}>{invoiceModalOrder.date}</span></div>
               <div className="d-flex justify-content-between"><span style={{ color: "#6d7175" }}>Items:</span> <strong style={{ color: "#202223" }}>{invoiceModalOrder.items}</strong></div>
               <div className="d-flex justify-content-between border-top pt-3 mt-1" style={{ borderColor: "#dfe3e8" }}>
-                <span className="fw-bold" style={{ color: "#454f5b" }}>Total:</span> 
+                <span className="fw-bold" style={{ color: "#454f5b" }}>Total:</span>
                 <span className="fw-bold fs-6" style={{ color: "#FF5722" }}>{invoiceModalOrder.total}</span>
               </div>
             </div>
@@ -4169,26 +4221,25 @@ export default function StoreOwnerDashboard() {
           className="position-fixed top-0 bottom-0 start-0 end-0 d-flex align-items-center justify-content-center p-3"
           style={{
             background: "rgba(0, 0, 0, 0.65)",
-            backdropFilter: "blur(2px)",
+            backdropFilter: "blur(3px)",
             zIndex: 9999,
           }}
-          onClick={() => setShowPlanRequiredModal(false)}
         >
           <div
             className="w-100 position-relative shadow-lg"
             style={{
               maxWidth: 480,
               background: "#373a40",
-              border: "1px solid rgba(255, 255, 255, 0.25)",
+              border: "1px solid rgba(255, 255, 255, 0.4)",
               borderRadius: "14px",
-              padding: "28px 30px",
-              boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.6)",
+              padding: "26px 28px",
+              boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.7)",
               color: "#ffffff",
             }}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="d-flex align-items-center justify-content-between mb-4">
+            <div className="d-flex align-items-center justify-content-between mb-3">
               <div className="d-flex align-items-center gap-2">
                 <Sparkles size={22} style={{ color: "#f59e0b" }} />
                 <h3
@@ -4204,7 +4255,7 @@ export default function StoreOwnerDashboard() {
                 className="btn btn-sm p-0 border-0 bg-transparent"
                 style={{
                   color: "#9ca3af",
-                  fontSize: "1.25rem",
+                  fontSize: "1.2rem",
                   lineHeight: 1,
                   cursor: "pointer",
                   transition: "color 0.2s",
@@ -4216,6 +4267,15 @@ export default function StoreOwnerDashboard() {
                 ✕
               </button>
             </div>
+
+            {/* Divider Line under header */}
+            <div
+              style={{
+                height: "1px",
+                backgroundColor: "rgba(255, 255, 255, 0.22)",
+                marginBottom: "18px",
+              }}
+            />
 
             {/* Content Body */}
             <div className="mb-4" style={{ fontSize: "0.93rem", lineHeight: 1.6, color: "#f3f4f6" }}>
@@ -4232,31 +4292,31 @@ export default function StoreOwnerDashboard() {
               <button
                 type="button"
                 onClick={() => setShowPlanRequiredModal(false)}
-                className="btn px-4 py-2 border-0"
+                className="btn p-0 border-0 bg-transparent"
                 style={{
-                  backgroundColor: "#c89b2b",
-                  color: "#18181b",
-                  borderRadius: "6px",
-                  fontSize: "0.9rem",
-                  fontWeight: "600",
-                  transition: "opacity 0.2s",
+                  color: "#9ca3af",
+                  fontSize: "0.92rem",
+                  fontWeight: "500",
+                  cursor: "pointer",
+                  transition: "color 0.2s",
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.9")}
-                onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "#ffffff")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "#9ca3af")}
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={() => navigate('/plans?redirect=dashboard')}
-                className="btn px-4 py-2 border-0"
+                className="btn px-4 py-2 border-0 fw-bold"
                 style={{
                   background: "linear-gradient(135deg, #e5a823, #c88a1b)",
                   color: "#18181b",
                   borderRadius: "6px",
-                  fontSize: "0.9rem",
+                  fontSize: "0.92rem",
                   fontWeight: "700",
                   boxShadow: "0 4px 14px rgba(200, 138, 27, 0.35)",
+                  cursor: "pointer",
                   transition: "transform 0.15s, box-shadow 0.15s",
                 }}
                 onMouseEnter={(e) => {

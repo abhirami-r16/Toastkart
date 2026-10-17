@@ -17,6 +17,7 @@ import {
   TrendingUp, BarChart3, Store, ExternalLink
 } from 'lucide-react';
 import AureumLogo from '../assets/aureum-logo.svg';
+import { formatINR, parseNumeric } from '../utils/currency';
 import '../styles/dashboard-premium.css';
 
 const GOLD = "#007f5f";
@@ -1055,7 +1056,7 @@ export default function CustomerDashboard() {
                             <div className="fs-8 text-secondary">{o.itemSummary || 'Awaiting item details'}</div>
                           </td>
                           <td className="fs-8 text-secondary">{o.created_at}</td>
-                          <td className="fw-bold text-dark">${o.total_amount}</td>
+                          <td className="fw-bold text-dark">{formatINR(o.total_amount)}</td>
                           <td>
                             <span className={o.status === 'Delivered' || o.status === 'Completed' ? 'gold-badge-emerald' : 'gold-badge-amber'}>
                               {o.status}
@@ -1252,7 +1253,7 @@ export default function CustomerDashboard() {
                           >
                             {p.name}
                           </div>
-                          <div className="fs-6 font-bold text-dark mb-3">${p.price}</div>
+                          <div className="fs-6 font-bold text-dark mb-3">{formatINR(p.price)}</div>
                         </div>
                         <div className="d-flex gap-2">
                           <button onClick={() => setShowQuickViewProduct(p)} className="btn btn-outline-warning btn-sm fs-8 py-1.5 px-2 flex-shrink-0" title="Quick View">
@@ -1371,7 +1372,7 @@ export default function CustomerDashboard() {
                         />
                         <div className="flex-grow-1">
                           <div className="fs-7 font-bold text-dark">{item.name}</div>
-                          <div className="fs-8 text-warning font-bold">${item.price}</div>
+                          <div className="fs-8 text-warning font-bold">{formatINR(item.price)}</div>
                           <div className="d-flex gap-2 mt-2">
                             <button onClick={() => handleMoveToCart(item)} className="btn btn-sm btn-gold-primary fs-8 py-1 px-2">Move to Cart</button>
                             <button onClick={() => handleRemoveWishlistItem(item.id)} className="btn btn-sm btn-outline-danger fs-8 py-1 px-2">Remove</button>
@@ -1438,8 +1439,8 @@ export default function CustomerDashboard() {
                                     </div>
                                   </td>
                                   <td className="text-end">{quantity}</td>
-                                  <td className="text-end text-warning">${unitPrice.toFixed(2)}</td>
-                                  <td className="text-end text-dark">${rowTotal}</td>
+                                  <td className="text-end text-warning">{formatINR(unitPrice)}</td>
+                                  <td className="text-end text-dark">{formatINR(rowTotal)}</td>
                                   <td className="text-end">
                                     <button onClick={() => removeFromCart?.(item.id)} className="btn btn-sm btn-outline-danger p-1">
                                       <Trash2 size={14} />
@@ -1457,11 +1458,11 @@ export default function CustomerDashboard() {
                   <div className="col-12 col-lg-4">
                     <div className="bg-white border rounded-4 shadow-sm  p-4">
                       <h3 className="fs-6 font-bold text-dark mb-3">Order Summary</h3>
-                      <div className="d-flex justify-content-between fs-7 mb-2"><span className="text-secondary">Items ({totalCartCount})</span> <span>${cartSubtotal.toFixed(2)}</span></div>
+                      <div className="d-flex justify-content-between fs-7 mb-2"><span className="text-secondary">Items ({totalCartCount})</span> <span>{formatINR(cartSubtotal)}</span></div>
                       <div className="d-flex justify-content-between fs-7 mb-2"><span className="text-secondary">Shipping</span> <span className="text-success">FREE</span></div>
-                      <div className="d-flex justify-content-between fs-7 mb-2"><span className="text-secondary">Taxes</span> <span>${(cartSubtotal * 0.00).toFixed(2)}</span></div>
+                      <div className="d-flex justify-content-between fs-7 mb-2"><span className="text-secondary">Taxes</span> <span>{formatINR(cartSubtotal * 0.00)}</span></div>
                       <div className="d-flex justify-content-between fs-6 font-bold border-top pt-2 mb-3" style={{ borderColor: 'rgba(212,175,55,0.2)' }}>
-                        <span>Total</span> <span className="text-warning">${cartSubtotal.toFixed(2)}</span>
+                        <span>Total</span> <span className="text-warning">{formatINR(cartSubtotal)}</span>
                       </div>
                       <button onClick={handleProceedToPayment} className="btn btn-gold-primary w-100 py-2 font-bold">
                         Proceed to Payment
@@ -1497,7 +1498,7 @@ export default function CustomerDashboard() {
                         </div>
                         {paymentError && <div className="text-danger fs-8">{paymentError}</div>}
                         <button type="submit" disabled={paymentProcessing} className="btn btn-gold-primary w-100 py-2 font-bold">
-                          {paymentProcessing ? 'Processing Order…' : `Confirm Order for ${paymentAmount ? `$${paymentAmount.toFixed(2)}` : ''}`}
+                          {paymentProcessing ? 'Processing Order…' : `Confirm Order for ${paymentAmount ? formatINR(paymentAmount) : ''}`}
                         </button>
                         <button onClick={() => setActiveTab('cart')} type="button" className="btn btn-outline-secondary w-100 py-2">
                           Back to Cart
@@ -1507,7 +1508,7 @@ export default function CustomerDashboard() {
                       <div className="text-center py-5">
                         <div className="fs-1 text-success mb-3">✓</div>
                         <h3 className="fs-5 font-bold text-dark mb-2">Order Confirmed</h3>
-                        <p className="fs-8 text-secondary mb-3">Your order of <strong>${paymentAmount.toFixed(2)}</strong> has been successfully placed.</p>
+                        <p className="fs-8 text-secondary mb-3">Your order of <strong>{formatINR(paymentAmount)}</strong> has been successfully placed.</p>
                         <button onClick={() => setActiveTab('orders')} className="btn btn-outline-warning btn-sm px-4 py-2">
                           View Order History
                         </button>
@@ -1519,11 +1520,11 @@ export default function CustomerDashboard() {
                 <div className="col-12 col-lg-5">
                   <div className="bg-white border rounded-4 shadow-sm  p-4">
                     <h3 className="fs-6 font-bold text-dark mb-3">Order Summary</h3>
-                    <div className="d-flex justify-content-between fs-7 mb-2"><span className="text-secondary">Subtotal</span> <span>${paymentAmount.toFixed(2)}</span></div>
-                    <div className="d-flex justify-content-between fs-7 mb-2"><span className="text-secondary">COD Fee</span> <span>$0.00</span></div>
+                    <div className="d-flex justify-content-between fs-7 mb-2"><span className="text-secondary">Subtotal</span> <span>₹{paymentAmount.toFixed(2)}</span></div>
+                    <div className="d-flex justify-content-between fs-7 mb-2"><span className="text-secondary">COD Fee</span> <span>₹0.00</span></div>
                     <div className="d-flex justify-content-between fs-7 mb-3"><span className="text-secondary">Shipping</span> <span className="text-success">FREE</span></div>
                     <div className="d-flex justify-content-between fs-6 font-bold border-top pt-2" style={{ borderColor: 'rgba(212,175,55,0.2)' }}>
-                      <span>Total</span> <span className="text-warning">${paymentAmount.toFixed(2)}</span>
+                      <span>Total</span> <span className="text-warning">₹{paymentAmount.toFixed(2)}</span>
                     </div>
                     <div className="mt-4 p-3 rounded-3" style={{ background: '#0f0d0b', border: '1px solid rgba(212,175,55,0.12)' }}>
                       <div className="fs-8 text-warning font-bold mb-2">Cash on Delivery</div>
@@ -1567,7 +1568,7 @@ export default function CustomerDashboard() {
                             <div className="fs-8 text-secondary">{o.itemSummary || 'No items listed'}</div>
                           </td>
                           <td className="fs-8 text-secondary">{o.carrier || 'FedEx'}</td>
-                          <td className="fw-bold">${o.total_amount}</td>
+                          <td className="fw-bold">{formatINR(o.total_amount)}</td>
                           <td><span className="gold-badge-emerald">{o.status}</span></td>
                           <td className="text-end">
                             <button onClick={() => handleViewOrderDetails(o)} className="btn btn-sm btn-gold-primary fs-8 py-1 px-2">
@@ -1618,7 +1619,7 @@ export default function CustomerDashboard() {
               <div className="row g-3">
                 {[
                   { code: 'AUREUMGOLD20', desc: 'Get 20% off on luxury watches & jewelry', expiry: 'Expires Jul 31' },
-                  { code: 'FREESHIP100', desc: 'Free express shipping on orders over $100', expiry: 'Expires Aug 15' },
+                  { code: 'FREESHIP100', desc: 'Free express shipping on orders over ₹500', expiry: 'Expires Aug 15' },
                 ].map((c, i) => (
                   <div key={i} className="col-12 col-md-6">
                     <div className="bg-white border rounded-4 shadow-sm  p-3 border-dashed">
@@ -1779,7 +1780,7 @@ export default function CustomerDashboard() {
                   <div className="d-flex justify-between"><span className="text-secondary">Carrier:</span> <strong>{selectedOrderDetails?.carrier || showTrackingModalOrder.carrier || 'FedEx Express'}</strong></div>
                   <div className="d-flex justify-between"><span className="text-secondary">Tracking Code:</span> <span className="font-mono text-warning">{selectedOrderDetails?.tracking || showTrackingModalOrder.tracking || 'TRK-982401'}</span></div>
                   <div className="d-flex justify-between"><span className="text-secondary">Status:</span> <span className="gold-badge-emerald">{selectedOrderDetails?.status || showTrackingModalOrder.status || 'Pending'}</span></div>
-                  <div className="d-flex justify-between"><span className="text-secondary">Total Paid:</span> <strong>${(selectedOrderDetails?.total_amount ?? showTrackingModalOrder.total_amount ?? 0).toFixed(2)}</strong></div>
+                  <div className="d-flex justify-between"><span className="text-secondary">Total Paid:</span> <strong>{formatINR(selectedOrderDetails?.total_amount ?? showTrackingModalOrder.total_amount ?? 0)}</strong></div>
                 </div>
 
                 <div className="p-3 bg-light rounded border border-light mb-3">
@@ -1884,7 +1885,7 @@ export default function CustomerDashboard() {
                 <div>
                   <div className="d-flex align-items-center justify-content-between mb-1">
                     <span className="fs-8 text-warning font-semibold tracking-wider text-uppercase">{showQuickViewProduct.category || "General"}</span>
-                    <span className="fs-6 font-bold text-dark">${showQuickViewProduct.price}</span>
+                    <span className="fs-6 font-bold text-dark">{formatINR(showQuickViewProduct.price)}</span>
                   </div>
                   <h3 className="fs-4 font-bold text-dark mb-2">{showQuickViewProduct.name}</h3>
 
