@@ -134,7 +134,7 @@ export default function MyOrders() {
                 </div>
                 <div className="d-flex align-items-center gap-3">
                   <div className="fw-bold fs-5">
-                    ${Number(order.total_amount || order.total || 0).toFixed(2)}
+                    ₹{Number(order.total_amount || order.total || 0).toFixed(2)}
                   </div>
                   <div className={`badge rounded-pill px-3 py-2 fw-semibold d-flex align-items-center gap-1 ${getStatusBadgeClass(order.status)}`}>
                     {getStatusIcon(order.status)}
@@ -157,10 +157,11 @@ export default function MyOrders() {
                       </div>
                       <div>
                         <div className="fs-7 fw-semibold">{item.product?.name || item.name || 'Product Item'}</div>
-                        <div className="text-secondary fs-8">Qty: {item.quantity || 1} {item.price ? `• $${Number(item.price).toFixed(2)}` : ''}</div>
+                        <div className="text-secondary fs-8">Qty: {item.quantity || 1} {item.price ? `• ₹${Number(item.price).toFixed(2)}` : ''}</div>
                       </div>
                     </div>
                   ))
+
                 ) : (
                   <div className="text-secondary fs-7 fst-italic">
                     {order.itemSummary || 'Item details not available'}

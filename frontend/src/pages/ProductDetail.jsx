@@ -140,8 +140,9 @@ export default function ProductDetail() {
                   <DollarSign size={14} style={{ color: GOLD }} /> Price
                 </div>
                 <div className="mt-2 text-xl font-bold" style={{ color: GOLD_LIGHT }}>
-                  {formatPrice ? formatPrice(product.price) : `$${Number(product.price).toFixed(2)}`}
+                  {formatPrice ? formatPrice(product.price) : `₹${Number(product.price).toFixed(2)}`}
                 </div>
+
               </div>
 
               <div className="rounded-2xl p-4" style={{ background: '#161310', border: '1px solid rgba(212,175,55,0.14)' }}>

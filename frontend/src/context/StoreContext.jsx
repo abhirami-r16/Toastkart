@@ -339,7 +339,7 @@ export const useStore = () => {
       createStore: async () => ({ success: true }),
       updateStore: async () => ({ success: true }),
       deleteStore: async () => ({ success: true }),
-      formatPrice: (val) => `$${val}`,
+      formatPrice: (val) => `₹${val}`,
       setActiveStore: () => {}
     };
   }
