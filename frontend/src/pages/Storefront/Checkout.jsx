@@ -126,7 +126,12 @@ export default function Checkout() {
           customer: orderPayload.customer_name,
           email: orderPayload.customer_email,
           shipping_address: orderPayload.shipping_address,
-          total: cartTotal.toFixed(2),
+          total: (isNaN(cartTotal) || cartTotal <= 0 
+            ? cartItems.reduce((acc, item) => acc + (parseFloat(String(item.price).replace(/[^0-9.]/g, '')) || 0) * (item.quantity || 1), 0) 
+            : cartTotal).toFixed(2),
+          total_amount: (isNaN(cartTotal) || cartTotal <= 0 
+            ? cartItems.reduce((acc, item) => acc + (parseFloat(String(item.price).replace(/[^0-9.]/g, '')) || 0) * (item.quantity || 1), 0) 
+            : cartTotal).toFixed(2),
           status: 'Pending',
           payment_method: 'cod',
           date: new Date().toISOString(),
@@ -134,7 +139,7 @@ export default function Checkout() {
             product_id: item.id,
             product_name: item.name,
             product: item,
-            price: item.price,
+            price: parseFloat(String(item.price).replace(/[^0-9.]/g, '')) || 0,
             quantity: item.quantity,
             image_url: item.image || item.image_url
           }))

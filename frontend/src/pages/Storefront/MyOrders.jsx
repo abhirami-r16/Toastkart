@@ -103,7 +103,38 @@ export default function MyOrders() {
     });
   };
 
+  const getOrderTotal = (order) => {
+    const rawVal = order?.total_amount != null && order?.total_amount !== '' && order?.total_amount !== 'NaN'
+      ? order.total_amount
+      : (order?.total != null && order?.total !== '' && order?.total !== 'NaN' ? order.total : null);
 
+    if (rawVal != null) {
+      const clean = String(rawVal).replace(/[^0-9.]/g, '');
+      const parsed = parseFloat(clean);
+      if (!isNaN(parsed) && parsed > 0) {
+        return parsed.toFixed(2);
+      }
+    }
+
+    if (order?.items && Array.isArray(order.items) && order.items.length > 0) {
+      const computed = order.items.reduce((sum, item) => {
+        const pClean = String(item.price || item.product?.price || '0').replace(/[^0-9.]/g, '');
+        const pNum = parseFloat(pClean) || 0;
+        const qNum = parseInt(item.quantity, 10) || 1;
+        return sum + (pNum * qNum);
+      }, 0);
+      if (computed > 0) return computed.toFixed(2);
+    }
+
+    return '0.00';
+  };
+
+  const formatItemPrice = (price) => {
+    if (price == null || price === '' || price === 'NaN') return '';
+    const clean = String(price).replace(/[^0-9.]/g, '');
+    const num = parseFloat(clean);
+    return isNaN(num) ? '' : num.toFixed(2);
+  };
 
   return (
     <div className="storefront-container py-5 min-vh-100">
@@ -134,7 +165,7 @@ export default function MyOrders() {
                 </div>
                 <div className="d-flex align-items-center gap-3">
                   <div className="fw-bold fs-5">
-                    ₹{Number(order.total_amount || order.total || 0).toFixed(2)}
+                    ₹{getOrderTotal(order)}
                   </div>
                   <div className={`badge rounded-pill px-3 py-2 fw-semibold d-flex align-items-center gap-1 ${getStatusBadgeClass(order.status)}`}>
                     {getStatusIcon(order.status)}
@@ -157,7 +188,7 @@ export default function MyOrders() {
                       </div>
                       <div>
                         <div className="fs-7 fw-semibold">{item.product?.name || item.name || 'Product Item'}</div>
-                        <div className="text-secondary fs-8">Qty: {item.quantity || 1} {item.price ? `• ₹${Number(item.price).toFixed(2)}` : ''}</div>
+                        <div className="text-secondary fs-8">Qty: {item.quantity || 1} {formatItemPrice(item.price) ? `• ₹${formatItemPrice(item.price)}` : ''}</div>
                       </div>
                     </div>
                   ))
