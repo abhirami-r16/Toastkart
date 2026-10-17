@@ -41,4 +41,10 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function meeshoProduct()
+    {
+        return $this->hasOne(MeeshoProduct::class, 'product_id');
+    }
 }
+

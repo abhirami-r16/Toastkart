@@ -103,7 +103,7 @@ Route::post('/subscriptions/autopay/cancel', [\App\Http\Controllers\Subscription
 
 // Webhook
 Route::post('/webhooks/razorpay', [\App\Http\Controllers\RazorpayWebhookController::class, 'handleWebhook']);
-
+Route::post('/webhooks/meesho-tracking', [\App\Http\Controllers\MeeshoController::class, 'handleTrackingWebhook']);
 
 // Meesho Dropshipping & Reselling Routes (Authenticated Store Owner Only)
 Route::prefix('meesho')->middleware('auth:sanctum')->group(function () {
@@ -125,6 +125,9 @@ Route::prefix('meesho')->middleware('auth:sanctum')->group(function () {
     Route::get('/orders', [\App\Http\Controllers\MeeshoController::class, 'getOrders']);
     Route::post('/orders/create-from-toastkart', [\App\Http\Controllers\MeeshoController::class, 'mapOrder']);
     Route::post('/orders/{id}/process', [\App\Http\Controllers\MeeshoController::class, 'processSupplierOrder']);
+    Route::post('/orders/{id}/retry', [\App\Http\Controllers\MeeshoController::class, 'retrySupplierOrder']);
+    Route::post('/orders/{id}/sync-tracking', [\App\Http\Controllers\MeeshoController::class, 'syncOrderTracking']);
+    Route::post('/orders/sync-all-tracking', [\App\Http\Controllers\MeeshoController::class, 'syncAllStoreTracking']);
     Route::put('/orders/{id}/tracking', [\App\Http\Controllers\MeeshoController::class, 'updateTracking']);
     Route::post('/orders/{id}/return', [\App\Http\Controllers\MeeshoController::class, 'handleReturn']);
     Route::get('/logs', [\App\Http\Controllers\MeeshoController::class, 'getLogs']);

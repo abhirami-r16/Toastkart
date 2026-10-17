@@ -64,4 +64,13 @@ return [
         'actor' => env('APIFY_MEESHO_ACTOR', 'easyapi~meesho-product-search-scraper'),
         'timeout' => (int) env('APIFY_TIMEOUT', 12),
     ],
+    'meesho' => [
+        'fulfillment_mode' => env('MEESHO_FULFILLMENT_MODE', 'manual_assisted'), // manual_assisted, sandbox, partner_api
+        'auto_fulfill_policy' => env('MEESHO_AUTO_FULFILL_POLICY', 'paid_only'), // paid_only, allow_cod, disabled
+        'partner_api_url' => env('MEESHO_PARTNER_API_URL', null),
+        'partner_client_id' => env('MEESHO_PARTNER_CLIENT_ID', null),
+        'partner_client_secret' => env('MEESHO_PARTNER_CLIENT_SECRET', null),
+        'webhook_secret' => env('MEESHO_WEBHOOK_SECRET', null),
+        'timeout' => (int) env('MEESHO_API_TIMEOUT', 15),
+    ],
 ];

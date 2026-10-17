@@ -42,7 +42,10 @@ export default function PlanSelection() {
         navigate('/login', { replace: true });
       } else if (
         user.active_subscription ||
-        user.activeSubscription
+        user.activeSubscription ||
+        user.role === 'owner' ||
+        user.role === 'merchant' ||
+        user.role === 'admin'
       ) {
         const searchParams = new URLSearchParams(window.location.search);
         const redirect = searchParams.get('redirect');

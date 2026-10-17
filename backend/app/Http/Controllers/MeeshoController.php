@@ -19,10 +19,14 @@ use Illuminate\Support\Str;
 class MeeshoController extends Controller
 {
     protected $meeshoService;
+    protected $fulfillmentService;
 
-    public function __construct(MeeshoIntegrationService $meeshoService)
-    {
+    public function __construct(
+        MeeshoIntegrationService $meeshoService,
+        \App\Services\Fulfillment\MeeshoFulfillmentService $fulfillmentService
+    ) {
         $this->meeshoService = $meeshoService;
+        $this->fulfillmentService = $fulfillmentService;
     }
 
     private function getStore(Request $request): ?Store
@@ -319,7 +323,8 @@ class MeeshoController extends Controller
                 $maxPrice
             );
 
-            if ($result['ok'] && !empty($result['products'])) {
+            if ($result['ok']) {
+                $rawProducts = $result['products'] ?? [];
                 $items = array_map(function ($item) use ($importedIds, $store) {
                     $item['is_imported'] = in_array($item['meesho_product_id'], $importedIds, true);
                     // Pre-cache item detail for fast and reliable access
@@ -327,7 +332,7 @@ class MeeshoController extends Controller
                         Cache::put($this->liveProductCacheKey($store->id, (string)$item['meesho_product_id']), $item, now()->addMinutes(60));
                     }
                     return $item;
-                }, $result['products']);
+                }, $rawProducts);
 
                 // Provider safety bound filters
                 if ($minPrice !== null) {
@@ -337,19 +342,29 @@ class MeeshoController extends Controller
                     $items = array_values(array_filter($items, fn ($item) => ($item['source_price'] ?? 0) <= $maxPrice));
                 }
 
-                if (!empty($items)) {
-                    return response()->json([
-                        'catalog' => $items,
-                        'total' => null,
-                        'cursor' => $result['cursor'],
-                        'has_more' => $result['has_more'],
-                        'catalog_source' => 'ReefAPI / Meesho Live',
-                        'is_staging' => false,
-                        'live_search_configured' => true,
-                        'category_applied' => $category !== '' && strtolower($category) !== 'all' ? $category : null,
-                    ]);
-                }
+                return response()->json([
+                    'catalog' => $items,
+                    'total' => count($items),
+                    'cursor' => $result['cursor'] ?? null,
+                    'has_more' => $result['has_more'] ?? false,
+                    'catalog_source' => 'ReefAPI / Meesho Live',
+                    'is_staging' => false,
+                    'live_search_configured' => true,
+                    'category_applied' => $category !== '' && strtolower($category) !== 'all' ? $category : null,
+                ]);
             }
+
+            // Return provider error (e.g. 429 rate limit or 503)
+            $errResponse = response()->json([
+                'code' => $result['code'] ?? 'UPSTREAM_ERROR',
+                'message' => $result['message'] ?? 'ReefAPI error occurred.',
+                'retry_after' => $result['retry_after'] ?? null,
+            ], $result['status'] ?? 502);
+
+            if (!empty($result['retry_after'])) {
+                $errResponse->header('Retry-After', (string)$result['retry_after']);
+            }
+            return $errResponse;
         }
 
         // 2. Apify Meesho Search Scraper fallback if configured
@@ -842,7 +857,7 @@ class MeeshoController extends Controller
                     }
                 }
 
-                $isActive = isset($validated['is_active']) ? (bool) $validated['is_active'] : true;
+                $isActive = isset($validated['is_active']) ? (bool) $validated['is_active'] : false;
 
                 $product = Product::create([
                     'store_id' => $store->id,
@@ -1176,49 +1191,82 @@ class MeeshoController extends Controller
             'notes' => 'nullable|string',
         ]);
 
-        // Safety check: Prevent booking if customer payment has failed
-        if ($mOrder->customer_payment_status === 'Failed') {
-            return response()->json([
-                'message' => 'Cannot process supplier fulfillment for an order with failed customer payment.',
-            ], 422);
-        }
-
-        // Duplicate order check / idempotency
-        if (!empty($mOrder->meesho_order_id) && in_array($mOrder->supplier_order_status, ['Placed with Supplier', 'Confirmed', 'Supplier Processing'])) {
-            if ($mOrder->meesho_order_id === $validated['meesho_order_id']) {
-                return response()->json([
-                    'message' => 'Order is already booked with this supplier reference.',
-                    'order' => $mOrder->fresh()->load(['order', 'meeshoProduct']),
-                ], 200);
-            }
-
-            return response()->json([
-                'message' => "Supplier order already booked with reference '{$mOrder->meesho_order_id}'. Cancel existing booking first to re-book.",
-            ], 422);
-        }
-
-        $mOrder->update([
-            'meesho_order_id' => $validated['meesho_order_id'],
-            'supplier_order_status' => $validated['supplier_order_status'],
-            'supplier_placed_at' => now(),
-            'notes' => $validated['notes'] ?? $mOrder->notes,
-        ]);
-
-        if ($mOrder->order) {
-            $mOrder->order->update(['status' => 'Processing']);
-        }
-
-        MeeshoSyncLog::create([
-            'store_id' => $store->id,
-            'action_type' => 'order_dispatch',
-            'status' => 'success',
-            'message' => "Order #{$mOrder->order_id} placed with Meesho supplier (Ref: {$validated['meesho_order_id']}).",
-            'payload' => ['supplier_ref' => $validated['meesho_order_id'], 'status' => $validated['supplier_order_status']],
-        ]);
+        $res = $this->fulfillmentService->submitToSupplier(
+            $mOrder,
+            $validated['meesho_order_id'],
+            $validated['notes'] ?? null
+        );
 
         return response()->json([
-            'message' => 'Supplier order placed successfully.',
-            'order' => $mOrder->fresh()->load(['order', 'meeshoProduct']),
+            'message' => $res['message'],
+            'order' => $res['order'] ?? $mOrder->fresh()->load(['order', 'meeshoProduct']),
+        ], $res['status'] ?? ($res['ok'] ? 200 : 422));
+    }
+
+    /**
+     * POST /api/meesho/orders/{id}/retry
+     * Retries submission to supplier safely using the configured provider.
+     */
+    public function retrySupplierOrder(Request $request, $id)
+    {
+        $store = $this->getStore($request);
+        if (!$store) {
+            return response()->json(['message' => 'Store not found or unauthorized access.'], 403);
+        }
+
+        $mOrder = MeeshoOrder::where('store_id', $store->id)->findOrFail($id);
+        $result = $this->fulfillmentService->submitToSupplier($mOrder);
+
+        return response()->json([
+            'message' => $result['message'],
+            'order' => $result['order'] ?? $mOrder->fresh()->load(['order', 'meeshoProduct']),
+        ], $result['status'] ?? ($result['ok'] ? 200 : 422));
+    }
+
+    /**
+     * POST /api/meesho/orders/{id}/sync-tracking
+     * Queries upstream tracking status and synchronizes Toastkart customer order.
+     */
+    public function syncOrderTracking(Request $request, $id)
+    {
+        $store = $this->getStore($request);
+        if (!$store) {
+            return response()->json(['message' => 'Store not found or unauthorized access.'], 403);
+        }
+
+        $mOrder = MeeshoOrder::where('store_id', $store->id)->findOrFail($id);
+        $result = $this->fulfillmentService->syncTracking($mOrder);
+
+        return response()->json([
+            'message' => $result['message'],
+            'order' => $result['order'] ?? $mOrder->fresh()->load(['order', 'meeshoProduct']),
+        ], $result['ok'] ? 200 : 422);
+    }
+
+    /**
+     * POST /api/meesho/orders/sync-all-tracking
+     * Synchronize tracking for all active in-transit orders.
+     */
+    public function syncAllStoreTracking(Request $request)
+    {
+        $store = $this->getStore($request);
+        if (!$store) {
+            return response()->json(['message' => 'Store not found or unauthorized access.'], 403);
+        }
+
+        $activeOrders = MeeshoOrder::where('store_id', $store->id)
+            ->whereIn('shipment_status', ['Label Created', 'Picked Up', 'In Transit', 'Out for Delivery'])
+            ->get();
+
+        $synced = 0;
+        foreach ($activeOrders as $ord) {
+            $res = $this->fulfillmentService->syncTracking($ord);
+            if ($res['ok']) $synced++;
+        }
+
+        return response()->json([
+            'message' => "Synchronized tracking for {$synced} of {$activeOrders->count()} orders.",
+            'synced_count' => $synced,
         ]);
     }
 
@@ -1289,43 +1337,89 @@ class MeeshoController extends Controller
 
         $mOrder = MeeshoOrder::where('store_id', $store->id)->findOrFail($id);
 
-        if ($mOrder->return_status === 'refunded') {
-            return response()->json(['message' => 'This order has already been refunded.'], 422);
-        }
-
         $validated = $request->validate([
-            'return_status' => 'required|string|in:requested,approved,picked_up,refunded,rejected',
+            'return_status' => 'required|string|in:requested,approved,picked_up,refunded,rejected,rto',
             'return_reason' => 'required|string|max:500',
             'refund_amount' => 'nullable|numeric|min:0|max:' . max(1, (float)$mOrder->toastkart_selling_price),
         ]);
 
-        $refundAmt = (float)($validated['refund_amount'] ?? $mOrder->toastkart_selling_price);
+        $refundAmt = isset($validated['refund_amount']) ? (float)$validated['refund_amount'] : null;
 
+        $res = $this->fulfillmentService->handleReturn(
+            $mOrder,
+            $validated['return_status'],
+            $validated['return_reason'],
+            $refundAmt
+        );
+
+        return response()->json([
+            'message' => $res['message'],
+            'order' => $res['order'] ?? $mOrder->fresh()->load(['order', 'meeshoProduct']),
+        ], $res['status'] ?? ($res['ok'] ? 200 : 422));
+    }
+
+    /**
+     * POST /api/webhooks/meesho-tracking
+     * Public carrier / supplier tracking webhook endpoint.
+     */
+    public function handleTrackingWebhook(Request $request)
+    {
+        $webhookSecret = config('services.meesho.webhook_secret');
+        if (!empty($webhookSecret)) {
+            $signature = $request->header('X-Webhook-Signature');
+            $expectedSignature = hash_hmac('sha256', $request->getContent(), $webhookSecret);
+            if (!hash_equals($expectedSignature, (string)$signature)) {
+                return response()->json(['message' => 'Invalid webhook signature.'], 401);
+            }
+        }
+
+        $supplierOrderId = $request->input('supplier_order_id') ?? $request->input('order_id');
+        $awb = $request->input('awb_number') ?? $request->input('tracking_number');
+        $shipmentStatus = $request->input('shipment_status');
+
+        if (!$shipmentStatus || (!$supplierOrderId && !$awb)) {
+            return response()->json(['message' => 'Missing required webhook parameters.'], 422);
+        }
+
+        $query = MeeshoOrder::query();
+        if ($supplierOrderId) {
+            $query->where('meesho_order_id', $supplierOrderId);
+        } elseif ($awb) {
+            $query->where('awb_number', $awb);
+        }
+        $mOrder = $query->first();
+
+        if (!$mOrder) {
+            return response()->json(['message' => 'Fulfillment record not found.'], 404);
+        }
+
+        $isDelivered = $shipmentStatus === 'Delivered';
         $mOrder->update([
-            'return_status' => $validated['return_status'],
-            'return_reason' => $validated['return_reason'],
-            'refund_amount' => $refundAmt,
-            'is_profit_confirmed' => false,
-            'net_profit' => ($validated['return_status'] === 'refunded') ? 0.00 : $mOrder->net_profit,
-            'customer_payment_status' => ($validated['return_status'] === 'refunded') ? 'Refunded' : $mOrder->customer_payment_status,
+            'shipment_status' => $shipmentStatus,
+            'courier_partner' => $request->input('courier_partner') ?? $mOrder->courier_partner,
+            'awb_number' => $awb ?? $mOrder->awb_number,
+            'tracking_url' => $request->input('tracking_url') ?? $mOrder->tracking_url,
+            'delivered_at' => $isDelivered ? now() : $mOrder->delivered_at,
+            'is_profit_confirmed' => $isDelivered,
         ]);
 
-        if ($validated['return_status'] === 'refunded' && $mOrder->order) {
-            $mOrder->order->update(['status' => 'Cancelled']);
+        if ($mOrder->order) {
+            if ($isDelivered) {
+                $mOrder->order->update(['status' => 'Delivered']);
+            } elseif (in_array($shipmentStatus, ['Picked Up', 'In Transit', 'Out for Delivery'])) {
+                $mOrder->order->update(['status' => 'Shipped']);
+            }
         }
 
         MeeshoSyncLog::create([
-            'store_id' => $store->id,
-            'action_type' => 'order_dispatch',
-            'status' => 'warning',
-            'message' => "Return status for Order #{$mOrder->order_id} changed to {$validated['return_status']}.",
-            'payload' => $validated,
+            'store_id' => $mOrder->store_id,
+            'action_type' => 'tracking_update',
+            'status' => 'success',
+            'message' => "Webhook tracking update: Order #{$mOrder->order_id} status changed to {$shipmentStatus}.",
+            'payload' => $request->all(),
         ]);
 
-        return response()->json([
-            'message' => 'Return/Cancellation status updated.',
-            'order' => $mOrder->fresh()->load(['order', 'meeshoProduct']),
-        ]);
+        return response()->json(['message' => 'Webhook tracking processed successfully.']);
     }
 
     /**

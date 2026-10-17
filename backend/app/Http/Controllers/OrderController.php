@@ -14,7 +14,7 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Order::with(['items.product', 'customer', 'store']);
+        $query = Order::with(['items.product.meeshoProduct', 'meeshoOrders.meeshoProduct', 'customer', 'store']);
 
         if ($request->has('store_id') && $request->store_id) {
             $query->where(function ($q) use ($request) {
@@ -156,13 +156,20 @@ class OrderController extends Controller
                 OrderItem::create($itemData);
             }
 
+            // Automatically check and process dropshipping fulfillment for Meesho reselling products
+            try {
+                app(\App\Services\Fulfillment\MeeshoFulfillmentService::class)->processNewToastkartOrder($order);
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::warning('Automatic dropshipping fulfillment creation failed: ' . $e->getMessage());
+            }
+
             return response()->json($order->load(['items.product', 'customer', 'store']), 201);
         });
     }
 
     public function show($id)
     {
-        $order = Order::with(['items.product', 'customer', 'store'])->findOrFail($id);
+        $order = Order::with(['items.product.meeshoProduct', 'meeshoOrders.meeshoProduct', 'customer', 'store'])->findOrFail($id);
         return response()->json($order);
     }
 

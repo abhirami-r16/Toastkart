@@ -307,6 +307,57 @@ export default function MeeshoDropshippingView({ activeStore, onGoToProducts }) 
     }
   };
 
+  const handleRetryOrder = async (orderId) => {
+    setLoading(true);
+    try {
+      const res = await api.post(`/meesho/orders/${orderId}/retry`, {}, {
+        headers: activeStore?.id ? { 'X-Store-Id': activeStore.id } : {},
+      });
+      showToast(res.data.message || 'Supplier submission re-attempted.');
+      loadOrders();
+      loadStatus();
+      loadLogs();
+    } catch (err) {
+      showToast(handleApiError(err, 'Failed to retry order.'), 'danger');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSyncTracking = async (orderId) => {
+    setLoading(true);
+    try {
+      const res = await api.post(`/meesho/orders/${orderId}/sync-tracking`, {}, {
+        headers: activeStore?.id ? { 'X-Store-Id': activeStore.id } : {},
+      });
+      showToast(res.data.message || 'Tracking synchronized.');
+      loadOrders();
+      loadStatus();
+      loadLogs();
+    } catch (err) {
+      showToast(handleApiError(err, 'Failed to synchronize tracking.'), 'danger');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSyncAllTracking = async () => {
+    setLoading(true);
+    try {
+      const res = await api.post('/meesho/orders/sync-all-tracking', {}, {
+        headers: activeStore?.id ? { 'X-Store-Id': activeStore.id } : {},
+      });
+      showToast(res.data.message || 'All tracking records synchronized.');
+      loadOrders();
+      loadStatus();
+      loadLogs();
+    } catch (err) {
+      showToast(handleApiError(err, 'Bulk tracking sync failed.'), 'danger');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="d-flex flex-column gap-3">
       {requestError && (
@@ -427,6 +478,9 @@ export default function MeeshoDropshippingView({ activeStore, onGoToProducts }) 
         <ResellingOrders
           orders={orders}
           onProcessOrder={handleProcessOrder}
+          onRetryOrder={handleRetryOrder}
+          onSyncTracking={handleSyncTracking}
+          onSyncAllTracking={handleSyncAllTracking}
           onUpdateTracking={handleUpdateTracking}
           onHandleReturn={handleReturn}
           loading={loading}

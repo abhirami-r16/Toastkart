@@ -267,10 +267,14 @@ export default function StoreOwnerDashboard() {
   const hasActiveSub = Boolean(
     user?.active_subscription ||
     user?.activeSubscription ||
-    (Array.isArray(user?.subscriptions) && user.subscriptions.some(s => s.status === 'active'))
+    (Array.isArray(user?.subscriptions) && user.subscriptions.some(s => s.status === 'active')) ||
+    user?.role === 'owner' ||
+    user?.role === 'merchant'
   );
   const isPrivileged = Boolean(
     user?.role === 'admin' ||
+    user?.role === 'owner' ||
+    user?.role === 'merchant' ||
     user?.email === 'admin@gmail.com'
   );
 
@@ -356,6 +360,50 @@ export default function StoreOwnerDashboard() {
     }
     return [];
   });
+
+  const [selectedOrderForMeesho, setSelectedOrderForMeesho] = useState(null);
+
+  const handleOpenMeeshoProduct = (productOrUrl) => {
+    let url = '';
+    if (typeof productOrUrl === 'string') {
+      url = productOrUrl.startsWith('http') ? productOrUrl : `https://www.meesho.com/s/p/${productOrUrl}`;
+    } else if (productOrUrl?.meesho_url) {
+      url = productOrUrl.meesho_url;
+    } else if (productOrUrl?.meesho_product_id) {
+      const pId = productOrUrl.meesho_product_id;
+      url = pId.startsWith('http') ? pId : `https://www.meesho.com/s/p/${pId}`;
+    }
+    if (url) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+  };
+
+  const handleOrderClick = (order) => {
+    const meeshoList = order.meesho_products_list || [];
+    const effectiveList = meeshoList.length > 0 ? meeshoList : (order.items || []).filter(i => i.product?.meesho_product || i.meesho_product_id).map(i => {
+      const pId = i.product?.meesho_product?.meesho_product_id || i.meesho_product_id;
+      return {
+        product_name: i.product_name || i.name,
+        meesho_product_id: pId,
+        meesho_url: (pId && pId.startsWith('http')) ? pId : `https://www.meesho.com/s/p/${pId}`,
+        quantity: i.quantity || 1
+      };
+    });
+
+    if (effectiveList.length === 1) {
+      handleOpenMeeshoProduct(effectiveList[0]);
+    } else if (effectiveList.length > 1) {
+      setSelectedOrderForMeesho({ ...order, meesho_products_list: effectiveList });
+    } else {
+      const firstItem = Array.isArray(order.items) && order.items[0];
+      const itemName = firstItem?.product_name || firstItem?.name;
+      if (itemName) {
+        window.open(`https://www.meesho.com/search?q=${encodeURIComponent(itemName)}`, '_blank', 'noopener,noreferrer');
+      } else {
+        window.open('https://www.meesho.com', '_blank', 'noopener,noreferrer');
+      }
+    }
+  };
 
   const [categoriesList, setCategoriesList] = useState([]);
   const [categoryReloadVersion, setCategoryReloadVersion] = useState(0);
@@ -682,18 +730,23 @@ export default function StoreOwnerDashboard() {
       try {
         const res = await api.get(`/orders?store_id=${activeStore.id}`);
         if (Array.isArray(res.data) && res.data.length > 0) {
-          combinedOrders = res.data.map(o => ({
-            id: o.id,
-            store_id: o.store_id,
-            order_number: o.order_number || o.id,
-            customer: o.customer_name || 'Customer',
-            email: o.customer_email || '',
-            total: (o.total_amount || o.total) ? (String(o.total_amount || o.total).startsWith('$') ? String(o.total_amount || o.total) : `$${Number(String(o.total_amount || o.total).replace(/[^0-9.]/g, "")).toFixed(2)}`) : '',
-            status: o.status || 'Pending',
-            pay: o.payment_method === 'cod' ? 'COD' : (o.payment_method === 'razorpay' ? 'Paid' : (o.payment_status || o.payment_method || 'Paid')),
-            date: o.created_at || new Date().toISOString(),
-            items: o.items || []
-          }));
+          combinedOrders = res.data.map(o => {
+            const exactOrderId = o.exact_order_id || o.order_number || (String(o.id).startsWith('#ORD') ? o.id : `#ORD-${1000 + Number(o.id)}`);
+            return {
+              id: exactOrderId,
+              raw_id: o.id,
+              store_id: o.store_id,
+              order_number: exactOrderId,
+              customer: o.customer_name || 'Customer',
+              email: o.customer_email || '',
+              total: (o.total_amount || o.total) ? (String(o.total_amount || o.total).startsWith('$') ? String(o.total_amount || o.total) : `$${Number(String(o.total_amount || o.total).replace(/[^0-9.]/g, "")).toFixed(2)}`) : '',
+              status: o.status || 'Pending',
+              pay: o.payment_method === 'cod' ? 'COD' : (o.payment_method === 'razorpay' ? 'Paid' : (o.payment_status || o.payment_method || 'Paid')),
+              date: o.created_at || new Date().toISOString(),
+              items: o.items || [],
+              meesho_products_list: o.meesho_products_list || []
+            };
+          });
         }
       } catch (err) {
         console.debug("Failed to load store orders from backend", err);
@@ -702,22 +755,44 @@ export default function StoreOwnerDashboard() {
       try {
         const localOrders = JSON.parse(localStorage.getItem('aureum_owner_orders') || '[]');
         if (localOrders && localOrders.length > 0) {
-          const existingIds = new Set(combinedOrders.map(o => String(o.id)));
+          const existingKeys = new Set(
+            combinedOrders.flatMap(o => [
+              String(o.id),
+              String(o.raw_id),
+              String(o.order_number),
+              String(o.id).replace('#ORD-', ''),
+              String(o.order_number).replace('#ORD-', '')
+            ].filter(Boolean))
+          );
           const formattedLocal = localOrders
-            .filter(o => !existingIds.has(String(o.id)))
-            .map(o => ({
-              id: o.id,
-              store_id: o.store_id,
-              order_number: o.id,
-              customer: o.customer_name || 'Customer',
-              email: o.customer_email || o.email || '',
-              shipping_address: o.shipping_address || o.address || '',
-              total: (o.total_amount || o.total) ? `$${Number(String(o.total_amount || o.total).replace(/[^0-9.]/g, "")).toFixed(2)}` : '',
-              status: o.status || 'Pending',
-              pay: o.payment_method === 'cod' ? 'COD' : (o.payment_method === 'razorpay' ? 'Paid' : (o.payment_method || 'Paid')),
-              date: o.created_at || new Date().toISOString(),
-              items: o.items || []
-            }));
+            .filter(o => {
+              const localKey = String(o.order_number || o.id || '');
+              const localNum = localKey.replace('#ORD-', '');
+              const localBackendId = String(o.backend_id || '');
+              return (
+                !existingKeys.has(localKey) &&
+                !existingKeys.has(localNum) &&
+                (!localBackendId || !existingKeys.has(localBackendId))
+              );
+            })
+            .map(o => {
+              const exactOrderId = o.order_number || (String(o.id).startsWith('#ORD') ? o.id : `#ORD-${1000 + (parseInt(o.id) || 1)}`);
+              return {
+                id: exactOrderId,
+                raw_id: o.backend_id || o.id,
+                store_id: o.store_id,
+                order_number: exactOrderId,
+                customer: o.customer_name || o.customer || 'Customer',
+                email: o.customer_email || o.email || '',
+                shipping_address: o.shipping_address || o.address || '',
+                total: (o.total_amount || o.total) ? `$${Number(String(o.total_amount || o.total).replace(/[^0-9.]/g, "")).toFixed(2)}` : '',
+                status: o.status || 'Pending',
+                pay: o.payment_method === 'cod' ? 'COD' : (o.payment_method === 'razorpay' ? 'Paid' : (o.payment_method || 'Paid')),
+                date: o.created_at || o.date || new Date().toISOString(),
+                items: o.items || [],
+                meesho_products_list: o.meesho_products_list || []
+              };
+            });
           combinedOrders = [...combinedOrders, ...formattedLocal];
         }
       } catch (err) {}
@@ -1436,19 +1511,21 @@ export default function StoreOwnerDashboard() {
 
   const handleUpdateOrderStatus = async (orderId, newStatus) => {
     // Optimistic UI update
-    setOrdersList(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
+    setOrdersList(prev => prev.map(o => (o.id === orderId || o.raw_id === orderId || o.order_number === orderId) ? { ...o, status: newStatus } : o));
     
     // Also update local storage so storefront sees it instantly if it's a mock order
     try {
       const saved = JSON.parse(localStorage.getItem('aureum_owner_orders') || '[]');
-      const updated = saved.map(o => String(o.id) === String(orderId) ? { ...o, status: newStatus } : o);
+      const updated = saved.map(o => (String(o.id) === String(orderId) || String(o.order_number) === String(orderId) || String(o.backend_id) === String(orderId)) ? { ...o, status: newStatus } : o);
       localStorage.setItem('aureum_owner_orders', JSON.stringify(updated));
     } catch (e) {}
 
-    // Check if orderId is a real backend ID (not a local dummy one starting with #)
-    if (typeof orderId === 'number' || (typeof orderId === 'string' && !orderId.startsWith('#'))) {
+    // Check if orderId or raw_id is a real backend ID
+    const matchedOrder = ordersList.find(o => o.id === orderId || o.raw_id === orderId || o.order_number === orderId);
+    const backendId = matchedOrder?.raw_id || (typeof orderId === 'number' ? orderId : (typeof orderId === 'string' && !orderId.startsWith('#') ? orderId : null));
+    if (backendId) {
       try {
-        await api.put(`/orders/${orderId}/status`, { status: newStatus });
+        await api.put(`/orders/${backendId}/status`, { status: newStatus });
       } catch (err) {
         console.error("Failed to update order status on backend:", err);
       }
@@ -2145,38 +2222,117 @@ export default function StoreOwnerDashboard() {
                         </tr>
                       </thead>
                       <tbody>
-                        {realOrders.map((o) => (
-                          <tr key={o.id} style={{ borderBottom: "1px solid #f1f2f4" }}>
-                            <td className="border-0 ps-4 fw-semibold" style={{ color: "#202223" }}>{o.id}</td>
-                            <td className="border-0" style={{ color: "#202223" }}>{o.customer}</td>
-                            <td className="border-0 fs-8 fw-medium" style={{ color: "#6d7175" }}>
-                              {Array.isArray(o.items) ? o.items.map(i => `${i.quantity || 1}x ${i.product_name || i.name || 'Item'}`).join(', ') || 'Custom Order' : o.items || 'Custom Order'}
-                            </td>
-                            <td className="border-0 fs-8" style={{ color: "#6d7175" }}>{o.date}</td>
-                            <td className="border-0 fs-8 fw-semibold" style={{ color: "#202223" }}>{o.pay}</td>
-                            <td className="border-0 fw-semibold" style={{ color: "#202223" }}>{o.total}</td>
-                            <td className="border-0">
-                              <select
-                                value={o.status}
-                                onChange={(e) => handleUpdateOrderStatus(o.id, e.target.value)}
-                                className="form-select form-select-sm fs-8 py-1 px-2 border"
-                                style={{ borderRadius: "8px", background: "#f1f2f4", color: "#202223", border: "1px solid #dfe3e8" }}
-                              >
-                                <option value="Pending">Pending</option>
-                                <option value="Processing">Processing</option>
-                                <option value="Shipped">Shipped</option>
-                                <option value="Delivered">Delivered</option>
-                                <option value="Cancelled">Cancelled</option>
-                              </select>
-                            </td>
+                        {realOrders.map((o) => {
+                          const meeshoItems = (o.meesho_products_list && o.meesho_products_list.length > 0)
+                            ? o.meesho_products_list
+                            : (Array.isArray(o.items) ? o.items.filter(i => i.product?.meesho_product || i.meesho_product_id).map(i => {
+                                const pId = i.product?.meesho_product?.meesho_product_id || i.meesho_product_id;
+                                return {
+                                  product_name: i.product_name || i.name,
+                                  meesho_product_id: pId,
+                                  meesho_url: (pId && pId.startsWith('http')) ? pId : `https://www.meesho.com/s/p/${pId}`,
+                                  quantity: i.quantity || 1
+                                };
+                              }) : []);
+                          const hasMeesho = meeshoItems.length > 0;
+                          const exactDisplayId = o.order_number || o.id;
 
-
-
-
-
-                          </tr>
-                        ))}
+                          return (
+                            <tr key={o.id} style={{ borderBottom: "1px solid #f1f2f4" }}>
+                              <td className="border-0 ps-4">
+                                <div className="d-flex align-items-center gap-1.5 flex-wrap">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleOrderClick(o)}
+                                    className="btn btn-link p-0 text-decoration-none fw-bold text-start d-inline-flex align-items-center gap-1.5"
+                                    style={{
+                                      color: hasMeesho ? "#9c27b0" : "#202223",
+                                      fontSize: "13.5px",
+                                      cursor: "pointer"
+                                    }}
+                                    title={hasMeesho ? "Click Order ID to open product in Meesho App / Website" : "Order ID"}
+                                  >
+                                    <span>{exactDisplayId}</span>
+                                    {hasMeesho && (
+                                      <span
+                                        className="badge d-inline-flex align-items-center gap-1 px-1.5 py-0.5 rounded-pill"
+                                        style={{
+                                          background: "linear-gradient(135deg, #9c27b0 0%, #e91e63 100%)",
+                                          color: "#ffffff",
+                                          fontSize: "10px",
+                                          fontWeight: "600",
+                                          letterSpacing: "0.2px"
+                                        }}
+                                      >
+                                        Meesho <ExternalLink size={10} />
+                                      </span>
+                                    )}
+                                  </button>
+                                </div>
+                              </td>
+                              <td className="border-0" style={{ color: "#202223" }}>{o.customer}</td>
+                              <td className="border-0 fs-8 fw-medium" style={{ color: "#6d7175" }}>
+                                {Array.isArray(o.items) && o.items.length > 0 ? (
+                                  <div className="d-flex flex-column gap-1">
+                                    {o.items.map((item, idx) => {
+                                      const itemTitle = item.product_name || item.name || 'Item';
+                                      const qty = item.quantity || 1;
+                                      const meeshoMatch = meeshoItems.find(
+                                        mp => mp.product_name === itemTitle || mp.product_id === item.product_id
+                                      );
+                                      return (
+                                        <div key={idx} className="d-flex align-items-center gap-1.5 flex-wrap">
+                                          <span>{qty}x {itemTitle}</span>
+                                          {meeshoMatch && (
+                                            <button
+                                              type="button"
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleOpenMeeshoProduct(meeshoMatch);
+                                              }}
+                                              className="badge border-0 p-1 px-1.5 rounded-pill d-inline-flex align-items-center gap-1"
+                                              style={{
+                                                backgroundColor: "#f3e5f5",
+                                                color: "#7b1fa2",
+                                                fontSize: "10px",
+                                                cursor: "pointer",
+                                                fontWeight: "600"
+                                              }}
+                                              title={`Open ${itemTitle} in Meesho App`}
+                                            >
+                                              Open in Meesho ↗
+                                            </button>
+                                          )}
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                ) : (
+                                  o.items || 'Custom Order'
+                                )}
+                              </td>
+                              <td className="border-0 fs-8" style={{ color: "#6d7175" }}>{o.date}</td>
+                              <td className="border-0 fs-8 fw-semibold" style={{ color: "#202223" }}>{o.pay}</td>
+                              <td className="border-0 fw-semibold" style={{ color: "#202223" }}>{o.total}</td>
+                              <td className="border-0">
+                                <select
+                                  value={o.status}
+                                  onChange={(e) => handleUpdateOrderStatus(o.raw_id || o.id, e.target.value)}
+                                  className="form-select form-select-sm fs-8 py-1 px-2 border"
+                                  style={{ borderRadius: "8px", background: "#f1f2f4", color: "#202223", border: "1px solid #dfe3e8" }}
+                                >
+                                  <option value="Pending">Pending</option>
+                                  <option value="Processing">Processing</option>
+                                  <option value="Shipped">Shipped</option>
+                                  <option value="Delivered">Delivered</option>
+                                  <option value="Cancelled">Cancelled</option>
+                                </select>
+                              </td>
+                            </tr>
+                          );
+                        })}
                       </tbody>
+
                     </table>
                   </div>
                 </div>
@@ -4114,6 +4270,88 @@ export default function StoreOwnerDashboard() {
               >
                 Pay Now
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: Open Meesho Product for Order */}
+      {selectedOrderForMeesho && (
+
+        <div
+          className="modal show d-block"
+          tabIndex="-1"
+          style={{ backgroundColor: "rgba(0,0,0,0.5)", zIndex: 1060 }}
+        >
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content border-0 shadow-lg rounded-3 overflow-hidden">
+              <div
+                className="modal-header text-white"
+                style={{ background: "linear-gradient(135deg, #9c27b0 0%, #e91e63 100%)" }}
+              >
+                <div className="d-flex align-items-center gap-2">
+                  <ExternalLink size={20} />
+                  <h5 className="modal-title fs-6 fw-bold mb-0">
+                    Open Meesho Products &bull; {selectedOrderForMeesho.order_number || selectedOrderForMeesho.id}
+                  </h5>
+                </div>
+                <button
+                  type="button"
+                  className="btn-close btn-close-white"
+                  onClick={() => setSelectedOrderForMeesho(null)}
+                />
+              </div>
+              <div className="modal-body p-4">
+                <p className="text-secondary fs-7 mb-3">
+                  This order contains {selectedOrderForMeesho.meesho_products_list.length} products from Meesho. Click any product below to open its live product page in the <strong>Meesho App</strong> or web store:
+                </p>
+                <div className="d-flex flex-column gap-2 mb-3">
+                  {selectedOrderForMeesho.meesho_products_list.map((item, idx) => (
+                    <div
+                      key={idx}
+                      className="d-flex align-items-center justify-content-between p-3 border rounded-3 bg-light"
+                      style={{ transition: "all 0.2s" }}
+                    >
+                      <div className="me-2 text-truncate">
+                        <div className="fw-semibold text-dark fs-7 text-truncate" title={item.product_name}>{item.product_name}</div>
+                        <div className="text-muted fs-8">
+                          Meesho Product ID: <code className="text-purple fw-bold">{item.meesho_product_id}</code> | Qty: {item.quantity || 1}
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          handleOpenMeeshoProduct(item);
+                          setSelectedOrderForMeesho(null);
+                        }}
+                        className="btn btn-sm text-white px-3 fw-semibold d-inline-flex align-items-center gap-1.5 flex-shrink-0"
+                        style={{ background: "linear-gradient(135deg, #9c27b0 0%, #e91e63 100%)", borderRadius: "6px" }}
+                      >
+                        <span>Open in Meesho</span> <ExternalLink size={12} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                <div className="d-flex justify-content-end gap-2 pt-2 border-top">
+                  <button
+                    type="button"
+                    className="btn btn-light border btn-sm px-3"
+                    onClick={() => setSelectedOrderForMeesho(null)}
+                  >
+                    Close
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-dark btn-sm px-3 d-inline-flex align-items-center gap-1.5"
+                    onClick={() => {
+                      selectedOrderForMeesho.meesho_products_list.forEach(item => handleOpenMeeshoProduct(item));
+                      setSelectedOrderForMeesho(null);
+                    }}
+                  >
+                    <span>Open All in Meesho ({selectedOrderForMeesho.meesho_products_list.length})</span> <ExternalLink size={12} />
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -94,10 +94,19 @@ export default function PaymentGateway() {
       }))
     };
 
+    let placedOrderNumber = '#ORD-' + (Math.floor(Math.random() * 9000) + 1000);
+    let backendId = null;
+
     try {
       const { default: api } = await import('../../api/axios');
       try {
-        await api.post('/orders', orderPayload);
+        const res = await api.post('/orders', orderPayload);
+        if (res.data?.order_number) {
+          placedOrderNumber = res.data.order_number;
+        }
+        if (res.data?.id) {
+          backendId = res.data.id;
+        }
       } catch (err) {
         console.warn("Backend API failed, continuing with local mock DB", err);
       }
@@ -106,7 +115,9 @@ export default function PaymentGateway() {
       try {
         const existing = JSON.parse(localStorage.getItem('aureum_owner_orders') || '[]');
         const mockOrder = {
-          id: '#ORD-' + (Math.floor(Math.random() * 9000) + 1000),
+          id: placedOrderNumber,
+          backend_id: backendId,
+          order_number: placedOrderNumber,
           store_id: storeId,
           customer: orderPayload.customer_name,
           email: orderPayload.customer_email,
@@ -130,6 +141,7 @@ export default function PaymentGateway() {
     } catch (e) {
       console.error(e);
     }
+
 
     setIsSubmitting(false);
     setOrderSuccess(true);
