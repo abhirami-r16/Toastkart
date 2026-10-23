@@ -35,7 +35,7 @@ class SubscriptionController extends Controller
     {
         $fields = $request->validate([
             'plan' => 'required|string|in:basic,growth,pro',
-            'billing_cycle' => 'required|string|in:monthly,yearly',
+            'billing_cycle' => 'nullable|string|in:monthly,yearly',
         ]);
 
         $user = $request->user();
@@ -44,7 +44,7 @@ class SubscriptionController extends Controller
         }
 
         $plan = $fields['plan'];
-        $billingCycle = $fields['billing_cycle'];
+        $billingCycle = $fields['billing_cycle'] ?? 'yearly';
         $amountInPaise = $this->plans[$billingCycle][$plan];
 
         try {
@@ -160,9 +160,9 @@ class SubscriptionController extends Controller
 
         $subscription = null;
 
-        if ($request->has('plan') && $request->has('billing_cycle')) {
+        if ($request->has('plan')) {
             $plan = $request->input('plan');
-            $billingCycle = $request->input('billing_cycle');
+            $billingCycle = $request->input('billing_cycle', 'yearly');
             $amountInPaise = $this->plans[$billingCycle][$plan];
 
             $subscription = Subscription::create([
