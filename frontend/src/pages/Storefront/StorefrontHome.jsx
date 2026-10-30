@@ -770,7 +770,7 @@ export default function StorefrontHome({ storeData, products, categories = [], l
             );
           });
 
-          if (catProducts.length === 0) {
+          if (catProducts.length === 0 && !cat.isCustom) {
             return null;
           }
 
@@ -786,7 +786,6 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                 <div>
                   {theme === 'theme-coconut' ? (
                     <div>
-                      <div className="coconut-section-badge mb-1">🌴 KERALA HARVEST</div>
                       <h3 className="coconut-section-heading mb-0">
                         <span>DISCOVER </span>
                         <span className="coconut-highlight">{cat.name}</span>
@@ -809,11 +808,6 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                         : `Trending in ${cat.name}`}
                     </h3>
                   )}
-                  {cat.description && (
-                    <p className="text-muted mt-1 mb-0 fs-7" style={{ maxWidth: 640 }}>
-                      {cat.description}
-                    </p>
-                  )}
                 </div>
 
                 <button className="storefront-view-all-btn">
@@ -821,7 +815,13 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                 </button>
               </div>
 
-              {renderProductGrid(catProducts.slice(0, 8))}
+              {catProducts.length > 0 ? (
+                renderProductGrid(catProducts.slice(0, 8))
+              ) : (
+                <div className="text-center py-4 text-muted bg-white rounded-3 border p-4 my-2" style={{ borderColor: 'rgba(20,39,28,0.1)' }}>
+                  <p className="mb-0 fs-7">Products in this collection will be available shortly.</p>
+                </div>
+              )}
             </div>
           );
         })

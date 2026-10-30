@@ -99,8 +99,9 @@ export default function StorefrontLayout({ storeData, categories = [], products 
     }
   });
 
-  // Filter out empty categories
+  // Include custom store categories or categories with active products in navbar
   const activeCategories = categoriesToRender.filter(cat => {
+    if (cat.isCustom) return true;
     const catProducts = products.filter(p => {
       const pCat = String((p.category && typeof p.category === 'object' ? p.category.name : p.category) || 'Uncategorized').toLowerCase();
       return pCat === String(cat.id).toLowerCase() || pCat === String(cat.name || '').toLowerCase() || pCat === String(cat.slug || '').toLowerCase();
