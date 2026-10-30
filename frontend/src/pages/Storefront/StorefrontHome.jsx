@@ -249,9 +249,6 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                 className="text-decoration-none text-dark d-block"
               >
                 <div className="storefront-product-image-container position-relative">
-                  {theme === 'theme-coconut' && (
-                    <div className="coconut-purity-tag" style={{ backgroundColor: '#C2844E', color: '#ffffff' }}>100% Organic</div>
-                  )}
                   {product.compare_price &&
                     parsePrice(product.compare_price) > parsePrice(product.price) && (
                       <div className="storefront-discount-badge">

@@ -666,15 +666,25 @@
 
 .theme-coconut .storefront-discount-badge {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  background: var(--coco-amber) !important; /* Husk Amber #C2844E */
+  top: 6px;
+  left: 8px;
+  right: auto !important;
+  width: auto !important;
+  max-width: fit-content !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  background: var(--coco-amber, #C2844E) !important; /* Husk Amber #C2844E */
   color: #ffffff !important;
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 800;
-  padding: 4px 9px;
-  border-radius: 8px;
-  z-index: 2;
+  padding: 3px 9px;
+  border-radius: 14px;
+  z-index: 5;
+  box-shadow: 0 2px 6px rgba(194, 132, 78, 0.35);
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+  white-space: nowrap;
 }
 
 .theme-coconut .coconut-card-details {
