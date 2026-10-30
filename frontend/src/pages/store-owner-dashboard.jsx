@@ -104,7 +104,6 @@ const ownerLinks = [
   { key: "orders", label: "Orders", icon: ShoppingCart },
   { key: "customers", label: "Customers", icon: Users },
   { key: "discounts", label: "Discounts", icon: Percent },
-  { key: "subscription", label: "Subscription", icon: CreditCard },
 ];
 
 const salesTrendDaily = [
@@ -278,19 +277,14 @@ export default function StoreOwnerDashboard() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
 
-  // Subscription mode enabled: full access requires an active merchant subscription
-  const hasActiveSub = Boolean(
-    user?.active_subscription ||
-    user?.activeSubscription ||
-    (user?.subscriptions && Array.isArray(user.subscriptions) && user.subscriptions.some(s => s.status === 'active' && (!s.expiry_date || new Date(s.expiry_date) >= new Date())))
-  );
+  // Subscription paywall removed: full access enabled for all merchant features
+  const [showPlanRequiredModal, setShowPlanRequiredModal] = useState(false);
+  const hasActiveSub = true;
 
   const isPrivileged = Boolean(
     user?.role === 'admin' ||
     user?.email === 'admin@gmail.com'
   );
-
-  const [showPlanRequiredModal, setShowPlanRequiredModal] = useState(false);
 
   useEffect(() => {
     if (!loading) {
@@ -298,11 +292,9 @@ export default function StoreOwnerDashboard() {
         navigate('/login', { replace: true });
         return;
       }
-      if (!isPrivileged && !hasActiveSub) {
-        setShowPlanRequiredModal(true);
-      }
+      setShowPlanRequiredModal(false);
     }
-  }, [user, loading, hasActiveSub, isPrivileged, navigate]);
+  }, [user, loading, navigate]);
 
   const [active, setActive] = useState(() => {
     try {
@@ -1724,10 +1716,6 @@ export default function StoreOwnerDashboard() {
               const Icon = item.icon;
               const isActive = active === item.key;
               const handleClick = () => {
-                if (item.key !== 'dashboard' && item.key !== 'subscription' && !hasActiveSub && !isPrivileged) {
-                  setShowPlanRequiredModal(true);
-                  return;
-                }
                 setActive(item.key);
               };
               return (
@@ -1784,19 +1772,6 @@ export default function StoreOwnerDashboard() {
             >
               <ExternalLink size={14} /> View Store
             </a>
-            <button
-              onClick={() => setActive("subscription")}
-              className="btn btn-sm d-flex align-items-center gap-1.5 px-3 py-1.5 rounded-pill border fw-bold text-nowrap"
-              style={{
-                background: hasActiveSub ? 'rgba(46,125,50,0.08)' : 'rgba(255,87,34,0.08)',
-                borderColor: hasActiveSub ? 'rgba(46,125,50,0.3)' : 'rgba(255,87,34,0.3)',
-                color: hasActiveSub ? '#2e7d32' : '#FF5722',
-                fontSize: '0.8rem'
-              }}
-            >
-              <CreditCard size={14} />
-              <span>{hasActiveSub ? (user?.active_subscription?.plan ? user.active_subscription.plan.toUpperCase() + ' Plan' : 'Active Plan') : 'Plan: Inactive'}</span>
-            </button>
             <div className="topbar-search-box d-none d-md-block position-relative">
               <span className="topbar-search-icon" style={{ color: "#6d7175" }}><Search size={14} /></span>
               <input
@@ -1918,13 +1893,7 @@ export default function StoreOwnerDashboard() {
               <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", padding: "20px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
                 <div className="d-flex align-items-center justify-content-between mb-3">
                   <h3 className="fs-6 font-bold mb-0" style={{ color: "#202223" }}>Recent Orders</h3>
-                  <button className="btn btn-link fs-8 p-0 text-decoration-none fw-semibold" style={{ color: "#FF5722" }} onClick={() => {
-                    if (!hasActiveSub && !isPrivileged) {
-                      setShowPlanRequiredModal(true);
-                      return;
-                    }
-                    setActive("orders");
-                  }}>View All</button>
+                  <button className="btn btn-link fs-8 p-0 text-decoration-none fw-semibold" style={{ color: "#FF5722" }} onClick={() => setActive("orders")}>View All</button>
                 </div>
                 <div className="table-responsive">
                   <table className="table table-hover mb-0 align-middle border-0">
@@ -3593,13 +3562,7 @@ export default function StoreOwnerDashboard() {
                         Turn your products and collections into a stunning, colorful, and highly attractive online storefront instantly. Our AI analyzes your category and inventory to generate a bespoke website design tailored for you.
                       </p>
                       <button
-                        onClick={() => {
-                          if (!hasActiveSub && !isPrivileged) {
-                            setShowPlanRequiredModal(true);
-                            return;
-                          }
-                          setActive('ai-builder');
-                        }}
+                        onClick={() => setActive('ai-builder')}
                         className="btn btn-lg fw-bold px-5 py-3 text-white shadow"
                         style={{ background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', borderRadius: '30px', transition: 'all 0.3s ease' }}
                       >
@@ -3728,115 +3691,6 @@ export default function StoreOwnerDashboard() {
             }} />
           )}
 
-          {/* MODULE: SUBSCRIPTION & BILLING */}
-          {active === "subscription" && (
-            <div className="d-flex flex-column gap-3">
-              <div className="d-flex align-items-center justify-content-between">
-                <div>
-                  <h2 className="fs-4 font-bold mb-0" style={{ color: "#202223" }}>Subscription & Billing</h2>
-                  <p className="fs-8 mb-0" style={{ color: "#6d7175" }}>Manage your store plan, billing cycle, and feature access.</p>
-                </div>
-                <button
-                  onClick={() => navigate('/plans?redirect=dashboard')}
-                  className="btn btn-sm px-3 py-1.5 d-flex align-items-center gap-1 text-white fw-bold"
-                  style={{ background: "#FF5722", borderRadius: "8px" }}
-                >
-                  <Sparkles size={16} /> Upgrade Plan
-                </button>
-              </div>
-
-              {/* Current Status Card */}
-              <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", padding: "24px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
-                <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 pb-3 border-bottom" style={{ borderColor: "#dfe3e8" }}>
-                  <div className="d-flex align-items-center gap-3">
-                    <div className="rounded-circle d-flex align-items-center justify-content-center" style={{ background: hasActiveSub ? "rgba(46,125,50,0.1)" : "rgba(255,87,34,0.1)", color: hasActiveSub ? "#2e7d32" : "#FF5722", width: 48, height: 48 }}>
-                      <CreditCard size={24} />
-                    </div>
-                    <div>
-                      <div className="d-flex align-items-center gap-2">
-                        <h4 className="fs-5 font-bold mb-0" style={{ color: "#202223" }}>
-                          {hasActiveSub ? (user?.active_subscription?.plan ? user.active_subscription.plan.toUpperCase() + ' Plan' : 'Active Plan') : 'No Active Subscription'}
-                        </h4>
-                        <span className="badge rounded-pill px-2.5 py-1" style={{ background: hasActiveSub ? "#e8f5e9" : "#fff3e0", color: hasActiveSub ? "#2e7d32" : "#FF5722", fontWeight: 700 }}>
-                          {hasActiveSub ? "Active" : "Inactive"}
-                        </span>
-                      </div>
-                      <p className="fs-8 text-muted mb-0 mt-0.5">
-                        {hasActiveSub ? `Billing cycle: ${user?.active_subscription?.billing_cycle || 'monthly'}` : 'Upgrade to publish products and connect your custom storefront'}
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => navigate('/plans?redirect=dashboard')}
-                    className="btn btn-sm fw-bold px-4 py-2 text-white"
-                    style={{ background: "#1c2226", borderRadius: "6px" }}
-                  >
-                    {hasActiveSub ? "Change Plan" : "Choose a Plan"}
-                  </button>
-                </div>
-
-                <div className="row g-3 pt-3">
-                  <div className="col-12 col-md-4">
-                    <div className="p-3 rounded-2" style={{ background: "#fafbfc", border: "1px solid #f1f2f4" }}>
-                      <div className="fs-8 text-muted mb-1">Status</div>
-                      <div className="fs-7 fw-bold" style={{ color: hasActiveSub ? "#2e7d32" : "#d82c0d" }}>
-                        {hasActiveSub ? "Active & Healthy" : "Payment Required"}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-12 col-md-4">
-                    <div className="p-3 rounded-2" style={{ background: "#fafbfc", border: "1px solid #f1f2f4" }}>
-                      <div className="fs-8 text-muted mb-1">Auto-Renewal</div>
-                      <div className="fs-7 fw-bold" style={{ color: "#202223" }}>
-                        {user?.active_subscription?.autopay_enabled ? "AutoPay Enabled" : "Manual Renewal"}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-12 col-md-4">
-                    <div className="p-3 rounded-2" style={{ background: "#fafbfc", border: "1px solid #f1f2f4" }}>
-                      <div className="fs-8 text-muted mb-1">Store Features</div>
-                      <div className="fs-7 fw-bold" style={{ color: hasActiveSub ? "#2e7d32" : "#FF5722" }}>
-                        {hasActiveSub ? "Full Access Unlocked" : "Locked (Requires Plan)"}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Plans Overview Cards */}
-              <div className="row g-3">
-                {[
-                  { name: "Starter", price: "₹499/mo", desc: "For new stores getting started", features: ["1 Storefront", "Up to 50 Products", "Standard Support"] },
-                  { name: "Growth", price: "₹999/mo", desc: "Best for growing direct-to-consumer brands", features: ["3 Storefronts", "Unlimited Products", "AI Store Builder", "Custom Domain"] },
-                  { name: "Enterprise", price: "₹1,999/mo", desc: "Maximum scale & dedicated dropshipping", features: ["Unlimited Stores", "Meesho Auto Sync", "Priority 24/7 Support", "Custom CSS & Themes"] }
-                ].map(p => (
-                  <div key={p.name} className="col-12 col-md-4">
-                    <div className="p-4 rounded-3 h-100 d-flex flex-column justify-content-between" style={{ background: "#ffffff", border: "1px solid #dfe3e8", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
-                      <div>
-                        <h4 className="fs-6 fw-bold mb-1" style={{ color: "#202223" }}>{p.name}</h4>
-                        <div className="fs-4 font-bold my-2" style={{ color: "#FF5722" }}>{p.price}</div>
-                        <p className="fs-8 text-muted mb-3">{p.desc}</p>
-                        <ul className="list-unstyled d-flex flex-column gap-1 fs-8 text-muted">
-                          {p.features.map(f => (
-                            <li key={f} className="d-flex align-items-center gap-1.5">
-                              <CheckCircle2 size={14} style={{ color: "#2e7d32" }} /> {f}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      <button
-                        onClick={() => navigate('/plans?redirect=dashboard')}
-                        className="btn btn-sm w-100 mt-3 fw-bold"
-                        style={{ background: "#1c2226", color: "#fff", borderRadius: "6px" }}
-                      >
-                        Select {p.name}
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </main>
       </div>
 
