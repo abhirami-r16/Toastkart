@@ -46,6 +46,7 @@ export default function StorefrontLayout({ storeData, categories = [], products 
           case 'theme-jewelry': await import('../styles/theme-jewelry.css'); break;
           case 'theme-eflyer': await import('../styles/theme-eflyer.css'); break;
           case 'theme-perfume': await import('../styles/theme-perfume.css'); break;
+          case 'theme-coconut': await import('../styles/theme-coconut.css'); break;
           default: break;
         }
       } catch (e) {
@@ -289,6 +290,16 @@ export default function StorefrontLayout({ storeData, categories = [], products 
               </marquee>
             </div>
           )}
+          {theme === 'theme-coconut' && (
+            <div className="coconut-top-bar" style={{ backgroundColor: '#14271C', color: '#FDFBF7', padding: '10px 0', width: '100%' }}>
+              <marquee scrollamount="7" behavior="scroll" direction="left" style={{ color: '#FDFBF7', fontWeight: 'bold', fontSize: '0.88rem', letterSpacing: '0.5px' }}>
+                <span className="mx-5">🌴 100% Organic & Cold-Pressed Kerala Coconut Treasures</span>
+                <span className="mx-5">🥥 Direct From Coastal Farm Groves</span>
+                <span className="mx-5">✨ Zero Chemical Refining • Traditional Wood Extraction</span>
+                <span className="mx-5">🌿 Sustainable Artisanal Living from God's Own Country</span>
+              </marquee>
+            </div>
+          )}
           <header className="storefront-header hexashop-header">
           <div className="hexashop-header-content">
             <div className="d-flex align-items-center position-relative">
@@ -302,7 +313,22 @@ export default function StorefrontLayout({ storeData, categories = [], products 
               </button>
 
               <div className="storefront-logo hexashop-logo ms-4" onClick={() => navigate({ pathname: basePath, search: location.search })} style={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '55vw', cursor: 'pointer' }}>
-                {storeData?.logo_url ? (
+                {theme === 'theme-coconut' ? (
+                  <div className="d-flex align-items-center" style={{ maxHeight: '65px' }}>
+                    <img 
+                      src="/images/amiora-logo.png" 
+                      alt={storeData?.name || "AMIORA"} 
+                      className="coconut-brand-logo"
+                      style={{
+                        height: '52px',
+                        maxWidth: '220px',
+                        width: 'auto',
+                        objectFit: 'contain',
+                        display: 'block'
+                      }} 
+                    />
+                  </div>
+                ) : storeData?.logo_url ? (
                   <img src={storeData.logo_url} alt={storeData.name} className="storefront-logo-img" />
                 ) : (
                   <div className="d-flex align-items-center gap-3">
@@ -413,7 +439,15 @@ export default function StorefrontLayout({ storeData, categories = [], products 
             <div className="storefront-mobile-menu-overlay" onClick={() => setIsCategoryOpen(false)}>
               <div className="storefront-mobile-menu" onClick={e => e.stopPropagation()}>
                 <div className="storefront-mobile-menu-header">
-                  <span className="fw-bold fs-5">{storeData?.name || 'Menu'}</span>
+                  {theme === 'theme-coconut' ? (
+                    <img 
+                      src="/images/amiora-logo.png" 
+                      alt={storeData?.name || "AMIORA"} 
+                      style={{ height: '36px', maxWidth: '160px', width: 'auto', objectFit: 'contain' }} 
+                    />
+                  ) : (
+                    <span className="fw-bold fs-5">{storeData?.name || 'Menu'}</span>
+                  )}
                   <button className="btn p-0 border-0" onClick={() => setIsCategoryOpen(false)}>
                     <X size={24} />
                   </button>

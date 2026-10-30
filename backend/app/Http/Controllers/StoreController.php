@@ -19,6 +19,7 @@ class StoreController extends Controller
         if (str_contains($cat, 'electronic') || str_contains($cat, 'tech')) return ['https://images.unsplash.com/photo-1498049794561-7780e7231661?auto=format&fit=crop&q=80', 'https://images.unsplash.com/photo-1550009158-9ebf69173e03?auto=format&fit=crop&q=80'];
         if (str_contains($cat, 'grocery') || str_contains($cat, 'food')) return ['https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&q=80', 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80'];
         if (str_contains($cat, 'furniture') || str_contains($cat, 'home')) return ['https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80', 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80'];
+        if (str_contains($cat, 'coconut') || str_contains($cat, 'copra') || str_contains($cat, 'kera')) return ['/images/coconut-hero-slide-1.jpg', '/images/coconut-hero-slide-2.jpg'];
         if (str_contains($cat, 'restaurant')) return ['https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80', 'https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&q=80'];
         
         return ['https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80', 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&q=80'];

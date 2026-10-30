@@ -1,10 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingCart, Heart } from 'lucide-react';
+import { ShoppingCart, Heart, Droplet, ShieldCheck, Leaf, Sparkles, Award } from 'lucide-react';
 import { useStorefrontCart } from '../../context/StorefrontCartContext';
 import { useStorefrontAuth } from '../../context/StorefrontAuthContext';
 import { resolveStoreTheme } from '../../utils/themeResolver';
 import { normalizeProductImage } from '../../utils/imageUtils';
+import { formatStoreCurrency } from '../../utils/currency';
 
 const ThemeEflyerHero = React.lazy(() => import('../../components/themes/ThemeEflyerHero'));
 const ThemeHexashopHero = React.lazy(() => import('../../components/themes/ThemeHexashopHero'));
@@ -16,6 +17,7 @@ const ThemeFootwearHero = React.lazy(() => import('../../components/themes/Theme
 const ThemeGroceryHero = React.lazy(() => import('../../components/themes/ThemeGroceryHero'));
 const ThemeGiftHero = React.lazy(() => import('../../components/themes/ThemeGiftHero'));
 const ThemePerfumeHero = React.lazy(() => import('../../components/themes/ThemePerfumeHero'));
+const ThemeCoconutHero = React.lazy(() => import('../../components/themes/ThemeCoconutHero'));
 const ThemeDefaultHero = React.lazy(() => import('../../components/themes/ThemeDefaultHero'));
 const ThemeHomeFooter = React.lazy(() => import('../../components/themes/ThemeHomeFooter'));
 const AIStoreRenderer = React.lazy(() => import('../../components/AIStoreRenderer'));
@@ -32,6 +34,7 @@ export default function StorefrontHome({ storeData, products, categories = [], l
   const [jewelrySlide, setJewelrySlide] = useState(0);
   const [beautySlide, setBeautySlide] = useState(0);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [activeCoconutFilter, setActiveCoconutFilter] = useState('all');
 
   const theme = resolveStoreTheme(storeData);
 
@@ -231,7 +234,7 @@ export default function StorefrontHome({ storeData, products, categories = [], l
       >
         <div
           className={
-            theme === 'theme-perfume' || displayItems.length >= 5
+            theme === 'theme-perfume' || theme === 'theme-coconut' || displayItems.length >= 5
               ? "storefront-product-slider"
               : "storefront-product-grid"
           }
@@ -246,6 +249,9 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                 className="text-decoration-none text-dark d-block"
               >
                 <div className="storefront-product-image-container position-relative">
+                  {theme === 'theme-coconut' && (
+                    <div className="coconut-purity-tag" style={{ backgroundColor: '#C2844E', color: '#ffffff' }}>100% Organic</div>
+                  )}
                   {product.compare_price &&
                     parsePrice(product.compare_price) > parsePrice(product.price) && (
                       <div className="storefront-discount-badge">
@@ -272,7 +278,42 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                 </div>
 
                 <div className="storefront-product-details pb-3 px-3 mt-3 d-flex flex-column" style={{ flexGrow: 1 }}>
-                  {theme === 'theme-perfume' ? (
+                  {theme === 'theme-coconut' ? (
+                    <div className="coconut-card-details d-flex flex-column h-100" style={{ backgroundColor: '#FFFFFF' }}>
+                      <div className="storefront-product-category text-uppercase mt-1 mb-1" style={{ fontSize: '0.72rem', letterSpacing: '1px', color: '#C2844E', fontWeight: '700' }}>
+                        🌿 {product.category?.name || product.category || '100% ORGANIC KERALA'}
+                      </div>
+                      <div className="storefront-product-title mb-1 fw-bold" style={{ fontSize: '1.08rem', color: '#2D3748' }}>
+                        {product.name}
+                      </div>
+                      
+                      <div className="storefront-product-price-row fw-bold mb-2 d-flex align-items-baseline gap-2">
+                        <span className="storefront-product-price" style={{ color: '#C2844E', fontSize: '1.25rem', fontWeight: '800' }}>
+                          {formatStoreCurrency(product.price, storeData?.currency)}
+                        </span>
+                        {product.compare_price && parsePrice(product.compare_price) > parsePrice(product.price) && (
+                          <span className="storefront-product-original-price" style={{ color: '#8a9990', fontSize: '0.88rem', textDecoration: 'line-through' }}>
+                            {formatStoreCurrency(product.compare_price, storeData?.currency)}
+                          </span>
+                        )}
+                      </div>
+                      
+                      <div className="coconut-variants d-flex gap-2 flex-wrap mb-3 mt-auto">
+                        {product.size ? (
+                          String(product.size).split(',').map((sz, i) => (
+                            <span key={i} className="coconut-variant-badge">
+                              {sz.trim()}
+                            </span>
+                          ))
+                        ) : (
+                          <>
+                            <span className="coconut-variant-badge">Virgin Oils</span>
+                            <span className="coconut-variant-badge">Zero Waste Bowls</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  ) : theme === 'theme-perfume' ? (
                     <div className="perfume-card-details d-flex flex-column h-100">
                       <div className="storefront-product-title text-uppercase mb-0 fw-bold" style={{ fontSize: '1.05rem', color: '#333' }}>
                         {product.name}
@@ -283,7 +324,7 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                       
                       <div className="storefront-product-price-row fw-bold mb-1" style={{ color: '#000', fontSize: '1.1rem' }}>
                         <span className="storefront-product-price">
-                          ₹{parsePrice(product.price).toLocaleString('en-IN')}.00
+                          {formatStoreCurrency(product.price, storeData?.currency)}
                         </span>
                       </div>
                       
@@ -326,20 +367,15 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                           parsePrice(product.price) ? (
                           <>
                             <span className="storefront-product-price">
-                              ₹
-                              {parsePrice(product.price).toLocaleString('en-IN')}
+                              {formatStoreCurrency(product.price, storeData?.currency)}
                             </span>
                             <span className="storefront-product-original-price">
-                              ₹
-                              {parsePrice(product.compare_price).toLocaleString(
-                                'en-IN'
-                              )}
+                              {formatStoreCurrency(product.compare_price, storeData?.currency)}
                             </span>
                           </>
                         ) : (
                           <span className="storefront-product-price">
-                            ₹
-                            {parsePrice(product.price).toLocaleString('en-IN')}
+                            {formatStoreCurrency(product.price, storeData?.currency)}
                           </span>
                         )}
                       </div>
@@ -383,7 +419,29 @@ export default function StorefrontHome({ storeData, products, categories = [], l
               </button>
 
               {/* Add to Cart Button */}
-              {theme === 'theme-perfume' ? (
+              {theme === 'theme-coconut' ? (
+                <div className="px-3 pb-3 mt-auto w-100">
+                  <button
+                    className="btn coconut-cart-btn w-100 rounded-pill fw-bold text-uppercase d-flex align-items-center justify-content-center gap-2"
+                    style={{ fontSize: '0.82rem', padding: '12px', backgroundColor: '#14271C', color: '#FFFFFF', borderColor: '#14271C' }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      addToCart(
+                        {
+                          ...product,
+                          selectedSize: getFirstAvailableSize(product),
+                          selectedColor: getFirstAvailableColor(product),
+                        },
+                        1
+                      );
+                    }}
+                  >
+                    <ShoppingCart size={16} />
+                    Add to Cart
+                  </button>
+                </div>
+              ) : theme === 'theme-perfume' ? (
                 <div className="px-3 pb-3 mt-auto w-100">
                   <button
                     className="btn btn-dark w-100 rounded-pill fw-bold text-uppercase d-flex align-items-center justify-content-center gap-2"
@@ -643,9 +701,126 @@ export default function StorefrontHome({ storeData, products, categories = [], l
               {theme === 'theme-grocery' && <ThemeGroceryHero />}
               {theme === 'theme-gift' && <ThemeGiftHero />}
               {theme === 'theme-perfume' && <ThemePerfumeHero />}
+              {theme === 'theme-coconut' && <ThemeCoconutHero />}
             </>
           )}
         </React.Suspense>
+      )}
+
+      {/* Coconut Theme Dedicated Category Showcase Cards */}
+      {theme === 'theme-coconut' && !searchQuery && (
+        <section className="coconut-categories-section">
+          <div className="text-center mb-5">
+            <span className="coconut-section-badge">🌴 NATURAL PURITY</span>
+            <h2 className="coconut-section-heading">Explore By Harvest Collection</h2>
+            <p className="text-muted" style={{ maxWidth: '600px', margin: '0 auto', fontSize: '1rem' }}>
+              From wood-pressed edible oils to sustainable shell crafts, discover pure goodness harvested straight from Kerala's coastal groves.
+            </p>
+          </div>
+
+          <div className="row g-4">
+            <div className="col-12 col-sm-6 col-lg-3">
+              <a 
+                href="#cold-pressed-oils" 
+                onClick={(e) => {
+                  const el = document.getElementById('cold-pressed-oils') || document.querySelector('.storefront-section');
+                  if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth' }); }
+                }}
+                className="coconut-category-card" 
+                style={{ backgroundImage: `url('/images/coconut-cat-oils.jpg')` }}
+              >
+                <div className="coconut-category-overlay"></div>
+                <div className="coconut-category-content">
+                  <h4 className="coconut-category-title">Virgin & Cold-Pressed Oils</h4>
+                  <p className="coconut-category-desc">100% Mara Chekku wood pressed, unrefined & rich in Lauric acid</p>
+                </div>
+              </a>
+            </div>
+
+            <div className="col-12 col-sm-6 col-lg-3">
+              <a 
+                href="#food-culinary" 
+                onClick={(e) => {
+                  const el = document.getElementById('food-culinary') || document.querySelector('.storefront-section');
+                  if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth' }); }
+                }}
+                className="coconut-category-card" 
+                style={{ backgroundImage: `url('/images/coconut-cat-food.jpg')` }}
+              >
+                <div className="coconut-category-overlay"></div>
+                <div className="coconut-category-content">
+                  <h4 className="coconut-category-title">Food & Culinary</h4>
+                  <p className="coconut-category-desc">Crisp roasted chips, desiccated flakes & thick pure coconut cream</p>
+                </div>
+              </a>
+            </div>
+
+            <div className="col-12 col-sm-6 col-lg-3">
+              <a 
+                href="#wellness-skincare" 
+                onClick={(e) => {
+                  const el = document.getElementById('wellness-skincare') || document.querySelector('.storefront-section');
+                  if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth' }); }
+                }}
+                className="coconut-category-card" 
+                style={{ backgroundImage: `url('/images/coconut-cat-skin.jpg')` }}
+              >
+                <div className="coconut-category-overlay"></div>
+                <div className="coconut-category-content">
+                  <h4 className="coconut-category-title">Hair & Skin Wellness</h4>
+                  <p className="coconut-category-desc">Natural cold-pressed soaps, rejuvenating hair oils & body scrubs</p>
+                </div>
+              </a>
+            </div>
+
+            <div className="col-12 col-sm-6 col-lg-3">
+              <a 
+                href="#artisanal-crafts" 
+                onClick={(e) => {
+                  const el = document.getElementById('artisanal-crafts') || document.querySelector('.storefront-section');
+                  if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth' }); }
+                }}
+                className="coconut-category-card" 
+                style={{ backgroundImage: `url('/images/coconut-cat-crafts.jpg')` }}
+              >
+                <div className="coconut-category-overlay"></div>
+                <div className="coconut-category-content">
+                  <h4 className="coconut-category-title">Artisanal Crafts</h4>
+                  <p className="coconut-category-desc">Hand-carved coconut shell bowls, eco utensils & coir decor</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Category Filter Pills (Sage Mint #E8EFE9: "Virgin Oils", "Zero Waste Bowls") */}
+      {theme === 'theme-coconut' && !searchQuery && filteredProducts.length > 0 && categoriesToRender.length > 0 && (
+        <div className="coconut-filter-container container text-center my-4">
+          <div className="coconut-filter-pills d-flex flex-wrap justify-content-center gap-2">
+            <button
+              type="button"
+              className={`coconut-filter-pill ${activeCoconutFilter === 'all' ? 'active' : ''}`}
+              onClick={() => setActiveCoconutFilter('all')}
+            >
+              🌿 All Harvest
+            </button>
+            {categoriesToRender.map((cat) => (
+              <button
+                type="button"
+                key={cat.id || cat.name}
+                className={`coconut-filter-pill ${activeCoconutFilter === cat.name ? 'active' : ''}`}
+                onClick={() => {
+                  setActiveCoconutFilter(cat.name);
+                  const el = document.getElementById(cat.slug);
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                {cat.name}
+              </button>
+            ))}
+          </div>
+        </div>
       )}
 
       {searchQuery ? (
@@ -694,7 +869,15 @@ export default function StorefrontHome({ storeData, products, categories = [], l
             >
               <div className="storefront-section-header align-items-end mb-4">
                 <div>
-                  {theme === 'theme-perfume' ? (
+                  {theme === 'theme-coconut' ? (
+                    <div>
+                      <div className="coconut-section-badge mb-1">🌴 KERALA HARVEST</div>
+                      <h3 className="coconut-section-heading mb-0">
+                        <span>DISCOVER </span>
+                        <span className="coconut-highlight">{cat.name}</span>
+                      </h3>
+                    </div>
+                  ) : theme === 'theme-perfume' ? (
                     <h3 style={{ textTransform: 'uppercase', letterSpacing: '1px', fontSize: '2rem' }}>
                       <span style={{ fontWeight: 'bold' }}>DISCOVER </span>
                       <span className="perfume-highlight" style={{ fontWeight: 'bold' }}>{cat.name}</span>
@@ -808,6 +991,110 @@ export default function StorefrontHome({ storeData, products, categories = [], l
               <p style={{ color: '#666', fontSize: '1.1rem', lineHeight: '1.8', marginBottom: '2.5rem', fontFamily: 'var(--perfume-font-body, sans-serif)' }}>
                 Craft Your Own Perfume, CYOP is India's premier perfume bar known for <span style={{ color: '#ff7b00', fontWeight: '500' }}>high-quality, long-lasting</span> fragrances with unparalleled expertise in the art and science of perfumery. CYOP perfumes, reformulated with <span style={{ color: '#ff7b00', fontWeight: '500' }}>50% fragrance oil concentration</span> last longer in tropical weather conditions. Our experts can guide the customer to not just select the right perfume, but also provide them with the unique experience of mixing perfumes to create a <span style={{ color: '#ff7b00', fontWeight: '500' }}>fully personalised olfactory experience.</span>
               </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Kerala Heritage Story & Trust Banner for Coconut Theme */}
+      {theme === 'theme-coconut' && !searchQuery && (
+        <div className="container" id="kerala-heritage" style={{ marginTop: '5rem', marginBottom: '4rem' }}>
+          <div className="coconut-heritage-section">
+            <div className="row g-0 align-items-center">
+              <div className="col-lg-6">
+                <div className="coconut-heritage-img-wrapper">
+                  <img 
+                    src="/images/coconut-story.jpg" 
+                    alt="Kerala Coconut Farmer & Heritage" 
+                    loading="lazy"
+                    decoding="async"
+                    className="coconut-heritage-img"
+                  />
+                </div>
+              </div>
+              <div className="col-lg-6">
+                <div className="coconut-heritage-content">
+                  <span className="coconut-section-badge">🌴 OUR LIVING HERITAGE</span>
+                  <h2 className="coconut-heritage-title">
+                    Rooted in the Soil of God's Own Country
+                  </h2>
+                  <p className="coconut-heritage-text">
+                    For generations, Kerala’s lush coastal climate and mineral-rich backwater soils have cultivated India’s most nourishing coconuts. We partner directly with local farming families, using centuries-old traditional wood-pressed (Mara Chekku) extraction to bring unadulterated purity from tree to your home.
+                  </p>
+                  
+                  <div className="coconut-benefit-item">
+                    <div className="coconut-benefit-icon">
+                      <Droplet size={20} />
+                    </div>
+                    <div>
+                      <h5 className="fw-bold mb-1" style={{ color: '#1b4332', fontSize: '1.05rem' }}>Traditional Wood-Press Extraction</h5>
+                      <p className="text-muted mb-0" style={{ fontSize: '0.9rem' }}>Cold-pressed at room temperature to preserve Lauric acid, natural vitamins, and delicate tropical aromas.</p>
+                    </div>
+                  </div>
+
+                  <div className="coconut-benefit-item">
+                    <div className="coconut-benefit-icon">
+                      <ShieldCheck size={20} />
+                    </div>
+                    <div>
+                      <h5 className="fw-bold mb-1" style={{ color: '#1b4332', fontSize: '1.05rem' }}>Zero Chemical Refining or Sulfur</h5>
+                      <p className="text-muted mb-0" style={{ fontSize: '0.9rem' }}>Never bleached, deodorized, or adulterated with liquid paraffin or artificial stabilizers.</p>
+                    </div>
+                  </div>
+
+                  <div className="coconut-benefit-item">
+                    <div className="coconut-benefit-icon">
+                      <Leaf size={20} />
+                    </div>
+                    <div>
+                      <h5 className="fw-bold mb-1" style={{ color: '#1b4332', fontSize: '1.05rem' }}>Zero-Waste Sustainable Ecosystem</h5>
+                      <p className="text-muted mb-0" style={{ fontSize: '0.9rem' }}>From virgin oil and coconut milk to reclaimed shell bowls and coir fibre, every part is lovingly crafted.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 4 Trust Cards Banner */}
+          <div className="coconut-trust-banner">
+            <div className="row g-4">
+              <div className="col-6 col-md-3">
+                <div className="coconut-trust-card">
+                  <div className="coconut-trust-icon">
+                    <Droplet size={26} />
+                  </div>
+                  <h4 className="coconut-trust-title">100% Cold-Pressed</h4>
+                  <p className="coconut-trust-desc">Single-origin wood-pressed extraction preserving all micro-nutrients.</p>
+                </div>
+              </div>
+              <div className="col-6 col-md-3">
+                <div className="coconut-trust-card">
+                  <div className="coconut-trust-icon">
+                    <ShieldCheck size={26} />
+                  </div>
+                  <h4 className="coconut-trust-title">100% Chemical-Free</h4>
+                  <p className="coconut-trust-desc">Pure unrefined coconut harvest with zero additives or preservatives.</p>
+                </div>
+              </div>
+              <div className="col-6 col-md-3">
+                <div className="coconut-trust-card">
+                  <div className="coconut-trust-icon">
+                    <Heart size={26} />
+                  </div>
+                  <h4 className="coconut-trust-title">Farmer Direct</h4>
+                  <p className="coconut-trust-desc">Fair trade partnerships empowering coastal Kerala agricultural families.</p>
+                </div>
+              </div>
+              <div className="col-6 col-md-3">
+                <div className="coconut-trust-card">
+                  <div className="coconut-trust-icon">
+                    <Sparkles size={26} />
+                  </div>
+                  <h4 className="coconut-trust-title">Eco Packaging</h4>
+                  <p className="coconut-trust-desc">Sustainable amber glass bottles and upcycled natural coconut shells.</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

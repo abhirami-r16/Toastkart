@@ -28,9 +28,23 @@ export function resolveStoreTheme(storeData) {
     }
   }
 
+  // Check if store directly specifies a theme
+  if (storeData.theme) {
+    return storeData.theme;
+  }
+
   const category = String(storeData.category || '')
     .trim()
     .toLowerCase();
+
+  // Check coconut-related categories dynamically
+  if (
+    category.includes('coconut') ||
+    category.includes('copra') ||
+    category.includes('kera')
+  ) {
+    return 'theme-coconut';
+  }
 
   const themeMap = {
     'fashion & apparel': 'theme-eflyer',
@@ -38,14 +52,22 @@ export function resolveStoreTheme(storeData) {
     'jewellery': 'theme-jewelry',
     'home & living': 'theme-home',
     'perfumes': 'theme-perfume',
+    'perfume': 'theme-perfume',
     'beauty': 'theme-beauty',
     'beauty & cosmetics': 'theme-beauty',
     'electronics': 'theme-electronics',
     'footwear': 'theme-footwear',
     'grocery': 'theme-grocery',
     'grocery & food': 'theme-grocery',
+    'groceries': 'theme-grocery',
     'gift': 'theme-gift',
     'gift store': 'theme-gift',
+    'gift & novelty': 'theme-gift',
+    'coconut products': 'theme-coconut',
+    'coconut oil': 'theme-coconut',
+    'coconut-based products': 'theme-coconut',
+    'coconut manufacturing': 'theme-coconut',
+    'coconut': 'theme-coconut',
   };
 
   return themeMap[category] || 'theme-default';

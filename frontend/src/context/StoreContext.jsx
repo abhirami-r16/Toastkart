@@ -44,6 +44,26 @@ const INITIAL_DEMO_STORES = [
     products_count: 12,
     orders_count: 50,
     theme: 'theme-beauty'
+  },
+  {
+    id: 3,
+    user_id: 1,
+    name: 'Kera Pure Organics',
+    slug: 'kera-pure',
+    subdomain: 'kera-pure',
+    customDomain: 'www.kerapure.com',
+    logo: '',
+    banner: '/images/coconut-hero-slide-1.jpg',
+    currency: 'INR',
+    description: '100% Mara Chekku cold-pressed virgin coconut oil, roasted coconut chips, and sustainable Kerala artisanal crafts.',
+    status: 'Active',
+    email: 'harvest@kerapure.com',
+    phone: '+91 98470 12345',
+    category: 'Coconut Products',
+    timezone: 'Asia/Kolkata',
+    products_count: 8,
+    orders_count: 86,
+    theme: 'theme-coconut'
   }
 ];
 

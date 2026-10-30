@@ -57,4 +57,25 @@ export const formatINR = (amount, hideDecimalsIfZero = false) => {
   return `₹${formatted}`;
 };
 
+export const getStoreCurrencySymbol = (currency = 'INR') => {
+  if (!currency) return '₹';
+  const c = String(currency).trim().toUpperCase();
+  if (c.includes('USD') || c.includes('$')) return '$';
+  if (c.includes('EUR') || c.includes('€')) return '€';
+  if (c.includes('GBP') || c.includes('£')) return '£';
+  if (c.includes('AED')) return 'AED ';
+  return '₹';
+};
+
+export const formatStoreCurrency = (amount, currency = 'INR', hideDecimalsIfZero = false) => {
+  const num = parseNumeric(amount, 0);
+  const symbol = getStoreCurrencySymbol(currency);
+  const locale = symbol === '$' ? 'en-US' : (symbol === '€' ? 'de-DE' : (symbol === '£' ? 'en-GB' : 'en-IN'));
+  const formatted = num.toLocaleString(locale, {
+    minimumFractionDigits: hideDecimalsIfZero && Number.isInteger(num) ? 0 : 2,
+    maximumFractionDigits: 2,
+  });
+  return `${symbol}${formatted}`;
+};
+
 export default formatINR;

@@ -1337,9 +1337,10 @@ export default function Products() {
                     {(() => {
                       const selectedCategoryName = categories.find(c => String(c.id) === String(formData.category_id))?.name?.toLowerCase() || '';
                       const isPerfume = selectedCategoryName.includes('perfume') || selectedCategoryName.includes('fragrance') || selectedCategoryName.includes('cologne');
-                      return isPerfume
-                        ? ['10ml', '30ml', '50ml', '100ml', '150ml', '200ml', 'Personalized']
-                        : ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'Free Size'];
+                      const isCoconut = selectedCategoryName.includes('coconut');
+                      if (isPerfume) return ['10ml', '30ml', '50ml', '100ml', '150ml', '200ml', 'Personalized'];
+                      if (isCoconut) return ['100 ml', '250 ml', '500 ml', '1 L', '2 L', '5 L', '100 g', '250 g', '500 g', '1 kg', 'Pack of 2', 'Pack of 4', 'Pack of 6', 'Single Pack', 'ml', 'L', 'g', 'Pack', 'Free Size'];
+                      return ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'Free Size'];
                     })().map((s) => {
                       const currentSizes =
                         formData.size

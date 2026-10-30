@@ -18,8 +18,22 @@ import MeeshoDropshippingView from "../components/meesho/MeeshoDropshippingView"
 import { formatINR, parseNumeric } from "../utils/currency";
 import "../styles/dashboard-premium.css";
 
-const getSizesForCategory = (productCategory, storeCategory) => {
-  const cat = ((productCategory || '') + ' ' + (storeCategory || '')).toLowerCase();
+const getSizesForCategory = (productCategory, storeCategory, storeTheme, storeName) => {
+  const cat = (
+    (productCategory || '') + ' ' + 
+    (storeCategory || '') + ' ' + 
+    (storeTheme || '') + ' ' + 
+    (storeName || '')
+  ).toLowerCase();
+  if (cat.includes('coconut') || cat.includes('amiora') || cat.includes('amivora')) {
+    return [
+      '100 ml', '250 ml', '500 ml', '1 L', '2 L', '5 L',
+      '100 g', '250 g', '500 g', '1 kg',
+      'Pack of 2', 'Pack of 4', 'Pack of 6', 'Single Pack',
+      'ml', 'L', 'g', 'Pack',
+      'Free Size'
+    ];
+  }
   if (cat.includes('jewel') || cat.includes('ring')) {
     return ['Free Size', '5', '6', '7', '8', '9', '10', '11', '12'];
   }
@@ -263,43 +277,9 @@ export default function StoreOwnerDashboard() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
 
-  const [showPlanRequiredModal, setShowPlanRequiredModal] = useState(() => {
-    try {
-      const saved = localStorage.getItem('toastkart_user');
-      if (saved) {
-        const u = JSON.parse(saved);
-        if (u?.role === 'admin' || u?.email === 'admin@gmail.com') return false;
-        const sub = u?.active_subscription || u?.activeSubscription;
-        if (sub && (sub.status === 'active' || !sub.status)) {
-          if (!sub.expiry_date || new Date(sub.expiry_date).getTime() > Date.now()) {
-            return false;
-          }
-        }
-      }
-    } catch (e) {}
-    return true;
-  });
-
-  const hasActiveSub = useMemo(() => {
-    if (!user) return false;
-    const sub = user.active_subscription || user.activeSubscription;
-    if (sub && (sub.status === 'active' || !sub.status)) {
-      if (sub.expiry_date) {
-        return new Date(sub.expiry_date).getTime() > Date.now();
-      }
-      return true;
-    }
-    if (Array.isArray(user.subscriptions)) {
-      return user.subscriptions.some(s => {
-        if (s.status !== 'active') return false;
-        if (s.expiry_date) {
-          return new Date(s.expiry_date).getTime() > Date.now();
-        }
-        return true;
-      });
-    }
-    return false;
-  }, [user]);
+  // Subscription paywall removed: full access enabled for all merchant features
+  const [showPlanRequiredModal, setShowPlanRequiredModal] = useState(false);
+  const hasActiveSub = true;
 
   const isPrivileged = Boolean(
     user?.role === 'admin' ||
@@ -312,13 +292,9 @@ export default function StoreOwnerDashboard() {
         navigate('/login', { replace: true });
         return;
       }
-      if (!isPrivileged && !hasActiveSub) {
-        setShowPlanRequiredModal(true);
-      } else {
-        setShowPlanRequiredModal(false);
-      }
+      setShowPlanRequiredModal(false);
     }
-  }, [user, loading, hasActiveSub, isPrivileged, navigate]);
+  }, [user, loading, navigate]);
 
   const [active, setActive] = useState(() => {
     try {
@@ -2165,7 +2141,7 @@ export default function StoreOwnerDashboard() {
                     Your store has no products listed yet. Click the button below to add your first product to populate real-time inventory stock levels.
                   </p>
                   <button onClick={openAddProductModal} className="btn btn-gold-primary py-2.5 px-4 font-bold fs-7 d-inline-flex align-items-center gap-2">
-                    <Plus size={18} /> + Add Product To Catalog
+                    <Plus size={18} /> Add Product To Catalog
                   </button>
                 </div>
               ) : (
@@ -2625,7 +2601,7 @@ export default function StoreOwnerDashboard() {
                     Your store catalog doesn't have any collections yet. Click the button below to add your first product collection with custom URL slug and description.
                   </p>
                   <button onClick={openAddCategoryModal} className="btn py-2.5 px-4 font-bold fs-7 d-inline-flex align-items-center gap-2 text-white" style={{ background: "#1c2226", borderRadius: "8px" }}>
-                    <Plus size={18} /> + Add Your First Collection
+                    <Plus size={18} /> Add Your First Collection
                   </button>
                 </div>
               ) : (
@@ -2741,6 +2717,7 @@ export default function StoreOwnerDashboard() {
                         <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Category</label>
                         <select value={storeForm.category} onChange={(e) => setStoreForm({ ...storeForm, category: e.target.value })} className="form-select" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}>
                           <option value="Fashion & Apparel">Fashion & Apparel</option>
+                          <option value="Coconut Products">Coconut Products</option>
                           <option value="Jewellery">Jewellery</option>
                           <option value="Beauty & Cosmetics">Beauty & Cosmetics</option>
                           <option value="Home & Living">Home & Living</option>
@@ -2750,8 +2727,6 @@ export default function StoreOwnerDashboard() {
                           <option value="Gift & Novelty">Gift & Novelty</option>
                           <option value="Watches">Watches</option>
                           <option value="Footwear">Footwear</option>
-                          <option value="E-flyer">E-flyer</option>
-                          <option value="Other">Other</option>
                         </select>
                       </div>
                       <div className="col-6">
@@ -2828,6 +2803,7 @@ export default function StoreOwnerDashboard() {
                             <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Category</label>
                             <select value={storeForm.category} onChange={(e) => setStoreForm({ ...storeForm, category: e.target.value })} className="form-select" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}>
                               <option value="Fashion & Apparel">Fashion & Apparel</option>
+                              <option value="Coconut Products">Coconut Products</option>
                               <option value="Jewellery">Jewellery</option>
                               <option value="Beauty & Cosmetics">Beauty & Cosmetics</option>
                               <option value="Home & Living">Home & Living</option>
@@ -2837,8 +2813,6 @@ export default function StoreOwnerDashboard() {
                               <option value="Gift & Novelty">Gift & Novelty</option>
                               <option value="Watches">Watches</option>
                               <option value="Footwear">Footwear</option>
-                              <option value="E-flyer">E-flyer</option>
-                              <option value="Other">Other</option>
                             </select>
                           </div>
                           <div className="col-6">
@@ -3281,7 +3255,7 @@ export default function StoreOwnerDashboard() {
                                   <div className="col-12 mt-2">
                                     <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Sizes</label>
                                     <div className="d-flex flex-wrap gap-1">
-                                      {getSizesForCategory(newProd.category, activeStore?.category).map(s => {
+                                      {getSizesForCategory(newProd.category, activeStore?.category || storeForm?.category, activeStore?.theme, activeStore?.name).map(s => {
                                         const currentSizes = newProd.size ? newProd.size.split(',').map(x => x.trim()).filter(Boolean) : [];
                                         const isSelected = currentSizes.includes(s);
                                         return (
@@ -3306,6 +3280,14 @@ export default function StoreOwnerDashboard() {
                                         );
                                       })}
                                     </div>
+                                    <input
+                                      type="text"
+                                      value={newProd.size || ""}
+                                      onChange={(e) => setNewProd({ ...newProd, size: e.target.value })}
+                                      placeholder="Custom or selected sizes (e.g. 500 ml, 1 L, 250 g, Pack of 2)"
+                                      className="form-control form-control-sm mt-1"
+                                      style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc", fontSize: "12px" }}
+                                    />
                                   </div>
                                 </div>
                               </div>
@@ -3342,6 +3324,7 @@ export default function StoreOwnerDashboard() {
                                 required
                               >
                                 <option value="">Select a Collection</option>
+                                <option value="Coconut Products">Coconut Products</option>
                                 {categoriesList && categoriesList.map(cat => (
                                   <option key={cat.id || cat.name} value={cat.name}>
                                     {cat.name}
@@ -3800,7 +3783,7 @@ export default function StoreOwnerDashboard() {
                     <div className="col-12 mt-2">
                       <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Sizes</label>
                       <div className="d-flex flex-wrap gap-1">
-                        {getSizesForCategory(newProd.category, activeStore?.category).map(s => {
+                        {getSizesForCategory(newProd.category, activeStore?.category || storeForm?.category, activeStore?.theme, activeStore?.name).map(s => {
                           const currentSizes = newProd.size ? newProd.size.split(',').map(x => x.trim()).filter(Boolean) : [];
                           const isSelected = currentSizes.includes(s);
                           return (
@@ -3825,6 +3808,14 @@ export default function StoreOwnerDashboard() {
                           );
                         })}
                       </div>
+                      <input
+                        type="text"
+                        value={newProd.size || ""}
+                        onChange={(e) => setNewProd({ ...newProd, size: e.target.value })}
+                        placeholder="Custom or selected sizes (e.g. 500 ml, 1 L, 250 g, Pack of 2)"
+                        className="form-control form-control-sm mt-1"
+                        style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc", fontSize: "12px" }}
+                      />
                     </div>
                   </div>
                 </div>
@@ -3861,6 +3852,7 @@ export default function StoreOwnerDashboard() {
                   required
                 >
                   <option value="">Select a Collection</option>
+                  <option value="Coconut Products">Coconut Products</option>
                   {categoriesList && categoriesList.map(cat => (
                     <option key={cat.id || cat.name} value={cat.name}>
                       {cat.name}

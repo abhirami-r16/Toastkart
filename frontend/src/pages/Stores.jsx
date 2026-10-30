@@ -380,6 +380,7 @@ export default function Stores() {
                     style={{ background: '#161310', border: `1px solid rgba(212, 175, 55, 0.2)` }}
                   >
                     <option value="Fashion & Apparel">Fashion & Apparel</option>
+                    <option value="Coconut Products">Coconut Products</option>
                     <option value="Jewellery">Jewellery</option>
                     <option value="Beauty & Cosmetics">Beauty & Cosmetics</option>
                     <option value="Home & Living">Home & Living</option>
@@ -389,9 +390,7 @@ export default function Stores() {
                     <option value="Gift & Novelty">Gift & Novelty</option>
                     <option value="Watches">Watches</option>
                     <option value="Footwear">Footwear</option>
-                    <option value="E-flyer">E-flyer</option>
                     <option value="General Retail">General Retail</option>
-                    <option value="Other">Other</option>
                   </select>
                 </div>
 
@@ -610,6 +609,7 @@ export default function Stores() {
                       style={{ background: '#161310', border: `1px solid rgba(212, 175, 55, 0.2)` }}
                     >
                       <option value="Fashion & Apparel">Fashion & Apparel</option>
+                      <option value="Coconut Products">Coconut Products</option>
                       <option value="Jewellery">Jewellery</option>
                       <option value="Beauty & Cosmetics">Beauty & Cosmetics</option>
                       <option value="Home & Living">Home & Living</option>
@@ -619,9 +619,7 @@ export default function Stores() {
                       <option value="Gift & Novelty">Gift & Novelty</option>
                       <option value="Watches">Watches</option>
                       <option value="Footwear">Footwear</option>
-                      <option value="E-flyer">E-flyer</option>
                       <option value="General Retail">General Retail</option>
-                      <option value="Other">Other</option>
                     </select>
                   </div>
                   <div className="border-b p-3" style={{ borderColor: 'rgba(212, 175, 55, 0.14)' }}>

@@ -297,6 +297,7 @@ theme-footwear
 theme-grocery
 theme-gift
 theme-perfume
+theme-coconut
 
 The selected theme MUST be stored inside:
 
@@ -783,7 +784,8 @@ PROMPT;
             'theme-footwear',
             'theme-grocery',
             'theme-gift',
-            'theme-perfume'
+            'theme-perfume',
+            'theme-coconut'
         ];
 
         $selectedTheme =
@@ -830,6 +832,24 @@ PROMPT;
 
                 $selectedTheme =
                     'theme-beauty';
+
+            } elseif (
+                str_contains(
+                    $categoryText,
+                    'coconut'
+                ) ||
+                str_contains(
+                    $categoryText,
+                    'copra'
+                ) ||
+                str_contains(
+                    $categoryText,
+                    'kera'
+                )
+            ) {
+
+                $selectedTheme =
+                    'theme-coconut';
 
             } elseif (
                 str_contains(
@@ -1527,6 +1547,23 @@ PROMPT;
     {
         $text = strtolower(trim($prompt));
 
+        // Coconut — check before general food/crafts
+        if (
+            str_contains($text, 'coconut') ||
+            str_contains($text, 'copra') ||
+            str_contains($text, 'kera') ||
+            str_contains($text, 'thenga') ||
+            str_contains($text, 'narikela')
+        ) {
+            if (str_contains($text, 'oil')) {
+                return 'Coconut Oil';
+            }
+            if (str_contains($text, 'manufactur')) {
+                return 'Coconut Manufacturing';
+            }
+            return 'Coconut Products';
+        }
+
         // Footwear — check before fashion
         if (
             str_contains($text, 'footwear') ||
@@ -1723,6 +1760,10 @@ Footwear
 Electronics
 General Retail
 Perfume
+Coconut Products
+Coconut Oil
+Coconut-based Products
+Coconut Manufacturing
 Grocery
 Furniture
 Restaurant
@@ -1868,6 +1909,24 @@ PROMPT;
                 'General Retail';
 
             if (
+                str_contains(
+                    $lowerPrompt,
+                    'coconut'
+                ) ||
+                str_contains(
+                    $lowerPrompt,
+                    'copra'
+                ) ||
+                str_contains(
+                    $lowerPrompt,
+                    'kera'
+                )
+            ) {
+
+                $category =
+                    'Coconut Products';
+
+            } elseif (
                 str_contains(
                     $lowerPrompt,
                     'jewel'

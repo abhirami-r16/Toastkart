@@ -23,6 +23,7 @@ export default function StorefrontApp({ subdomain }) {
     const name = cleanSub.charAt(0).toUpperCase() + cleanSub.slice(1).replace(/-/g, ' ').replace('store', 'Store');
     let category = 'General Retail';
     if (cleanSub.includes('perfume')) category = 'perfumes';
+    else if (cleanSub.includes('coconut') || cleanSub.includes('copra') || cleanSub.includes('kera')) category = 'Coconut Products';
     else if (cleanSub.includes('jewelry')) category = 'jewelry';
     else if (cleanSub.includes('beauty') || cleanSub.includes('glow')) category = 'beauty';
     else if (cleanSub.includes('home') || cleanSub.includes('decor')) category = 'home & living';
@@ -224,8 +225,9 @@ if (!foundStore) {
         });
       }
 
-      if (!isMounted()) return;
-      setStoreProducts(currentStoreProducts);
+      // If coconut store has no products yet, populate curated demonstration harvest products
+      const storeCatStr = String(foundStore?.category || '').toLowerCase();
+      let currentStoreCategories = [];
 
       if (allCategories.length === 0) {
         const saved = localStorage.getItem('aureum_owner_categories');
@@ -235,7 +237,7 @@ if (!foundStore) {
       }
       // Strictly filter categories to only those matching the current store
       if (allCategories.length > 0) {
-        let currentStoreCategories = allCategories.filter(c => {
+        currentStoreCategories = allCategories.filter(c => {
           const cStoreId = c.store_id ?? c.store?.id ?? c.storeId ?? null;
           const cStoreSlug = c.store?.slug ?? c.store?.subdomain ?? c.store_subdomain ?? c.store_slug ?? null;
           const cStoreSubdomain = c.store?.subdomain ?? c.store_subdomain ?? cStoreSlug ?? null;
@@ -252,13 +254,11 @@ if (!foundStore) {
           
           return false;
         });
-
-        if (!isMounted()) return;
-        setStoreCategories(currentStoreCategories);
-      } else {
-        if (!isMounted()) return;
-        setStoreCategories([]);
       }
+
+      if (!isMounted()) return;
+      setStoreProducts(currentStoreProducts);
+      setStoreCategories(currentStoreCategories);
     } catch (e) {
       console.error('Error loading store data for storefront:', e);
     } finally {
