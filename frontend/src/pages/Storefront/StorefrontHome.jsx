@@ -234,19 +234,20 @@ export default function StorefrontHome({ storeData, products, categories = [], l
       >
         <div
           className={
-            theme === 'theme-perfume' || theme === 'theme-coconut' || displayItems.length >= 5
+            (theme === 'theme-perfume' || theme === 'theme-coconut' || displayItems.length >= 5
               ? "storefront-product-slider"
-              : "storefront-product-grid"
+              : "storefront-product-grid") +
+            (displayItems.length === 1 ? " is-single-product" : "")
           }
         >
           {displayItems.map((product, idx) => (
             <div
               key={`${product.id}-${idx}`}
-              className={`storefront-product-card position-relative ${theme === 'theme-home' ? 'storefront-home-theme-card' : ''}`}
+              className={`storefront-product-card position-relative ${theme === 'theme-home' ? 'storefront-home-theme-card' : ''} ${displayItems.length === 1 ? 'is-single-card' : ''}`}
             >
               <Link
                 to={`${basePath}/product/${product.id}`}
-                className="text-decoration-none text-dark d-block"
+                className="text-decoration-none text-dark d-flex flex-column flex-grow-1"
               >
                 <div className="storefront-product-image-container position-relative">
                   {product.compare_price &&
@@ -274,28 +275,28 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                   />
                 </div>
 
-                <div className="storefront-product-details pb-3 px-3 mt-3 d-flex flex-column" style={{ flexGrow: 1 }}>
+                <div className="storefront-product-details d-flex flex-column flex-grow-1">
                   {theme === 'theme-coconut' ? (
-                    <div className="coconut-card-details d-flex flex-column h-100" style={{ backgroundColor: '#FFFFFF' }}>
-                      <div className="storefront-product-category text-uppercase mt-1 mb-1" style={{ fontSize: '0.72rem', letterSpacing: '1px', color: '#C2844E', fontWeight: '700' }}>
+                    <div className="coconut-card-details d-flex flex-column flex-grow-1">
+                      <div className="storefront-product-category text-uppercase">
                         🌿 {product.category?.name || product.category || '100% ORGANIC KERALA'}
                       </div>
-                      <div className="storefront-product-title mb-1 fw-bold" style={{ fontSize: '1.08rem', color: '#2D3748' }}>
+                      <div className="storefront-product-title fw-bold">
                         {product.name}
                       </div>
                       
-                      <div className="storefront-product-price-row fw-bold mb-2 d-flex align-items-baseline gap-2">
-                        <span className="storefront-product-price" style={{ color: '#C2844E', fontSize: '1.25rem', fontWeight: '800' }}>
+                      <div className="storefront-product-price-row fw-bold d-flex align-items-baseline">
+                        <span className="storefront-product-price">
                           {formatStoreCurrency(product.price, storeData?.currency)}
                         </span>
                         {product.compare_price && parsePrice(product.compare_price) > parsePrice(product.price) && (
-                          <span className="storefront-product-original-price" style={{ color: '#8a9990', fontSize: '0.88rem', textDecoration: 'line-through' }}>
+                          <span className="storefront-product-original-price">
                             {formatStoreCurrency(product.compare_price, storeData?.currency)}
                           </span>
                         )}
                       </div>
                       
-                      <div className="coconut-variants d-flex gap-2 flex-wrap mb-3 mt-auto">
+                      <div className="coconut-variants d-flex flex-wrap mt-auto">
                         {product.size ? (
                           String(product.size).split(',').map((sz, i) => (
                             <span key={i} className="coconut-variant-badge">
@@ -311,21 +312,21 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                       </div>
                     </div>
                   ) : theme === 'theme-perfume' ? (
-                    <div className="perfume-card-details d-flex flex-column h-100">
-                      <div className="storefront-product-title text-uppercase mb-0 fw-bold" style={{ fontSize: '1.05rem', color: '#333' }}>
+                    <div className="perfume-card-details d-flex flex-column flex-grow-1">
+                      <div className="storefront-product-title text-uppercase fw-bold">
                         {product.name}
                       </div>
-                      <div className="storefront-product-category text-uppercase text-muted mt-1 mb-2" style={{ fontSize: '0.65rem', letterSpacing: '0.5px' }}>
+                      <div className="storefront-product-category text-uppercase text-muted">
                         {product.category?.name || product.category || 'WOODY | ALLDAY | UNISEX'}
                       </div>
                       
-                      <div className="storefront-product-price-row fw-bold mb-1" style={{ color: '#000', fontSize: '1.1rem' }}>
+                      <div className="storefront-product-price-row fw-bold">
                         <span className="storefront-product-price">
                           {formatStoreCurrency(product.price, storeData?.currency)}
                         </span>
                       </div>
                       
-                      <div className="perfume-variants d-flex gap-2 flex-wrap mb-4 mt-auto">
+                      <div className="perfume-variants d-flex gap-2 flex-wrap mt-auto">
                         {product.size ? (
                           String(product.size).split(',').map((sz, i) => (
                             <span key={i} className={`btn btn-outline-dark ${i === 0 ? 'border-2 border-dark fw-bold' : ''} btn-sm rounded-1 px-2 py-1`} style={{ fontSize: '0.7rem' }}>
@@ -417,10 +418,9 @@ export default function StorefrontHome({ storeData, products, categories = [], l
 
               {/* Add to Cart Button */}
               {theme === 'theme-coconut' ? (
-                <div className="px-3 pb-3 mt-auto w-100">
+                <div className="coconut-cart-wrapper w-100 mt-auto">
                   <button
-                    className="btn coconut-cart-btn w-100 rounded-pill fw-bold text-uppercase d-flex align-items-center justify-content-center gap-2"
-                    style={{ fontSize: '0.82rem', padding: '12px', backgroundColor: '#14271C', color: '#FFFFFF', borderColor: '#14271C' }}
+                    className="btn coconut-cart-btn w-100 rounded-pill fw-bold d-flex align-items-center justify-content-center"
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
@@ -434,15 +434,14 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                       );
                     }}
                   >
-                    <ShoppingCart size={16} />
-                    Add to Cart
+                    <ShoppingCart size={13} strokeWidth={2.2} />
+                    <span className="coconut-cart-btn-text">Add to Cart</span>
                   </button>
                 </div>
               ) : theme === 'theme-perfume' ? (
-                <div className="px-3 pb-3 mt-auto w-100">
+                <div className="perfume-cart-wrapper w-100 mt-auto">
                   <button
-                    className="btn btn-dark w-100 rounded-pill fw-bold text-uppercase d-flex align-items-center justify-content-center gap-2"
-                    style={{ fontSize: '0.8rem', padding: '12px' }}
+                    className="btn btn-dark perfume-cart-btn w-100 rounded-pill fw-bold d-flex align-items-center justify-content-center"
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
@@ -456,8 +455,8 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                       );
                     }}
                   >
-                    <ShoppingCart size={16} />
-                    Add to Cart
+                    <ShoppingCart size={13} strokeWidth={2.2} />
+                    <span>Add to Cart</span>
                   </button>
                 </div>
               ) : (

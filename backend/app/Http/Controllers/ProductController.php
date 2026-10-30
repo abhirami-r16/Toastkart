@@ -64,7 +64,7 @@ class ProductController extends Controller
         $products = $query->select([
             'id', 'store_id', 'category_id', 'name', 'slug', 'sku', 
             'price', 'compare_price', 'image', 'status', 'is_active', 
-            'color', 'size', 'description', 'images', 'stock_quantity'
+            'color', 'size', 'piece_per_carton', 'description', 'images', 'stock_quantity'
         ])->orderBy('id', 'desc')->get();
 
         return response()->json($products);
@@ -92,6 +92,7 @@ class ProductController extends Controller
             'owner_email'     => 'nullable|string|max:255',
             'color'           => 'nullable|string|max:255',
             'size'            => 'nullable|string|max:255',
+            'piece_per_carton'=> 'nullable|integer|min:1',
             'images'          => 'nullable|array',
         ]);
 
@@ -149,6 +150,7 @@ class ProductController extends Controller
             'is_active'      => $validated['is_active'] ?? true,
             'color'          => $validated['color'] ?? null,
             'size'           => $validated['size'] ?? null,
+            'piece_per_carton' => !empty($validated['piece_per_carton']) ? (int)$validated['piece_per_carton'] : null,
             'images'         => $processedGallery,
         ]);
 
@@ -182,6 +184,7 @@ class ProductController extends Controller
             'is_active' => 'nullable|boolean',
             'color' => 'nullable|string|max:255',
             'size' => 'nullable|string|max:255',
+            'piece_per_carton' => 'nullable|integer|min:1',
             'images' => 'nullable|array',
         ]);
 

@@ -271,7 +271,7 @@ const resolveProductColor = (product) => {
   return null;
 };
 
-const emptyProductForm = { name: "", sku: "", price: "", compare_price: "", discount_percentage: "", category: "Apparel", stock: "", description: "", image: "", images: [], color: "", size: "", is_active: true };
+const emptyProductForm = { name: "", sku: "", price: "", compare_price: "", discount_percentage: "", category: "Apparel", stock: "", description: "", image: "", images: [], color: "", size: "", piece_per_carton: "", is_active: true };
 
 export default function StoreOwnerDashboard() {
   const navigate = useNavigate();
@@ -702,7 +702,8 @@ export default function StoreOwnerDashboard() {
             images: p.images || [],
             description: p.description || "",
             color: p.color || null,
-            size: p.size || null
+            size: p.size || null,
+            piece_per_carton: p.piece_per_carton || null
           })));
         } else {
           setProductsList([]);
@@ -1402,6 +1403,7 @@ export default function StoreOwnerDashboard() {
       images: Array.isArray(product.images) ? product.images.map(img => typeof img === 'string' ? { url: img, color: '' } : img) : (product.image ? [{ url: product.image, color: '' }] : []),
       color: product.color || "",
       size: product.size || "",
+      piece_per_carton: product.piece_per_carton ? String(product.piece_per_carton) : "",
       is_active: product.is_active !== false && product.is_active !== 0,
     });
     setShowAddProduct(true);
@@ -1465,6 +1467,7 @@ export default function StoreOwnerDashboard() {
       owner_email: currentOwnerEmail || user?.email || '',
       color: newProd.color?.trim() || null,
       size: newProd.size?.trim() || null,
+      piece_per_carton: newProd.piece_per_carton ? parseInt(String(newProd.piece_per_carton).replace(/[^0-9]/g, ""), 10) || null : null,
     };
 
     const mapProduct = (p) => {
@@ -1494,6 +1497,7 @@ export default function StoreOwnerDashboard() {
         description: p.description || newProd.description || "",
         color: p.color || newProd.color || null,
         size: p.size || newProd.size || null,
+        piece_per_carton: p.piece_per_carton ?? (newProd.piece_per_carton ? parseInt(String(newProd.piece_per_carton).replace(/[^0-9]/g, ""), 10) || null : null),
         is_active: p.is_active === undefined ? newProd.is_active : p.is_active !== false && p.is_active !== 0,
       };
     };
@@ -3329,6 +3333,30 @@ export default function StoreOwnerDashboard() {
                                 <option value="Uncategorized">Uncategorized</option>
                               </select>
                             </div>
+                            {((newProd.category && String(newProd.category).toLowerCase().includes('coconut')) || (activeStore?.category && String(activeStore.category).toLowerCase().includes('coconut'))) && (
+                              <div>
+                                <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Piece per Carton (Optional)</label>
+                                <input
+                                  type="number"
+                                  min="1"
+                                  step="1"
+                                  value={newProd.piece_per_carton || ''}
+                                  onKeyDown={(e) => {
+                                    if (['-', '+', '.', 'e', 'E'].includes(e.key)) {
+                                      e.preventDefault();
+                                    }
+                                  }}
+                                  onChange={(e) => {
+                                    const cleaned = e.target.value.replace(/[^0-9]/g, '');
+                                    const num = cleaned ? parseInt(cleaned, 10) : '';
+                                    setNewProd({ ...newProd, piece_per_carton: num > 0 ? num : '' });
+                                  }}
+                                  placeholder="e.g. 10, 12, 24, 30"
+                                  className="form-control"
+                                  style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
+                                />
+                              </div>
+                            )}
                             <div>
                               <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Product Images Upload (Multiple)</label>
                               <div className="mb-3">
@@ -3859,6 +3887,30 @@ export default function StoreOwnerDashboard() {
                   <option value="Uncategorized">Uncategorized</option>
                 </select>
               </div>
+              {((newProd.category && String(newProd.category).toLowerCase().includes('coconut')) || (activeStore?.category && String(activeStore.category).toLowerCase().includes('coconut'))) && (
+                <div>
+                  <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Piece per Carton (Optional)</label>
+                  <input
+                    type="number"
+                    min="1"
+                    step="1"
+                    value={newProd.piece_per_carton || ''}
+                    onKeyDown={(e) => {
+                      if (['-', '+', '.', 'e', 'E'].includes(e.key)) {
+                        e.preventDefault();
+                      }
+                    }}
+                    onChange={(e) => {
+                      const cleaned = e.target.value.replace(/[^0-9]/g, '');
+                      const num = cleaned ? parseInt(cleaned, 10) : '';
+                      setNewProd({ ...newProd, piece_per_carton: num > 0 ? num : '' });
+                    }}
+                    placeholder="e.g. 10, 12, 24, 30"
+                    className="form-control"
+                    style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
+                  />
+                </div>
+              )}
               <div>
                 <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Product Images Upload (Multiple)</label>
                 <div className="mb-3">

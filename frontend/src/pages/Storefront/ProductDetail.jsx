@@ -276,6 +276,24 @@ export default function ProductDetail({ storeData, products }) {
               })()}
             </div>
 
+            {(() => {
+              const isCoconut = (() => {
+                const cName = String(categoryName || '').toLowerCase();
+                const sCat = String(storeData?.category || '').toLowerCase();
+                const pCat = String(product?.category?.name || product?.category || '').toLowerCase();
+                return cName.includes('coconut') || sCat.includes('coconut') || pCat.includes('coconut');
+              })();
+              const ppcVal = product?.piece_per_carton ? Number(product.piece_per_carton) : 0;
+              if (!isCoconut || isNaN(ppcVal) || ppcVal <= 0) return null;
+              return (
+                <div className="piece-per-carton-detail mb-4 py-2 px-3 rounded-2 d-inline-block" style={{ backgroundColor: '#f4fbf7', border: '1px solid #d1eedc' }}>
+                  <span className="fs-6 fw-bold" style={{ color: '#14271C' }}>
+                    Piece per Carton: <span className="fw-semibold">{ppcVal}</span>
+                  </span>
+                </div>
+              );
+            })()}
+
             <div className="mb-4">
               <h6 className="fw-bold mb-2 text-uppercase" style={{ letterSpacing: '0.5px' }}>Product Details</h6>
               {product.description ? (

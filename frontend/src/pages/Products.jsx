@@ -111,6 +111,7 @@ export default function Products() {
     description: '',
     color: '',
     size: '',
+    piece_per_carton: '',
   });
 
   useSEO({
@@ -224,6 +225,7 @@ export default function Products() {
               description: p.description || "",
               color: p.color || "",
               size: p.size || "",
+              piece_per_carton: p.piece_per_carton || null,
             }));
 
             setProducts(mapped);
@@ -320,6 +322,7 @@ export default function Products() {
       description: '',
       color: '',
       size: '',
+      piece_per_carton: '',
     });
 
     setShowModal(true);
@@ -343,6 +346,7 @@ export default function Products() {
       description: product.description || '',
       color: product.color || '',
       size: product.size || '',
+      piece_per_carton: product.piece_per_carton ? String(product.piece_per_carton) : '',
     });
 
     setShowModal(true);
@@ -427,6 +431,7 @@ export default function Products() {
       description: formData.description,
       color: formData.color,
       size: formData.size,
+      piece_per_carton: formData.piece_per_carton ? parseInt(String(formData.piece_per_carton).replace(/[^0-9]/g, ''), 10) || null : null,
     };
 
     console.log('Saving product payload:', payload);
@@ -1409,6 +1414,50 @@ export default function Products() {
                   </div>
                 </div>
               </div>
+
+              {/* Piece per Carton (Coconut Products only) */}
+              {(() => {
+                const selectedCatObj = categories.find(c => String(c.id) === String(formData.category_id));
+                const selectedCatName = (selectedCatObj?.name || '').toLowerCase();
+                const isCoconut = selectedCatName.includes('coconut');
+                if (!isCoconut) return null;
+                return (
+                  <div>
+                    <label
+                      className="text-[11px] font-bold uppercase tracking-wider block mb-1.5"
+                      style={{ color: '#8a7a4d' }}
+                    >
+                      Piece per Carton (Optional)
+                    </label>
+                    <input
+                      type="number"
+                      min="1"
+                      step="1"
+                      value={formData.piece_per_carton || ''}
+                      onKeyDown={(e) => {
+                        if (['-', '+', '.', 'e', 'E'].includes(e.key)) {
+                          e.preventDefault();
+                        }
+                      }}
+                      onChange={(e) => {
+                        const cleaned = e.target.value.replace(/[^0-9]/g, '');
+                        const num = cleaned ? parseInt(cleaned, 10) : '';
+                        setFormData({
+                          ...formData,
+                          piece_per_carton: num > 0 ? num : ''
+                        });
+                      }}
+                      placeholder="e.g. 10, 12, 24, 30"
+                      style={{
+                        background: '#161310',
+                        color: '#ffffff',
+                        border: '1px solid rgba(212, 175, 55, 0.25)'
+                      }}
+                      className="w-full p-3 rounded-xl text-sm outline-none"
+                    />
+                  </div>
+                );
+              })()}
 
               {/* Description */}
               <div>

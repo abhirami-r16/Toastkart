@@ -24,12 +24,14 @@ class Product extends Model
         'is_active',
         'color',
         'size',
+        'piece_per_carton',
         'images',
     ];
 
     protected $casts = [
         'images' => 'array',
         'is_active' => 'boolean',
+        'piece_per_carton' => 'integer',
     ];
 
     public function store()
