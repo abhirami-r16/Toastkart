@@ -114,4 +114,16 @@ return [
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Special Owner Subscription Bypass Email
+    |--------------------------------------------------------------------------
+    |
+    | Defines the special owner account email that is granted direct bypass
+    | access to the Owner Dashboard without requiring a paid subscription.
+    |
+    */
+
+    'special_bypass_owner_email' => env('SPECIAL_BYPASS_OWNER_EMAIL', 'emvithaofficial@gmail.com'),
+
 ];

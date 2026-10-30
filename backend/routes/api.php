@@ -34,8 +34,8 @@ Route::post('/auth/google', [AuthController::class, 'googleLogin']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 Route::get('/me', [AuthController::class, 'me'])->middleware('auth:sanctum');
 Route::post('/update-password', [AuthController::class, 'updatePassword']);
-// Dashboard
-Route::get('/dashboard', [DashboardController::class, 'index']);
+// Dashboard (Protected by authentication & subscription check / bypass)
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth:sanctum', 'subscription.active']);
 
 // Users (Admin)
 Route::get('/users', [UserController::class, 'index']);
@@ -105,8 +105,8 @@ Route::post('/subscriptions/autopay/cancel', [\App\Http\Controllers\Subscription
 Route::post('/webhooks/razorpay', [\App\Http\Controllers\RazorpayWebhookController::class, 'handleWebhook']);
 Route::post('/webhooks/meesho-tracking', [\App\Http\Controllers\MeeshoController::class, 'handleTrackingWebhook']);
 
-// Meesho Dropshipping & Reselling Routes (Authenticated Store Owner Only)
-Route::prefix('meesho')->middleware('auth:sanctum')->group(function () {
+// Meesho Dropshipping & Reselling Routes (Authenticated Store Owner with active subscription / bypass)
+Route::prefix('meesho')->middleware(['auth:sanctum', 'subscription.active'])->group(function () {
     Route::get('/status', [\App\Http\Controllers\MeeshoController::class, 'getStatus']);
     Route::post('/reefapi/test', [\App\Http\Controllers\MeeshoController::class, 'testReefApiConnection']);
     Route::post('/apify/test', [\App\Http\Controllers\MeeshoController::class, 'testApifyConnection']);

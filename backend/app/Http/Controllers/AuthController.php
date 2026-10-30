@@ -116,9 +116,12 @@ class AuthController extends Controller
 
         $token = $user->createToken('shopify_token')->plainTextToken;
         $user->load(['stores', 'activeSubscription']);
+        $userData = $user->toArray();
+        $userData['subscription_bypass'] = $user->hasSubscriptionBypass();
+        $userData['has_active_subscription'] = $user->hasActiveSubscriptionOrBypass();
 
         return response()->json([
-            'user' => $user,
+            'user' => $userData,
             'token' => $token,
             'message' => 'Login successful',
         ]);
@@ -202,6 +205,9 @@ class AuthController extends Controller
             return response()->json(['message' => 'Unauthenticated'], 401);
         }
         $user->load(['stores', 'activeSubscription']);
-        return response()->json($user);
+        $userData = $user->toArray();
+        $userData['subscription_bypass'] = $user->hasSubscriptionBypass();
+        $userData['has_active_subscription'] = $user->hasActiveSubscriptionOrBypass();
+        return response()->json($userData);
     }
 }

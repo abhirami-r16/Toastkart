@@ -250,7 +250,25 @@ export default function Login() {
     try {
       const res = await googleLogin(googleCredential);
       if (res.success) {
-        navigate('/owner/dashboard');
+        const loggedUser = res.user;
+        const isBypass = Boolean(
+          loggedUser?.subscription_bypass ||
+          (loggedUser?.email && loggedUser.email.toLowerCase().trim() === 'emvithaofficial@gmail.com')
+        );
+        const isAdmin = loggedUser?.role === 'admin' || loggedUser?.email === 'admin@gmail.com';
+        const hasActiveSub = Boolean(
+          isBypass ||
+          isAdmin ||
+          loggedUser?.has_active_subscription ||
+          loggedUser?.active_subscription ||
+          loggedUser?.activeSubscription
+        );
+
+        if (isAdmin) {
+          navigate('/admin/dashboard');
+        } else {
+          navigate('/owner/dashboard');
+        }
       } else {
         setError(res.message || 'Google login failed');
       }
@@ -312,13 +330,22 @@ export default function Login() {
     const res = await login(email, password);
 
     if (res.success) {
-      let userRole = 'owner';
+      const loggedUser = res.user;
+      const isBypass = Boolean(
+        loggedUser?.subscription_bypass ||
+        (loggedUser?.email && loggedUser.email.toLowerCase().trim() === 'emvithaofficial@gmail.com') ||
+        email.toLowerCase().trim() === 'emvithaofficial@gmail.com'
+      );
+      const isAdmin = loggedUser?.role === 'admin' || loggedUser?.email === 'admin@gmail.com' || email.toLowerCase().trim() === 'admin@gmail.com';
+      const hasActiveSub = Boolean(
+        isBypass ||
+        isAdmin ||
+        loggedUser?.has_active_subscription ||
+        loggedUser?.active_subscription ||
+        loggedUser?.activeSubscription
+      );
 
-      if (email === 'admin@gmail.com' || res.user?.role === 'admin') {
-        userRole = 'admin';
-      }
-
-      if (userRole === 'admin') {
+      if (isAdmin) {
         navigate('/admin/dashboard');
       } else {
         navigate('/owner/dashboard');

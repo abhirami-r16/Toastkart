@@ -32,6 +32,40 @@ class User extends Authenticatable
         ];
     }
 
+    protected $appends = [
+        'subscription_bypass',
+        'has_active_subscription',
+    ];
+
+    public function hasSubscriptionBypass(): bool
+    {
+        $bypassEmail = strtolower(trim(config('auth.special_bypass_owner_email', env('SPECIAL_BYPASS_OWNER_EMAIL', 'emvithaofficial@gmail.com'))));
+        return !empty($this->email) && strtolower(trim($this->email)) === $bypassEmail;
+    }
+
+    public function hasActiveSubscriptionOrBypass(): bool
+    {
+        if ($this->role === 'admin' || $this->email === 'admin@gmail.com') {
+            return true;
+        }
+
+        if ($this->hasSubscriptionBypass()) {
+            return true;
+        }
+
+        return $this->activeSubscription()->exists();
+    }
+
+    public function getSubscriptionBypassAttribute(): bool
+    {
+        return $this->hasSubscriptionBypass();
+    }
+
+    public function getHasActiveSubscriptionAttribute(): bool
+    {
+        return $this->hasActiveSubscriptionOrBypass();
+    }
+
     public function stores()
     {
         return $this->hasMany(Store::class);

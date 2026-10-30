@@ -36,6 +36,27 @@ const PortfolioView = React.lazy(() => import('../pages/PortfolioView'));
 const WhatsappWidget = React.lazy(() => import('../components/WhatsappWidget'));
 const PlanSelection = React.lazy(() => import('../pages/PlanSelection'));
 
+const ProtectedOwnerRoute = ({ children }) => {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="d-flex align-items-center justify-content-center min-vh-100" style={{ background: '#040404', color: '#f6f1e4' }}>
+        <div className="text-center">
+          <div className="spinner-border text-warning" role="status" />
+          <p className="mt-3">Loading dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
+};
+
 const StorefrontWrapper = () => {
   const { slug } = useParams();
   return <StorefrontApp subdomain={slug || 'demo'} />;
@@ -141,7 +162,7 @@ function AppRoutes() {
               {/* Dashboard Routes */}
               <Route
                 path="/dashboard"
-                element={<StoreOwnerDashboard />}
+                element={<ProtectedOwnerRoute><StoreOwnerDashboard /></ProtectedOwnerRoute>}
               />
 
               <Route
@@ -156,27 +177,27 @@ function AppRoutes() {
 
               <Route
                 path="/owner/dashboard"
-                element={<StoreOwnerDashboard />}
+                element={<ProtectedOwnerRoute><StoreOwnerDashboard /></ProtectedOwnerRoute>}
               />
 
               <Route
                 path="/owner/dashboard/*"
-                element={<StoreOwnerDashboard />}
+                element={<ProtectedOwnerRoute><StoreOwnerDashboard /></ProtectedOwnerRoute>}
               />
 
               <Route
                 path="/store-owner"
-                element={<StoreOwnerDashboard />}
+                element={<ProtectedOwnerRoute><StoreOwnerDashboard /></ProtectedOwnerRoute>}
               />
 
               <Route
                 path="/store-owner-dashboard"
-                element={<StoreOwnerDashboard />}
+                element={<ProtectedOwnerRoute><StoreOwnerDashboard /></ProtectedOwnerRoute>}
               />
 
               <Route
                 path="/merchant/dashboard"
-                element={<StoreOwnerDashboard />}
+                element={<ProtectedOwnerRoute><StoreOwnerDashboard /></ProtectedOwnerRoute>}
               />
 
               <Route
@@ -195,7 +216,7 @@ function AppRoutes() {
               />
 
               {/* Merchant Admin Sub-pages */}
-              <Route element={<AdminLayout />}>
+              <Route element={<ProtectedOwnerRoute><AdminLayout /></ProtectedOwnerRoute>}>
 
                 <Route
                   path="/stores"

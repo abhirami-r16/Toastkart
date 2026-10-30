@@ -277,13 +277,24 @@ export default function StoreOwnerDashboard() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
 
-  // Subscription paywall removed: full access enabled for all merchant features
   const [showPlanRequiredModal, setShowPlanRequiredModal] = useState(false);
-  const hasActiveSub = true;
+
+  const isBypass = Boolean(
+    user?.subscription_bypass ||
+    (user?.email && user.email.toLowerCase().trim() === 'emvithaofficial@gmail.com')
+  );
 
   const isPrivileged = Boolean(
+    isBypass ||
     user?.role === 'admin' ||
     user?.email === 'admin@gmail.com'
+  );
+
+  const hasActiveSub = Boolean(
+    isPrivileged ||
+    user?.has_active_subscription ||
+    user?.active_subscription ||
+    user?.activeSubscription
   );
 
   useEffect(() => {
@@ -292,9 +303,13 @@ export default function StoreOwnerDashboard() {
         navigate('/login', { replace: true });
         return;
       }
-      setShowPlanRequiredModal(false);
+      if (!isPrivileged && !hasActiveSub) {
+        setShowPlanRequiredModal(true);
+      } else {
+        setShowPlanRequiredModal(false);
+      }
     }
-  }, [user, loading, navigate]);
+  }, [user, loading, hasActiveSub, isPrivileged, navigate]);
 
   const [active, setActive] = useState(() => {
     try {
@@ -1720,6 +1735,10 @@ export default function StoreOwnerDashboard() {
               const Icon = item.icon;
               const isActive = active === item.key;
               const handleClick = () => {
+                if (item.key !== 'dashboard' && !hasActiveSub && !isPrivileged) {
+                  setShowPlanRequiredModal(true);
+                  return;
+                }
                 setActive(item.key);
               };
               return (
