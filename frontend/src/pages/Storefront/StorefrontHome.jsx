@@ -714,7 +714,7 @@ export default function StorefrontHome({ storeData, products, categories = [], l
               className={`coconut-filter-pill ${activeCoconutFilter === 'all' ? 'active' : ''}`}
               onClick={() => setActiveCoconutFilter('all')}
             >
-              🌿 All Harvest
+              All Products
             </button>
             {categoriesToRender.map((cat) => (
               <button
