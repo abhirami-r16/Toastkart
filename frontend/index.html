@@ -5,7 +5,16 @@
     <link rel="icon" type="image/png" href="/favicon.png" id="dynamic-favicon" />
     <link rel="apple-touch-icon" href="/favicon.png" id="dynamic-apple-icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ToastKart - E-Commerce Platform</title>
+    <title>AMIORA</title>
+    <meta property="og:title" content="AMIORA" />
+    <meta property="og:site_name" content="AMIORA" />
+    <meta property="og:description" content="AMIORA - Handcrafted & Organic Coconut Essentials" />
+    <meta property="og:image" content="/images/amiora-logo.png" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="AMIORA" />
+    <meta name="twitter:description" content="AMIORA - Handcrafted & Organic Coconut Essentials" />
+    <meta name="twitter:image" content="/images/amiora-logo.png" />
     <script>
       (function() {
         try {
@@ -19,6 +28,8 @@
             var appleIcon = document.getElementById('dynamic-apple-icon');
             if (appleIcon) appleIcon.href = '/images/amiora-favicon-badge.png';
             document.title = 'AMIORA';
+          } else if (h.indexOf('toastkart') !== -1) {
+            document.title = 'ToastKart - E-Commerce Platform';
           }
         } catch(e) {}
       })();
