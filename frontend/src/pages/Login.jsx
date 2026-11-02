@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import useSEO from '../hooks/useSEO';
 import ToastKartLogo from '../components/ToastKartLogo';
 import { GoogleLogin } from '@react-oauth/google';
+import { Eye, EyeOff } from 'lucide-react';
 
 const goslotLoginStyles = `
   .goslot-login-bg {
@@ -205,8 +206,11 @@ export default function Login() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [newPassword, setNewPassword] = useState('');
+  const [showNewPassword, setShowNewPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [isForgotPassword, setIsForgotPassword] = useState(false);
@@ -512,13 +516,33 @@ export default function Login() {
                     NEW PASSWORD
                   </label>
 
-                  <input
-                    type="password"
-                    className="goslot-input"
-                    required
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                  />
+                  <div className="position-relative">
+                    <input
+                      type={showNewPassword ? 'text' : 'password'}
+                      className="goslot-input"
+                      style={{ paddingRight: '2.75rem' }}
+                      required
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                    />
+                    <button
+                      type="button"
+                      className="position-absolute border-0 bg-transparent d-flex align-items-center justify-content-center"
+                      style={{
+                        right: '12px',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        color: '#6b7280',
+                        cursor: 'pointer',
+                        padding: 0,
+                      }}
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                      tabIndex={-1}
+                      aria-label={showNewPassword ? 'Hide password' : 'Show password'}
+                    >
+                      {showNewPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
                 </div>
 
                 <div className="mb-4">
@@ -526,13 +550,33 @@ export default function Login() {
                     RE-ENTER PASSWORD
                   </label>
 
-                  <input
-                    type="password"
-                    className="goslot-input"
-                    required
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                  />
+                  <div className="position-relative">
+                    <input
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      className="goslot-input"
+                      style={{ paddingRight: '2.75rem' }}
+                      required
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
+                    <button
+                      type="button"
+                      className="position-absolute border-0 bg-transparent d-flex align-items-center justify-content-center"
+                      style={{
+                        right: '12px',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        color: '#6b7280',
+                        cursor: 'pointer',
+                        padding: 0,
+                      }}
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      tabIndex={-1}
+                      aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+                    >
+                      {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
                 </div>
 
                 <button
@@ -581,13 +625,33 @@ export default function Login() {
                   PASSWORD
                 </label>
 
-                <input
-                  type="password"
-                  className="goslot-input"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+                <div className="position-relative">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    className="goslot-input"
+                    style={{ paddingRight: '2.75rem' }}
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    className="position-absolute border-0 bg-transparent d-flex align-items-center justify-content-center"
+                    style={{
+                      right: '12px',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      color: '#6b7280',
+                      cursor: 'pointer',
+                      padding: 0,
+                    }}
+                    onClick={() => setShowPassword(!showPassword)}
+                    tabIndex={-1}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
               </div>
 
               <div className="d-flex align-items-center justify-content-between mb-4">
