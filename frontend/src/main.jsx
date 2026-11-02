@@ -4,16 +4,40 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 
 const getSubdomain = () => {
-  const host = window.location.hostname;
+  const host = window.location.hostname.toLowerCase();
   const isIp = /^(\d{1,3}\.){3}\d{1,3}$/.test(host);
-  const mainDomains = ['localhost', 'toastkart.com', 'www.toastkart.com'];
+  const mainDomains = ['localhost', 'toastkart.com', 'www.toastkart.com', '127.0.0.1'];
   if (isIp || mainDomains.includes(host)) return null;
   const parts = host.split('.');
-  if (parts.length >= 2 && parts[0] !== 'www') return parts[0];
+  if (parts.length >= 2) {
+    if (parts[0] === 'www' && parts.length >= 3) {
+      if (parts[1] === 'toastkart') return null;
+      return parts[1];
+    }
+    if (parts[0] !== 'www') return parts[0];
+  }
   return null;
 };
 
 const subdomain = getSubdomain();
+
+// Immediate favicon & title update for Amiora storefront
+const currentHost = window.location.hostname.toLowerCase();
+const currentPath = window.location.pathname.toLowerCase();
+const isAmioraSite =
+  currentHost.includes('amiora') ||
+  currentHost.includes('cocoa') ||
+  currentPath.includes('/store/amiora') ||
+  currentPath.includes('/store/cocoamiora') ||
+  (subdomain && (subdomain.includes('amiora') || subdomain.includes('cocoa')));
+
+if (isAmioraSite) {
+  const icon = document.querySelector("link[rel*='icon']");
+  if (icon) icon.href = '/images/amiora-favicon.png';
+  const appleIcon = document.querySelector("link[rel='apple-touch-icon']");
+  if (appleIcon) appleIcon.href = '/images/amiora-favicon-badge.png';
+  document.title = 'AMIORA';
+}
 
 import { GoogleOAuthProvider } from "@react-oauth/google";
 

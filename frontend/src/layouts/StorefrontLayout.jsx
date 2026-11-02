@@ -59,6 +59,44 @@ export default function StorefrontLayout({ storeData, categories = [], products 
     return () => { mounted = false; };
   }, [theme]);
 
+  // Ensure favicon & title are set for Amiora and storefronts
+  React.useEffect(() => {
+    const isAmiora =
+      theme === 'theme-coconut' ||
+      String(storeData?.name || '').toLowerCase().includes('amiora') ||
+      String(storeData?.subdomain || '').toLowerCase().includes('amiora') ||
+      String(storeData?.category || '').toLowerCase().includes('coconut') ||
+      window.location.hostname.toLowerCase().includes('amiora') ||
+      window.location.hostname.toLowerCase().includes('cocoa');
+
+    const faviconUrl = isAmiora
+      ? '/images/amiora-favicon.png'
+      : (storeData?.logo_url || '/favicon.png');
+
+    let link = document.querySelector("link[rel*='icon']");
+    if (!link) {
+      link = document.createElement('link');
+      link.rel = 'icon';
+      document.head.appendChild(link);
+    }
+    link.type = 'image/png';
+    link.href = faviconUrl;
+
+    let appleLink = document.querySelector("link[rel='apple-touch-icon']");
+    if (!appleLink) {
+      appleLink = document.createElement('link');
+      appleLink.rel = 'apple-touch-icon';
+      document.head.appendChild(appleLink);
+    }
+    appleLink.href = isAmiora ? '/images/amiora-favicon-badge.png' : faviconUrl;
+
+    if (isAmiora) {
+      document.title = 'AMIORA';
+    } else if (storeData?.name && storeData.id !== 'loading') {
+      document.title = `${storeData.name} - Online Store`;
+    }
+  }, [storeData, theme]);
+
   if (!themeLoaded) {
     return (
       <div className="d-flex justify-content-center align-items-center vh-100">

@@ -20,10 +20,15 @@ export default function StorefrontApp({ subdomain }) {
   const [storeData, setStoreData] = useState(() => {
     // Generate a temporary store data to render the shell immediately
     const cleanSub = subdomain || slug || 'store';
-    const name = cleanSub.charAt(0).toUpperCase() + cleanSub.slice(1).replace(/-/g, ' ').replace('store', 'Store');
+    const isAmioraStore =
+      cleanSub.includes('amiora') ||
+      cleanSub.includes('cocoa') ||
+      window.location.hostname.toLowerCase().includes('amiora') ||
+      window.location.hostname.toLowerCase().includes('cocoa');
+    const name = isAmioraStore ? 'AMIORA' : (cleanSub.charAt(0).toUpperCase() + cleanSub.slice(1).replace(/-/g, ' ').replace('store', 'Store'));
     let category = 'General Retail';
     if (cleanSub.includes('perfume')) category = 'perfumes';
-    else if (cleanSub.includes('coconut') || cleanSub.includes('copra') || cleanSub.includes('kera')) category = 'Coconut Products';
+    else if (cleanSub.includes('coconut') || cleanSub.includes('copra') || cleanSub.includes('kera') || isAmioraStore) category = 'Coconut Products';
     else if (cleanSub.includes('jewelry')) category = 'jewelry';
     else if (cleanSub.includes('beauty') || cleanSub.includes('glow')) category = 'beauty';
     else if (cleanSub.includes('home') || cleanSub.includes('decor')) category = 'home & living';
@@ -287,6 +292,43 @@ if (!foundStore) {
       window.removeEventListener('storage', handler);
     };
   }, [fetchStoreData]);
+
+  // Dynamic favicon and document title for the store
+  useEffect(() => {
+    const isAmiora =
+      String(storeData?.name || '').toLowerCase().includes('amiora') ||
+      String(storeData?.subdomain || '').toLowerCase().includes('amiora') ||
+      String(storeData?.category || '').toLowerCase().includes('coconut') ||
+      window.location.hostname.toLowerCase().includes('amiora') ||
+      window.location.hostname.toLowerCase().includes('cocoa');
+
+    const faviconUrl = isAmiora
+      ? '/images/amiora-favicon.png'
+      : (storeData?.logo_url || '/favicon.png');
+
+    let link = document.querySelector("link[rel*='icon']");
+    if (!link) {
+      link = document.createElement('link');
+      link.rel = 'icon';
+      document.head.appendChild(link);
+    }
+    link.type = 'image/png';
+    link.href = faviconUrl;
+
+    let appleLink = document.querySelector("link[rel='apple-touch-icon']");
+    if (!appleLink) {
+      appleLink = document.createElement('link');
+      appleLink.rel = 'apple-touch-icon';
+      document.head.appendChild(appleLink);
+    }
+    appleLink.href = isAmiora ? '/images/amiora-favicon-badge.png' : faviconUrl;
+
+    if (isAmiora) {
+      document.title = 'AMIORA';
+    } else if (storeData?.name && storeData.id !== 'loading') {
+      document.title = `${storeData.name} - Online Store`;
+    }
+  }, [storeData]);
 
   if (!loading && !storeData) {
     return (

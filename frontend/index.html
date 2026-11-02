@@ -2,9 +2,27 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="icon" type="image/png" href="/favicon.png" id="dynamic-favicon" />
+    <link rel="apple-touch-icon" href="/favicon.png" id="dynamic-apple-icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ToastKart - E-Commerce Platform</title>
+    <script>
+      (function() {
+        try {
+          var h = (window.location.hostname || '').toLowerCase();
+          var p = (window.location.pathname || '').toLowerCase();
+          var s = (window.location.search || '').toLowerCase();
+          var isAmiora = h.indexOf('amiora') !== -1 || h.indexOf('cocoa') !== -1 || p.indexOf('amiora') !== -1 || p.indexOf('cocoamiora') !== -1 || s.indexOf('amiora') !== -1;
+          if (isAmiora) {
+            var icon = document.getElementById('dynamic-favicon');
+            if (icon) icon.href = '/images/amiora-favicon.png';
+            var appleIcon = document.getElementById('dynamic-apple-icon');
+            if (appleIcon) appleIcon.href = '/images/amiora-favicon-badge.png';
+            document.title = 'AMIORA';
+          }
+        } catch(e) {}
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
