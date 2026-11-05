@@ -33,6 +33,17 @@ export function resolveStoreTheme(storeData) {
     return storeData.theme;
   }
 
+  const storeName = String(storeData.name || '').trim().toLowerCase();
+  const storeSlug = String(storeData.slug || '').trim().toLowerCase();
+  if (
+    storeName.includes('nafi') ||
+    storeName.includes('little wonder') ||
+    storeSlug.includes('nafi') ||
+    storeSlug.includes('little-wonder')
+  ) {
+    return 'theme-baby';
+  }
+
   const category = String(storeData.category || '')
     .trim()
     .toLowerCase();
@@ -44,6 +55,18 @@ export function resolveStoreTheme(storeData) {
     category.includes('kera')
   ) {
     return 'theme-coconut';
+  }
+
+  // Check baby-related categories dynamically
+  if (
+    category.includes('baby') ||
+    category.includes('infant') ||
+    category.includes('toddler') ||
+    category.includes('newborn') ||
+    category.includes('maternity') ||
+    category.includes('kid')
+  ) {
+    return 'theme-baby';
   }
 
   const themeMap = {
@@ -68,6 +91,14 @@ export function resolveStoreTheme(storeData) {
     'coconut-based products': 'theme-coconut',
     'coconut manufacturing': 'theme-coconut',
     'coconut': 'theme-coconut',
+    'baby products': 'theme-baby',
+    'baby store': 'theme-baby',
+    'baby care': 'theme-baby',
+    'baby': 'theme-baby',
+    'baby & kids': 'theme-baby',
+    'kids & baby': 'theme-baby',
+    'newborn essentials': 'theme-baby',
+    'maternity & baby': 'theme-baby',
   };
 
   return themeMap[category] || 'theme-default';

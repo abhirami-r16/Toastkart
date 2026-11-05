@@ -31,6 +31,21 @@ const isAmioraSite =
   currentPath.includes('/store/cocoamiora') ||
   (subdomain && (subdomain.includes('amiora') || subdomain.includes('cocoa')));
 
+const isNafiSite =
+  currentPath.includes('/store/an-nafi') ||
+  currentPath.includes('/store/nafi') ||
+  (subdomain && subdomain.includes('nafi'));
+
+if (isNafiSite) {
+  const icon = document.querySelector("link[rel*='icon']");
+  if (icon) icon.href = '/images/an-nafi-logo.png';
+  const dynFav = document.getElementById('dynamic-favicon');
+  if (dynFav) dynFav.href = '/images/an-nafi-logo.png';
+  const appleIcon = document.querySelector("link[rel='apple-touch-icon']");
+  if (appleIcon) appleIcon.href = '/images/an-nafi-logo.png';
+  document.title = "AN' NAFI Baby Shop";
+}
+
 if (isAmioraSite) {
   const icon = document.querySelector("link[rel*='icon']");
   if (icon) icon.href = '/images/amiora-favicon.png';

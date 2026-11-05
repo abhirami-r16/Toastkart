@@ -21,8 +21,15 @@
           var h = (window.location.hostname || '').toLowerCase();
           var p = (window.location.pathname || '').toLowerCase();
           var s = (window.location.search || '').toLowerCase();
-          var isAmiora = h.indexOf('amiora') !== -1 || h.indexOf('cocoa') !== -1 || p.indexOf('amiora') !== -1 || p.indexOf('cocoamiora') !== -1 || s.indexOf('amiora') !== -1;
-          if (isAmiora) {
+          var isNafi = p.indexOf('an-nafi') !== -1 || p.indexOf('nafi') !== -1 || s.indexOf('an-nafi') !== -1 || s.indexOf('nafi') !== -1;
+          var isAmiora = !isNafi && (h.indexOf('amiora') !== -1 || h.indexOf('cocoa') !== -1 || p.indexOf('amiora') !== -1 || p.indexOf('cocoamiora') !== -1 || s.indexOf('amiora') !== -1);
+          if (isNafi) {
+            var icon = document.getElementById('dynamic-favicon');
+            if (icon) icon.href = '/images/an-nafi-logo.png';
+            var appleIcon = document.getElementById('dynamic-apple-icon');
+            if (appleIcon) appleIcon.href = '/images/an-nafi-apple-touch-icon.png';
+            document.title = "AN' NAFI Baby Shop";
+          } else if (isAmiora) {
             var icon = document.getElementById('dynamic-favicon');
             if (icon) icon.href = '/images/amiora-favicon.png';
             var appleIcon = document.getElementById('dynamic-apple-icon');
@@ -37,7 +44,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/assets/index-BFw4eORJ.js"></script>
+    <script type="module" crossorigin src="/assets/index-CasP6qYL.js"></script>
     <link rel="modulepreload" crossorigin href="/assets/rolldown-runtime-QTnfLwEv.js">
     <link rel="stylesheet" crossorigin href="/assets/index-zq3ieRxt.css">
   </head>

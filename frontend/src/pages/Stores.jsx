@@ -380,6 +380,7 @@ export default function Stores() {
                     style={{ background: '#161310', border: `1px solid rgba(212, 175, 55, 0.2)` }}
                   >
                     <option value="Fashion & Apparel">Fashion & Apparel</option>
+                    <option value="Baby Products">Baby Products</option>
                     <option value="Coconut Products">Coconut Products</option>
                     <option value="Jewellery">Jewellery</option>
                     <option value="Beauty & Cosmetics">Beauty & Cosmetics</option>
@@ -609,6 +610,7 @@ export default function Stores() {
                       style={{ background: '#161310', border: `1px solid rgba(212, 175, 55, 0.2)` }}
                     >
                       <option value="Fashion & Apparel">Fashion & Apparel</option>
+                    <option value="Baby Products">Baby Products</option>
                       <option value="Coconut Products">Coconut Products</option>
                       <option value="Jewellery">Jewellery</option>
                       <option value="Beauty & Cosmetics">Beauty & Cosmetics</option>

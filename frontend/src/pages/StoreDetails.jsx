@@ -78,6 +78,9 @@ function StoreForm({ initial, onSave, onCancel }) {
             <option value="aureum">Aureum</option>
             <option value="light">Light</option>
             <option value="minimal">Minimal</option>
+            <option value="theme-baby">Little Wonders (Baby Store)</option>
+            <option value="theme-perfume">Perfumes (CYOP)</option>
+            <option value="theme-coconut">Coconut (Amiora)</option>
           </select>
         </div>
         <div>

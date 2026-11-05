@@ -298,6 +298,7 @@ theme-grocery
 theme-gift
 theme-perfume
 theme-coconut
+theme-baby
 
 The selected theme MUST be stored inside:
 
@@ -785,7 +786,8 @@ PROMPT;
             'theme-grocery',
             'theme-gift',
             'theme-perfume',
-            'theme-coconut'
+            'theme-coconut',
+            'theme-baby'
         ];
 
         $selectedTheme =
@@ -832,6 +834,18 @@ PROMPT;
 
                 $selectedTheme =
                     'theme-beauty';
+
+            } elseif (
+                str_contains($categoryText, 'baby') ||
+                str_contains($categoryText, 'infant') ||
+                str_contains($categoryText, 'toddler') ||
+                str_contains($categoryText, 'newborn') ||
+                str_contains($categoryText, 'maternity') ||
+                str_contains($categoryText, 'kid')
+            ) {
+
+                $selectedTheme =
+                    'theme-baby';
 
             } elseif (
                 str_contains(

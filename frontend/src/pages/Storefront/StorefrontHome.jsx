@@ -18,6 +18,8 @@ const ThemeGroceryHero = React.lazy(() => import('../../components/themes/ThemeG
 const ThemeGiftHero = React.lazy(() => import('../../components/themes/ThemeGiftHero'));
 const ThemePerfumeHero = React.lazy(() => import('../../components/themes/ThemePerfumeHero'));
 const ThemeCoconutHero = React.lazy(() => import('../../components/themes/ThemeCoconutHero'));
+const ThemeBabyHero = React.lazy(() => import('../../components/themes/ThemeBabyHero'));
+const ThemeBabySections = React.lazy(() => import('../../components/themes/ThemeBabySections'));
 const ThemeDefaultHero = React.lazy(() => import('../../components/themes/ThemeDefaultHero'));
 const ThemeHomeFooter = React.lazy(() => import('../../components/themes/ThemeHomeFooter'));
 const AIStoreRenderer = React.lazy(() => import('../../components/AIStoreRenderer'));
@@ -234,7 +236,7 @@ export default function StorefrontHome({ storeData, products, categories = [], l
       >
         <div
           className={
-            (theme === 'theme-perfume' || theme === 'theme-coconut' || displayItems.length >= 5
+            (theme === 'theme-perfume' || theme === 'theme-coconut' || theme === 'theme-baby' || displayItems.length >= 5
               ? "storefront-product-slider"
               : "storefront-product-grid") +
             (displayItems.length === 1 ? " is-single-product" : "")
@@ -303,11 +305,59 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                               {sz.trim()}
                             </span>
                           ))
-                        ) : (
+                        ) : theme === 'theme-baby' ? (
+                    <div className="storefront-product-details d-flex flex-column flex-grow-1">
+                      <span className="baby-card-category">
+                        {product.category?.name || product.category || 'BABY ESSENTIALS'}
+                      </span>
+                      <div className="storefront-product-title">
+                        {product.name}
+                      </div>
+                      <div className="baby-product-rating">
+                        <span className="baby-product-rating-stars">★★★★★</span>
+                        <span>{product.rating || product.meesho_product?.rating || 4.9}</span>
+                        <span className="baby-product-rating-count">(Verified)</span>
+                      </div>
+                      <div className="storefront-product-price-row">
+                        <span className="storefront-product-price">
+                          {formatStoreCurrency(product.price, storeData?.currency)}
+                        </span>
+                        {product.compare_price && parsePrice(product.compare_price) > parsePrice(product.price) && (
+                          <span className="storefront-product-original-price">
+                            {formatStoreCurrency(product.compare_price, storeData?.currency)}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  ) : (
                           <>
                             <span className="coconut-variant-badge">Virgin Oils</span>
                             <span className="coconut-variant-badge">Zero Waste Bowls</span>
                           </>
+                        )}
+                      </div>
+                    </div>
+                  ) : theme === 'theme-baby' ? (
+                    <div className="storefront-product-details d-flex flex-column flex-grow-1">
+                      <span className="baby-card-category">
+                        {product.category?.name || product.category || 'BABY ESSENTIALS'}
+                      </span>
+                      <div className="storefront-product-title">
+                        {product.name}
+                      </div>
+                      <div className="baby-product-rating">
+                        <span className="baby-product-rating-stars">★★★★★</span>
+                        <span>{product.rating || product.meesho_product?.rating || 4.9}</span>
+                        <span className="baby-product-rating-count">(Verified)</span>
+                      </div>
+                      <div className="storefront-product-price-row">
+                        <span className="storefront-product-price">
+                          {formatStoreCurrency(product.price, storeData?.currency)}
+                        </span>
+                        {product.compare_price && parsePrice(product.compare_price) > parsePrice(product.price) && (
+                          <span className="storefront-product-original-price">
+                            {formatStoreCurrency(product.compare_price, storeData?.currency)}
+                          </span>
                         )}
                       </div>
                     </div>
@@ -333,12 +383,60 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                               {sz.trim()}
                             </span>
                           ))
-                        ) : (
+                        ) : theme === 'theme-baby' ? (
+                    <div className="storefront-product-details d-flex flex-column flex-grow-1">
+                      <span className="baby-card-category">
+                        {product.category?.name || product.category || 'BABY ESSENTIALS'}
+                      </span>
+                      <div className="storefront-product-title">
+                        {product.name}
+                      </div>
+                      <div className="baby-product-rating">
+                        <span className="baby-product-rating-stars">★★★★★</span>
+                        <span>{product.rating || product.meesho_product?.rating || 4.9}</span>
+                        <span className="baby-product-rating-count">(Verified)</span>
+                      </div>
+                      <div className="storefront-product-price-row">
+                        <span className="storefront-product-price">
+                          {formatStoreCurrency(product.price, storeData?.currency)}
+                        </span>
+                        {product.compare_price && parsePrice(product.compare_price) > parsePrice(product.price) && (
+                          <span className="storefront-product-original-price">
+                            {formatStoreCurrency(product.compare_price, storeData?.currency)}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  ) : (
                           <span className="btn btn-outline-dark border-2 border-dark btn-sm rounded-1 fw-bold px-2 py-1" style={{ fontSize: '0.7rem' }}>100ml</span>
                         )}
                         <span className="btn btn-outline-dark btn-sm rounded-1 px-2 py-1 d-flex align-items-center gap-1" style={{ fontSize: '0.7rem' }}>
                           <i className="bi bi-gift-fill" style={{ fontSize: '0.7rem' }}></i> Personalized
                         </span>
+                      </div>
+                    </div>
+                  ) : theme === 'theme-baby' ? (
+                    <div className="storefront-product-details d-flex flex-column flex-grow-1">
+                      <span className="baby-card-category">
+                        {product.category?.name || product.category || 'BABY ESSENTIALS'}
+                      </span>
+                      <div className="storefront-product-title">
+                        {product.name}
+                      </div>
+                      <div className="baby-product-rating">
+                        <span className="baby-product-rating-stars">★★★★★</span>
+                        <span>{product.rating || product.meesho_product?.rating || 4.9}</span>
+                        <span className="baby-product-rating-count">(Verified)</span>
+                      </div>
+                      <div className="storefront-product-price-row">
+                        <span className="storefront-product-price">
+                          {formatStoreCurrency(product.price, storeData?.currency)}
+                        </span>
+                        {product.compare_price && parsePrice(product.compare_price) > parsePrice(product.price) && (
+                          <span className="storefront-product-original-price">
+                            {formatStoreCurrency(product.compare_price, storeData?.currency)}
+                          </span>
+                        )}
                       </div>
                     </div>
                   ) : (
@@ -371,7 +469,31 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                               {formatStoreCurrency(product.compare_price, storeData?.currency)}
                             </span>
                           </>
-                        ) : (
+                        ) : theme === 'theme-baby' ? (
+                    <div className="storefront-product-details d-flex flex-column flex-grow-1">
+                      <span className="baby-card-category">
+                        {product.category?.name || product.category || 'BABY ESSENTIALS'}
+                      </span>
+                      <div className="storefront-product-title">
+                        {product.name}
+                      </div>
+                      <div className="baby-product-rating">
+                        <span className="baby-product-rating-stars">★★★★★</span>
+                        <span>{product.rating || product.meesho_product?.rating || 4.9}</span>
+                        <span className="baby-product-rating-count">(Verified)</span>
+                      </div>
+                      <div className="storefront-product-price-row">
+                        <span className="storefront-product-price">
+                          {formatStoreCurrency(product.price, storeData?.currency)}
+                        </span>
+                        {product.compare_price && parsePrice(product.compare_price) > parsePrice(product.price) && (
+                          <span className="storefront-product-original-price">
+                            {formatStoreCurrency(product.compare_price, storeData?.currency)}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  ) : (
                           <span className="storefront-product-price">
                             {formatStoreCurrency(product.price, storeData?.currency)}
                           </span>
@@ -436,6 +558,27 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                   >
                     <ShoppingCart size={13} strokeWidth={2.2} />
                     <span className="coconut-cart-btn-text">Add to Cart</span>
+                  </button>
+                </div>
+              ) : theme === 'theme-baby' ? (
+                <div className="baby-cart-wrapper w-100 mt-auto">
+                  <button
+                    className="baby-cart-btn"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      addToCart(
+                        {
+                          ...product,
+                          selectedSize: getFirstAvailableSize(product),
+                          selectedColor: getFirstAvailableColor(product),
+                        },
+                        1
+                      );
+                    }}
+                  >
+                    <ShoppingCart size={15} />
+                    <span>Add to Cart</span>
                   </button>
                 </div>
               ) : theme === 'theme-perfume' ? (
@@ -698,6 +841,7 @@ export default function StorefrontHome({ storeData, products, categories = [], l
               {theme === 'theme-gift' && <ThemeGiftHero />}
               {theme === 'theme-perfume' && <ThemePerfumeHero />}
               {theme === 'theme-coconut' && <ThemeCoconutHero />}
+              {theme === 'theme-baby' && <ThemeBabyHero storeName={storeData?.name || 'Little Wonders'} />}
             </>
           )}
         </React.Suspense>
@@ -787,6 +931,11 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                         <span className="coconut-highlight">{cat.name}</span>
                       </h3>
                     </div>
+                  ) : theme === 'theme-baby' ? (
+                    <div>
+                      <div className="baby-section-title-tag">Little Wonders Collection</div>
+                      <h3 className="baby-section-title">{cat.name}</h3>
+                    </div>
                   ) : theme === 'theme-perfume' ? (
                     <h3 style={{ textTransform: 'uppercase', letterSpacing: '1px', fontSize: '2rem' }}>
                       <span style={{ fontWeight: 'bold' }}>DISCOVER </span>
@@ -796,6 +945,30 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                     <div>
                       <div className="text-uppercase text-muted fw-bold mb-1" style={{ fontSize: '11px', letterSpacing: '1px' }}>Bestsellers</div>
                       <h2 className="fw-bold m-0" style={{ fontFamily: 'Georgia, serif' }}>Our Most Loved Furniture</h2>
+                    </div>
+                  ) : theme === 'theme-baby' ? (
+                    <div className="storefront-product-details d-flex flex-column flex-grow-1">
+                      <span className="baby-card-category">
+                        {product.category?.name || product.category || 'BABY ESSENTIALS'}
+                      </span>
+                      <div className="storefront-product-title">
+                        {product.name}
+                      </div>
+                      <div className="baby-product-rating">
+                        <span className="baby-product-rating-stars">★★★★★</span>
+                        <span>{product.rating || product.meesho_product?.rating || 4.9}</span>
+                        <span className="baby-product-rating-count">(Verified)</span>
+                      </div>
+                      <div className="storefront-product-price-row">
+                        <span className="storefront-product-price">
+                          {formatStoreCurrency(product.price, storeData?.currency)}
+                        </span>
+                        {product.compare_price && parsePrice(product.compare_price) > parsePrice(product.price) && (
+                          <span className="storefront-product-original-price">
+                            {formatStoreCurrency(product.compare_price, storeData?.currency)}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   ) : (
                     <h3 className="mb-0">
@@ -848,6 +1021,27 @@ export default function StorefrontHome({ storeData, products, categories = [], l
       {theme === 'theme-home' && !searchQuery && (
         <React.Suspense fallback={null}>
           <ThemeHomeFooter />
+        </React.Suspense>
+      )}
+
+      {/* Baby Products Theme Dedicated Sections */}
+      {theme === 'theme-baby' && !searchQuery && (
+        <React.Suspense fallback={null}>
+          <ThemeBabySections
+            products={products}
+            categories={categories}
+            categoriesToRender={categoriesToRender}
+            storeData={storeData}
+            basePath={basePath}
+            addToCart={addToCart}
+            toggleWishlist={toggleWishlist}
+            isInWishlist={isInWishlist}
+            formatStoreCurrency={formatStoreCurrency}
+            normalizeProductImage={normalizeProductImage}
+            parsePrice={parsePrice}
+            getFirstAvailableSize={getFirstAvailableSize}
+            getFirstAvailableColor={getFirstAvailableColor}
+          />
         </React.Suspense>
       )}
 

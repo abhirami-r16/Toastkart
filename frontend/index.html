@@ -21,8 +21,15 @@
           var h = (window.location.hostname || '').toLowerCase();
           var p = (window.location.pathname || '').toLowerCase();
           var s = (window.location.search || '').toLowerCase();
-          var isAmiora = h.indexOf('amiora') !== -1 || h.indexOf('cocoa') !== -1 || p.indexOf('amiora') !== -1 || p.indexOf('cocoamiora') !== -1 || s.indexOf('amiora') !== -1;
-          if (isAmiora) {
+          var isNafi = p.indexOf('an-nafi') !== -1 || p.indexOf('nafi') !== -1 || s.indexOf('an-nafi') !== -1 || s.indexOf('nafi') !== -1;
+          var isAmiora = !isNafi && (h.indexOf('amiora') !== -1 || h.indexOf('cocoa') !== -1 || p.indexOf('amiora') !== -1 || p.indexOf('cocoamiora') !== -1 || s.indexOf('amiora') !== -1);
+          if (isNafi) {
+            var icon = document.getElementById('dynamic-favicon');
+            if (icon) icon.href = '/images/an-nafi-logo.png';
+            var appleIcon = document.getElementById('dynamic-apple-icon');
+            if (appleIcon) appleIcon.href = '/images/an-nafi-apple-touch-icon.png';
+            document.title = "AN' NAFI Baby Shop";
+          } else if (isAmiora) {
             var icon = document.getElementById('dynamic-favicon');
             if (icon) icon.href = '/images/amiora-favicon.png';
             var appleIcon = document.getElementById('dynamic-apple-icon');

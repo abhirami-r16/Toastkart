@@ -1341,6 +1341,8 @@ export default function Products() {
                   <div className="flex flex-wrap gap-1.5">
                     {(() => {
                       const selectedCategoryName = categories.find(c => String(c.id) === String(formData.category_id))?.name?.toLowerCase() || '';
+                      const isBaby = selectedCategoryName.includes('baby') || selectedCategoryName.includes('infant') || selectedCategoryName.includes('toddler') || selectedCategoryName.includes('newborn');
+                      if (isBaby) return ['0-3M', '3-6M', '6-9M', '9-12M', '12-18M', '18-24M', '2-3Y', '3-4Y', 'Free Size'];
                       const isPerfume = selectedCategoryName.includes('perfume') || selectedCategoryName.includes('fragrance') || selectedCategoryName.includes('cologne');
                       const isCoconut = selectedCategoryName.includes('coconut');
                       if (isPerfume) return ['10ml', '30ml', '50ml', '100ml', '150ml', '200ml', 'Personalized'];

@@ -64,6 +64,26 @@ const INITIAL_DEMO_STORES = [
     products_count: 8,
     orders_count: 86,
     theme: 'theme-coconut'
+  },
+  {
+    id: 5,
+    user_id: 1,
+    name: 'Little Wonders',
+    slug: 'little-wonders',
+    subdomain: 'little-wonders',
+    customDomain: 'www.littlewonders.in',
+    logo: '',
+    banner: 'https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=1200&q=80',
+    currency: 'INR',
+    description: 'A premium baby boutique offering gentle, organic cotton clothing, pediatrician-tested baby skincare, nursery essentials, and feeding accessories.',
+    status: 'Active',
+    email: 'care@littlewonders.com',
+    phone: '+91 98450 67890',
+    category: 'Baby Products',
+    timezone: 'Asia/Kolkata',
+    products_count: 16,
+    orders_count: 120,
+    theme: 'theme-baby'
   }
 ];
 

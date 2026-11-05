@@ -28,6 +28,7 @@ export default function StorefrontApp({ subdomain }) {
     const name = isAmioraStore ? 'AMIORA' : (cleanSub.charAt(0).toUpperCase() + cleanSub.slice(1).replace(/-/g, ' ').replace('store', 'Store'));
     let category = 'General Retail';
     if (cleanSub.includes('perfume')) category = 'perfumes';
+    else if (cleanSub.includes('baby') || cleanSub.includes('infant') || cleanSub.includes('toddler') || cleanSub.includes('newborn') || cleanSub.includes('littlewonders') || cleanSub.includes('little-wonders')) category = 'Baby Products';
     else if (cleanSub.includes('coconut') || cleanSub.includes('copra') || cleanSub.includes('kera') || isAmioraStore) category = 'Coconut Products';
     else if (cleanSub.includes('jewelry')) category = 'jewelry';
     else if (cleanSub.includes('beauty') || cleanSub.includes('glow')) category = 'beauty';
@@ -295,16 +296,31 @@ if (!foundStore) {
 
   // Dynamic favicon and document title for the store
   useEffect(() => {
-    const isAmiora =
-      String(storeData?.name || '').toLowerCase().includes('amiora') ||
-      String(storeData?.subdomain || '').toLowerCase().includes('amiora') ||
-      String(storeData?.category || '').toLowerCase().includes('coconut') ||
-      window.location.hostname.toLowerCase().includes('amiora') ||
-      window.location.hostname.toLowerCase().includes('cocoa');
+    if (!storeData || storeData.id === 'loading') return;
 
-    const faviconUrl = isAmiora
-      ? '/images/amiora-favicon.png'
-      : (storeData?.logo_url || '/favicon.png');
+    const isNafi =
+      String(storeData?.name || '').toLowerCase().includes('nafi') ||
+      String(storeData?.slug || '').toLowerCase().includes('nafi') ||
+      window.location.pathname.toLowerCase().includes('nafi');
+
+    const isAmiora =
+      !isNafi && (
+        String(storeData?.name || '').toLowerCase().includes('amiora') ||
+        String(storeData?.subdomain || '').toLowerCase().includes('amiora') ||
+        String(storeData?.category || '').toLowerCase().includes('coconut') ||
+        window.location.hostname.toLowerCase().includes('amiora') ||
+        window.location.hostname.toLowerCase().includes('cocoa')
+      );
+
+    // Give store their own logo as favicon
+    const ownLogo = storeData?.logo || storeData?.logo_url;
+    let faviconUrl = ownLogo || '/favicon.png';
+
+    if (isNafi) {
+      faviconUrl = ownLogo || '/images/an-nafi-logo.png';
+    } else if (isAmiora) {
+      faviconUrl = '/images/amiora-favicon.png';
+    }
 
     let link = document.querySelector("link[rel*='icon']");
     if (!link) {
@@ -315,17 +331,29 @@ if (!foundStore) {
     link.type = 'image/png';
     link.href = faviconUrl;
 
+    const dynFav = document.getElementById('dynamic-favicon');
+    if (dynFav) {
+      dynFav.href = faviconUrl;
+    }
+
     let appleLink = document.querySelector("link[rel='apple-touch-icon']");
     if (!appleLink) {
       appleLink = document.createElement('link');
       appleLink.rel = 'apple-touch-icon';
       document.head.appendChild(appleLink);
     }
-    appleLink.href = isAmiora ? '/images/amiora-favicon-badge.png' : faviconUrl;
+    appleLink.href = isNafi ? (ownLogo || '/images/an-nafi-logo.png') : (isAmiora ? '/images/amiora-favicon-badge.png' : faviconUrl);
 
-    if (isAmiora) {
+    const dynApple = document.getElementById('dynamic-apple-icon');
+    if (dynApple) {
+      dynApple.href = appleLink.href;
+    }
+
+    if (isNafi) {
+      document.title = `${storeData.name || "AN' NAFI"} Baby Shop`;
+    } else if (isAmiora) {
       document.title = 'AMIORA';
-    } else if (storeData?.name && storeData.id !== 'loading') {
+    } else if (storeData?.name) {
       document.title = `${storeData.name} - Online Store`;
     }
   }, [storeData]);
