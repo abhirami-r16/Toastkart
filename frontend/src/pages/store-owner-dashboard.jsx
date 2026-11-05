@@ -20,9 +20,9 @@ import "../styles/dashboard-premium.css";
 
 const getSizesForCategory = (productCategory, storeCategory, storeTheme, storeName) => {
   const cat = (
-    (productCategory || '') + ' ' + 
-    (storeCategory || '') + ' ' + 
-    (storeTheme || '') + ' ' + 
+    (productCategory || '') + ' ' +
+    (storeCategory || '') + ' ' +
+    (storeTheme || '') + ' ' +
     (storeName || '')
   ).toLowerCase();
   if (cat.includes('baby') || cat.includes('infant') || cat.includes('toddler') || cat.includes('newborn') || cat.includes('maternity')) {
@@ -282,9 +282,23 @@ export default function StoreOwnerDashboard() {
 
   const [showPlanRequiredModal, setShowPlanRequiredModal] = useState(false);
 
-  const isBypass = true;
-  const isPrivileged = true;
-  const hasActiveSub = true;
+  const isBypass = Boolean(
+    user?.subscription_bypass ||
+    (user?.email && user.email.toLowerCase().trim() === 'emvithaofficial@gmail.com')
+  );
+
+  const isPrivileged = Boolean(
+    isBypass ||
+    user?.role === 'admin' ||
+    user?.email === 'admin@gmail.com'
+  );
+
+  const hasActiveSub = Boolean(
+    isPrivileged ||
+    user?.has_active_subscription ||
+    user?.active_subscription ||
+    user?.activeSubscription
+  );
 
   useEffect(() => {
     if (!loading) {
@@ -292,9 +306,13 @@ export default function StoreOwnerDashboard() {
         navigate('/login', { replace: true });
         return;
       }
-      setShowPlanRequiredModal(false);
+      if (!isPrivileged && !hasActiveSub) {
+        setShowPlanRequiredModal(true);
+      } else {
+        setShowPlanRequiredModal(false);
+      }
     }
-  }, [user, loading, navigate]);
+  }, [user, loading, hasActiveSub, isPrivileged, navigate]);
 
   const [active, setActive] = useState(() => {
     try {
@@ -2808,7 +2826,7 @@ export default function StoreOwnerDashboard() {
                             <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Category</label>
                             <select value={storeForm.category} onChange={(e) => setStoreForm({ ...storeForm, category: e.target.value })} className="form-select" style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}>
                               <option value="Fashion & Apparel">Fashion & Apparel</option>
-                          <option value="Baby Products">Baby Products</option>
+                              <option value="Baby Products">Baby Products</option>
                               <option value="Coconut Products">Coconut Products</option>
                               <option value="Jewellery">Jewellery</option>
                               <option value="Beauty & Cosmetics">Beauty & Cosmetics</option>

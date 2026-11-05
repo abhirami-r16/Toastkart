@@ -1773,86 +1773,19 @@ export default function StorefrontLayout({ storeData, categories = [], products 
 
 
             {/* Desktop Navigation */}
-
-
-
-            {theme === 'theme-baby' ? (
-
-
-
-              <nav className="hexashop-nav d-none d-lg-flex">
-
-
-
-                <Link to={{ pathname: basePath, search: location.search }} className="hexashop-nav-item">Home</Link>
-
-
-
-              </nav>
-
-
-
-            ) : (
-
-
-
             <nav className="hexashop-nav d-none d-lg-flex">
-
-
-
               <Link to={{ pathname: basePath, search: location.search }} className="hexashop-nav-item">Home</Link>
-
-
-
               {activeCategories && activeCategories.map(cat => (
-
-
-
                 <a
-
-
-
                   key={cat.id || cat.name}
-
-
-
                   href={`#${cat.slug}`}
-
-
-
                   onClick={(e) => scrollToSection(e, cat.slug)}
-
-
-
                   className="hexashop-nav-item"
-
-
-
                 >
-
-
-
                   {cat.name}
-
-
-
                 </a>
-
-
-
               ))}
-
-
-
             </nav>
-
-
-
-
-
-
-
-            )}
 
 
 

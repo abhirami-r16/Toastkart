@@ -263,7 +263,7 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                         )}
                         % OFF
                       </div>
-                  )}
+                    )}
                   <img
                     src={normalizeProductImage(
                       product.image || product.image_url,
@@ -286,7 +286,7 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                       <div className="storefront-product-title fw-bold">
                         {product.name}
                       </div>
-                      
+
                       <div className="storefront-product-price-row fw-bold d-flex align-items-baseline">
                         <span className="storefront-product-price">
                           {formatStoreCurrency(product.price, storeData?.currency)}
@@ -297,7 +297,7 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                           </span>
                         )}
                       </div>
-                      
+
                       <div className="coconut-variants d-flex flex-wrap mt-auto">
                         {product.size ? (
                           String(product.size).split(',').map((sz, i) => (
@@ -306,30 +306,30 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                             </span>
                           ))
                         ) : theme === 'theme-baby' ? (
-                    <div className="storefront-product-details d-flex flex-column flex-grow-1">
-                      <span className="baby-card-category">
-                        {product.category?.name || product.category || 'BABY ESSENTIALS'}
-                      </span>
-                      <div className="storefront-product-title">
-                        {product.name}
-                      </div>
-                      <div className="baby-product-rating">
-                        <span className="baby-product-rating-stars">★★★★★</span>
-                        <span>{product.rating || product.meesho_product?.rating || 4.9}</span>
-                        <span className="baby-product-rating-count">(Verified)</span>
-                      </div>
-                      <div className="storefront-product-price-row">
-                        <span className="storefront-product-price">
-                          {formatStoreCurrency(product.price, storeData?.currency)}
-                        </span>
-                        {product.compare_price && parsePrice(product.compare_price) > parsePrice(product.price) && (
-                          <span className="storefront-product-original-price">
-                            {formatStoreCurrency(product.compare_price, storeData?.currency)}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  ) : (
+                          <div className="storefront-product-details d-flex flex-column flex-grow-1">
+                            <span className="baby-card-category">
+                              {product.category?.name || product.category || 'BABY ESSENTIALS'}
+                            </span>
+                            <div className="storefront-product-title">
+                              {product.name}
+                            </div>
+                            <div className="baby-product-rating">
+                              <span className="baby-product-rating-stars">★★★★★</span>
+                              <span>{product.rating || product.meesho_product?.rating || 4.9}</span>
+                              <span className="baby-product-rating-count">(Verified)</span>
+                            </div>
+                            <div className="storefront-product-price-row">
+                              <span className="storefront-product-price">
+                                {formatStoreCurrency(product.price, storeData?.currency)}
+                              </span>
+                              {product.compare_price && parsePrice(product.compare_price) > parsePrice(product.price) && (
+                                <span className="storefront-product-original-price">
+                                  {formatStoreCurrency(product.compare_price, storeData?.currency)}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        ) : (
                           <>
                             <span className="coconut-variant-badge">Virgin Oils</span>
                             <span className="coconut-variant-badge">Zero Waste Bowls</span>
@@ -369,13 +369,13 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                       <div className="storefront-product-category text-uppercase text-muted">
                         {product.category?.name || product.category || 'WOODY | ALLDAY | UNISEX'}
                       </div>
-                      
+
                       <div className="storefront-product-price-row fw-bold">
                         <span className="storefront-product-price">
                           {formatStoreCurrency(product.price, storeData?.currency)}
                         </span>
                       </div>
-                      
+
                       <div className="perfume-variants d-flex gap-2 flex-wrap mt-auto">
                         {product.size ? (
                           String(product.size).split(',').map((sz, i) => (
@@ -384,30 +384,30 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                             </span>
                           ))
                         ) : theme === 'theme-baby' ? (
-                    <div className="storefront-product-details d-flex flex-column flex-grow-1">
-                      <span className="baby-card-category">
-                        {product.category?.name || product.category || 'BABY ESSENTIALS'}
-                      </span>
-                      <div className="storefront-product-title">
-                        {product.name}
-                      </div>
-                      <div className="baby-product-rating">
-                        <span className="baby-product-rating-stars">★★★★★</span>
-                        <span>{product.rating || product.meesho_product?.rating || 4.9}</span>
-                        <span className="baby-product-rating-count">(Verified)</span>
-                      </div>
-                      <div className="storefront-product-price-row">
-                        <span className="storefront-product-price">
-                          {formatStoreCurrency(product.price, storeData?.currency)}
-                        </span>
-                        {product.compare_price && parsePrice(product.compare_price) > parsePrice(product.price) && (
-                          <span className="storefront-product-original-price">
-                            {formatStoreCurrency(product.compare_price, storeData?.currency)}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  ) : (
+                          <div className="storefront-product-details d-flex flex-column flex-grow-1">
+                            <span className="baby-card-category">
+                              {product.category?.name || product.category || 'BABY ESSENTIALS'}
+                            </span>
+                            <div className="storefront-product-title">
+                              {product.name}
+                            </div>
+                            <div className="baby-product-rating">
+                              <span className="baby-product-rating-stars">★★★★★</span>
+                              <span>{product.rating || product.meesho_product?.rating || 4.9}</span>
+                              <span className="baby-product-rating-count">(Verified)</span>
+                            </div>
+                            <div className="storefront-product-price-row">
+                              <span className="storefront-product-price">
+                                {formatStoreCurrency(product.price, storeData?.currency)}
+                              </span>
+                              {product.compare_price && parsePrice(product.compare_price) > parsePrice(product.price) && (
+                                <span className="storefront-product-original-price">
+                                  {formatStoreCurrency(product.compare_price, storeData?.currency)}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        ) : (
                           <span className="btn btn-outline-dark border-2 border-dark btn-sm rounded-1 fw-bold px-2 py-1" style={{ fontSize: '0.7rem' }}>100ml</span>
                         )}
                         <span className="btn btn-outline-dark btn-sm rounded-1 px-2 py-1 d-flex align-items-center gap-1" style={{ fontSize: '0.7rem' }}>
@@ -454,7 +454,7 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                       </div>
 
                       {theme === 'theme-home' && (
-                        <div className="rating-stars">★★★★★ <span className="text-muted" style={{fontSize: '11px'}}>(128)</span></div>
+                        <div className="rating-stars">★★★★★ <span className="text-muted" style={{ fontSize: '11px' }}>(128)</span></div>
                       )}
 
                       <div className="storefront-product-price-row">
@@ -470,30 +470,30 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                             </span>
                           </>
                         ) : theme === 'theme-baby' ? (
-                    <div className="storefront-product-details d-flex flex-column flex-grow-1">
-                      <span className="baby-card-category">
-                        {product.category?.name || product.category || 'BABY ESSENTIALS'}
-                      </span>
-                      <div className="storefront-product-title">
-                        {product.name}
-                      </div>
-                      <div className="baby-product-rating">
-                        <span className="baby-product-rating-stars">★★★★★</span>
-                        <span>{product.rating || product.meesho_product?.rating || 4.9}</span>
-                        <span className="baby-product-rating-count">(Verified)</span>
-                      </div>
-                      <div className="storefront-product-price-row">
-                        <span className="storefront-product-price">
-                          {formatStoreCurrency(product.price, storeData?.currency)}
-                        </span>
-                        {product.compare_price && parsePrice(product.compare_price) > parsePrice(product.price) && (
-                          <span className="storefront-product-original-price">
-                            {formatStoreCurrency(product.compare_price, storeData?.currency)}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  ) : (
+                          <div className="storefront-product-details d-flex flex-column flex-grow-1">
+                            <span className="baby-card-category">
+                              {product.category?.name || product.category || 'BABY ESSENTIALS'}
+                            </span>
+                            <div className="storefront-product-title">
+                              {product.name}
+                            </div>
+                            <div className="baby-product-rating">
+                              <span className="baby-product-rating-stars">★★★★★</span>
+                              <span>{product.rating || product.meesho_product?.rating || 4.9}</span>
+                              <span className="baby-product-rating-count">(Verified)</span>
+                            </div>
+                            <div className="storefront-product-price-row">
+                              <span className="storefront-product-price">
+                                {formatStoreCurrency(product.price, storeData?.currency)}
+                              </span>
+                              {product.compare_price && parsePrice(product.compare_price) > parsePrice(product.price) && (
+                                <span className="storefront-product-original-price">
+                                  {formatStoreCurrency(product.compare_price, storeData?.currency)}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        ) : (
                           <span className="storefront-product-price">
                             {formatStoreCurrency(product.price, storeData?.currency)}
                           </span>
@@ -605,8 +605,8 @@ export default function StorefrontHome({ storeData, products, categories = [], l
               ) : (
                 <div
                   className={`add-to-cart-wrapper ${theme !== 'theme-default'
-                      ? 'theme-cart-wrapper'
-                      : 'position-absolute bottom-0 start-0 w-100 p-2'
+                    ? 'theme-cart-wrapper'
+                    : 'position-absolute bottom-0 start-0 w-100 p-2'
                     }`}
                   style={{
                     zIndex: 2,
@@ -614,21 +614,21 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                 >
                   <button
                     className={`btn w-100 fw-bold d-flex align-items-center justify-content-center gap-2 add-to-cart-btn ${theme !== 'theme-default'
-                        ? 'theme-cart-btn'
-                        : ''
+                      ? 'theme-cart-btn'
+                      : ''
                       } ${theme === 'theme-home' ? 'text-uppercase' : ''}`}
                     style={
                       theme === 'theme-home'
                         ? {
-                            backgroundColor: '#e83e8c', // Pink
-                            color: '#fff',
-                            border: 'none',
-                            fontSize: '0.85rem',
-                            padding: '8px',
-                          }
+                          backgroundColor: '#e83e8c', // Pink
+                          color: '#fff',
+                          border: 'none',
+                          fontSize: '0.85rem',
+                          padding: '8px',
+                        }
                         : theme !== 'theme-default'
-                        ? {}
-                        : {
+                          ? {}
+                          : {
                             backgroundColor: '#ff9f00',
                             color: '#fff',
                             border: 'none',
@@ -670,7 +670,7 @@ export default function StorefrontHome({ storeData, products, categories = [], l
   const configId = new URLSearchParams(location.search).get('config_id');
   const aiConfigs = storeData?.ai_configurations || storeData?.aiConfigurations;
   const hasAiConfig = aiConfigs && aiConfigs.length > 0;
-  
+
   let aiConfig = null;
   if (hasAiConfig && (isAiPreview || aiConfigs[0].status === 'published')) {
     const configObj = configId ? aiConfigs.find(c => String(c.id) === String(configId)) || aiConfigs[0] : aiConfigs[0];
@@ -702,45 +702,45 @@ export default function StorefrontHome({ storeData, products, categories = [], l
     if (!aiConfig || !aiConfig.sections) return null;
     const heroSection = aiConfig.sections.find(s => s.type === 'hero');
     if (!heroSection) return null;
-    
+
     const hasImages = aiConfig?.style?.heroImages && Array.isArray(aiConfig.style.heroImages) && aiConfig.style.heroImages.length > 0;
     const imagesToRender = hasImages ? aiConfig.style.heroImages : (aiConfig?.style?.heroImage ? [aiConfig.style.heroImage] : []);
 
     return (
-      <div className="d-flex align-items-center justify-content-center text-center p-5 mb-5 position-relative overflow-hidden" 
-        style={{ 
-          minHeight: '60vh', 
+      <div className="d-flex align-items-center justify-content-center text-center p-5 mb-5 position-relative overflow-hidden"
+        style={{
+          minHeight: '60vh',
           color: 'var(--theme-bg)',
           borderBottomLeftRadius: 'var(--theme-border-radius)',
           borderBottomRightRadius: 'var(--theme-border-radius)'
         }}>
-        
-        {imagesToRender.length > 0 ? imagesToRender.map((img, i) => {
-            const imageUrl = img.startsWith('http')
-              ? img
-              : `${import.meta.env.VITE_API_BASE_URL?.replace('/api', '') || 'http://localhost:8000'}${img}`;
 
-            return (
-              <div 
-                key={i}
-                className="position-absolute w-100 h-100 top-0 start-0"
-                style={{
-                  backgroundImage: `url(${imageUrl})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  opacity: i === 0 ? 1 : 0,
-                  zIndex: 0
-                }}
-              />
-            );
-        }) : (
-            <div 
+        {imagesToRender.length > 0 ? imagesToRender.map((img, i) => {
+          const imageUrl = img.startsWith('http')
+            ? img
+            : `${import.meta.env.VITE_API_BASE_URL?.replace('/api', '') || 'http://localhost:8000'}${img}`;
+
+          return (
+            <div
+              key={i}
               className="position-absolute w-100 h-100 top-0 start-0"
               style={{
-                background: `linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-secondary) 100%)`,
+                backgroundImage: `url(${imageUrl})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                opacity: i === 0 ? 1 : 0,
                 zIndex: 0
               }}
             />
+          );
+        }) : (
+          <div
+            className="position-absolute w-100 h-100 top-0 start-0"
+            style={{
+              background: `linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-secondary) 100%)`,
+              zIndex: 0
+            }}
+          />
         )}
 
         <div className="position-absolute w-100 h-100 top-0 start-0" style={{ background: 'rgba(0, 0, 0, 0.4)', zIndex: 1 }}></div>
@@ -933,8 +933,36 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                     </div>
                   ) : theme === 'theme-baby' ? (
                     <div>
-                      <div className="baby-section-title-tag">Little Wonders Collection</div>
-                      <h3 className="baby-section-title">{cat.name}</h3>
+                      <div
+                        className="baby-section-title-tag"
+                        style={{
+                          color: '#D45D7E',
+                          backgroundColor: '#FFF0F5',
+                          border: '1px solid #FCD4E1',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          padding: '4px 14px',
+                          borderRadius: '50px',
+                          fontSize: '0.76rem',
+                          fontWeight: 700,
+                          letterSpacing: '1.5px',
+                          textTransform: 'uppercase',
+                          marginBottom: '0.45rem',
+                        }}
+                      >
+                        Little Wonders Collection
+                      </div>
+                      <h3
+                        className="baby-section-title"
+                        style={{
+                          color: '#8C3754',
+                          fontWeight: 800,
+                          letterSpacing: '-0.5px',
+                          margin: 0,
+                        }}
+                      >
+                        {cat.name}
+                      </h3>
                     </div>
                   ) : theme === 'theme-perfume' ? (
                     <h3 style={{ textTransform: 'uppercase', letterSpacing: '1px', fontSize: '2rem' }}>
@@ -995,26 +1023,26 @@ export default function StorefrontHome({ storeData, products, categories = [], l
           );
         })
       ) : loading ? (
-          <div className="storefront-loading-section" style={{ padding: '60px 20px', textAlign: 'center' }}>
-            <div className="spinner-border text-primary" role="status" style={{ width: '2rem', height: '2rem' }}>
-              <span className="visually-hidden">Loading products...</span>
-            </div>
-            <p className="mt-3 text-muted">Loading products...</p>
+        <div className="storefront-loading-section" style={{ padding: '60px 20px', textAlign: 'center' }}>
+          <div className="spinner-border text-primary" role="status" style={{ width: '2rem', height: '2rem' }}>
+            <span className="visually-hidden">Loading products...</span>
           </div>
-        ) : (
-          <div
-            className="storefront-empty-state"
-            style={{
-              padding: '80px 20px',
-              textAlign: 'center',
-            }}
-          >
-            <div className="text-uppercase text-muted fw-bold mb-2" style={{ fontSize: '11px', letterSpacing: '2px' }}>Welcome To Our Store</div>
-            <h2 className="fw-bold mb-3" style={{ fontFamily: 'Georgia, serif', fontSize: '2.5rem', color: '#1a1a1a' }}>Discover {storeData.name}</h2>
-            <p className="text-muted" style={{ fontSize: '1.1rem', maxWidth: '500px', margin: '0 auto', lineHeight: '1.6' }}>
-              There are no products yet. We are currently curating our collection of beautiful, thoughtfully designed pieces. Please check back soon.
-            </p>
-          </div>
+          <p className="mt-3 text-muted">Loading products...</p>
+        </div>
+      ) : (
+        <div
+          className="storefront-empty-state"
+          style={{
+            padding: '80px 20px',
+            textAlign: 'center',
+          }}
+        >
+          <div className="text-uppercase text-muted fw-bold mb-2" style={{ fontSize: '11px', letterSpacing: '2px' }}>Welcome To Our Store</div>
+          <h2 className="fw-bold mb-3" style={{ fontFamily: 'Georgia, serif', fontSize: '2.5rem', color: '#1a1a1a' }}>Discover {storeData.name}</h2>
+          <p className="text-muted" style={{ fontSize: '1.1rem', maxWidth: '500px', margin: '0 auto', lineHeight: '1.6' }}>
+            There are no products yet. We are currently curating our collection of beautiful, thoughtfully designed pieces. Please check back soon.
+          </p>
+        </div>
       )}
 
       {/* Footer sections for Nordic Theme */}
@@ -1050,19 +1078,19 @@ export default function StorefrontHome({ storeData, products, categories = [], l
         <div className="perfume-video-section" style={{ marginTop: '6rem', position: 'relative', width: '100%', height: '70vh', minHeight: '500px', overflow: 'hidden' }}>
           <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', overflow: 'hidden' }}>
             {isVideoPlaying ? (
-              <iframe 
-                src="https://www.youtube.com/embed/jlsfs5jCB7k?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&playlist=jlsfs5jCB7k" 
+              <iframe
+                src="https://www.youtube.com/embed/jlsfs5jCB7k?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&playlist=jlsfs5jCB7k"
                 style={{ width: '100vw', height: '56.25vw', minHeight: '100vh', minWidth: '177.77vh', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', border: 'none' }}
                 allow="autoplay; encrypted-media"
                 title="Clean Aesthetic Perfume Commercial"
               />
             ) : (
-              <div 
+              <div
                 style={{ width: '100%', height: '100%', backgroundImage: 'url(https://img.youtube.com/vi/jlsfs5jCB7k/maxresdefault.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                 onClick={() => setIsVideoPlaying(true)}
               >
                 <div style={{ width: '80px', height: '80px', backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                   <div style={{ width: 0, height: 0, borderTop: '15px solid transparent', borderBottom: '15px solid transparent', borderLeft: '25px solid white', marginLeft: '10px' }}></div>
+                  <div style={{ width: 0, height: 0, borderTop: '15px solid transparent', borderBottom: '15px solid transparent', borderLeft: '25px solid white', marginLeft: '10px' }}></div>
                 </div>
               </div>
             )}
@@ -1080,18 +1108,18 @@ export default function StorefrontHome({ storeData, products, categories = [], l
           <div className="row align-items-center">
             <div className="col-lg-6 mb-4 mb-lg-0">
               <div style={{ borderRadius: '24px', overflow: 'hidden', height: '100%', minHeight: '500px', boxShadow: '0 10px 30px rgba(0,0,0,0.08)' }}>
-                <img 
-                  src="https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=800&q=80" 
-                  alt="Craft Your Own Perfume" 
+                <img
+                  src="https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=800&q=80"
+                  alt="Craft Your Own Perfume"
                   loading="lazy"
                   decoding="async"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', minHeight: '500px' }} 
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', minHeight: '500px' }}
                 />
               </div>
             </div>
             <div className="col-lg-6 ps-lg-5">
               <h2 style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '1.5rem', lineHeight: '1.1', fontFamily: 'var(--perfume-font-heading, sans-serif)', letterSpacing: '-0.5px' }}>
-                <span style={{ color: '#ff7b00' }}>WHY WE DO,</span> <span style={{ color: '#000000' }}>WHAT<br/>WE DO</span>
+                <span style={{ color: '#ff7b00' }}>WHY WE DO,</span> <span style={{ color: '#000000' }}>WHAT<br />WE DO</span>
               </h2>
               <p style={{ color: '#666', fontSize: '1.1rem', lineHeight: '1.8', marginBottom: '2.5rem', fontFamily: 'var(--perfume-font-body, sans-serif)' }}>
                 Craft Your Own Perfume, CYOP is India's premier perfume bar known for <span style={{ color: '#ff7b00', fontWeight: '500' }}>high-quality, long-lasting</span> fragrances with unparalleled expertise in the art and science of perfumery. CYOP perfumes, reformulated with <span style={{ color: '#ff7b00', fontWeight: '500' }}>50% fragrance oil concentration</span> last longer in tropical weather conditions. Our experts can guide the customer to not just select the right perfume, but also provide them with the unique experience of mixing perfumes to create a <span style={{ color: '#ff7b00', fontWeight: '500' }}>fully personalised olfactory experience.</span>
@@ -1108,9 +1136,9 @@ export default function StorefrontHome({ storeData, products, categories = [], l
             <div className="row g-0 align-items-center">
               <div className="col-lg-6">
                 <div className="coconut-heritage-img-wrapper">
-                  <img 
-                    src="/images/coconut-story.jpg" 
-                    alt="Kerala Coconut Farmer & Heritage" 
+                  <img
+                    src="/images/coconut-story.jpg"
+                    alt="Kerala Coconut Farmer & Heritage"
                     loading="lazy"
                     decoding="async"
                     className="coconut-heritage-img"
@@ -1126,7 +1154,7 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                   <p className="coconut-heritage-text">
                     For generations, Kerala’s lush coastal climate and mineral-rich backwater soils have cultivated India’s most nourishing coconuts. We partner directly with local farming families, using centuries-old traditional wood-pressed (Mara Chekku) extraction to bring unadulterated purity from tree to your home.
                   </p>
-                  
+
                   <div className="coconut-benefit-item">
                     <div className="coconut-benefit-icon">
                       <Droplet size={20} />
