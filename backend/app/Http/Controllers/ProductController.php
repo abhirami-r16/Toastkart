@@ -117,8 +117,8 @@ class ProductController extends Controller
 
         // Process images
         $processedImage = $this->processBase64Image($validated['image'] ?? null, 'primary');
-        if (!$processedImage) {
-            $processedImage = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80';
+        if (!$processedImage && !empty($validated['image'])) {
+            $processedImage = $validated['image'];
         }
 
         $processedGallery = [];

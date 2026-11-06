@@ -127,13 +127,7 @@ const initialCategories = [
   { id: 5, name: "Jewelry", slug: "jewelry", description: "Artisanal gold-plated necklaces and traditional earrings.", featured: false, products_count: 8 },
 ];
 
-const initialProducts = [
-  { id: 1, name: "Linen Kurta", sku: "LK-101", category: "Apparel", price: "₹86.00", stock: 45, status: "In Stock", image: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=150" },
-  { id: 2, name: "Brass Diya Set", sku: "BD-204", category: "Home Decor", price: "₹42.50", stock: 18, status: "In Stock", image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=150" },
-  { id: 3, name: "Silk Scarf", sku: "SS-309", category: "Accessories", price: "₹34.00", stock: 8, status: "Low Stock", image: "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=150" },
-  { id: 4, name: "Clay Vase", sku: "CV-412", category: "Home Decor", price: "₹54.00", stock: 0, status: "Out of Stock", image: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=150" },
-  { id: 5, name: "Handwoven Cushion Cover", sku: "HC-502", category: "Textiles", price: "₹28.00", stock: 62, status: "In Stock", image: "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=150" },
-];
+const initialProducts = [];
 
 const initialOrders = [
   { id: "#AU-3021", customer: "Rhea Kapoor", items: "Linen Kurta x1", total: "₹86.00", status: "Shipped", date: "2026-07-25", pay: "Stripe" },
@@ -223,11 +217,18 @@ const normalizeProductImage = (rawUrl, productName = "") => {
     return getFallbackImageByName(productName);
   }
   let cleanUrl = rawUrl.trim();
-  if (cleanUrl.startsWith('/storage/')) {
-    cleanUrl = `http://127.0.0.1:8000${cleanUrl}`;
+  const envUrl = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL;
+  const backendUrl = envUrl ? envUrl.replace(/\/api\/?$/, '') : 'http://127.0.0.1:8000';
+
+  if (cleanUrl.startsWith('http://localhost:8000') && backendUrl !== 'http://localhost:8000') {
+    cleanUrl = cleanUrl.replace('http://localhost:8000', backendUrl);
+  } else if (cleanUrl.startsWith('http://127.0.0.1:8000') && backendUrl !== 'http://127.0.0.1:8000') {
+    cleanUrl = cleanUrl.replace('http://127.0.0.1:8000', backendUrl);
   }
-  if (cleanUrl.includes("source.unsplash.com") || cleanUrl.includes("unsplash.com/?")) {
-    return getFallbackImageByName(productName || cleanUrl);
+
+  if (cleanUrl.startsWith('/storage/') || cleanUrl.startsWith('storage/')) {
+    if (!cleanUrl.startsWith('/')) cleanUrl = '/' + cleanUrl;
+    return backendUrl + cleanUrl;
   }
   return cleanUrl;
 };
@@ -274,7 +275,7 @@ const resolveProductColor = (product) => {
   return null;
 };
 
-const emptyProductForm = { name: "", sku: "", price: "", compare_price: "", discount_percentage: "", category: "Apparel", subcategory: "", stock: "", description: "", image: "", images: [], color: "", size: "", piece_per_carton: "", is_active: true };
+const emptyProductForm = { name: "", sku: "", price: "", compare_price: "", discount_percentage: "", category: "", category_id: null, subcategory: "", stock: "", description: "", image: "", images: [], color: "", size: "", piece_per_carton: "", is_active: true };
 
 export default function StoreOwnerDashboard() {
   const navigate = useNavigate();
@@ -693,6 +694,7 @@ export default function StoreOwnerDashboard() {
             name: p.name,
             sku: p.sku || `SKU-${Math.floor(Math.random() * 900 + 100)}`,
             category: p.category?.name || p.category || "Uncategorized",
+            subcategory: p.subcategory || null,
             price: formatProductPrice(p.price, p),
             compare_price: p.compare_price != null && p.compare_price !== '' ? formatProductPrice(p.compare_price, p) : null,
             stock: p.stock_quantity ?? p.stock ?? 0,
@@ -1397,7 +1399,8 @@ export default function StoreOwnerDashboard() {
       price: String(product.price || "").replace(/[^0-9.]/g, ""),
       compare_price: product.compare_price ? String(product.compare_price).replace(/[^0-9.]/g, "") : "",
       discount_percentage: "",
-      category: product.category?.name || product.category || "Apparel",
+      category: product.category?.name || (typeof product.category === 'string' ? product.category : "") || "",
+      category_id: product.category_id || product.category?.id || null,
       subcategory: product.subcategory || "",
       stock: product.stock_quantity ?? product.stock ?? "",
       description: product.description || "",
@@ -1450,7 +1453,7 @@ export default function StoreOwnerDashboard() {
     });
     const payload = {
       store_id: activeStore?.id ?? editingProduct?.store_id ?? null,
-      category_id: category?.id ?? null,
+      category_id: category?.id ?? newProd.category_id ?? null,
       subcategory: newProd.subcategory?.trim() || null,
       name: newProd.name.trim(),
       sku: newProd.sku.trim() || `SKU-${Math.floor(Math.random() * 900 + 100)}`,
@@ -3363,13 +3366,28 @@ export default function StoreOwnerDashboard() {
                               <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Category</label>
                               <select
                                 value={newProd.category}
-                                onChange={(e) => setNewProd({ ...newProd, category: e.target.value })}
+                                onChange={(e) => {
+                                  const val = e.target.value;
+                                  const catObj = categoriesList?.find(c =>
+                                    String(c.id) === String(val) ||
+                                    (c.name || '').toLowerCase() === String(val || '').toLowerCase() ||
+                                    (c.slug || '').toLowerCase() === String(val || '').toLowerCase()
+                                  );
+                                  setNewProd({
+                                    ...newProd,
+                                    category: val,
+                                    category_id: catObj?.id || null,
+                                    subcategory: '',
+                                  });
+                                }}
                                 className="form-select"
                                 style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
                                 required
                               >
                                 <option value="">Select a Collection</option>
-                                <option value="Coconut Products">Coconut Products</option>
+                                {((activeStore?.category && String(activeStore.category).toLowerCase().includes('coconut')) || activeStore?.theme === 'theme-coconut') && (
+                                  <option value="Coconut Products">Coconut Products</option>
+                                )}
                                 {categoriesList && categoriesList.map(cat => (
                                   <option key={cat.id || cat.name} value={cat.name}>
                                     {cat.name}
@@ -3985,13 +4003,28 @@ export default function StoreOwnerDashboard() {
                 <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Category</label>
                 <select
                   value={newProd.category}
-                  onChange={(e) => setNewProd({ ...newProd, category: e.target.value })}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    const catObj = categoriesList?.find(c =>
+                      String(c.id) === String(val) ||
+                      (c.name || '').toLowerCase() === String(val || '').toLowerCase() ||
+                      (c.slug || '').toLowerCase() === String(val || '').toLowerCase()
+                    );
+                    setNewProd({
+                      ...newProd,
+                      category: val,
+                      category_id: catObj?.id || null,
+                      subcategory: '',
+                    });
+                  }}
                   className="form-select"
                   style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
                   required
                 >
                   <option value="">Select a Collection</option>
-                  <option value="Coconut Products">Coconut Products</option>
+                  {((activeStore?.category && String(activeStore.category).toLowerCase().includes('coconut')) || activeStore?.theme === 'theme-coconut') && (
+                    <option value="Coconut Products">Coconut Products</option>
+                  )}
                   {categoriesList && categoriesList.map(cat => (
                     <option key={cat.id || cat.name} value={cat.name}>
                       {cat.name}

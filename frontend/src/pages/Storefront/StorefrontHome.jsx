@@ -38,261 +38,6 @@ const NEWBORN_ITEMS = [
   'Romber set',
 ];
 
-const DEMO_BABY_SUBCAT_PRODUCTS = {
-  Bed: [
-    {
-      id: 'demo-bed-1',
-      name: 'Cloud-Soft Organic Baby Nest Bed',
-      price: 1499,
-      compare_price: 1999,
-      subcategory: 'Bed',
-      category: 'Baby Essentials',
-      image: '/images/baby-hero-neutral-crib.jpg',
-      rating: 4.9,
-    },
-    {
-      id: 'demo-bed-2',
-      name: 'Breathable Cotton Crib Mattress & Bolsters',
-      price: 1199,
-      compare_price: 1650,
-      subcategory: 'Bed',
-      category: 'Baby Essentials',
-      image: '/images/baby-hero-nursery.jpg',
-      rating: 4.8,
-    },
-    {
-      id: 'demo-bed-3',
-      name: 'Wooden Rocking Cradle & Soft Bumper Set',
-      price: 3499,
-      compare_price: 4299,
-      subcategory: 'Bed',
-      category: 'Baby Essentials',
-      image: '/images/baby-hero-nursery-2.jpg',
-      rating: 5.0,
-    },
-  ],
-  'Carry bag': [
-    {
-      id: 'demo-carry-1',
-      name: 'Portable Infant Carry Cot Bassinet',
-      price: 1299,
-      compare_price: 1799,
-      subcategory: 'Carry bag',
-      category: 'Baby Essentials',
-      image: 'https://images.unsplash.com/photo-1594824813576-787f0b5d5642?w=600&q=80',
-      rating: 4.9,
-    },
-    {
-      id: 'demo-carry-2',
-      name: 'Ergonomic 4-Position Baby Carrier Wrap',
-      price: 999,
-      compare_price: 1399,
-      subcategory: 'Carry bag',
-      category: 'Baby Essentials',
-      image: 'https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=600&q=80',
-      rating: 4.8,
-    },
-  ],
-  Motherbag: [
-    {
-      id: 'demo-motherbag-1',
-      name: 'Multi-Pocket Waterproof Diaper Motherbag',
-      price: 1150,
-      compare_price: 1599,
-      subcategory: 'Motherbag',
-      category: 'Baby Essentials',
-      image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&q=80',
-      rating: 4.9,
-    },
-    {
-      id: 'demo-motherbag-2',
-      name: 'Maternity Hospital & Weekend Travel Tote',
-      price: 1399,
-      compare_price: 1850,
-      subcategory: 'Motherbag',
-      category: 'Baby Essentials',
-      image: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80',
-      rating: 4.8,
-    },
-  ],
-  'Maternity pillow': [
-    {
-      id: 'demo-maternity-1',
-      name: 'Full-Body U-Shaped Pregnancy Support Pillow',
-      price: 1450,
-      compare_price: 2100,
-      subcategory: 'Maternity pillow',
-      category: 'Baby Essentials',
-      image: 'https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=600&q=80',
-      rating: 5.0,
-    },
-    {
-      id: 'demo-maternity-2',
-      name: 'Contoured Side-Sleeper Maternity Pillow',
-      price: 1299,
-      compare_price: 1799,
-      subcategory: 'Maternity pillow',
-      category: 'Baby Essentials',
-      image: 'https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=600&q=80',
-      rating: 4.9,
-    },
-  ],
-  'Feeding pillow': [
-    {
-      id: 'demo-feeding-1',
-      name: 'Ergonomic Nursing Pillow with Belt',
-      price: 899,
-      compare_price: 1299,
-      subcategory: 'Feeding pillow',
-      category: 'Baby Essentials',
-      image: 'https://images.unsplash.com/photo-1596870230751-ebdfce98ec42?w=600&q=80',
-      rating: 4.9,
-    },
-    {
-      id: 'demo-feeding-2',
-      name: 'Multi-Use Breastfeeding & Tummy Time Pillow',
-      price: 799,
-      compare_price: 1099,
-      subcategory: 'Feeding pillow',
-      category: 'Baby Essentials',
-      image: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=600&q=80',
-      rating: 4.8,
-    },
-  ],
-  'Hooded towel': [
-    {
-      id: 'demo-hooded-1',
-      name: 'Ultra-Soft Bamboo Animal Hooded Baby Towel',
-      price: 499,
-      compare_price: 699,
-      subcategory: 'Hooded towel',
-      category: 'Baby Essentials',
-      image: 'https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=600&q=80',
-      rating: 4.9,
-    },
-    {
-      id: 'demo-hooded-2',
-      name: 'Embroidered Bunny Hooded Bath Wrap',
-      price: 549,
-      compare_price: 799,
-      subcategory: 'Hooded towel',
-      category: 'Baby Essentials',
-      image: 'https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=600&q=80',
-      rating: 4.8,
-    },
-  ],
-  'Plain towel': [
-    {
-      id: 'demo-plain-1',
-      name: 'Muslin Cotton Baby Bath Towels (Pack of 3)',
-      price: 599,
-      compare_price: 850,
-      subcategory: 'Plain towel',
-      category: 'Baby Essentials',
-      image: 'https://images.unsplash.com/photo-1616627547584-bf28cee262db?w=600&q=80',
-      rating: 4.9,
-    },
-    {
-      id: 'demo-plain-2',
-      name: 'Quick-Dry Organic Cotton Baby Bath Sheet',
-      price: 449,
-      compare_price: 650,
-      subcategory: 'Plain towel',
-      category: 'Baby Essentials',
-      image: 'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=600&q=80',
-      rating: 4.8,
-    },
-  ],
-  Dress: [
-    {
-      id: 'demo-dress-1',
-      name: 'Floral Frill Cotton Newborn Frock with Bonnet',
-      price: 599,
-      compare_price: 850,
-      subcategory: 'Dress',
-      category: 'Baby Essentials',
-      image: '/images/baby-editorial-clothing.jpg',
-      rating: 5.0,
-    },
-    {
-      id: 'demo-dress-2',
-      name: 'Pastel Organic Tiered Baby Jumpsuit & Dress',
-      price: 699,
-      compare_price: 999,
-      subcategory: 'Dress',
-      category: 'Baby Essentials',
-      image: 'https://images.unsplash.com/photo-1522771930-78848d9293e8?w=600&q=80',
-      rating: 4.9,
-    },
-  ],
-  Napkin: [
-    {
-      id: 'demo-napkin-1',
-      name: '6-Layer Muslin Baby Washcloth Napkins (Pack of 6)',
-      price: 349,
-      compare_price: 499,
-      subcategory: 'Napkin',
-      category: 'Baby Essentials',
-      image: 'https://images.unsplash.com/photo-1574634534894-89d7576c8259?w=600&q=80',
-      rating: 4.9,
-    },
-    {
-      id: 'demo-napkin-2',
-      name: 'Organic Cotton Bandana Drool Bibs & Napkins',
-      price: 299,
-      compare_price: 450,
-      subcategory: 'Napkin',
-      category: 'Baby Essentials',
-      image: 'https://images.unsplash.com/photo-1596870230751-ebdfce98ec42?w=600&q=80',
-      rating: 4.8,
-    },
-  ],
-  Diaper: [
-    {
-      id: 'demo-diaper-1',
-      name: 'Eco-Friendly Reusable Pocket Cloth Diaper (Pack of 2)',
-      price: 649,
-      compare_price: 899,
-      subcategory: 'Diaper',
-      category: 'Baby Essentials',
-      image: 'https://images.unsplash.com/photo-1519689680058-324335c77eba?w=600&q=80',
-      rating: 4.9,
-    },
-    {
-      id: 'demo-diaper-2',
-      name: 'Hypoallergenic Breathable Newborn Diaper Pants (32 Pcs)',
-      price: 599,
-      compare_price: 799,
-      subcategory: 'Diaper',
-      category: 'Baby Essentials',
-      image: 'https://images.unsplash.com/photo-1544126592-807ade215a0b?w=600&q=80',
-      rating: 4.8,
-    },
-  ],
-  'Romber set': [
-    {
-      id: 'demo-romper-1',
-      name: 'Pure Cotton Button-Down Romper Set (Pack of 3)',
-      price: 899,
-      compare_price: 1299,
-      subcategory: 'Romber set',
-      category: 'Baby Essentials',
-      image: '/images/baby-editorial-clothing.jpg',
-      rating: 5.0,
-    },
-    {
-      id: 'demo-romper-2',
-      name: 'Ribbed Knit Footie Romper with Matching Beanie',
-      price: 749,
-      compare_price: 1050,
-      subcategory: 'Romber set',
-      category: 'Baby Essentials',
-      image: 'https://images.unsplash.com/photo-1519689680058-324335c77eba?w=600&q=80',
-      rating: 4.9,
-    },
-  ],
-};
-
 export default function StorefrontHome({ storeData, products, categories = [], loading }) {
   const { requireAuth } = useStorefrontAuth();
   const location = useLocation();
@@ -1406,31 +1151,64 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                   selectedSubcategories[String(cat.slug || '').toLowerCase()] ||
                   null;
 
-                let displayedProducts = activeSubcat
+                const normalize = (str) =>
+                  String(str || '')
+                    .trim()
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]/g, '');
+
+                const displayedProducts = activeSubcat
                   ? catProducts.filter((p) => {
                     const pSub = String(p.subcategory || '').trim().toLowerCase();
                     const pName = String(p.name || '').trim().toLowerCase();
                     const pDesc = String(p.description || '').trim().toLowerCase();
-                    const target = activeSubcat.toLowerCase();
-                    return pSub === target || pName.includes(target) || pDesc.includes(target);
+                    const target = String(activeSubcat).trim().toLowerCase();
+
+                    const normSub = normalize(pSub);
+                    const normTarget = normalize(target);
+                    const normName = normalize(pName);
+                    const normDesc = normalize(pDesc);
+
+                    // 1. Direct or normalized subcategory match
+                    if (normSub && normTarget && (normSub === normTarget || normSub.includes(normTarget) || normTarget.includes(normSub))) {
+                      return true;
+                    }
+
+                    if (pSub && (pSub.includes(target) || target.includes(pSub))) {
+                      return true;
+                    }
+
+                    // 2. Keyword matching (e.g. "bag" matching "Carry bag", "Motherbag", or any item with "bag")
+                    const targetWords = target.split(/\s+/).filter((w) => w.length >= 3);
+                    const hasWordMatch = targetWords.some((w) => {
+                      const nw = normalize(w);
+                      return (
+                        (pSub && pSub.includes(w)) ||
+                        (normSub && normSub.includes(nw)) ||
+                        (pName && pName.includes(w)) ||
+                        (normName && normName.includes(nw))
+                      );
+                    });
+                    if (hasWordMatch) return true;
+
+                    // 3. Product subcategory word inside activeSubcat
+                    if (pSub) {
+                      const subWords = pSub.split(/\s+/).filter((w) => w.length >= 3);
+                      const hasReverseWordMatch = subWords.some((w) => {
+                        const nw = normalize(w);
+                        return target.includes(w) || normTarget.includes(nw);
+                      });
+                      if (hasReverseWordMatch) return true;
+                    }
+
+                    // 4. Product name or description includes target
+                    if (normName.includes(normTarget) || normDesc.includes(normTarget)) {
+                      return true;
+                    }
+
+                    return false;
                   })
                   : catProducts;
-
-                // When in baby theme and no custom products exist yet for this subcategory/category,
-                // seamlessly provide curated baby boutique items so each subcategory shows products!
-                if (displayedProducts.length === 0 && theme === 'theme-baby') {
-                  if (activeSubcat) {
-                    const foundKey = Object.keys(DEMO_BABY_SUBCAT_PRODUCTS).find(
-                      (k) => k.toLowerCase() === activeSubcat.toLowerCase()
-                    );
-                    if (foundKey) {
-                      displayedProducts = DEMO_BABY_SUBCAT_PRODUCTS[foundKey];
-                    }
-                  } else if (catProducts.length === 0) {
-                    // When "All" is active but category has no products, gather sample items
-                    displayedProducts = Object.values(DEMO_BABY_SUBCAT_PRODUCTS).flat().slice(0, 8);
-                  }
-                }
 
                 if (displayedProducts.length > 0) {
                   return renderProductGrid(displayedProducts.slice(0, 8));
