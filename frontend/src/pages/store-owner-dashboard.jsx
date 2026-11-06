@@ -274,7 +274,7 @@ const resolveProductColor = (product) => {
   return null;
 };
 
-const emptyProductForm = { name: "", sku: "", price: "", compare_price: "", discount_percentage: "", category: "Apparel", stock: "", description: "", image: "", images: [], color: "", size: "", piece_per_carton: "", is_active: true };
+const emptyProductForm = { name: "", sku: "", price: "", compare_price: "", discount_percentage: "", category: "Apparel", subcategory: "", stock: "", description: "", image: "", images: [], color: "", size: "", piece_per_carton: "", is_active: true };
 
 export default function StoreOwnerDashboard() {
   const navigate = useNavigate();
@@ -1397,7 +1397,8 @@ export default function StoreOwnerDashboard() {
       price: String(product.price || "").replace(/[^0-9.]/g, ""),
       compare_price: product.compare_price ? String(product.compare_price).replace(/[^0-9.]/g, "") : "",
       discount_percentage: "",
-      category: product.category || "Apparel",
+      category: product.category?.name || product.category || "Apparel",
+      subcategory: product.subcategory || "",
       stock: product.stock_quantity ?? product.stock ?? "",
       description: product.description || "",
       image: product.image || "",
@@ -1450,6 +1451,7 @@ export default function StoreOwnerDashboard() {
     const payload = {
       store_id: activeStore?.id ?? editingProduct?.store_id ?? null,
       category_id: category?.id ?? null,
+      subcategory: newProd.subcategory?.trim() || null,
       name: newProd.name.trim(),
       sku: newProd.sku.trim() || `SKU-${Math.floor(Math.random() * 900 + 100)}`,
       price: Number(String(newProd.price).replace(/[^0-9.]/g, "")) || 0,
@@ -1489,6 +1491,7 @@ export default function StoreOwnerDashboard() {
         name: p.name,
         sku: p.sku,
         category: p.category?.name || p.category || newProd.category,
+        subcategory: p.subcategory ?? newProd.subcategory ?? null,
         price: formatProductPrice(p.price, p),
         compare_price: p.compare_price != null && p.compare_price !== '' ? formatProductPrice(p.compare_price, p) : null,
         stock: p.stock_quantity ?? normalizedStock,
@@ -2098,7 +2101,14 @@ export default function StoreOwnerDashboard() {
                                 <button onClick={() => adjustStock(p.id, 1)} className="btn btn-outline-secondary py-0 px-2" title="Increase Stock">+</button>
                               </div>
                             </td>
-                            <td className="border-0 fs-7" style={{ color: "#6d7175" }}>{p.category || "Apparel"}</td>
+                            <td className="border-0 fs-7" style={{ color: "#6d7175" }}>
+                              <div>{p.category || "Apparel"}</div>
+                              {p.subcategory && (
+                                <span className="badge rounded-pill mt-1" style={{ fontSize: '10px', backgroundColor: '#FFF0F5', color: '#8C3754', border: '1px solid #FCD4E1' }}>
+                                  {p.subcategory}
+                                </span>
+                              )}
+                            </td>
                             <td className="border-0 text-end pe-4">
                               <div className="d-flex justify-content-end gap-2">
                                 <button onClick={() => openEditProductModal(p)} className="btn btn-sm btn-light border" style={{ color: "#6d7175" }} title="Edit Product">
@@ -3368,6 +3378,67 @@ export default function StoreOwnerDashboard() {
                                 <option value="Uncategorized">Uncategorized</option>
                               </select>
                             </div>
+                            {(() => {
+                              const selectedCatObj = categoriesList?.find(c =>
+                                String(c.id) === String(newProd.category) ||
+                                (c.name || '').toLowerCase() === String(newProd.category || '').toLowerCase() ||
+                                (c.slug || '').toLowerCase() === String(newProd.category || '').toLowerCase()
+                              );
+                              let subItems = [];
+                              if (selectedCatObj) {
+                                if (Array.isArray(selectedCatObj.dropdown_items) && selectedCatObj.dropdown_items.length > 0) {
+                                  subItems = selectedCatObj.dropdown_items;
+                                } else if (typeof selectedCatObj.dropdown_items === 'string' && selectedCatObj.dropdown_items.trim()) {
+                                  try {
+                                    const parsed = JSON.parse(selectedCatObj.dropdown_items);
+                                    if (Array.isArray(parsed)) subItems = parsed;
+                                  } catch (e) {
+                                    subItems = selectedCatObj.dropdown_items.split(',').map(s => s.trim()).filter(Boolean);
+                                  }
+                                } else if (String(selectedCatObj.name || '').toLowerCase() === 'newborn' || String(selectedCatObj.slug || '').toLowerCase() === 'newborn') {
+                                  subItems = ['Bed', 'Carry bag', 'Motherbag', 'Maternity pillow', 'Feeding pillow', 'Hooded towel', 'Plain towel', 'Dress', 'Napkin', 'Diaper', 'Romber set'];
+                                }
+                              }
+                              return (
+                                <div>
+                                  <div className="d-flex justify-content-between align-items-center mb-1">
+                                    <label className="fs-8 fw-semibold mb-0" style={{ color: "#454f5b" }}>
+                                      Subcategory / Dropdown Item
+                                    </label>
+                                    {subItems.length > 0 && (
+                                      <span className="badge rounded-pill" style={{ fontSize: '10px', backgroundColor: '#FFF0F5', color: '#D45D7E', border: '1px solid #FCD4E1' }}>
+                                        {subItems.length} options available
+                                      </span>
+                                    )}
+                                  </div>
+                                  {subItems.length > 0 ? (
+                                    <select
+                                      value={newProd.subcategory || ""}
+                                      onChange={(e) => setNewProd({ ...newProd, subcategory: e.target.value })}
+                                      className="form-select"
+                                      style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
+                                    >
+                                      <option value="">-- Select Subcategory (Category Level) --</option>
+                                      {subItems.map((item) => (
+                                        <option key={item} value={item}>
+                                          {item}
+                                        </option>
+                                      ))}
+                                    </select>
+                                  ) : (
+                                    <input
+                                      type="text"
+                                      value={newProd.subcategory || ""}
+                                      onChange={(e) => setNewProd({ ...newProd, subcategory: e.target.value })}
+                                      placeholder="e.g. Bed, Dress, Feeding pillow..."
+                                      className="form-control"
+                                      style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
+                                    />
+                                  )}
+                                  <small className="text-muted fs-9">Assigns this product to a subcategory pill button.</small>
+                                </div>
+                              );
+                            })()}
                             {((newProd.category && String(newProd.category).toLowerCase().includes('coconut')) || (activeStore?.category && String(activeStore.category).toLowerCase().includes('coconut'))) && (
                               <div>
                                 <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Piece per Carton (Optional)</label>
@@ -3542,7 +3613,14 @@ export default function StoreOwnerDashboard() {
                                 <td className="border-0 py-2">
                                   <code style={{ background: "#f1f2f4", padding: "1px 6px", borderRadius: 4, fontSize: "0.72rem", color: "#454f5b" }}>{p.sku || "—"}</code>
                                 </td>
-                                <td className="border-0 py-2 fs-8" style={{ color: "#6d7175" }}>{p.category || "—"}</td>
+                                <td className="border-0 py-2 fs-8" style={{ color: "#6d7175" }}>
+                                  <div>{p.category || "—"}</div>
+                                  {p.subcategory && (
+                                    <span className="badge rounded-pill mt-1" style={{ fontSize: '10px', backgroundColor: '#FFF0F5', color: '#8C3754', border: '1px solid #FCD4E1' }}>
+                                      {p.subcategory}
+                                    </span>
+                                  )}
+                                </td>
                                 <td className="border-0 py-2 fs-8" style={{ color: "#6d7175" }}>{p.color || "—"}</td>
                                 <td className="border-0 py-2 fs-8" style={{ color: "#6d7175" }}>{p.size || "—"}</td>
                                 <td className="border-0 py-2">
@@ -3922,6 +4000,67 @@ export default function StoreOwnerDashboard() {
                   <option value="Uncategorized">Uncategorized</option>
                 </select>
               </div>
+              {(() => {
+                const selectedCatObj = categoriesList?.find(c =>
+                  String(c.id) === String(newProd.category) ||
+                  (c.name || '').toLowerCase() === String(newProd.category || '').toLowerCase() ||
+                  (c.slug || '').toLowerCase() === String(newProd.category || '').toLowerCase()
+                );
+                let subItems = [];
+                if (selectedCatObj) {
+                  if (Array.isArray(selectedCatObj.dropdown_items) && selectedCatObj.dropdown_items.length > 0) {
+                    subItems = selectedCatObj.dropdown_items;
+                  } else if (typeof selectedCatObj.dropdown_items === 'string' && selectedCatObj.dropdown_items.trim()) {
+                    try {
+                      const parsed = JSON.parse(selectedCatObj.dropdown_items);
+                      if (Array.isArray(parsed)) subItems = parsed;
+                    } catch (e) {
+                      subItems = selectedCatObj.dropdown_items.split(',').map(s => s.trim()).filter(Boolean);
+                    }
+                  } else if (String(selectedCatObj.name || '').toLowerCase() === 'newborn' || String(selectedCatObj.slug || '').toLowerCase() === 'newborn') {
+                    subItems = ['Bed', 'Carry bag', 'Motherbag', 'Maternity pillow', 'Feeding pillow', 'Hooded towel', 'Plain towel', 'Dress', 'Napkin', 'Diaper', 'Romber set'];
+                  }
+                }
+                return (
+                  <div>
+                    <div className="d-flex justify-content-between align-items-center mb-1">
+                      <label className="fs-8 fw-semibold mb-0" style={{ color: "#454f5b" }}>
+                        Subcategory / Dropdown Item
+                      </label>
+                      {subItems.length > 0 && (
+                        <span className="badge rounded-pill" style={{ fontSize: '10px', backgroundColor: '#FFF0F5', color: '#D45D7E', border: '1px solid #FCD4E1' }}>
+                          {subItems.length} options available
+                        </span>
+                      )}
+                    </div>
+                    {subItems.length > 0 ? (
+                      <select
+                        value={newProd.subcategory || ""}
+                        onChange={(e) => setNewProd({ ...newProd, subcategory: e.target.value })}
+                        className="form-select"
+                        style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
+                      >
+                        <option value="">-- Select Subcategory (Category Level) --</option>
+                        {subItems.map((item) => (
+                          <option key={item} value={item}>
+                            {item}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      <input
+                        type="text"
+                        value={newProd.subcategory || ""}
+                        onChange={(e) => setNewProd({ ...newProd, subcategory: e.target.value })}
+                        placeholder="e.g. Bed, Dress, Feeding pillow..."
+                        className="form-control"
+                        style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
+                      />
+                    )}
+                    <small className="text-muted fs-9">Assigns this product to a subcategory pill button.</small>
+                  </div>
+                );
+              })()}
               {((newProd.category && String(newProd.category).toLowerCase().includes('coconut')) || (activeStore?.category && String(activeStore.category).toLowerCase().includes('coconut'))) && (
                 <div>
                   <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Piece per Carton (Optional)</label>

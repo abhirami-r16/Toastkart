@@ -51,6 +51,21 @@ export default function StorefrontHome({ storeData, products, categories = [], l
   const [beautySlide, setBeautySlide] = useState(0);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [activeCoconutFilter, setActiveCoconutFilter] = useState('all');
+  const [selectedSubcategories, setSelectedSubcategories] = useState({});
+
+  useEffect(() => {
+    const handleSubcatSelect = (e) => {
+      const { category, subcategory } = e.detail || {};
+      if (category && subcategory) {
+        setSelectedSubcategories((prev) => ({
+          ...prev,
+          [String(category).toLowerCase()]: subcategory,
+        }));
+      }
+    };
+    window.addEventListener('select-storefront-subcat', handleSubcatSelect);
+    return () => window.removeEventListener('select-storefront-subcat', handleSubcatSelect);
+  }, []);
 
   const theme = resolveStoreTheme(storeData);
 
@@ -1012,26 +1027,70 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                           items = NEWBORN_ITEMS;
                         }
                         if (!items || items.length === 0) return null;
+
+                        const catKey = String(cat.slug || cat.name || cat.id).toLowerCase();
+                        const activeSubcat =
+                          selectedSubcategories[catKey] ||
+                          selectedSubcategories[String(cat.name || '').toLowerCase()] ||
+                          selectedSubcategories[String(cat.slug || '').toLowerCase()] ||
+                          null;
+
+                        const setSubcat = (sub) => {
+                          setSelectedSubcategories((prev) => ({
+                            ...prev,
+                            [catKey]: sub,
+                            [String(cat.name || '').toLowerCase()]: sub,
+                            [String(cat.slug || '').toLowerCase()]: sub,
+                          }));
+                        };
+
                         return (
-                          <div className="d-flex flex-wrap gap-2 mt-3 baby-subcat-pills">
-                            {items.map((item) => (
-                              <span
-                                key={item}
-                                className="badge rounded-pill px-3 py-2"
-                                style={{
-                                  backgroundColor: '#FFF0F5',
-                                  color: '#8C3754',
-                                  border: '1px solid #FCD4E1',
-                                  fontSize: '0.8rem',
-                                  fontWeight: 500,
-                                  letterSpacing: '0.2px',
-                                  cursor: 'default',
-                                  boxShadow: '0 2px 6px rgba(212, 93, 126, 0.08)',
-                                }}
-                              >
-                                {item}
-                              </span>
-                            ))}
+                          <div className="d-flex flex-wrap gap-2 mt-3 baby-subcat-pills align-items-center">
+                            <button
+                              type="button"
+                              onClick={() => setSubcat(null)}
+                              className="btn btn-sm rounded-pill baby-subcat-pill"
+                              style={{
+                                backgroundColor: !activeSubcat ? '#D45D7E' : '#FFF0F5',
+                                color: !activeSubcat ? '#FFFFFF' : '#8C3754',
+                                border: `1px solid ${!activeSubcat ? '#D45D7E' : '#FCD4E1'}`,
+                                fontSize: '0.8rem',
+                                fontWeight: !activeSubcat ? 700 : 500,
+                                padding: '4px 14px',
+                                letterSpacing: '0.2px',
+                                cursor: 'pointer',
+                                boxShadow: !activeSubcat ? '0 4px 10px rgba(212, 93, 126, 0.25)' : '0 2px 5px rgba(212, 93, 126, 0.06)',
+                                transition: 'all 0.18s ease',
+                              }}
+                            >
+                              All
+                            </button>
+                            {items.map((item) => {
+                              const isSelected = activeSubcat === item;
+                              return (
+                                <button
+                                  key={item}
+                                  type="button"
+                                  onClick={() => setSubcat(isSelected ? null : item)}
+                                  className={`btn btn-sm rounded-pill baby-subcat-pill ${isSelected ? 'active' : ''}`}
+                                  style={{
+                                    backgroundColor: isSelected ? '#D45D7E' : '#FFF0F5',
+                                    color: isSelected ? '#FFFFFF' : '#8C3754',
+                                    border: `1px solid ${isSelected ? '#D45D7E' : '#FCD4E1'}`,
+                                    fontSize: '0.8rem',
+                                    fontWeight: isSelected ? 700 : 500,
+                                    padding: '4px 14px',
+                                    letterSpacing: '0.2px',
+                                    cursor: 'pointer',
+                                    boxShadow: isSelected ? '0 4px 10px rgba(212, 93, 126, 0.25)' : '0 2px 5px rgba(212, 93, 126, 0.06)',
+                                    transition: 'all 0.18s ease',
+                                    transform: isSelected ? 'scale(1.05)' : 'none',
+                                  }}
+                                >
+                                  {item}
+                                </button>
+                              );
+                            })}
                           </div>
                         );
                       })()}
@@ -1084,13 +1143,64 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                 </button>
               </div>
 
-              {catProducts.length > 0 ? (
-                renderProductGrid(catProducts.slice(0, 8))
-              ) : (
-                <div className="text-center py-4 text-muted bg-white rounded-3 border p-4 my-2" style={{ borderColor: 'rgba(20,39,28,0.1)' }}>
-                  <p className="mb-0 fs-7">Products in this collection will be available shortly.</p>
-                </div>
-              )}
+              {(() => {
+                const catKey = String(cat.slug || cat.name || cat.id).toLowerCase();
+                const activeSubcat =
+                  selectedSubcategories[catKey] ||
+                  selectedSubcategories[String(cat.name || '').toLowerCase()] ||
+                  selectedSubcategories[String(cat.slug || '').toLowerCase()] ||
+                  null;
+
+                const displayedProducts = activeSubcat
+                  ? catProducts.filter((p) => {
+                      const pSub = String(p.subcategory || '').trim().toLowerCase();
+                      const pName = String(p.name || '').trim().toLowerCase();
+                      const pDesc = String(p.description || '').trim().toLowerCase();
+                      const target = activeSubcat.toLowerCase();
+                      return pSub === target || pName.includes(target) || pDesc.includes(target);
+                    })
+                  : catProducts;
+
+                if (displayedProducts.length > 0) {
+                  return renderProductGrid(displayedProducts.slice(0, 8));
+                }
+
+                return (
+                  <div
+                    className="text-center py-4 text-muted bg-white rounded-3 border p-4 my-2"
+                    style={{ borderColor: theme === 'theme-baby' ? '#FCD4E1' : 'rgba(20,39,28,0.1)' }}
+                  >
+                    <p className="mb-0 fs-7">
+                      {activeSubcat
+                        ? `Products in ${cat.name} » "${activeSubcat}" will be available shortly.`
+                        : 'Products in this collection will be available shortly.'}
+                    </p>
+                    {activeSubcat && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedSubcategories((prev) => ({
+                            ...prev,
+                            [catKey]: null,
+                            [String(cat.name || '').toLowerCase()]: null,
+                            [String(cat.slug || '').toLowerCase()]: null,
+                          }));
+                        }}
+                        className="btn btn-sm mt-2 rounded-pill"
+                        style={{
+                          backgroundColor: '#FFF0F5',
+                          color: '#B04764',
+                          border: '1px solid #FCD4E1',
+                          fontWeight: 600,
+                          fontSize: '0.8rem',
+                        }}
+                      >
+                        Show All {cat.name}
+                      </button>
+                    )}
+                  </div>
+                );
+              })()}
             </div>
           );
         })

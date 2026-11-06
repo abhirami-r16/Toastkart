@@ -1205,763 +1205,39 @@ export default function StorefrontLayout({ storeData, categories = [], products 
 
 
 
-          <div className="hexashop-header-content">
+            <div className="hexashop-header-content">
 
 
 
-            <div className="d-flex align-items-center position-relative">
+              <div className="d-flex align-items-center position-relative">
 
 
 
-              {/* Hamburger Menu Toggle (Mobile & Desktop) */}
+                {/* Hamburger Menu Toggle (Mobile & Desktop) */}
 
 
 
-              <button
+                <button
 
 
 
-                className="hexashop-icon-btn border-0 bg-transparent p-0 me-3 position-absolute"
+                  className="hexashop-icon-btn border-0 bg-transparent p-0 me-3 position-absolute"
 
 
 
-                style={{ left: '-20px' }}
+                  style={{ left: '-20px' }}
 
 
 
-                onClick={() => setIsCategoryOpen(true)}
+                  onClick={() => setIsCategoryOpen(true)}
 
 
 
-              >
+                >
 
 
 
-                <Menu size={24} />
-
-
-
-              </button>
-
-
-
-
-
-
-
-              <div className="storefront-logo hexashop-logo ms-4" onClick={() => navigate({ pathname: basePath, search: location.search })} style={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '55vw', cursor: 'pointer' }}>
-
-
-
-                {theme === 'theme-coconut' ? (
-
-
-
-                  <div className="d-flex align-items-center" style={{ maxHeight: '65px' }}>
-
-
-
-                    <img 
-
-
-
-                      src="/images/amiora-logo.png" 
-
-
-
-                      alt={storeData?.name || "AMIORA"} 
-
-
-
-                      className="coconut-brand-logo"
-
-
-
-                      style={{
-
-
-
-                        height: '52px',
-
-
-
-                        maxWidth: '220px',
-
-
-
-                        width: 'auto',
-
-
-
-                        objectFit: 'contain',
-
-
-
-                        display: 'block'
-
-
-
-                      }} 
-
-
-
-                    />
-
-
-
-                  </div>
-
-
-
-                ) : theme === 'theme-baby' ? (
-
-
-
-                  <div className="d-flex align-items-center gap-2" style={{ maxHeight: '65px' }}>
-
-
-
-                    <img 
-
-
-
-                      src={storeData?.logo_url || storeData?.logo || "/images/an-nafi-logo.png"} 
-
-
-
-                      alt={storeData?.name || "AN' NAFI Baby shop"} 
-
-
-
-                      className="baby-brand-logo"
-
-
-
-                      style={{
-
-
-
-                        height: '48px',
-
-
-
-                        maxWidth: '56px',
-
-
-
-                        width: 'auto',
-
-
-
-                        objectFit: 'contain',
-
-
-
-                        display: 'block'
-
-
-
-                      }} 
-
-
-
-                    />
-
-
-
-                    <div className="d-flex flex-column justify-content-center text-start">
-
-
-
-                      <span 
-
-
-
-                        className="baby-store-title"
-
-
-
-                        style={{
-
-
-
-                          fontFamily: "'Outfit', 'Comfortaa', -apple-system, sans-serif",
-
-
-
-                          fontWeight: 800,
-
-
-
-                          fontSize: 'clamp(1.1rem, 1.8vw, 1.4rem)',
-
-
-
-                          letterSpacing: '0.2px',
-
-
-
-                          color: '#2D2A26',
-
-
-
-                          lineHeight: 1.15,
-
-
-
-                          whiteSpace: 'nowrap'
-
-
-
-                        }}
-
-
-
-                      >
-
-
-
-                        {storeData?.name?.toLowerCase() === 'an nafi' ? "AN' NAFI" : (storeData?.name || "AN' NAFI")}
-
-
-
-                      </span>
-
-
-
-                      <span
-
-
-
-                        className="baby-store-subtitle"
-
-
-
-                        style={{
-
-
-
-                          fontFamily: "'Quicksand', -apple-system, sans-serif",
-
-
-
-                          fontSize: '0.70rem',
-
-
-
-                          fontWeight: 700,
-
-
-
-                          letterSpacing: '1.4px',
-
-
-
-                          textTransform: 'uppercase',
-
-
-
-                          color: '#C9933B',
-
-
-
-                          lineHeight: 1.1,
-
-
-
-                          marginTop: '2px'
-
-
-
-                        }}
-
-
-
-                      >
-
-
-
-                        Baby shop
-
-
-
-                      </span>
-
-
-
-                    </div>
-
-
-
-                  </div>
-
-
-
-                ) : storeData?.logo_url ? (
-
-
-
-                  <img src={storeData.logo_url} alt={storeData.name} className="storefront-logo-img" />
-
-
-
-                ) : (
-
-
-
-                  <div className="d-flex align-items-center gap-3">
-
-
-
-                    {theme === 'theme-perfume' && (
-
-
-
-                      <div 
-
-
-
-                        className="d-flex flex-column align-items-center justify-content-center" 
-
-
-
-                        style={{ 
-
-
-
-                          fontWeight: 'bold', 
-
-
-
-                          fontSize: '1.6rem', 
-
-
-
-                          lineHeight: '0.9', 
-
-
-
-                          borderRight: '1px solid #e0e0e0', 
-
-
-
-                          paddingRight: '12px', 
-
-
-
-                          fontFamily: 'var(--perfume-font-heading, serif)',
-
-
-
-                          background: 'linear-gradient(135deg, #d4af37 0%, #aa841f 100%)',
-
-
-
-                          WebkitBackgroundClip: 'text',
-
-
-
-                          WebkitTextFillColor: 'transparent'
-
-
-
-                        }}
-
-
-
-                      >
-
-
-
-                        <span style={{ letterSpacing: '4px', marginLeft: '4px' }}>CY</span>
-
-
-
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-
-
-
-                          <span style={{ letterSpacing: '0px' }}>
-
-
-
-                            <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-
-
-
-                              O
-
-
-
-                              <svg 
-
-
-
-                                viewBox="0 0 24 24" 
-
-
-
-                                fill="none" 
-
-
-
-                                stroke="#d4af37" 
-
-
-
-                                strokeWidth="1.5" 
-
-
-
-                                style={{ 
-
-
-
-                                  position: 'absolute', 
-
-
-
-                                  width: '0.45em', 
-
-
-
-                                  height: '0.45em', 
-
-
-
-                                  top: '50%', 
-
-
-
-                                  left: '50%', 
-
-
-
-                                  transform: 'translate(-50%, -50%)',
-
-
-
-                                  WebkitTextFillColor: 'initial' /* Prevent text fill transparent from breaking SVG */
-
-
-
-                                }}
-
-
-
-                              >
-
-
-
-                                <circle cx="12" cy="15" r="5" />
-
-
-
-                                <path d="M10 10V7h4v3" />
-
-
-
-                                <rect x="9" y="4" width="6" height="3" rx="1" />
-
-
-
-                                <path d="M12 12v5" strokeWidth="1" opacity="0.7" />
-
-
-
-                              </svg>
-
-
-
-                            </span>
-
-
-
-                          </span>
-
-
-
-                          <span style={{ letterSpacing: '0px', marginLeft: '2px' }}>P</span>
-
-
-
-                        </div>
-
-
-
-                      </div>
-
-
-
-                    )}
-
-
-
-                    {theme === 'theme-baby' && (
-
-
-
-                      <div className="baby-logo-icon me-2">
-
-
-
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E06D8C" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-
-
-
-                          <path d="M12 2a5 5 0 0 0-5 5v2a5 5 0 0 0 10 0V7a5 5 0 0 0-5-5z"/>
-
-
-
-                          <path d="M12 14a8 8 0 0 0-8 8h16a8 8 0 0 0-8-8z"/>
-
-
-
-                        </svg>
-
-
-
-                      </div>
-
-
-
-                    )}
-
-
-
-                    <span className="storefront-logo-text" style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>
-
-
-
-                      {storeData?.name || 'Store'}
-
-
-
-                      {theme === 'theme-home' && <span className="furni-dot">.</span>}
-
-
-
-                    </span>
-
-
-
-                  </div>
-
-
-
-                )}
-
-
-
-              </div>
-
-
-
-            </div>
-
-
-
-
-
-
-
-            {/* Desktop Navigation */}
-            <nav className="hexashop-nav d-none d-lg-flex" style={{ alignItems: 'center' }}>
-              <Link to={{ pathname: basePath, search: location.search }} className="hexashop-nav-item">Home</Link>
-              {activeCategories && activeCategories.map(cat => {
-                const catKey = String(cat.id || cat.slug || cat.name);
-                const dropdownItems = getCategoryDropdownItems(cat);
-                const hasDropdown = dropdownItems && dropdownItems.length > 0;
-                const isOpen = openDropdownId === catKey;
-
-                if (hasDropdown) {
-                  return (
-                    <div
-                      key={catKey}
-                      className="baby-nav-dropdown-wrapper position-relative"
-                      onMouseEnter={() => setOpenDropdownId(catKey)}
-                      onMouseLeave={() => setOpenDropdownId(null)}
-                      style={{ display: 'inline-flex', alignItems: 'center' }}
-                    >
-                      <a
-                        href={`#${cat.slug}`}
-                        onClick={(e) => scrollToSection(e, cat.slug)}
-                        className="hexashop-nav-item baby-nav-dropdown-trigger d-inline-flex align-items-center gap-1"
-                        style={{ cursor: 'pointer' }}
-                      >
-                        <span>{cat.name}</span>
-                        <ChevronDown size={14} style={{ transition: 'transform 0.2s', transform: isOpen ? 'rotate(180deg)' : 'none' }} />
-                      </a>
-                      {isOpen && (
-                        <div
-                          className="baby-nav-dropdown-menu shadow-lg rounded-3 py-2"
-                          style={{
-                            position: 'absolute',
-                            top: '100%',
-                            left: '50%',
-                            transform: 'translateX(-50%)',
-                            minWidth: '220px',
-                            backgroundColor: '#FFFFFF',
-                            border: '1px solid #FCD4E1',
-                            boxShadow: '0 12px 30px rgba(212, 93, 126, 0.15)',
-                            zIndex: 1050,
-                            display: 'flex',
-                            flexDirection: 'column',
-                          }}
-                        >
-                          <div className="px-3 py-1 text-uppercase fw-bold" style={{ fontSize: '0.68rem', color: '#D45D7E', letterSpacing: '1px', borderBottom: '1px solid #FFF0F5' }}>
-                            {cat.name} Essentials
-                          </div>
-                          {dropdownItems.map((item) => (
-                            <a
-                              key={item}
-                              href={`#${cat.slug}`}
-                              onClick={(e) => {
-                                setOpenDropdownId(null);
-                                scrollToSection(e, cat.slug);
-                              }}
-                              className="baby-dropdown-item px-3 py-2 text-decoration-none"
-                              style={{
-                                color: '#542337',
-                                fontSize: '0.88rem',
-                                fontWeight: 500,
-                                transition: 'all 0.15s ease',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                              }}
-                              onMouseEnter={(e) => {
-                                e.currentTarget.style.backgroundColor = '#FFF0F5';
-                                e.currentTarget.style.color = '#D45D7E';
-                                e.currentTarget.style.paddingLeft = '18px';
-                              }}
-                              onMouseLeave={(e) => {
-                                e.currentTarget.style.backgroundColor = 'transparent';
-                                e.currentTarget.style.color = '#542337';
-                                e.currentTarget.style.paddingLeft = '16px';
-                              }}
-                            >
-                              <span>{item}</span>
-                              <span style={{ fontSize: '0.75rem', opacity: 0.5 }}>›</span>
-                            </a>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  );
-                }
-                return (
-                  <a
-                    key={catKey}
-                    href={`#${cat.slug}`}
-                    onClick={(e) => scrollToSection(e, cat.slug)}
-                    className="hexashop-nav-item"
-                  >
-                    {cat.name}
-                  </a>
-                );
-              })}
-            </nav>
-
-
-
-
-
-
-
-            <div className="hexashop-nav-actions">
-
-
-
-              {theme !== 'theme-baby' && (
-
-                <a
-
-
-
-                href="#shop"
-
-
-
-                onClick={(e) => {
-
-
-
-                  e.preventDefault();
-
-
-
-                  scrollToSection(e, 'shop');
-
-
-
-                }}
-
-
-
-                className="hexashop-icon-btn text-decoration-none"
-
-
-
-                title="Search"
-
-
-
-              >
-
-
-
-                <Search size={20} />
-
-
-
-              </a>
-
-              )}
-
-
-
-              {/* These are hidden on mobile to prevent overlap, except the cart */}
-
-
-
-              {user && user.id ? (
-
-
-
-                <div className="align-items-center gap-3 d-none d-md-flex">
-
-
-
-                  <span className="fs-7 fw-semibold d-none d-lg-block" style={{ color: '#2a2a2a' }}>Hi, {user.name}</span>
-
-
-
-                  <button onClick={logout} className="hexashop-icon-btn text-danger border-0 bg-transparent p-0" title="Logout">
-
-
-
-                    <LogOut size={20} />
-
-
-
-                  </button>
-
-
-
-                </div>
-
-
-
-              ) : (
-
-
-
-                <button onClick={openLoginModal} className="hexashop-icon-btn border-0 bg-transparent p-0 d-none d-md-flex" title="Login">
-
-
-
-                  <User size={20} />
+                  <Menu size={24} />
 
 
 
@@ -1969,99 +1245,11 @@ export default function StorefrontLayout({ storeData, categories = [], products 
 
 
 
-              )}
 
 
 
 
-
-
-
-              <Link to={{ pathname: `${basePath}/wishlist`, search: location.search }} className="hexashop-icon-btn text-decoration-none">
-
-
-
-                <Heart size={20} />
-
-
-
-              </Link>
-
-
-
-              <Link to={{ pathname: `${basePath}/orders`, search: location.search }} className="hexashop-icon-btn text-decoration-none d-none d-md-block" title="Orders">
-
-
-
-                <Package size={20} />
-
-
-
-              </Link>
-
-
-
-              <Link to={{ pathname: `${basePath}/cart`, search: location.search }} className="hexashop-icon-btn text-decoration-none position-relative">
-
-
-
-                <ShoppingCart size={20} />
-
-
-
-                {cartCount > 0 && (
-
-
-
-                  <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark" style={{ fontSize: '0.65rem' }}>
-
-
-
-                    {cartCount}
-
-
-
-                  </span>
-
-
-
-                )}
-
-
-
-              </Link>
-
-
-
-            </div>
-
-
-
-          </div>
-
-
-
-
-
-
-
-          {/* Mobile Sidebar Menu */}
-
-
-
-          {isCategoryOpen && (
-
-
-
-            <div className="storefront-mobile-menu-overlay" onClick={() => setIsCategoryOpen(false)}>
-
-
-
-              <div className="storefront-mobile-menu" onClick={e => e.stopPropagation()}>
-
-
-
-                <div className="storefront-mobile-menu-header">
+                <div className="storefront-logo hexashop-logo ms-4" onClick={() => navigate({ pathname: basePath, search: location.search })} style={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '55vw', cursor: 'pointer' }}>
 
 
 
@@ -2069,47 +1257,51 @@ export default function StorefrontLayout({ storeData, categories = [], products 
 
 
 
-                    <img 
+                    <div className="d-flex align-items-center" style={{ maxHeight: '65px' }}>
 
 
 
-                      src="/images/amiora-logo.png" 
+                      <img
 
 
 
-                      alt={storeData?.name || "AMIORA"} 
+                        src="/images/amiora-logo.png"
 
 
 
-                      style={{ height: '36px', maxWidth: '160px', width: 'auto', objectFit: 'contain' }} 
+                        alt={storeData?.name || "AMIORA"}
 
 
 
-                    />
+                        className="coconut-brand-logo"
 
 
 
-                  ) : theme === 'theme-baby' ? (
+                        style={{
 
 
 
-                    <div className="d-flex align-items-center gap-2">
+                          height: '52px',
 
 
 
-                      <img 
+                          maxWidth: '220px',
 
 
 
-                        src={storeData?.logo_url || storeData?.logo || "/images/an-nafi-logo.png"} 
+                          width: 'auto',
 
 
 
-                        alt={storeData?.name || "AN' NAFI Baby shop"} 
+                          objectFit: 'contain',
 
 
 
-                        style={{ height: '40px', maxWidth: '48px', width: 'auto', objectFit: 'contain' }} 
+                          display: 'block'
+
+
+
+                        }}
 
 
 
@@ -2117,11 +1309,115 @@ export default function StorefrontLayout({ storeData, categories = [], products 
 
 
 
-                      <div className="d-flex flex-column text-start">
+                    </div>
 
 
 
-                        <span className="fw-bold" style={{ fontSize: '1.05rem', color: '#2D2A26', lineHeight: 1.15 }}>
+                  ) : theme === 'theme-baby' ? (
+
+
+
+                    <div className="d-flex align-items-center gap-2" style={{ maxHeight: '65px' }}>
+
+
+
+                      <img
+
+
+
+                        src={storeData?.logo_url || storeData?.logo || "/images/an-nafi-logo.png"}
+
+
+
+                        alt={storeData?.name || "AN' NAFI Baby shop"}
+
+
+
+                        className="baby-brand-logo"
+
+
+
+                        style={{
+
+
+
+                          height: '48px',
+
+
+
+                          maxWidth: '56px',
+
+
+
+                          width: 'auto',
+
+
+
+                          objectFit: 'contain',
+
+
+
+                          display: 'block'
+
+
+
+                        }}
+
+
+
+                      />
+
+
+
+                      <div className="d-flex flex-column justify-content-center text-start">
+
+
+
+                        <span
+
+
+
+                          className="baby-store-title"
+
+
+
+                          style={{
+
+
+
+                            fontFamily: "'Outfit', 'Comfortaa', -apple-system, sans-serif",
+
+
+
+                            fontWeight: 800,
+
+
+
+                            fontSize: 'clamp(1.1rem, 1.8vw, 1.4rem)',
+
+
+
+                            letterSpacing: '0.2px',
+
+
+
+                            color: '#2D2A26',
+
+
+
+                            lineHeight: 1.15,
+
+
+
+                            whiteSpace: 'nowrap'
+
+
+
+                          }}
+
+
+
+                        >
 
 
 
@@ -2133,7 +1429,55 @@ export default function StorefrontLayout({ storeData, categories = [], products 
 
 
 
-                        <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#C9933B', textTransform: 'uppercase', letterSpacing: '1.2px', marginTop: '2px' }}>
+                        <span
+
+
+
+                          className="baby-store-subtitle"
+
+
+
+                          style={{
+
+
+
+                            fontFamily: "'Quicksand', -apple-system, sans-serif",
+
+
+
+                            fontSize: '0.70rem',
+
+
+
+                            fontWeight: 700,
+
+
+
+                            letterSpacing: '1.4px',
+
+
+
+                            textTransform: 'uppercase',
+
+
+
+                            color: '#C9933B',
+
+
+
+                            lineHeight: 1.1,
+
+
+
+                            marginTop: '2px'
+
+
+
+                          }}
+
+
+
+                        >
 
 
 
@@ -2153,302 +1497,255 @@ export default function StorefrontLayout({ storeData, categories = [], products 
 
 
 
+                  ) : storeData?.logo_url ? (
+
+
+
+                    <img src={storeData.logo_url} alt={storeData.name} className="storefront-logo-img" />
+
+
+
                   ) : (
 
 
 
-                    <span className="fw-bold fs-5">{storeData?.name || 'Menu'}</span>
+                    <div className="d-flex align-items-center gap-3">
 
 
 
-                  )}
+                      {theme === 'theme-perfume' && (
 
 
 
-                  <button className="btn p-0 border-0" onClick={() => setIsCategoryOpen(false)}>
+                        <div
 
 
 
-                    <X size={24} />
+                          className="d-flex flex-column align-items-center justify-content-center"
 
 
 
-                  </button>
+                          style={{
 
 
 
-                </div>
+                            fontWeight: 'bold',
 
 
 
-                <div className="storefront-mobile-menu-body">
+                            fontSize: '1.6rem',
 
 
 
-                  <Link
+                            lineHeight: '0.9',
 
 
 
-                    to={{ pathname: basePath, search: location.search }}
+                            borderRight: '1px solid #e0e0e0',
 
 
 
-                    className="storefront-mobile-nav-item"
+                            paddingRight: '12px',
 
 
 
-                    onClick={() => setIsCategoryOpen(false)}
+                            fontFamily: 'var(--perfume-font-heading, serif)',
 
 
 
-                  >
+                            background: 'linear-gradient(135deg, #d4af37 0%, #aa841f 100%)',
 
 
 
-                    Home
+                            WebkitBackgroundClip: 'text',
 
 
 
-                  </Link>
+                            WebkitTextFillColor: 'transparent'
 
 
 
-                  <div className="storefront-mobile-nav-title mt-4 mb-2 text-muted fw-bold" style={{ fontSize: '12px', paddingLeft: '15px' }}>
+                          }}
 
 
 
-                    CATEGORIES
+                        >
 
 
 
-                  </div>
+                          <span style={{ letterSpacing: '4px', marginLeft: '4px' }}>CY</span>
 
 
 
-                  {activeCategories && activeCategories.map(cat => {
-                    const catKey = String(cat.id || cat.slug || cat.name);
-                    const dropdownItems = getCategoryDropdownItems(cat);
-                    const hasDropdown = dropdownItems && dropdownItems.length > 0;
-                    const isOpen = Boolean(openMobileDropdownIds[catKey]);
+                          <div style={{ display: 'flex', alignItems: 'center' }}>
 
-                    if (hasDropdown) {
-                      return (
-                        <div key={catKey} className="mobile-baby-accordion-item">
-                          <div className="d-flex align-items-center justify-content-between storefront-mobile-nav-item">
-                            <a
-                              href={`#${cat.slug}`}
-                              onClick={(e) => {
-                                setIsCategoryOpen(false);
-                                scrollToSection(e, cat.slug);
-                              }}
-                              className="text-decoration-none text-dark flex-grow-1"
-                            >
-                              {cat.name}
-                            </a>
-                            <button
-                              type="button"
-                              onClick={() => setOpenMobileDropdownIds(prev => ({ ...prev, [catKey]: !prev[catKey] }))}
-                              className="btn btn-sm btn-link p-0 text-muted"
-                              style={{ color: '#D45D7E' }}
-                            >
-                              <ChevronDown size={18} style={{ transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
-                            </button>
-                          </div>
-                          {isOpen && (
-                            <div className="ps-3 py-1 border-start ms-3 mb-2" style={{ borderColor: '#FCD4E1' }}>
-                              {dropdownItems.map((item) => (
-                                <a
-                                  key={item}
-                                  href={`#${cat.slug}`}
-                                  onClick={(e) => {
-                                    setIsCategoryOpen(false);
-                                    scrollToSection(e, cat.slug);
+
+
+                            <span style={{ letterSpacing: '0px' }}>
+
+
+
+                              <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+
+
+
+                                O
+
+
+
+                                <svg
+
+
+
+                                  viewBox="0 0 24 24"
+
+
+
+                                  fill="none"
+
+
+
+                                  stroke="#d4af37"
+
+
+
+                                  strokeWidth="1.5"
+
+
+
+                                  style={{
+
+
+
+                                    position: 'absolute',
+
+
+
+                                    width: '0.45em',
+
+
+
+                                    height: '0.45em',
+
+
+
+                                    top: '50%',
+
+
+
+                                    left: '50%',
+
+
+
+                                    transform: 'translate(-50%, -50%)',
+
+
+
+                                    WebkitTextFillColor: 'initial' /* Prevent text fill transparent from breaking SVG */
+
+
+
                                   }}
-                                  className="d-block py-1 text-decoration-none"
-                                  style={{ color: '#542337', fontSize: '0.85rem' }}
+
+
+
                                 >
-                                  {item}
-                                </a>
-                              ))}
-                            </div>
-                          )}
+
+
+
+                                  <circle cx="12" cy="15" r="5" />
+
+
+
+                                  <path d="M10 10V7h4v3" />
+
+
+
+                                  <rect x="9" y="4" width="6" height="3" rx="1" />
+
+
+
+                                  <path d="M12 12v5" strokeWidth="1" opacity="0.7" />
+
+
+
+                                </svg>
+
+
+
+                              </span>
+
+
+
+                            </span>
+
+
+
+                            <span style={{ letterSpacing: '0px', marginLeft: '2px' }}>P</span>
+
+
+
+                          </div>
+
+
+
                         </div>
-                      );
-                    }
-                    return (
-                      <a
-                        key={catKey}
-                        href={`#${cat.slug}`}
-                        onClick={(e) => {
-                          setIsCategoryOpen(false);
-                          scrollToSection(e, cat.slug);
-                        }}
-                        className="storefront-mobile-nav-item"
-                      >
-                        {cat.name}
-                      </a>
-                    );
-                  })}
 
 
 
+                      )}
 
 
 
+                      {theme === 'theme-baby' && (
 
-                  <div className="storefront-mobile-nav-title mt-4 mb-2 text-muted fw-bold" style={{ fontSize: '12px', paddingLeft: '15px' }}>
 
 
+                        <div className="baby-logo-icon me-2">
 
-                    ACCOUNT
 
 
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E06D8C" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
 
-                  </div>
 
 
+                            <path d="M12 2a5 5 0 0 0-5 5v2a5 5 0 0 0 10 0V7a5 5 0 0 0-5-5z" />
 
-                  {user && user.id ? (
 
 
+                            <path d="M12 14a8 8 0 0 0-8 8h16a8 8 0 0 0-8-8z" />
 
-                    <>
 
 
+                          </svg>
 
-                      <div className="storefront-mobile-nav-item text-primary" style={{ borderBottom: 'none' }}>
 
 
+                        </div>
 
-                        Hi, {user.name}
 
 
+                      )}
 
-                      </div>
 
 
+                      <span className="storefront-logo-text" style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>
 
-                      <Link to={{ pathname: `${basePath}/orders`, search: location.search }} className="storefront-mobile-nav-item" onClick={() => setIsCategoryOpen(false)}>
 
 
+                        {storeData?.name || 'Store'}
 
-                        <Package size={16} className="me-2" /> My Orders
 
 
+                        {theme === 'theme-home' && <span className="furni-dot">.</span>}
 
-                      </Link>
 
 
+                      </span>
 
-                      <Link to={{ pathname: `${basePath}/wishlist`, search: location.search }} className="storefront-mobile-nav-item" onClick={() => setIsCategoryOpen(false)}>
 
 
-
-                        <Heart size={16} className="me-2" /> Wishlist
-
-
-
-                      </Link>
-
-
-
-                      <button
-
-
-
-                        className="storefront-mobile-nav-item text-danger border-0 bg-transparent text-start"
-
-
-
-                        onClick={() => {
-
-
-
-                          logout();
-
-
-
-                          setIsCategoryOpen(false);
-
-
-
-                        }}
-
-
-
-                      >
-
-
-
-                        <LogOut size={16} className="me-2" /> Logout
-
-
-
-                      </button>
-
-
-
-                    </>
-
-
-
-                  ) : (
-
-
-
-                    <>
-
-
-
-                      <button
-
-
-
-                        className="storefront-mobile-nav-item border-0 bg-transparent text-start w-100"
-
-
-
-                        onClick={() => { setIsCategoryOpen(false); openLoginModal(); }}
-
-
-
-                      >
-
-
-
-                        Login
-
-
-
-                      </button>
-
-
-
-                      <button
-
-
-
-                        className="storefront-mobile-nav-item border-0 bg-transparent text-start w-100"
-
-
-
-                        onClick={() => { setIsCategoryOpen(false); openLoginModal(); }}
-
-
-
-                      >
-
-
-
-                        Create Account
-
-
-
-                      </button>
-
-
-
-                    </>
+                    </div>
 
 
 
@@ -2464,15 +1761,725 @@ export default function StorefrontLayout({ storeData, categories = [], products 
 
 
 
+
+
+
+
+              {/* Desktop Navigation */}
+              <nav className="hexashop-nav d-none d-lg-flex" style={{ alignItems: 'center' }}>
+                <Link to={{ pathname: basePath, search: location.search }} className="hexashop-nav-item">Home</Link>
+                {activeCategories && activeCategories.map(cat => {
+                  const catKey = String(cat.id || cat.slug || cat.name);
+                  const dropdownItems = getCategoryDropdownItems(cat);
+                  const hasDropdown = dropdownItems && dropdownItems.length > 0;
+                  const isOpen = openDropdownId === catKey;
+
+                  if (hasDropdown) {
+                    return (
+                      <div
+                        key={catKey}
+                        className="baby-nav-dropdown-wrapper position-relative"
+                        onMouseEnter={() => setOpenDropdownId(catKey)}
+                        onMouseLeave={() => setOpenDropdownId(null)}
+                        style={{ display: 'inline-flex', alignItems: 'center' }}
+                      >
+                        <a
+                          href={`#${cat.slug}`}
+                          onClick={(e) => scrollToSection(e, cat.slug)}
+                          className="hexashop-nav-item baby-nav-dropdown-trigger d-inline-flex align-items-center gap-1"
+                          style={{ cursor: 'pointer' }}
+                        >
+                          <span>{cat.name}</span>
+                          <ChevronDown size={14} style={{ transition: 'transform 0.2s', transform: isOpen ? 'rotate(180deg)' : 'none' }} />
+                        </a>
+                        {isOpen && (
+                          <div
+                            className="baby-nav-dropdown-menu shadow-lg rounded-3 py-2"
+                            style={{
+                              position: 'absolute',
+                              top: '100%',
+                              left: '50%',
+                              transform: 'translateX(-50%)',
+                              minWidth: '220px',
+                              backgroundColor: '#FFFFFF',
+                              border: '1px solid #FCD4E1',
+                              boxShadow: '0 12px 30px rgba(212, 93, 126, 0.15)',
+                              zIndex: 1050,
+                              display: 'flex',
+                              flexDirection: 'column',
+                            }}
+                          >
+                            <div className="px-3 py-1 text-uppercase fw-bold" style={{ fontSize: '0.68rem', color: '#D45D7E', letterSpacing: '1px', borderBottom: '1px solid #FFF0F5' }}>
+                              {cat.name} Essentials
+                            </div>
+                            {dropdownItems.map((item) => (
+                              <a
+                                key={item}
+                                href={`#${cat.slug}`}
+                                onClick={(e) => {
+                                  setOpenDropdownId(null);
+                                  scrollToSection(e, cat.slug);
+                                  if (typeof window !== 'undefined') {
+                                    window.dispatchEvent(
+                                      new CustomEvent('select-storefront-subcat', {
+                                        detail: { category: cat.slug || cat.name, subcategory: item },
+                                      })
+                                    );
+                                  }
+                                }}
+                                className="baby-dropdown-item px-3 py-2 text-decoration-none"
+                                style={{
+                                  color: '#542337',
+                                  fontSize: '0.88rem',
+                                  fontWeight: 500,
+                                  transition: 'all 0.15s ease',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'space-between',
+                                }}
+                                onMouseEnter={(e) => {
+                                  e.currentTarget.style.backgroundColor = '#FFF0F5';
+                                  e.currentTarget.style.color = '#D45D7E';
+                                  e.currentTarget.style.paddingLeft = '18px';
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.currentTarget.style.backgroundColor = 'transparent';
+                                  e.currentTarget.style.color = '#542337';
+                                  e.currentTarget.style.paddingLeft = '16px';
+                                }}
+                              >
+                                <span>{item}</span>
+                                <span style={{ fontSize: '0.75rem', opacity: 0.5 }}>›</span>
+                              </a>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  }
+                  return (
+                    <a
+                      key={catKey}
+                      href={`#${cat.slug}`}
+                      onClick={(e) => scrollToSection(e, cat.slug)}
+                      className="hexashop-nav-item"
+                    >
+                      {cat.name}
+                    </a>
+                  );
+                })}
+              </nav>
+
+
+
+
+
+
+
+              <div className="hexashop-nav-actions">
+
+
+
+                {theme !== 'theme-baby' && (
+
+                  <a
+
+
+
+                    href="#shop"
+
+
+
+                    onClick={(e) => {
+
+
+
+                      e.preventDefault();
+
+
+
+                      scrollToSection(e, 'shop');
+
+
+
+                    }}
+
+
+
+                    className="hexashop-icon-btn text-decoration-none"
+
+
+
+                    title="Search"
+
+
+
+                  >
+
+
+
+                    <Search size={20} />
+
+
+
+                  </a>
+
+                )}
+
+
+
+                {/* These are hidden on mobile to prevent overlap, except the cart */}
+
+
+
+                {user && user.id ? (
+
+
+
+                  <div className="align-items-center gap-3 d-none d-md-flex">
+
+
+
+                    <span className="fs-7 fw-semibold d-none d-lg-block" style={{ color: '#2a2a2a' }}>Hi, {user.name}</span>
+
+
+
+                    <button onClick={logout} className="hexashop-icon-btn text-danger border-0 bg-transparent p-0" title="Logout">
+
+
+
+                      <LogOut size={20} />
+
+
+
+                    </button>
+
+
+
+                  </div>
+
+
+
+                ) : (
+
+
+
+                  <button onClick={openLoginModal} className="hexashop-icon-btn border-0 bg-transparent p-0 d-none d-md-flex" title="Login">
+
+
+
+                    <User size={20} />
+
+
+
+                  </button>
+
+
+
+                )}
+
+
+
+
+
+
+
+                <Link to={{ pathname: `${basePath}/wishlist`, search: location.search }} className="hexashop-icon-btn text-decoration-none">
+
+
+
+                  <Heart size={20} />
+
+
+
+                </Link>
+
+
+
+                <Link to={{ pathname: `${basePath}/orders`, search: location.search }} className="hexashop-icon-btn text-decoration-none d-none d-md-block" title="Orders">
+
+
+
+                  <Package size={20} />
+
+
+
+                </Link>
+
+
+
+                <Link to={{ pathname: `${basePath}/cart`, search: location.search }} className="hexashop-icon-btn text-decoration-none position-relative">
+
+
+
+                  <ShoppingCart size={20} />
+
+
+
+                  {cartCount > 0 && (
+
+
+
+                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark" style={{ fontSize: '0.65rem' }}>
+
+
+
+                      {cartCount}
+
+
+
+                    </span>
+
+
+
+                  )}
+
+
+
+                </Link>
+
+
+
+              </div>
+
+
+
             </div>
 
 
 
-          )}
 
 
 
-        </header>
+
+            {/* Mobile Sidebar Menu */}
+
+
+
+            {isCategoryOpen && (
+
+
+
+              <div className="storefront-mobile-menu-overlay" onClick={() => setIsCategoryOpen(false)}>
+
+
+
+                <div className="storefront-mobile-menu" onClick={e => e.stopPropagation()}>
+
+
+
+                  <div className="storefront-mobile-menu-header">
+
+
+
+                    {theme === 'theme-coconut' ? (
+
+
+
+                      <img
+
+
+
+                        src="/images/amiora-logo.png"
+
+
+
+                        alt={storeData?.name || "AMIORA"}
+
+
+
+                        style={{ height: '36px', maxWidth: '160px', width: 'auto', objectFit: 'contain' }}
+
+
+
+                      />
+
+
+
+                    ) : theme === 'theme-baby' ? (
+
+
+
+                      <div className="d-flex align-items-center gap-2">
+
+
+
+                        <img
+
+
+
+                          src={storeData?.logo_url || storeData?.logo || "/images/an-nafi-logo.png"}
+
+
+
+                          alt={storeData?.name || "AN' NAFI Baby shop"}
+
+
+
+                          style={{ height: '40px', maxWidth: '48px', width: 'auto', objectFit: 'contain' }}
+
+
+
+                        />
+
+
+
+                        <div className="d-flex flex-column text-start">
+
+
+
+                          <span className="fw-bold" style={{ fontSize: '1.05rem', color: '#2D2A26', lineHeight: 1.15 }}>
+
+
+
+                            {storeData?.name?.toLowerCase() === 'an nafi' ? "AN' NAFI" : (storeData?.name || "AN' NAFI")}
+
+
+
+                          </span>
+
+
+
+                          <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#C9933B', textTransform: 'uppercase', letterSpacing: '1.2px', marginTop: '2px' }}>
+
+
+
+                            Baby shop
+
+
+
+                          </span>
+
+
+
+                        </div>
+
+
+
+                      </div>
+
+
+
+                    ) : (
+
+
+
+                      <span className="fw-bold fs-5">{storeData?.name || 'Menu'}</span>
+
+
+
+                    )}
+
+
+
+                    <button className="btn p-0 border-0" onClick={() => setIsCategoryOpen(false)}>
+
+
+
+                      <X size={24} />
+
+
+
+                    </button>
+
+
+
+                  </div>
+
+
+
+                  <div className="storefront-mobile-menu-body">
+
+
+
+                    <Link
+
+
+
+                      to={{ pathname: basePath, search: location.search }}
+
+
+
+                      className="storefront-mobile-nav-item"
+
+
+
+                      onClick={() => setIsCategoryOpen(false)}
+
+
+
+                    >
+
+
+
+                      Home
+
+
+
+                    </Link>
+
+
+
+                    <div className="storefront-mobile-nav-title mt-4 mb-2 text-muted fw-bold" style={{ fontSize: '12px', paddingLeft: '15px' }}>
+
+
+
+                      CATEGORIES
+
+
+
+                    </div>
+
+
+
+                    {activeCategories && activeCategories.map(cat => {
+                      const catKey = String(cat.id || cat.slug || cat.name);
+                      const dropdownItems = getCategoryDropdownItems(cat);
+                      const hasDropdown = dropdownItems && dropdownItems.length > 0;
+                      const isOpen = Boolean(openMobileDropdownIds[catKey]);
+
+                      if (hasDropdown) {
+                        return (
+                          <div key={catKey} className="mobile-baby-accordion-item">
+                            <div className="d-flex align-items-center justify-content-between storefront-mobile-nav-item">
+                              <a
+                                href={`#${cat.slug}`}
+                                onClick={(e) => {
+                                  setIsCategoryOpen(false);
+                                  scrollToSection(e, cat.slug);
+                                }}
+                                className="text-decoration-none text-dark flex-grow-1"
+                              >
+                                {cat.name}
+                              </a>
+                              <button
+                                type="button"
+                                onClick={() => setOpenMobileDropdownIds(prev => ({ ...prev, [catKey]: !prev[catKey] }))}
+                                className="btn btn-sm btn-link p-0 text-muted"
+                                style={{ color: '#D45D7E' }}
+                              >
+                                <ChevronDown size={18} style={{ transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
+                              </button>
+                            </div>
+                            {isOpen && (
+                              <div className="ps-3 py-1 border-start ms-3 mb-2" style={{ borderColor: '#FCD4E1' }}>
+                                {dropdownItems.map((item) => (
+                                  <a
+                                    key={item}
+                                    href={`#${cat.slug}`}
+                                    onClick={(e) => {
+                                      setIsCategoryOpen(false);
+                                      scrollToSection(e, cat.slug);
+                                    }}
+                                    className="d-block py-1 text-decoration-none"
+                                    style={{ color: '#542337', fontSize: '0.85rem' }}
+                                  >
+                                    {item}
+                                  </a>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      }
+                      return (
+                        <a
+                          key={catKey}
+                          href={`#${cat.slug}`}
+                          onClick={(e) => {
+                            setIsCategoryOpen(false);
+                            scrollToSection(e, cat.slug);
+                          }}
+                          className="storefront-mobile-nav-item"
+                        >
+                          {cat.name}
+                        </a>
+                      );
+                    })}
+
+
+
+
+
+
+
+                    <div className="storefront-mobile-nav-title mt-4 mb-2 text-muted fw-bold" style={{ fontSize: '12px', paddingLeft: '15px' }}>
+
+
+
+                      ACCOUNT
+
+
+
+                    </div>
+
+
+
+                    {user && user.id ? (
+
+
+
+                      <>
+
+
+
+                        <div className="storefront-mobile-nav-item text-primary" style={{ borderBottom: 'none' }}>
+
+
+
+                          Hi, {user.name}
+
+
+
+                        </div>
+
+
+
+                        <Link to={{ pathname: `${basePath}/orders`, search: location.search }} className="storefront-mobile-nav-item" onClick={() => setIsCategoryOpen(false)}>
+
+
+
+                          <Package size={16} className="me-2" /> My Orders
+
+
+
+                        </Link>
+
+
+
+                        <Link to={{ pathname: `${basePath}/wishlist`, search: location.search }} className="storefront-mobile-nav-item" onClick={() => setIsCategoryOpen(false)}>
+
+
+
+                          <Heart size={16} className="me-2" /> Wishlist
+
+
+
+                        </Link>
+
+
+
+                        <button
+
+
+
+                          className="storefront-mobile-nav-item text-danger border-0 bg-transparent text-start"
+
+
+
+                          onClick={() => {
+
+
+
+                            logout();
+
+
+
+                            setIsCategoryOpen(false);
+
+
+
+                          }}
+
+
+
+                        >
+
+
+
+                          <LogOut size={16} className="me-2" /> Logout
+
+
+
+                        </button>
+
+
+
+                      </>
+
+
+
+                    ) : (
+
+
+
+                      <>
+
+
+
+                        <button
+
+
+
+                          className="storefront-mobile-nav-item border-0 bg-transparent text-start w-100"
+
+
+
+                          onClick={() => { setIsCategoryOpen(false); openLoginModal(); }}
+
+
+
+                        >
+
+
+
+                          Login
+
+
+
+                        </button>
+
+
+
+                        <button
+
+
+
+                          className="storefront-mobile-nav-item border-0 bg-transparent text-start w-100"
+
+
+
+                          onClick={() => { setIsCategoryOpen(false); openLoginModal(); }}
+
+
+
+                        >
+
+
+
+                          Create Account
+
+
+
+                        </button>
+
+
+
+                      </>
+
+
+
+                    )}
+
+
+
+                  </div>
+
+
+
+                </div>
+
+
+
+              </div>
+
+
+
+            )}
+
+
+
+          </header>
 
 
 
@@ -2524,31 +2531,115 @@ export default function StorefrontLayout({ storeData, categories = [], products 
 
 
 
-      <footer className="storefront-footer">
+        <footer className="storefront-footer">
 
 
 
-        <div className="storefront-footer-content">
+          <div className="storefront-footer-content">
 
 
 
-          <div className="footer-col">
+            <div className="footer-col">
 
 
 
-            <h4>ABOUT</h4>
+              <h4>ABOUT</h4>
 
 
 
-            <p>Contact Us</p>
+              <p>Contact Us</p>
 
 
 
-            <p>About Us</p>
+              <p>About Us</p>
 
 
 
-            <p>Careers</p>
+              <p>Careers</p>
+
+
+
+            </div>
+
+
+
+            <div className="footer-col">
+
+
+
+              <h4>HELP</h4>
+
+
+
+              <p>Payments</p>
+
+
+
+              <p>Shipping</p>
+
+
+
+              <p>Cancellation & Returns</p>
+
+
+
+            </div>
+
+
+
+            <div className="footer-col">
+
+
+
+              <h4>POLICY</h4>
+
+
+
+              <p>Return Policy</p>
+
+
+
+              <p>Terms Of Use</p>
+
+
+
+              <p>Security</p>
+
+
+
+            </div>
+
+
+
+            <div className="footer-col border-left">
+
+
+
+              <h4>Mail Us:</h4>
+
+
+
+              <p>{storeData.name} Internet Private Limited,</p>
+
+
+
+              <p>Buildings Alyssa, Begonia &</p>
+
+
+
+              <p>Clove Embassy Tech Village,</p>
+
+
+
+              <p>Bengaluru, 560103,</p>
+
+
+
+              <p>Karnataka, India</p>
+
+
+
+            </div>
 
 
 
@@ -2556,91 +2647,7 @@ export default function StorefrontLayout({ storeData, categories = [], products 
 
 
 
-          <div className="footer-col">
-
-
-
-            <h4>HELP</h4>
-
-
-
-            <p>Payments</p>
-
-
-
-            <p>Shipping</p>
-
-
-
-            <p>Cancellation & Returns</p>
-
-
-
-          </div>
-
-
-
-          <div className="footer-col">
-
-
-
-            <h4>POLICY</h4>
-
-
-
-            <p>Return Policy</p>
-
-
-
-            <p>Terms Of Use</p>
-
-
-
-            <p>Security</p>
-
-
-
-          </div>
-
-
-
-          <div className="footer-col border-left">
-
-
-
-            <h4>Mail Us:</h4>
-
-
-
-            <p>{storeData.name} Internet Private Limited,</p>
-
-
-
-            <p>Buildings Alyssa, Begonia &</p>
-
-
-
-            <p>Clove Embassy Tech Village,</p>
-
-
-
-            <p>Bengaluru, 560103,</p>
-
-
-
-            <p>Karnataka, India</p>
-
-
-
-          </div>
-
-
-
-        </div>
-
-
-
-      </footer>
+        </footer>
 
 
 

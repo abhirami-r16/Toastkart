@@ -62,7 +62,7 @@ class ProductController extends Controller
         }
 
         $products = $query->select([
-            'id', 'store_id', 'category_id', 'name', 'slug', 'sku', 
+            'id', 'store_id', 'category_id', 'subcategory', 'name', 'slug', 'sku', 
             'price', 'compare_price', 'image', 'status', 'is_active', 
             'color', 'size', 'piece_per_carton', 'description', 'images', 'stock_quantity'
         ])->orderBy('id', 'desc')->get();
@@ -75,6 +75,7 @@ class ProductController extends Controller
         $validated = $request->validate([
             'store_id'        => 'nullable|integer',
             'category_id'     => 'nullable|integer',
+            'subcategory'     => 'nullable|string|max:255',
             'name'            => 'required|string|max:255',
             'price'           => 'required|numeric|min:0',
             'compare_price'   => 'nullable|numeric|min:0',
@@ -138,6 +139,7 @@ class ProductController extends Controller
         $product = Product::create([
             'store_id'       => $storeId,
             'category_id'    => $categoryId,
+            'subcategory'    => $validated['subcategory'] ?? null,
             'name'           => $validated['name'],
             'slug'           => Str::slug($validated['name']) . '-' . Str::random(4),
             'sku'            => $sku,
@@ -174,6 +176,7 @@ class ProductController extends Controller
 
         $validated = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
+            'subcategory' => 'nullable|string|max:255',
             'name' => 'sometimes|required|string|max:255',
             'price' => 'sometimes|required|numeric|min:0',
             'compare_price' => 'nullable|numeric|min:0',
