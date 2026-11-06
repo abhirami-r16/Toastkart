@@ -24,6 +24,20 @@ const ThemeDefaultHero = React.lazy(() => import('../../components/themes/ThemeD
 const ThemeHomeFooter = React.lazy(() => import('../../components/themes/ThemeHomeFooter'));
 const AIStoreRenderer = React.lazy(() => import('../../components/AIStoreRenderer'));
 
+const NEWBORN_ITEMS = [
+  'Bed',
+  'Carry bag',
+  'Motherbag',
+  'Maternity pillow',
+  'Feeding pillow',
+  'Hooded towel',
+  'Plain towel',
+  'Dress',
+  'Napkin',
+  'Diaper',
+  'Romber set',
+];
+
 export default function StorefrontHome({ storeData, products, categories = [], loading }) {
   const { requireAuth } = useStorefrontAuth();
   const location = useLocation();
@@ -154,6 +168,25 @@ export default function StorefrontHome({ storeData, products, categories = [], l
       });
     }
   });
+
+  if (theme === 'theme-baby') {
+    const babyDefaults = [
+      { id: 40, name: 'Toys', slug: 'toys', isCustom: true },
+      { id: 41, name: 'Newborn', slug: 'newborn', isCustom: true },
+      { id: 42, name: 'Cosmetics', slug: 'cosmetics', isCustom: true },
+    ];
+    babyDefaults.forEach((def) => {
+      if (
+        !categoriesToRender.some(
+          (c) =>
+            String(c.slug || '').toLowerCase() === def.slug ||
+            String(c.name || '').toLowerCase() === def.name.toLowerCase()
+        )
+      ) {
+        categoriesToRender.push(def);
+      }
+    });
+  }
 
   /*
    * Handle URL hash scrolling
@@ -910,7 +943,7 @@ export default function StorefrontHome({ storeData, products, categories = [], l
             );
           });
 
-          if (catProducts.length === 0 && !cat.isCustom) {
+          if (catProducts.length === 0 && !cat.isCustom && theme !== 'theme-baby') {
             return null;
           }
 
@@ -936,7 +969,7 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                       <div
                         className="baby-section-title-tag"
                         style={{
-                          color: '#D45D7E',
+                          color: '#B04764',
                           backgroundColor: '#FFF0F5',
                           border: '1px solid #FCD4E1',
                           display: 'inline-flex',
@@ -955,7 +988,7 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                       <h3
                         className="baby-section-title"
                         style={{
-                          color: '#8C3754',
+                          color: '#5B2636',
                           fontWeight: 800,
                           letterSpacing: '-0.5px',
                           margin: 0,
@@ -963,6 +996,28 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                       >
                         {cat.name}
                       </h3>
+                      {String(cat.slug || '').toLowerCase() === 'newborn' && (
+                        <div className="d-flex flex-wrap gap-2 mt-3 baby-subcat-pills">
+                          {NEWBORN_ITEMS.map((item) => (
+                            <span
+                              key={item}
+                              className="badge rounded-pill px-3 py-2"
+                              style={{
+                                backgroundColor: '#FFF0F5',
+                                color: '#8C3754',
+                                border: '1px solid #FCD4E1',
+                                fontSize: '0.8rem',
+                                fontWeight: 500,
+                                letterSpacing: '0.2px',
+                                cursor: 'default',
+                                boxShadow: '0 2px 6px rgba(212, 93, 126, 0.08)',
+                              }}
+                            >
+                              {item}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   ) : theme === 'theme-perfume' ? (
                     <h3 style={{ textTransform: 'uppercase', letterSpacing: '1px', fontSize: '2rem' }}>

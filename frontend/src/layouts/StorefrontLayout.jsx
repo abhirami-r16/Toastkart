@@ -38,35 +38,31 @@ const StorefrontLoginModal = React.lazy(() => import('../components/StorefrontLo
 
 
 
+const NEWBORN_ITEMS = [
+  'Bed',
+  'Carry bag',
+  'Motherbag',
+  'Maternity pillow',
+  'Feeding pillow',
+  'Hooded towel',
+  'Plain towel',
+  'Dress',
+  'Napkin',
+  'Diaper',
+  'Romber set',
+];
+
 export default function StorefrontLayout({ storeData, categories = [], products = [] }) {
-
-
-
   const { cartCount } = useStorefrontCart();
-
-
-
   const { user, logout, openLoginModal } = useStorefrontAuth();
-
-
-
   const navigate = useNavigate();
-
-
-
   const location = useLocation();
 
-
-
   const [searchQuery, setSearchQuery] = useState(new URLSearchParams(location.search).get('search') || '');
-
-
-
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
-
-
-
   const [selectedCategory, setSelectedCategory] = useState('All Category');
+  const [newbornDropdownOpen, setNewbornDropdownOpen] = useState(false);
+  const [mobileNewbornOpen, setMobileNewbornOpen] = useState(false);
 
 
 
@@ -187,38 +183,40 @@ export default function StorefrontLayout({ storeData, categories = [], products 
         window.location.hostname.toLowerCase().includes('cocoa')
       );
 
-    const storeLogo = storeData?.logo_url || storeData?.logo || '/images/an-nafi-logo.png';
+    const storeLogo = storeData?.logo_url || storeData?.logo || (isNafi ? '/images/an-nafi-logo.png' : '/favicon.png');
     const faviconUrl = isNafi
-      ? '/images/an-nafi-favicon.png'
+      ? (storeData?.logo_url || storeData?.logo || '/images/an-nafi-logo.png')
       : (isAmiora
         ? '/images/amiora-favicon.png'
         : (storeLogo || '/favicon.png'));
 
-    // Update standard icon
-    let link = document.querySelector("link[rel='icon']");
-    if (!link) {
-      link = document.createElement('link');
-      link.rel = 'icon';
-      document.head.appendChild(link);
-    }
-    link.type = 'image/png';
-    link.href = faviconUrl;
+    // Update standard icon & force reload to avoid cached favicon
+    try {
+      const head = document.head || document.getElementsByTagName('head')[0];
+      const existingIcons = head.querySelectorAll("link[rel*='icon']");
+      existingIcons.forEach(el => el.parentNode && el.parentNode.removeChild(el));
 
-    const dynIcon = document.getElementById('dynamic-favicon');
-    if (dynIcon) {
-      dynIcon.href = faviconUrl;
-    }
+      const link = document.createElement('link');
+      link.type = 'image/png';
+      link.rel = 'shortcut icon';
+      link.id = 'dynamic-favicon';
+      link.href = faviconUrl;
+      head.appendChild(link);
 
-    // Update apple touch icon
-    let appleLink = document.querySelector("link[rel='apple-touch-icon']");
-    if (!appleLink) {
-      appleLink = document.createElement('link');
+      const standardLink = document.createElement('link');
+      standardLink.type = 'image/png';
+      standardLink.rel = 'icon';
+      standardLink.href = faviconUrl;
+      head.appendChild(standardLink);
+
+      const appleLink = document.createElement('link');
       appleLink.rel = 'apple-touch-icon';
-      document.head.appendChild(appleLink);
+      appleLink.id = 'dynamic-apple-icon';
+      appleLink.href = faviconUrl;
+      head.appendChild(appleLink);
+    } catch (e) {
+      console.debug('Favicon set error:', e);
     }
-    appleLink.href = isNafi
-      ? '/images/an-nafi-apple-touch-icon.png'
-      : (isAmiora ? '/images/amiora-favicon-badge.png' : faviconUrl);
 
     // Update title
     if (isNafi) {
@@ -341,9 +339,19 @@ export default function StorefrontLayout({ storeData, categories = [], products 
 
 
     });
+  }
 
-
-
+  if (theme === 'theme-baby') {
+    const babyDefaults = [
+      { id: 40, name: 'Toys', slug: 'toys', isCustom: true },
+      { id: 41, name: 'Newborn', slug: 'newborn', isCustom: true },
+      { id: 42, name: 'Cosmetics', slug: 'cosmetics', isCustom: true },
+    ];
+    babyDefaults.forEach(def => {
+      if (!categoriesToRender.some(c => String(c.slug || '').toLowerCase() === def.slug || String(c.name || '').toLowerCase() === def.name.toLowerCase())) {
+        categoriesToRender.push(def);
+      }
+    });
   }
 
 
@@ -396,38 +404,18 @@ export default function StorefrontLayout({ storeData, categories = [], products 
 
 
 
-  // Include custom store categories or categories with active products in navbar
-
-
-
+  // Include custom store categories, baby theme categories, or categories with active products in navbar
   const activeCategories = categoriesToRender.filter(cat => {
-
-
-
     if (cat.isCustom) return true;
-
-
+    if (theme === 'theme-baby') return true;
+    if (cat.store_id || cat.storeId) return true;
 
     const catProducts = products.filter(p => {
-
-
-
       const pCat = String((p.category && typeof p.category === 'object' ? p.category.name : p.category) || 'Uncategorized').toLowerCase();
-
-
-
       return pCat === String(cat.id).toLowerCase() || pCat === String(cat.name || '').toLowerCase() || pCat === String(cat.slug || '').toLowerCase();
-
-
-
     });
 
-
-
     return catProducts.length > 0;
-
-
-
   });
 
 
@@ -1773,18 +1761,97 @@ export default function StorefrontLayout({ storeData, categories = [], products 
 
 
             {/* Desktop Navigation */}
-            <nav className="hexashop-nav d-none d-lg-flex">
+            <nav className="hexashop-nav d-none d-lg-flex" style={{ alignItems: 'center' }}>
               <Link to={{ pathname: basePath, search: location.search }} className="hexashop-nav-item">Home</Link>
-              {activeCategories && activeCategories.map(cat => (
-                <a
-                  key={cat.id || cat.name}
-                  href={`#${cat.slug}`}
-                  onClick={(e) => scrollToSection(e, cat.slug)}
-                  className="hexashop-nav-item"
-                >
-                  {cat.name}
-                </a>
-              ))}
+              {activeCategories && activeCategories.map(cat => {
+                const isNewborn = String(cat.slug || '').toLowerCase() === 'newborn' || String(cat.name || '').toLowerCase() === 'newborn';
+                if (isNewborn) {
+                  return (
+                    <div
+                      key={cat.id || cat.name}
+                      className="baby-nav-dropdown-wrapper position-relative"
+                      onMouseEnter={() => setNewbornDropdownOpen(true)}
+                      onMouseLeave={() => setNewbornDropdownOpen(false)}
+                      style={{ display: 'inline-flex', alignItems: 'center' }}
+                    >
+                      <a
+                        href={`#${cat.slug}`}
+                        onClick={(e) => scrollToSection(e, cat.slug)}
+                        className="hexashop-nav-item baby-nav-dropdown-trigger d-inline-flex align-items-center gap-1"
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <span>{cat.name}</span>
+                        <ChevronDown size={14} style={{ transition: 'transform 0.2s', transform: newbornDropdownOpen ? 'rotate(180deg)' : 'none' }} />
+                      </a>
+                      {newbornDropdownOpen && (
+                        <div
+                          className="baby-nav-dropdown-menu shadow-lg rounded-3 py-2"
+                          style={{
+                            position: 'absolute',
+                            top: '100%',
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            minWidth: '220px',
+                            backgroundColor: '#FFFFFF',
+                            border: '1px solid #FCD4E1',
+                            boxShadow: '0 12px 30px rgba(212, 93, 126, 0.15)',
+                            zIndex: 1050,
+                            display: 'flex',
+                            flexDirection: 'column',
+                          }}
+                        >
+                          <div className="px-3 py-1 text-uppercase fw-bold" style={{ fontSize: '0.68rem', color: '#D45D7E', letterSpacing: '1px', borderBottom: '1px solid #FFF0F5' }}>
+                            Newborn Essentials
+                          </div>
+                          {NEWBORN_ITEMS.map((item) => (
+                            <a
+                              key={item}
+                              href={`#newborn`}
+                              onClick={(e) => {
+                                setNewbornDropdownOpen(false);
+                                scrollToSection(e, 'newborn');
+                              }}
+                              className="baby-dropdown-item px-3 py-2 text-decoration-none"
+                              style={{
+                                color: '#542337',
+                                fontSize: '0.88rem',
+                                fontWeight: 500,
+                                transition: 'all 0.15s ease',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.backgroundColor = '#FFF0F5';
+                                e.currentTarget.style.color = '#D45D7E';
+                                e.currentTarget.style.paddingLeft = '18px';
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.backgroundColor = 'transparent';
+                                e.currentTarget.style.color = '#542337';
+                                e.currentTarget.style.paddingLeft = '16px';
+                              }}
+                            >
+                              <span>{item}</span>
+                              <span style={{ fontSize: '0.75rem', opacity: 0.5 }}>›</span>
+                            </a>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
+                return (
+                  <a
+                    key={cat.id || cat.name}
+                    href={`#${cat.slug}`}
+                    onClick={(e) => scrollToSection(e, cat.slug)}
+                    className="hexashop-nav-item"
+                  >
+                    {cat.name}
+                  </a>
+                );
+              })}
             </nav>
 
 
@@ -2149,55 +2216,66 @@ export default function StorefrontLayout({ storeData, categories = [], products 
 
 
 
-                  {activeCategories && activeCategories.map(cat => (
-
-
-
-                    <a
-
-
-
-                      key={cat.id || cat.name}
-
-
-
-                      href={`#${cat.slug}`}
-
-
-
-                      onClick={(e) => {
-
-
-
-                        setIsCategoryOpen(false);
-
-
-
-                        scrollToSection(e, cat.slug);
-
-
-
-                      }}
-
-
-
-                      className="storefront-mobile-nav-item"
-
-
-
-                    >
-
-
-
-                      {cat.name}
-
-
-
-                    </a>
-
-
-
-                  ))}
+                  {activeCategories && activeCategories.map(cat => {
+                    const isNewborn = String(cat.slug || '').toLowerCase() === 'newborn' || String(cat.name || '').toLowerCase() === 'newborn';
+                    if (isNewborn) {
+                      return (
+                        <div key={cat.id || cat.name} className="mobile-baby-accordion-item">
+                          <div className="d-flex align-items-center justify-content-between storefront-mobile-nav-item">
+                            <a
+                              href={`#${cat.slug}`}
+                              onClick={(e) => {
+                                setIsCategoryOpen(false);
+                                scrollToSection(e, cat.slug);
+                              }}
+                              className="text-decoration-none text-dark flex-grow-1"
+                            >
+                              {cat.name}
+                            </a>
+                            <button
+                              type="button"
+                              onClick={() => setMobileNewbornOpen(!mobileNewbornOpen)}
+                              className="btn btn-sm btn-link p-0 text-muted"
+                              style={{ color: '#D45D7E' }}
+                            >
+                              <ChevronDown size={18} style={{ transform: mobileNewbornOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
+                            </button>
+                          </div>
+                          {mobileNewbornOpen && (
+                            <div className="ps-3 py-1 border-start ms-3 mb-2" style={{ borderColor: '#FCD4E1' }}>
+                              {NEWBORN_ITEMS.map((item) => (
+                                <a
+                                  key={item}
+                                  href={`#newborn`}
+                                  onClick={(e) => {
+                                    setIsCategoryOpen(false);
+                                    scrollToSection(e, 'newborn');
+                                  }}
+                                  className="d-block py-1 text-decoration-none"
+                                  style={{ color: '#542337', fontSize: '0.85rem' }}
+                                >
+                                  {item}
+                                </a>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    }
+                    return (
+                      <a
+                        key={cat.id || cat.name}
+                        href={`#${cat.slug}`}
+                        onClick={(e) => {
+                          setIsCategoryOpen(false);
+                          scrollToSection(e, cat.slug);
+                        }}
+                        className="storefront-mobile-nav-item"
+                      >
+                        {cat.name}
+                      </a>
+                    );
+                  })}
 
 
 

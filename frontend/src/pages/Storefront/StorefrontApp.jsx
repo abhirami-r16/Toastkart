@@ -313,7 +313,7 @@ if (!foundStore) {
       );
 
     // Give store their own logo as favicon
-    const ownLogo = storeData?.logo || storeData?.logo_url;
+    const ownLogo = storeData?.logo_url || storeData?.logo;
     let faviconUrl = ownLogo || '/favicon.png';
 
     if (isNafi) {
@@ -322,31 +322,31 @@ if (!foundStore) {
       faviconUrl = '/images/amiora-favicon.png';
     }
 
-    let link = document.querySelector("link[rel*='icon']");
-    if (!link) {
-      link = document.createElement('link');
-      link.rel = 'icon';
-      document.head.appendChild(link);
-    }
-    link.type = 'image/png';
-    link.href = faviconUrl;
+    try {
+      const head = document.head || document.getElementsByTagName('head')[0];
+      const existingIcons = head.querySelectorAll("link[rel*='icon']");
+      existingIcons.forEach(el => el.parentNode && el.parentNode.removeChild(el));
 
-    const dynFav = document.getElementById('dynamic-favicon');
-    if (dynFav) {
-      dynFav.href = faviconUrl;
-    }
+      const link = document.createElement('link');
+      link.type = 'image/png';
+      link.rel = 'shortcut icon';
+      link.id = 'dynamic-favicon';
+      link.href = faviconUrl;
+      head.appendChild(link);
 
-    let appleLink = document.querySelector("link[rel='apple-touch-icon']");
-    if (!appleLink) {
-      appleLink = document.createElement('link');
+      const standardLink = document.createElement('link');
+      standardLink.type = 'image/png';
+      standardLink.rel = 'icon';
+      standardLink.href = faviconUrl;
+      head.appendChild(standardLink);
+
+      const appleLink = document.createElement('link');
       appleLink.rel = 'apple-touch-icon';
-      document.head.appendChild(appleLink);
-    }
-    appleLink.href = isNafi ? (ownLogo || '/images/an-nafi-logo.png') : (isAmiora ? '/images/amiora-favicon-badge.png' : faviconUrl);
-
-    const dynApple = document.getElementById('dynamic-apple-icon');
-    if (dynApple) {
-      dynApple.href = appleLink.href;
+      appleLink.id = 'dynamic-apple-icon';
+      appleLink.href = faviconUrl;
+      head.appendChild(appleLink);
+    } catch (e) {
+      console.debug('Favicon error:', e);
     }
 
     if (isNafi) {
