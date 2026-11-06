@@ -14,7 +14,13 @@ class Category extends Model
         'name',
         'slug',
         'description',
+        'dropdown_items',
         'featured',
+    ];
+
+    protected $casts = [
+        'dropdown_items' => 'array',
+        'featured' => 'boolean',
     ];
 
     public function store()

@@ -61,8 +61,27 @@ export default function StorefrontLayout({ storeData, categories = [], products 
   const [searchQuery, setSearchQuery] = useState(new URLSearchParams(location.search).get('search') || '');
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('All Category');
-  const [newbornDropdownOpen, setNewbornDropdownOpen] = useState(false);
-  const [mobileNewbornOpen, setMobileNewbornOpen] = useState(false);
+  const [openDropdownId, setOpenDropdownId] = useState(null);
+  const [openMobileDropdownIds, setOpenMobileDropdownIds] = useState({});
+
+  const getCategoryDropdownItems = (cat) => {
+    if (Array.isArray(cat?.dropdown_items) && cat.dropdown_items.length > 0) {
+      return cat.dropdown_items;
+    }
+    if (typeof cat?.dropdown_items === 'string' && cat.dropdown_items.trim()) {
+      try {
+        const parsed = JSON.parse(cat.dropdown_items);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch (e) {
+        const parts = cat.dropdown_items.split(',').map(s => s.trim()).filter(Boolean);
+        if (parts.length > 0) return parts;
+      }
+    }
+    if (String(cat?.slug || '').toLowerCase() === 'newborn' || String(cat?.name || '').toLowerCase() === 'newborn') {
+      return NEWBORN_ITEMS;
+    }
+    return [];
+  };
 
 
 
@@ -315,25 +334,11 @@ export default function StorefrontLayout({ storeData, categories = [], products 
 
 
       categoriesToRender.push({
-
-
-
         id: cat.id,
-
-
-
         name: cat.name,
-
-
-
         slug: cat.slug || String(cat.name || '').toLowerCase().replace(/[^a-z0-9]/g, ''),
-
-
-
+        dropdown_items: cat.dropdown_items || [],
         isCustom: true
-
-
-
       });
 
 
@@ -1764,14 +1769,18 @@ export default function StorefrontLayout({ storeData, categories = [], products 
             <nav className="hexashop-nav d-none d-lg-flex" style={{ alignItems: 'center' }}>
               <Link to={{ pathname: basePath, search: location.search }} className="hexashop-nav-item">Home</Link>
               {activeCategories && activeCategories.map(cat => {
-                const isNewborn = String(cat.slug || '').toLowerCase() === 'newborn' || String(cat.name || '').toLowerCase() === 'newborn';
-                if (isNewborn) {
+                const catKey = String(cat.id || cat.slug || cat.name);
+                const dropdownItems = getCategoryDropdownItems(cat);
+                const hasDropdown = dropdownItems && dropdownItems.length > 0;
+                const isOpen = openDropdownId === catKey;
+
+                if (hasDropdown) {
                   return (
                     <div
-                      key={cat.id || cat.name}
+                      key={catKey}
                       className="baby-nav-dropdown-wrapper position-relative"
-                      onMouseEnter={() => setNewbornDropdownOpen(true)}
-                      onMouseLeave={() => setNewbornDropdownOpen(false)}
+                      onMouseEnter={() => setOpenDropdownId(catKey)}
+                      onMouseLeave={() => setOpenDropdownId(null)}
                       style={{ display: 'inline-flex', alignItems: 'center' }}
                     >
                       <a
@@ -1781,9 +1790,9 @@ export default function StorefrontLayout({ storeData, categories = [], products 
                         style={{ cursor: 'pointer' }}
                       >
                         <span>{cat.name}</span>
-                        <ChevronDown size={14} style={{ transition: 'transform 0.2s', transform: newbornDropdownOpen ? 'rotate(180deg)' : 'none' }} />
+                        <ChevronDown size={14} style={{ transition: 'transform 0.2s', transform: isOpen ? 'rotate(180deg)' : 'none' }} />
                       </a>
-                      {newbornDropdownOpen && (
+                      {isOpen && (
                         <div
                           className="baby-nav-dropdown-menu shadow-lg rounded-3 py-2"
                           style={{
@@ -1801,15 +1810,15 @@ export default function StorefrontLayout({ storeData, categories = [], products 
                           }}
                         >
                           <div className="px-3 py-1 text-uppercase fw-bold" style={{ fontSize: '0.68rem', color: '#D45D7E', letterSpacing: '1px', borderBottom: '1px solid #FFF0F5' }}>
-                            Newborn Essentials
+                            {cat.name} Essentials
                           </div>
-                          {NEWBORN_ITEMS.map((item) => (
+                          {dropdownItems.map((item) => (
                             <a
                               key={item}
-                              href={`#newborn`}
+                              href={`#${cat.slug}`}
                               onClick={(e) => {
-                                setNewbornDropdownOpen(false);
-                                scrollToSection(e, 'newborn');
+                                setOpenDropdownId(null);
+                                scrollToSection(e, cat.slug);
                               }}
                               className="baby-dropdown-item px-3 py-2 text-decoration-none"
                               style={{
@@ -1843,7 +1852,7 @@ export default function StorefrontLayout({ storeData, categories = [], products 
                 }
                 return (
                   <a
-                    key={cat.id || cat.name}
+                    key={catKey}
                     href={`#${cat.slug}`}
                     onClick={(e) => scrollToSection(e, cat.slug)}
                     className="hexashop-nav-item"
@@ -2217,10 +2226,14 @@ export default function StorefrontLayout({ storeData, categories = [], products 
 
 
                   {activeCategories && activeCategories.map(cat => {
-                    const isNewborn = String(cat.slug || '').toLowerCase() === 'newborn' || String(cat.name || '').toLowerCase() === 'newborn';
-                    if (isNewborn) {
+                    const catKey = String(cat.id || cat.slug || cat.name);
+                    const dropdownItems = getCategoryDropdownItems(cat);
+                    const hasDropdown = dropdownItems && dropdownItems.length > 0;
+                    const isOpen = Boolean(openMobileDropdownIds[catKey]);
+
+                    if (hasDropdown) {
                       return (
-                        <div key={cat.id || cat.name} className="mobile-baby-accordion-item">
+                        <div key={catKey} className="mobile-baby-accordion-item">
                           <div className="d-flex align-items-center justify-content-between storefront-mobile-nav-item">
                             <a
                               href={`#${cat.slug}`}
@@ -2234,22 +2247,22 @@ export default function StorefrontLayout({ storeData, categories = [], products 
                             </a>
                             <button
                               type="button"
-                              onClick={() => setMobileNewbornOpen(!mobileNewbornOpen)}
+                              onClick={() => setOpenMobileDropdownIds(prev => ({ ...prev, [catKey]: !prev[catKey] }))}
                               className="btn btn-sm btn-link p-0 text-muted"
                               style={{ color: '#D45D7E' }}
                             >
-                              <ChevronDown size={18} style={{ transform: mobileNewbornOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
+                              <ChevronDown size={18} style={{ transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
                             </button>
                           </div>
-                          {mobileNewbornOpen && (
+                          {isOpen && (
                             <div className="ps-3 py-1 border-start ms-3 mb-2" style={{ borderColor: '#FCD4E1' }}>
-                              {NEWBORN_ITEMS.map((item) => (
+                              {dropdownItems.map((item) => (
                                 <a
                                   key={item}
-                                  href={`#newborn`}
+                                  href={`#${cat.slug}`}
                                   onClick={(e) => {
                                     setIsCategoryOpen(false);
-                                    scrollToSection(e, 'newborn');
+                                    scrollToSection(e, cat.slug);
                                   }}
                                   className="d-block py-1 text-decoration-none"
                                   style={{ color: '#542337', fontSize: '0.85rem' }}
@@ -2264,7 +2277,7 @@ export default function StorefrontLayout({ storeData, categories = [], products 
                     }
                     return (
                       <a
-                        key={cat.id || cat.name}
+                        key={catKey}
                         href={`#${cat.slug}`}
                         onClick={(e) => {
                           setIsCategoryOpen(false);

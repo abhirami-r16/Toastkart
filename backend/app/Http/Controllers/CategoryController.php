@@ -38,7 +38,18 @@ class CategoryController extends Controller
             'name'            => 'required|string|max:255',
             'description'     => 'nullable|string',
             'featured'        => 'nullable|boolean',
+            'dropdown_items'  => 'nullable',
         ]);
+
+        $dropdownItems = $request->input('dropdown_items');
+        if (is_string($dropdownItems)) {
+            $decoded = json_decode($dropdownItems, true);
+            if (is_array($decoded)) {
+                $dropdownItems = $decoded;
+            } else {
+                $dropdownItems = array_values(array_filter(array_map('trim', explode(',', $dropdownItems))));
+            }
+        }
 
         // Resolve store_id using a 3-tier priority:
         // 1. Direct store_id match
@@ -92,11 +103,12 @@ class CategoryController extends Controller
         }
 
         $category = Category::create([
-            'store_id'    => $storeId,
-            'name'        => $validated['name'],
-            'slug'        => $slug,
-            'description' => $validated['description'] ?? '',
-            'featured'    => $validated['featured'] ?? false,
+            'store_id'       => $storeId,
+            'name'           => $validated['name'],
+            'slug'           => $slug,
+            'description'    => $validated['description'] ?? '',
+            'dropdown_items' => $dropdownItems,
+            'featured'       => $validated['featured'] ?? false,
         ]);
 
         $category->loadCount('products');
@@ -121,7 +133,21 @@ class CategoryController extends Controller
             'name'            => 'sometimes|required|string|max:255',
             'description'     => 'nullable|string',
             'featured'        => 'nullable|boolean',
+            'dropdown_items'  => 'nullable',
         ]);
+
+        if ($request->has('dropdown_items')) {
+            $dropdownItems = $request->input('dropdown_items');
+            if (is_string($dropdownItems)) {
+                $decoded = json_decode($dropdownItems, true);
+                if (is_array($decoded)) {
+                    $dropdownItems = $decoded;
+                } else {
+                    $dropdownItems = array_values(array_filter(array_map('trim', explode(',', $dropdownItems))));
+                }
+            }
+            $validated['dropdown_items'] = $dropdownItems;
+        }
 
         // Resolve store_id with 3-tier fallback (only update if a value was explicitly sent)
         if (array_key_exists('store_id', $validated) || !empty($validated['store_subdomain']) || !empty($validated['store_name'])) {

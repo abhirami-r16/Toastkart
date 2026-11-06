@@ -136,6 +136,7 @@ export default function StorefrontHome({ storeData, products, categories = [], l
         id: cat.id,
         name: cat.name,
         description: cat.description || '',
+        dropdown_items: cat.dropdown_items || [],
         slug:
           cat.slug ||
           String(cat.name || '')
@@ -996,28 +997,44 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                       >
                         {cat.name}
                       </h3>
-                      {String(cat.slug || '').toLowerCase() === 'newborn' && (
-                        <div className="d-flex flex-wrap gap-2 mt-3 baby-subcat-pills">
-                          {NEWBORN_ITEMS.map((item) => (
-                            <span
-                              key={item}
-                              className="badge rounded-pill px-3 py-2"
-                              style={{
-                                backgroundColor: '#FFF0F5',
-                                color: '#8C3754',
-                                border: '1px solid #FCD4E1',
-                                fontSize: '0.8rem',
-                                fontWeight: 500,
-                                letterSpacing: '0.2px',
-                                cursor: 'default',
-                                boxShadow: '0 2px 6px rgba(212, 93, 126, 0.08)',
-                              }}
-                            >
-                              {item}
-                            </span>
-                          ))}
-                        </div>
-                      )}
+                      {(() => {
+                        let items = [];
+                        if (Array.isArray(cat.dropdown_items) && cat.dropdown_items.length > 0) {
+                          items = cat.dropdown_items;
+                        } else if (typeof cat.dropdown_items === 'string' && cat.dropdown_items.trim()) {
+                          try {
+                            const parsed = JSON.parse(cat.dropdown_items);
+                            if (Array.isArray(parsed) && parsed.length > 0) items = parsed;
+                          } catch (e) {
+                            items = cat.dropdown_items.split(',').map((s) => s.trim()).filter(Boolean);
+                          }
+                        } else if (String(cat.slug || '').toLowerCase() === 'newborn' || String(cat.name || '').toLowerCase() === 'newborn') {
+                          items = NEWBORN_ITEMS;
+                        }
+                        if (!items || items.length === 0) return null;
+                        return (
+                          <div className="d-flex flex-wrap gap-2 mt-3 baby-subcat-pills">
+                            {items.map((item) => (
+                              <span
+                                key={item}
+                                className="badge rounded-pill px-3 py-2"
+                                style={{
+                                  backgroundColor: '#FFF0F5',
+                                  color: '#8C3754',
+                                  border: '1px solid #FCD4E1',
+                                  fontSize: '0.8rem',
+                                  fontWeight: 500,
+                                  letterSpacing: '0.2px',
+                                  cursor: 'default',
+                                  boxShadow: '0 2px 6px rgba(212, 93, 126, 0.08)',
+                                }}
+                              >
+                                {item}
+                              </span>
+                            ))}
+                          </div>
+                        );
+                      })()}
                     </div>
                   ) : theme === 'theme-perfume' ? (
                     <h3 style={{ textTransform: 'uppercase', letterSpacing: '1px', fontSize: '2rem' }}>

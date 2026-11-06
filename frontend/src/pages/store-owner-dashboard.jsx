@@ -899,7 +899,7 @@ export default function StoreOwnerDashboard() {
   // Category State & Modals
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
-  const [categoryForm, setCategoryForm] = useState({ name: "", description: "", featured: false });
+  const [categoryForm, setCategoryForm] = useState({ name: "", description: "", featured: false, dropdown_items: "" });
   const [categorySearchQuery, setCategorySearchQuery] = useState("");
   const [customerSearchQuery, setCustomerSearchQuery] = useState("");
   const [categoryToast, setCategoryToast] = useState("");
@@ -1202,35 +1202,35 @@ export default function StoreOwnerDashboard() {
 
   // Category CRUD Handlers
   const openAddCategoryModal = () => {
-    if (!hasActiveSub && !isPrivileged) {
-      setShowPlanRequiredModal(true);
-      return;
-    }
     setEditingCategory(null);
-    setCategoryForm({ name: "", description: "", featured: false });
+    setCategoryForm({ name: "", description: "", featured: false, dropdown_items: "" });
     setShowCategoryModal(true);
   };
 
   const openInlineCategoryForm = () => {
-    if (!hasActiveSub && !isPrivileged) {
-      setShowPlanRequiredModal(true);
-      return;
-    }
     setEditingCategory(null);
-    setCategoryForm({ name: "", description: "", featured: false });
+    setCategoryForm({ name: "", description: "", featured: false, dropdown_items: "" });
     setShowInlineCategoryForm(true);
   };
 
   const openEditCategoryModal = (cat) => {
-    if (!hasActiveSub && !isPrivileged) {
-      setShowPlanRequiredModal(true);
-      return;
-    }
     setEditingCategory(cat);
+    let itemsStr = "";
+    if (Array.isArray(cat.dropdown_items)) {
+      itemsStr = cat.dropdown_items.join(", ");
+    } else if (typeof cat.dropdown_items === "string") {
+      try {
+        const parsed = JSON.parse(cat.dropdown_items);
+        itemsStr = Array.isArray(parsed) ? parsed.join(", ") : cat.dropdown_items;
+      } catch (e) {
+        itemsStr = cat.dropdown_items;
+      }
+    }
     setCategoryForm({
       name: cat.name || "",
       description: cat.description || "",
-      featured: Boolean(cat.featured)
+      featured: Boolean(cat.featured),
+      dropdown_items: itemsStr,
     });
     setShowCategoryModal(true);
   };
@@ -1238,23 +1238,24 @@ export default function StoreOwnerDashboard() {
   const closeCategoryModal = () => {
     setShowCategoryModal(false);
     setEditingCategory(null);
-    setCategoryForm({ name: "", description: "", featured: false });
+    setCategoryForm({ name: "", description: "", featured: false, dropdown_items: "" });
   };
 
   const handleCategorySubmit = async (e) => {
     e.preventDefault();
-    if (!hasActiveSub && !isPrivileged) {
-      setShowPlanRequiredModal(true);
-      return;
-    }
     if (!categoryForm.name.trim()) return;
 
     const slug = categoryForm.name.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
+    const itemsArray = typeof categoryForm.dropdown_items === 'string'
+      ? categoryForm.dropdown_items.split(',').map(s => s.trim()).filter(Boolean)
+      : (Array.isArray(categoryForm.dropdown_items) ? categoryForm.dropdown_items : []);
 
     // Build payload — include subdomain/name so backend can resolve store even if store_id is a local timestamp
     const payload = {
       name: categoryForm.name.trim(),
       description: categoryForm.description.trim(),
+      dropdown_items: itemsArray,
       featured: categoryForm.featured,
       slug,
       store_id: activeStore?.id ?? null,
@@ -2614,6 +2615,7 @@ export default function StoreOwnerDashboard() {
                           <tr className="fs-8 fw-semibold" style={{ color: "#6d7175", borderBottom: "1px solid #dfe3e8" }}>
                             <th className="border-0 ps-4 py-3">Collection Name</th>
                             <th className="border-0 py-3">Description</th>
+                            <th className="border-0 py-3">Dropdown Items</th>
                             <th className="border-0 py-3">Status</th>
                             <th className="border-0 text-end pe-4 py-3">Actions</th>
                           </tr>
@@ -2624,7 +2626,7 @@ export default function StoreOwnerDashboard() {
                             (c.description && c.description.toLowerCase().includes(categorySearchQuery.toLowerCase()))
                           ).length === 0 ? (
                             <tr>
-                              <td colSpan="4" className="text-center py-4 fs-7" style={{ color: "#6d7175" }}>
+                              <td colSpan="5" className="text-center py-4 fs-7" style={{ color: "#6d7175" }}>
                                 No collections found matching "{categorySearchQuery}".
                               </td>
                             </tr>
@@ -2642,7 +2644,7 @@ export default function StoreOwnerDashboard() {
                                         <Tag size={14} />
                                       </div>
                                       <a
-                                        href={`${import.meta.env.VITE_FRONTEND_URL || 'https://www.toastkart.com'}/store/${activeStore?.slug || activeStore?.subdomain || activeStore?.name?.toLowerCase().replace(/\s+/g, '') || 'teststore1'}/#${cat.name.toLowerCase().includes('women') ? 'women' : cat.name.toLowerCase().includes('men') ? 'men' : cat.name.toLowerCase().includes('kid') ? 'kids' : cat.name.toLowerCase().includes('accessories') ? 'accessories' : cat.name.toLowerCase().includes('tv') ? 'tv-appliances' : 'electronics'}`}
+                                        href={`${import.meta.env.VITE_FRONTEND_URL || 'https://www.toastkart.com'}/store/${activeStore?.slug || activeStore?.subdomain || activeStore?.name?.toLowerCase().replace(/\s+/g, '') || 'teststore1'}/#${cat.slug || cat.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="text-decoration-underline"
@@ -2653,7 +2655,7 @@ export default function StoreOwnerDashboard() {
                                       </a>
                                     </div>
                                   </td>
-                                  <td className="border-0 fs-8" style={{ color: "#6d7175", maxWidth: 260 }}>
+                                  <td className="border-0 fs-8" style={{ color: "#6d7175", maxWidth: 220 }}>
                                     {cat.description ? (
                                       cat.description
                                     ) : (
@@ -2667,6 +2669,37 @@ export default function StoreOwnerDashboard() {
                                         + Add description
                                       </button>
                                     )}
+                                  </td>
+                                  <td className="border-0 fs-8" style={{ maxWidth: 220 }}>
+                                    {(() => {
+                                      let items = [];
+                                      if (Array.isArray(cat.dropdown_items)) items = cat.dropdown_items;
+                                      else if (typeof cat.dropdown_items === 'string') {
+                                        try { items = JSON.parse(cat.dropdown_items); } catch(e) { items = cat.dropdown_items.split(',').map(s=>s.trim()).filter(Boolean); }
+                                      }
+                                      if (items && items.length > 0) {
+                                        return (
+                                          <div className="d-flex flex-wrap gap-1 align-items-center">
+                                            <span className="badge rounded-pill px-2 py-0.5" style={{ background: "rgba(40,116,240,0.1)", color: "#2874f0", fontWeight: 700, fontSize: "0.72rem" }}>
+                                              {items.length} items
+                                            </span>
+                                            <span className="text-muted text-truncate d-inline-block" style={{ maxWidth: 140, fontSize: "0.75rem" }} title={items.join(', ')}>
+                                              {items.slice(0, 3).join(', ')}{items.length > 3 ? '...' : ''}
+                                            </span>
+                                          </div>
+                                        );
+                                      }
+                                      return (
+                                        <button
+                                          type="button"
+                                          onClick={() => openEditCategoryModal(cat)}
+                                          className="btn btn-sm btn-link p-0 text-decoration-none fs-8"
+                                          style={{ color: "#6d7175" }}
+                                        >
+                                          + Add dropdown items
+                                        </button>
+                                      );
+                                    })()}
                                   </td>
                                   <td className="border-0">
                                     {cat.featured ? (
@@ -4093,6 +4126,54 @@ export default function StoreOwnerDashboard() {
                   style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
                   placeholder="Summary of products in this category..."
                 />
+              </div>
+
+              <div>
+                <div className="d-flex align-items-center justify-content-between mb-1">
+                  <label className="fs-8 fw-semibold mb-0" style={{ color: "#454f5b" }}>Dropdown Sub-Items / Subcategories (Optional)</label>
+                  {String(categoryForm.name || '').toLowerCase().includes('newborn') && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCategoryForm(prev => ({
+                          ...prev,
+                          dropdown_items: 'Bed, Carry bag, Motherbag, Maternity pillow, Feeding pillow, Hooded towel, Plain towel, Dress, Napkin, Diaper, Romber set'
+                        }));
+                      }}
+                      className="btn btn-link btn-sm p-0 fs-9 text-decoration-none fw-bold"
+                      style={{ color: "#FF5722" }}
+                    >
+                      + Fill Newborn Essentials
+                    </button>
+                  )}
+                </div>
+                <textarea
+                  rows="3"
+                  value={categoryForm.dropdown_items || ""}
+                  onChange={(e) => setCategoryForm({ ...categoryForm, dropdown_items: e.target.value })}
+                  className="form-control"
+                  style={{ border: "1px solid #dfe3e8", color: "#202223", backgroundColor: "#fafbfc" }}
+                  placeholder="e.g. Bed, Carry bag, Motherbag, Maternity pillow, Feeding pillow, Hooded towel, Plain towel, Dress, Napkin, Diaper, Romber set"
+                />
+                <div className="fs-9 mt-1 text-muted">
+                  Enter items separated by commas. These will appear in the navigation dropdown list for this category on your store.
+                </div>
+                {categoryForm.dropdown_items && (
+                  <div className="d-flex flex-wrap gap-1 mt-2">
+                    {(typeof categoryForm.dropdown_items === 'string'
+                      ? categoryForm.dropdown_items.split(',').map(s => s.trim()).filter(Boolean)
+                      : []
+                    ).map((sub, i) => (
+                      <span
+                        key={i}
+                        className="badge rounded-pill px-2.5 py-1"
+                        style={{ background: "rgba(255,87,34,0.1)", color: "#FF5722", border: "1px solid rgba(255,87,34,0.2)", fontSize: "0.75rem", fontWeight: 600 }}
+                      >
+                        {sub}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="form-check">
