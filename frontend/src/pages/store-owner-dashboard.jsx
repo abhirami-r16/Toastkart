@@ -4216,12 +4216,20 @@ export default function StoreOwnerDashboard() {
       {/* ADD / EDIT CATEGORY MODAL */}
       {showCategoryModal && (
         <div className="position-fixed top-0 bottom-0 start-0 end-0 bg-dark bg-opacity-75 d-flex align-items-center justify-content-center p-3" style={{ zIndex: 1050 }}>
-          <div className="bg-white rounded-3 shadow w-100 p-4" style={{ maxWidth: 460, border: "1px solid #dfe3e8" }}>
-            <div className="d-flex align-items-center justify-content-between mb-3 border-bottom pb-3" style={{ borderColor: "#dfe3e8" }}>
+          <div
+            className="bg-white rounded-3 shadow w-100 p-4 d-flex flex-column"
+            style={{
+              maxWidth: 480,
+              maxHeight: "90vh",
+              border: "1px solid #dfe3e8",
+              overflow: "hidden",
+            }}
+          >
+            <div className="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2" style={{ borderColor: "#dfe3e8", flexShrink: 0 }}>
               <h3 className="fs-5 font-bold mb-0" style={{ color: "#202223" }}>{editingCategory ? `Edit Category: ${editingCategory.name}` : "Add New Category"}</h3>
               <button onClick={closeCategoryModal} className="btn btn-sm p-0 border-0 bg-transparent" style={{ color: "#6d7175" }}>✕</button>
             </div>
-            <form onSubmit={handleCategorySubmit} className="d-flex flex-column gap-3 fs-7">
+            <form onSubmit={handleCategorySubmit} className="d-flex flex-column gap-2.5 fs-7" style={{ overflowY: "auto", overflowX: "hidden", flex: 1, paddingRight: "4px" }}>
               <div>
                 <label className="mb-1 fs-8 fw-semibold" style={{ color: "#454f5b" }}>Category Name *</label>
                 <input
@@ -4258,7 +4266,7 @@ export default function StoreOwnerDashboard() {
                   )}
                 </div>
                 <textarea
-                  rows="3"
+                  rows="2"
                   value={categoryForm.description}
                   onChange={(e) => setCategoryForm({ ...categoryForm, description: e.target.value })}
                   className="form-control"
@@ -4287,7 +4295,7 @@ export default function StoreOwnerDashboard() {
                   )}
                 </div>
                 <textarea
-                  rows="3"
+                  rows="2"
                   value={categoryForm.dropdown_items || ""}
                   onChange={(e) => setCategoryForm({ ...categoryForm, dropdown_items: e.target.value })}
                   className="form-control"
@@ -4315,7 +4323,7 @@ export default function StoreOwnerDashboard() {
                 )}
               </div>
 
-              <div className="form-check">
+              <div className="form-check mt-1">
                 <input
                   type="checkbox"
                   id="categoryFeaturedCheck"
@@ -4328,11 +4336,20 @@ export default function StoreOwnerDashboard() {
                 </label>
               </div>
 
-              <div className="d-flex align-items-center justify-content-end gap-2 mt-2 pt-3 border-top" style={{ borderColor: "#dfe3e8" }}>
+              <div
+                className="d-flex align-items-center justify-content-end gap-2 mt-2 pt-3 border-top"
+                style={{
+                  borderColor: "#dfe3e8",
+                  position: "sticky",
+                  bottom: 0,
+                  backgroundColor: "#ffffff",
+                  zIndex: 5,
+                }}
+              >
                 <button type="button" onClick={closeCategoryModal} className="btn btn-sm px-3 py-2" style={{ background: "#f1f2f4", color: "#454f5b", border: "1px solid #dfe3e8", borderRadius: "6px", fontWeight: "600" }}>
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-sm px-4 py-2 text-white fw-bold" style={{ background: "#1c2226", borderRadius: "6px" }}>
+                <button type="submit" className="btn btn-sm px-4 py-2 text-white fw-bold" style={{ background: "#1c2226", borderRadius: "6px", boxShadow: "0 2px 6px rgba(0,0,0,0.15)" }}>
                   {editingCategory ? "Save Changes" : "Create Category"}
                 </button>
               </div>
