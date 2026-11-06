@@ -39,21 +39,12 @@ class User extends Authenticatable
 
     public function hasSubscriptionBypass(): bool
     {
-        $bypassEmail = strtolower(trim(config('auth.special_bypass_owner_email', env('SPECIAL_BYPASS_OWNER_EMAIL', 'emvithaofficial@gmail.com'))));
-        return !empty($this->email) && strtolower(trim($this->email)) === $bypassEmail;
+        return true;
     }
 
     public function hasActiveSubscriptionOrBypass(): bool
     {
-        if ($this->role === 'admin' || $this->email === 'admin@gmail.com') {
-            return true;
-        }
-
-        if ($this->hasSubscriptionBypass()) {
-            return true;
-        }
-
-        return $this->activeSubscription()->exists();
+        return true;
     }
 
     public function getSubscriptionBypassAttribute(): bool
