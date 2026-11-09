@@ -35,6 +35,18 @@ export function resolveStoreTheme(storeData) {
 
   const storeName = String(storeData.name || '').trim().toLowerCase();
   const storeSlug = String(storeData.slug || '').trim().toLowerCase();
+  const storeSubdomain = String(storeData.subdomain || '').trim().toLowerCase();
+  if (
+    storeName.includes('amiora') ||
+    storeName.includes('cocoa') ||
+    storeSlug.includes('amiora') ||
+    storeSlug.includes('cocoa') ||
+    storeSubdomain.includes('amiora') ||
+    storeSubdomain.includes('cocoa')
+  ) {
+    return 'theme-coconut';
+  }
+
   if (
     storeName.includes('nafi') ||
     storeName.includes('little wonder') ||

@@ -51,6 +51,7 @@ export default function StorefrontHome({ storeData, products, categories = [], l
   const [beautySlide, setBeautySlide] = useState(0);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [activeCoconutFilter, setActiveCoconutFilter] = useState('all');
+  const [coconutQuantities, setCoconutQuantities] = useState({});
   const [selectedSubcategories, setSelectedSubcategories] = useState({});
 
   useEffect(() => {
@@ -590,24 +591,69 @@ export default function StorefrontHome({ storeData, products, categories = [], l
               {/* Add to Cart Button */}
               {theme === 'theme-coconut' ? (
                 <div className="coconut-cart-wrapper w-100 mt-auto">
-                  <button
-                    className="btn coconut-cart-btn w-100 rounded-pill fw-bold d-flex align-items-center justify-content-center"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      addToCart(
-                        {
-                          ...product,
-                          selectedSize: getFirstAvailableSize(product),
-                          selectedColor: getFirstAvailableColor(product),
-                        },
-                        1
-                      );
-                    }}
-                  >
-                    <ShoppingCart size={13} strokeWidth={2.2} />
-                    <span className="coconut-cart-btn-text">Add to Cart</span>
-                  </button>
+                  <div className="coconut-qty-container d-flex align-items-center gap-2">
+                    <div
+                      className="coconut-qty-control d-flex align-items-center"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                    >
+                      <button
+                        type="button"
+                        className="coconut-qty-btn"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setCoconutQuantities((prev) => ({
+                            ...prev,
+                            [product.id]: Math.max(1, (prev[product.id] || 1) - 1),
+                          }));
+                        }}
+                        aria-label="Decrease quantity"
+                      >
+                        −
+                      </button>
+                      <span className="coconut-qty-value">
+                        {coconutQuantities[product.id] || 1}
+                      </span>
+                      <button
+                        type="button"
+                        className="coconut-qty-btn"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setCoconutQuantities((prev) => ({
+                            ...prev,
+                            [product.id]: (prev[product.id] || 1) + 1,
+                          }));
+                        }}
+                        aria-label="Increase quantity"
+                      >
+                        +
+                      </button>
+                    </div>
+
+                    <button
+                      className="btn coconut-cart-btn flex-grow-1 rounded-pill fw-bold d-flex align-items-center justify-content-center"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const qty = coconutQuantities[product.id] || 1;
+                        addToCart(
+                          {
+                            ...product,
+                            selectedSize: getFirstAvailableSize(product),
+                            selectedColor: getFirstAvailableColor(product),
+                          },
+                          qty
+                        );
+                      }}
+                    >
+                      <ShoppingCart size={13} strokeWidth={2.2} />
+                      <span className="coconut-cart-btn-text ms-1">Add to Cart</span>
+                    </button>
+                  </div>
                 </div>
               ) : theme === 'theme-baby' ? (
                 <div className="baby-cart-wrapper w-100 mt-auto">
@@ -900,7 +946,7 @@ export default function StorefrontHome({ storeData, products, categories = [], l
 
       {/* Category Filter Pills (Sage Mint #E8EFE9: "Virgin Oils", "Zero Waste Bowls") */}
       {theme === 'theme-coconut' && !searchQuery && filteredProducts.length > 0 && categoriesToRender.length > 0 && (
-        <div className="coconut-filter-container container text-center my-4">
+        <div className="coconut-filter-container container text-center my-4" id="shop">
           <div className="coconut-filter-pills d-flex flex-wrap justify-content-center gap-2">
             <button
               type="button"
@@ -1412,7 +1458,7 @@ export default function StorefrontHome({ storeData, products, categories = [], l
                     </div>
                     <div>
                       <h5 className="fw-bold mb-1" style={{ color: '#1b4332', fontSize: '1.05rem' }}>Zero-Waste Sustainable Ecosystem</h5>
-                      <p className="text-muted mb-0" style={{ fontSize: '0.9rem' }}>From virgin oil and coconut milk to reclaimed shell bowls and coir fibre, every part is lovingly crafted.</p>
+                      <p className="text-muted mb-0" style={{ fontSize: '0.9rem' }}>From cold-pressed virgin oil and fresh coconut milk to desiccated coconut powder, every part is lovingly prepared with purity.</p>
                     </div>
                   </div>
                 </div>

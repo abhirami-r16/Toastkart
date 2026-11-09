@@ -1,93 +1,80 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function ThemeCoconutHero() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const slides = [
     {
-      img: '/images/coconut-thenga-hero.jpg',
-      badge: '100% Organic',
-      title: 'Welcome to the world of Coconut!',
-      subtitle: 'Embrace pure, sustainable living with 100% natural and handcrafted coconut essentials',
-      cta: 'SHOP COLLECTION',
-      href: '#shop'
+      img: '/images/cocoamiora-hero-slide-1-v6.jpg',
+      alt: "Bring the Purest Goodness to Your Home - Experience 100% natural, hand-sourced coconut products from Kerala's heritage groves.",
     },
     {
-      img: '/images/coconut-kerala-culture.jpg',
-      badge: 'Traditional Heritage Living',
-      title: 'Rooted in Kerala Culture',
-      subtitle: 'Cold-pressed virgin coconut oil, pure white coconuts and sustainable handcrafted living',
-      cta: 'DISCOVER CRAFTS',
-      href: '#cold-pressed-oils'
+      img: '/images/cocoamiora-hero-slide-2-v6.jpg',
+      alt: 'Authentic Coconut Goodness, Sourced from Kerala - Cold-pressed, pure oil and natural desiccated powder.',
     },
     {
-      img: '/images/coconut-hero-slide-1.jpg',
-      badge: 'Traditional Wood Extraction',
-      title: 'Pure Kerala Virgin Coconut Oil',
-      subtitle: 'Harvested directly from coastal coconut groves in God\'s Own Country',
-      cta: 'EXPLORE OILS',
-      href: '#oils'
-    }
+      img: '/images/cocoamiora-hero-slide-3-v6.jpg',
+      alt: 'Authentic Kerala Goodness, Straight from the Grove - Experience 100% natural, hand-harvested coconuts and premium products.',
+    },
   ];
 
+  // Automatically transition between the 3 images every 5 seconds
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 6000);
+    }, 5000);
     return () => clearInterval(timer);
   }, [slides.length]);
 
-  const active = slides[currentSlide];
+  const handleScrollToShop = (e) => {
+    e.preventDefault();
+    const shopEl =
+      document.getElementById('shop') ||
+      document.querySelector('.coconut-filter-container') ||
+      document.querySelector('.storefront-section');
+    if (shopEl) {
+      shopEl.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <>
-      {/* Preload LCP hero image */}
+      {/* Preload hero images */}
       <link rel="preload" as="image" href={slides[0].img} fetchPriority="high" />
+      <link rel="preload" as="image" href={slides[1].img} />
+      <link rel="preload" as="image" href={slides[2].img} />
 
       <div className="storefront-hero-container">
-        <div className="coconut-hero">
-          {slides.map((s, index) => (
-            <div
-              key={index}
-              className={`coconut-hero-slide ${currentSlide === index ? 'active' : ''}`}
-              style={{
-                backgroundImage: `url(${s.img})`,
-                opacity: currentSlide === index ? 1 : 0,
-                zIndex: 1,
-              }}
-            />
-          ))}
-
-          {/* Tropical Gradient Overlay */}
-          <div className="coconut-hero-overlay">
-            <div className="container">
-              <div className="coconut-hero-content">
-                <div className="coconut-hero-badge">
-                  {active.badge}
-                </div>
-
-                <h1 className="coconut-hero-title">
-                  {active.title}
-                </h1>
-
-                <p className="coconut-hero-subtitle">
-                  {active.subtitle}
-                </p>
-
-                <div className="d-flex gap-3 justify-content-center align-items-center mt-4">
-                  <a href={active.href} className="coconut-btn-thenga">
-                    {active.cta} <ArrowRight size={16} />
-                  </a>
-                </div>
-              </div>
-            </div>
+        <div className="coconut-hero-slider-wrap">
+          <div className="coconut-hero-slides">
+            {slides.map((s, index) => (
+              <a
+                key={index}
+                href="#shop"
+                onClick={handleScrollToShop}
+                className={`coconut-hero-slide-item ${currentSlide === index ? 'active' : ''}`}
+                aria-label={s.alt}
+              >
+                <img
+                  src={s.img}
+                  alt={s.alt}
+                  className="coconut-hero-slide-img"
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  fetchPriority={index === 0 ? 'high' : 'auto'}
+                />
+              </a>
+            ))}
           </div>
 
-          {/* Slider Prev / Next Arrows */}
+          {/* Slider Prev / Next Controls */}
           <button
             type="button"
             className="coconut-hero-arrow coconut-hero-prev"
-            onClick={() => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+            }}
             aria-label="Previous slide"
           >
             <ChevronLeft size={22} />
@@ -95,7 +82,11 @@ export default function ThemeCoconutHero() {
           <button
             type="button"
             className="coconut-hero-arrow coconut-hero-next"
-            onClick={() => setCurrentSlide((prev) => (prev + 1) % slides.length)}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setCurrentSlide((prev) => (prev + 1) % slides.length);
+            }}
             aria-label="Next slide"
           >
             <ChevronRight size={22} />
@@ -108,8 +99,12 @@ export default function ThemeCoconutHero() {
                 key={idx}
                 type="button"
                 className={`coconut-hero-dot ${currentSlide === idx ? 'active' : ''}`}
-                onClick={() => setCurrentSlide(idx)}
-                aria-label={`Slide ${idx + 1}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setCurrentSlide(idx);
+                }}
+                aria-label={`Go to slide ${idx + 1}`}
               />
             ))}
           </div>

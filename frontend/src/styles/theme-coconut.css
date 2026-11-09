@@ -180,6 +180,63 @@
   background-color: var(--coco-cream);
 }
 
+/* Authentic CocoAmiora Hero Slider (2 Rotating Auto-play Slides) */
+.theme-coconut .coconut-hero-slider-wrap,
+.theme-coconut .coconut-hero-banner-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  background-color: var(--coco-cream);
+  display: block;
+}
+
+.theme-coconut .coconut-hero-slides {
+  position: relative;
+  width: 100%;
+  display: block;
+}
+
+.theme-coconut .coconut-hero-slide-item {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.8s ease-in-out;
+}
+
+.theme-coconut .coconut-hero-slide-item:not(.active) {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.theme-coconut .coconut-hero-slide-item.active {
+  position: relative;
+  opacity: 1;
+  z-index: 2;
+}
+
+.theme-coconut .coconut-hero-slide-img,
+.theme-coconut .coconut-hero-banner-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  margin: 0;
+}
+
+.theme-coconut .coconut-hero-banner-link {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  cursor: pointer;
+}
+
 .theme-coconut .coconut-hero {
   position: relative;
   height: calc(90vh - 90px);
@@ -795,6 +852,58 @@
   padding: 0 1.15rem 1.15rem;
   width: 100%;
   margin-top: auto;
+}
+
+/* Quantity Selector for Coconut Theme Product Cards */
+.theme-coconut .coconut-qty-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.theme-coconut .coconut-qty-control {
+  background: #F4F7F4;
+  border: 1px solid rgba(20, 39, 28, 0.2);
+  border-radius: 50px;
+  padding: 2px 4px;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.theme-coconut .coconut-qty-btn {
+  background: transparent;
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--coco-primary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  padding: 0;
+  line-height: 1;
+}
+
+.theme-coconut .coconut-qty-btn:hover {
+  background: rgba(20, 39, 28, 0.12);
+  color: var(--coco-primary-light);
+}
+
+.theme-coconut .coconut-qty-value {
+  min-width: 24px;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--coco-primary);
+  user-select: none;
+  padding: 0 2px;
 }
 
 /* Primary CTA Button: Forest Green #14271C ("Add to Cart", "Checkout") */

@@ -4,6 +4,7 @@ import { ShoppingCart, Heart, ArrowLeft, ArrowRight, Zap, ChevronLeft, ChevronRi
 import { useStorefrontCart } from '../../context/StorefrontCartContext';
 import { useStorefrontAuth } from '../../context/StorefrontAuthContext';
 import { normalizeProductImage } from '../../utils/imageUtils';
+import { resolveStoreTheme } from '../../utils/themeResolver';
 
 export default function ProductDetail({ storeData, products }) {
   const { id } = useParams();
@@ -11,6 +12,10 @@ export default function ProductDetail({ storeData, products }) {
   const { addToCart, toggleWishlist, isInWishlist } = useStorefrontCart();
   const { requireAuth } = useStorefrontAuth();
 
+  const theme = resolveStoreTheme(storeData);
+  const isCoconutTheme = theme === 'theme-coconut';
+
+  const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
 
@@ -29,8 +34,8 @@ export default function ProductDetail({ storeData, products }) {
   const inWishlist = product ? isInWishlist(product.id) : false;
 
   // Size calculation
-  const productSizes = product?.size 
-    ? String(product.size).toUpperCase().split(',').map(s => s.trim()).filter(Boolean) 
+  const productSizes = product?.size
+    ? String(product.size).toUpperCase().split(',').map(s => s.trim()).filter(Boolean)
     : [];
   // Keep all sizes for all products
   const displaySizes = productSizes;
@@ -47,7 +52,7 @@ export default function ProductDetail({ storeData, products }) {
   }, [productSizes, selectedSize]);
 
   // Color calculation
-  const productColors = product?.color 
+  const productColors = product?.color
     ? String(product.color).split(',').map(c => c.trim()).filter(Boolean)
     : [];
 
@@ -55,15 +60,15 @@ export default function ProductDetail({ storeData, products }) {
     if (!product) return [];
     let imgs = [];
     if (typeof product.images === 'string') {
-      try { imgs = JSON.parse(product.images); } catch(e) {}
+      try { imgs = JSON.parse(product.images); } catch (e) { }
     } else if (Array.isArray(product.images)) {
       imgs = product.images;
     }
-    
+
     let normalizedImgs = imgs.map(img => typeof img === 'string' ? { url: img, color: '' } : img);
-    
+
     const colors = product.color ? String(product.color).split(',').map(c => c.trim()).filter(Boolean) : [];
-    
+
     if (colors.length > 0) {
       const finalImgs = [];
       colors.forEach(color => {
@@ -83,17 +88,17 @@ export default function ProductDetail({ storeData, products }) {
       });
       return finalImgs;
     }
-    
+
     if (normalizedImgs.length === 0) {
       return [{ url: product.image || product.image_url, color: '' }];
     }
-    
+
     // Ensure the primary image is always included and is first
     const primaryUrl = product.image || product.image_url;
     if (primaryUrl && !normalizedImgs.some(img => img.url === primaryUrl)) {
       normalizedImgs.unshift({ url: primaryUrl, color: '' });
     }
-    
+
     return normalizedImgs;
   }, [product?.images, product?.color, product?.image, product?.image_url]);
 
@@ -133,11 +138,11 @@ export default function ProductDetail({ storeData, products }) {
   }, [productColors, selectedColor, parsedImages, product?.name]);
 
   const handleAddToCart = () => {
-    addToCart({ ...product, selectedSize, selectedColor }, 1);
+    addToCart({ ...product, selectedSize, selectedColor }, quantity);
   };
 
   const handleBuyNow = () => {
-    addToCart({ ...product, selectedSize, selectedColor }, 1);
+    addToCart({ ...product, selectedSize, selectedColor }, quantity);
     navigate(`${basePath}/checkout`);
   };
 
@@ -170,7 +175,7 @@ export default function ProductDetail({ storeData, products }) {
 
   return (
     <div className="storefront-container py-5 px-3 px-md-4">
-      <button 
+      <button
         className="btn btn-link text-decoration-none text-secondary mb-4 d-flex align-items-center gap-2 p-0"
         onClick={() => navigate(-1)}
       >
@@ -181,7 +186,7 @@ export default function ProductDetail({ storeData, products }) {
         <div className="col-md-6">
           <div className="product-image-container p-4 bg-white rounded-3 shadow-sm border border-light text-center h-100 d-flex flex-column align-items-center justify-content-center position-relative">
             {parsedImages.length > 1 && (
-              <button 
+              <button
                 className="btn position-absolute start-0 top-50 translate-middle-y m-2 rounded-circle shadow-sm bg-white"
                 style={{ width: '40px', height: '40px', padding: '0', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10, color: '#333' }}
                 onClick={handlePrevImage}
@@ -189,16 +194,16 @@ export default function ProductDetail({ storeData, products }) {
                 <ChevronLeft size={20} />
               </button>
             )}
-            <img 
-              src={activeImage} 
-              alt={product.name} 
-              className="img-fluid rounded" 
+            <img
+              src={activeImage}
+              alt={product.name}
+              className="img-fluid rounded"
               fetchPriority="high"
               decoding="async"
               style={{ maxHeight: '400px', objectFit: 'contain', transition: 'all 0.15s ease-in-out', opacity: isFading ? 0 : 1, transform: isFading ? 'scale(0.98)' : 'scale(1)' }}
             />
             {parsedImages.length > 1 && (
-              <button 
+              <button
                 className="btn position-absolute end-0 top-50 translate-middle-y m-2 rounded-circle shadow-sm bg-white"
                 style={{ width: '40px', height: '40px', padding: '0', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10, color: '#333' }}
                 onClick={handleNextImage}
@@ -211,8 +216,8 @@ export default function ProductDetail({ storeData, products }) {
                 {parsedImages.map((img, idx) => {
                   const imgUrl = normalizeProductImage(img.url, product.name);
                   return (
-                    <div 
-                      key={idx} 
+                    <div
+                      key={idx}
                       className={`border rounded p-1 ${activeImage === imgUrl ? 'border-primary shadow-sm' : 'border-light opacity-75'}`}
                       style={{ width: '60px', height: '60px', cursor: 'pointer', transition: 'all 0.2s' }}
                       onClick={() => {
@@ -225,7 +230,7 @@ export default function ProductDetail({ storeData, products }) {
                 })}
               </div>
             )}
-            <button 
+            <button
               className="btn position-absolute top-0 end-0 m-3 rounded-circle shadow-sm bg-white"
               style={{ width: '40px', height: '40px', padding: '0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: inWishlist ? '#ff4757' : '#ced4da', zIndex: 10 }}
               onClick={() => toggleWishlist(product)}
@@ -242,10 +247,10 @@ export default function ProductDetail({ storeData, products }) {
               </span>
             )}
             <h1 className="fs-2 fs-md-1 fw-bold mb-3 lh-sm">{product.name}</h1>
-            
-            
 
-<div className="d-flex align-items-baseline flex-wrap gap-2 mb-4">
+
+
+            <div className="d-flex align-items-baseline flex-wrap gap-2 mb-4">
               {(() => {
                 const parsePrice = (val) => {
                   if (val === null || val === undefined || val === '') return 0;
@@ -255,7 +260,7 @@ export default function ProductDetail({ storeData, products }) {
                 };
                 const pPrice = parsePrice(product.price);
                 const pCompare = parsePrice(product.compare_price);
-                
+
                 return pCompare > pPrice && pPrice > 0 ? (
                   <>
                     <span className="fs-4 text-muted text-decoration-line-through">
@@ -297,40 +302,84 @@ export default function ProductDetail({ storeData, products }) {
             <div className="mb-4">
               <h6 className="fw-bold mb-2 text-uppercase" style={{ letterSpacing: '0.5px' }}>Product Details</h6>
               {product.description ? (
-                <div 
-                  className="text-secondary fs-6 lh-base product-description" 
+                <div
+                  className="text-secondary fs-6 lh-base product-description"
                   style={{ whiteSpace: 'pre-wrap' }}
-                  dangerouslySetInnerHTML={{ __html: product.description.includes('<p>') || product.description.includes('<ul>') || product.description.includes('<br>') ? product.description : product.description.replace(/</g, '&lt;').replace(/>/g, '&gt;') }} 
+                  dangerouslySetInnerHTML={{ __html: product.description.includes('<p>') || product.description.includes('<ul>') || product.description.includes('<br>') ? product.description : product.description.replace(/</g, '&lt;').replace(/>/g, '&gt;') }}
                 />
               ) : (
                 <div className="text-secondary fs-6 fst-italic">No product details provided.</div>
               )}
             </div>
 
-            <div className="mb-4">
-              <div className="d-flex justify-content-between align-items-center mb-2">
-                <span className="fw-bold fs-6">Select Size</span>
-                <span className="text-primary fs-8 cursor-pointer text-decoration-underline">Size Guide</span>
-              </div>
-              <div className="d-flex flex-wrap gap-2">
-                {displaySizes.map((sz, idx) => {
-                  const isAvailable = productSizes.includes(sz);
-                  const isSelected = selectedSize === sz;
-                  return (
+            {isCoconutTheme ? (
+              <div className="mb-4">
+                <div className="d-flex justify-content-between align-items-center mb-2">
+                  <span className="fw-bold fs-6" style={{ color: '#14271C' }}>Quantity</span>
+                  {product.size && (
+                    <span className="badge rounded-pill bg-white text-secondary border px-3 py-1 fw-semibold fs-7" style={{ borderColor: 'rgba(20, 39, 28, 0.2)' }}>
+                      Pack: {product.size}
+                    </span>
+                  )}
+                </div>
+                <div className="d-flex align-items-center gap-3">
+                  <div
+                    className="d-inline-flex align-items-center bg-light border rounded-pill px-2 py-1"
+                    style={{ borderColor: 'rgba(20, 39, 28, 0.25)' }}
+                  >
                     <button
-                      key={idx}
-                      className={`btn border fw-bold d-flex align-items-center justify-content-center px-3 ${isSelected ? 'border-dark bg-dark text-white' : 'bg-white text-dark'} ${!isAvailable ? 'opacity-50 text-decoration-line-through' : ''}`}
-                      style={{ minWidth: '48px', height: '48px', borderRadius: '8px' }}
-                      disabled={!isAvailable}
-                      onClick={() => setSelectedSize(sz)}
-                      title={!isAvailable ? 'Out of stock' : 'In stock'}
+                      type="button"
+                      className="btn btn-sm btn-link text-dark text-decoration-none p-0 d-flex align-items-center justify-content-center"
+                      style={{ width: '38px', height: '38px', fontSize: '1.25rem', fontWeight: 'bold' }}
+                      onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
+                      aria-label="Decrease quantity"
                     >
-                      {sz}
+                      −
                     </button>
-                  );
-                })}
+                    <span
+                      className="px-3 fw-bold fs-6 text-center"
+                      style={{ minWidth: '45px', color: '#14271C' }}
+                    >
+                      {quantity}
+                    </span>
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-link text-dark text-decoration-none p-0 d-flex align-items-center justify-content-center"
+                      style={{ width: '38px', height: '38px', fontSize: '1.25rem', fontWeight: 'bold' }}
+                      onClick={() => setQuantity((prev) => prev + 1)}
+                      aria-label="Increase quantity"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="mb-4">
+                <div className="d-flex justify-content-between align-items-center mb-2">
+                  <span className="fw-bold fs-6">Select Size</span>
+                  <span className="text-primary fs-8 cursor-pointer text-decoration-underline">Size Guide</span>
+                </div>
+                <div className="d-flex flex-wrap gap-2">
+                  {displaySizes.map((sz, idx) => {
+                    const isAvailable = productSizes.includes(sz);
+                    const isSelected = selectedSize === sz;
+                    return (
+                      <button
+                        key={idx}
+                        className={`btn border fw-bold d-flex align-items-center justify-content-center px-3 ${isSelected ? 'border-dark bg-dark text-white' : 'bg-white text-dark'} ${!isAvailable ? 'opacity-50 text-decoration-line-through' : ''}`}
+                        style={{ minWidth: '48px', height: '48px', borderRadius: '8px' }}
+                        disabled={!isAvailable}
+                        onClick={() => setSelectedSize(sz)}
+                        title={!isAvailable ? 'Out of stock' : 'In stock'}
+                      >
+                        {sz}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             {productColors.length > 0 && (
               <div className="mb-4">
@@ -357,14 +406,14 @@ export default function ProductDetail({ storeData, products }) {
 
             <div className="d-flex flex-column gap-3 mb-5">
               <div className="d-flex flex-column flex-sm-row gap-3">
-                <button 
+                <button
                   className="btn btn-lg fw-bold d-flex align-items-center justify-content-center gap-2 flex-grow-1 py-3"
                   style={{ backgroundColor: '#ff9f00', color: '#fff', border: 'none', borderRadius: '8px' }}
                   onClick={handleAddToCart}
                 >
                   <ShoppingCart size={20} /> Add to Cart
                 </button>
-                <button 
+                <button
                   className="btn btn-lg fw-bold d-flex align-items-center justify-content-center gap-2 flex-grow-1 py-3"
                   style={{ backgroundColor: '#fb641b', color: '#fff', border: 'none', borderRadius: '8px' }}
                   onClick={handleBuyNow}
@@ -372,14 +421,14 @@ export default function ProductDetail({ storeData, products }) {
                   <Zap size={20} /> Buy Now
                 </button>
               </div>
-              <button 
+              <button
                 className="btn btn-lg fw-bold d-flex align-items-center justify-content-center gap-2 w-100 py-3"
                 style={{ backgroundColor: '#25D366', color: '#fff', border: 'none', borderRadius: '8px' }}
                 onClick={() => {
                   const price = Number(product.price);
                   const sizeStr = selectedSize ? ` (Size: ${selectedSize})` : '';
                   const colorStr = selectedColor ? ` (Color: ${selectedColor})` : '';
-                  const text = encodeURIComponent(`Hi, I would like to place an order for:\n- 1x ${product.name}${sizeStr}${colorStr}\nTotal: ₹${price.toFixed(2)}`);
+                  const text = encodeURIComponent(`Hi, I would like to place an order for:\n- ${quantity}x ${product.name}${sizeStr}${colorStr}\nTotal: ₹${(price * quantity).toFixed(2)}`);
                   window.open(`https://wa.me/1234567890?text=${text}`, '_blank');
                 }}
               >
@@ -393,7 +442,7 @@ export default function ProductDetail({ storeData, products }) {
             <div className="border-top pt-4">
               <div className="d-flex flex-column gap-2 text-muted fs-7">
                 <div className="d-flex gap-2">
-                  <strong>Availability:</strong> 
+                  <strong>Availability:</strong>
                   <span className={product.stock > 0 || product.stock_quantity > 0 ? 'text-success' : 'text-danger'}>
                     {product.stock > 0 || product.stock_quantity > 0 ? 'In Stock' : 'Out of Stock'}
                   </span>
