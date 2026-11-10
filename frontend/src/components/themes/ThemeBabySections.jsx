@@ -734,6 +734,43 @@ import {
 
 
 
+const InstagramBrandIcon = ({ size = 20, className = "" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="babyInstaGrad" cx="30%" cy="107%" r="150%">
+        <stop offset="0%" stopColor="#fdf497" />
+        <stop offset="10%" stopColor="#fdf497" />
+        <stop offset="45%" stopColor="#fd5949" />
+        <stop offset="60%" stopColor="#d6249f" />
+        <stop offset="90%" stopColor="#285AEB" />
+      </radialGradient>
+    </defs>
+    <rect x="2" y="2" width="20" height="20" rx="5.5" fill="url(#babyInstaGrad)" />
+    <circle cx="12" cy="12" r="4.2" stroke="#FFFFFF" strokeWidth="1.8" fill="none" />
+    <circle cx="17.2" cy="6.8" r="1.1" fill="#FFFFFF" />
+  </svg>
+);
+
+const YoutubeBrandIcon = ({ size = 20, className = "" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z"
+      fill="#FF0000"
+    />
+    <polygon points="9.6 15.5 15.6 12 9.6 8.5" fill="#FFFFFF" />
+  </svg>
+);
+
+const FacebookBrandIcon = ({ size = 20, className = "" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+    <circle cx="12" cy="12" r="11" fill="#1877F2" />
+    <path
+      d="M15.12 12.88l.52-3.41h-3.27V7.26c0-.93.46-1.84 1.92-1.84h1.49V2.51S14.43 2.28 13.14 2.28c-2.7 0-4.46 1.64-4.46 4.6v2.59H5.68v3.41h3v8.26a11.13 11.13 0 0 0 3.69 0v-8.26h2.75z"
+      fill="#FFFFFF"
+    />
+  </svg>
+);
+
 const InstagramIcon = () => (
 
 
@@ -12698,7 +12735,88 @@ const [activeTab, setActiveTab] = useState('featured');
 
 
 
-      {/* 7. Dedicated Footer */}
+            {/* 6. Follow AN' NAFI Baby Shop Social Section */}
+      <section className="baby-social-section" id="social-community">
+        <div className="container">
+          <div className="baby-social-header text-center">
+            <span className="baby-social-badge">
+              <span className="baby-social-badge-dot"></span>
+              Join Our Community
+            </span>
+            <h2 className="baby-social-heading">Follow AN’ NAFI Baby Shop</h2>
+            <p className="baby-social-subtitle">
+              Stay connected with us for the latest collections, adorable baby products, updates and special moments.
+            </p>
+          </div>
+
+          <div className="baby-social-grid">
+            {/* Instagram Card */}
+            <a
+              href="https://www.instagram.com/reel/Deo5m0STF5C/?rpxt=MWlhcXFjNnlzMmtuNw=="
+              target="_blank"
+              rel="noopener noreferrer"
+              className="baby-social-card baby-social-card-instagram"
+              aria-label="Watch our Reel on Instagram"
+            >
+              <div className="baby-social-card-inner">
+                <div className="d-flex align-items-center justify-content-between mb-3">
+                  <div className="baby-social-icon-wrapper ig-wrapper">
+                    <InstagramBrandIcon size={34} />
+                  </div>
+                </div>
+                <div className="baby-social-card-content">
+                  <h3 className="baby-social-card-title">Watch on Instagram</h3>
+                  <p className="baby-social-handle">@annafibabyshop</p>
+                  <p className="baby-social-desc">
+                    Catch our cutest baby styles, styling ideas & adorable milestone reels in action.
+                  </p>
+                </div>
+                <div className="baby-social-card-cta">
+                  <span>Watch Instagram</span>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </div>
+              </div>
+            </a>
+
+            {/* YouTube Card */}
+            <a
+              href="https://youtube.com/@annafibabyshop?si=OFSQsn8utiz3dNZ2"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="baby-social-card baby-social-card-youtube"
+              aria-label="Subscribe to AN’ NAFI Baby Shop on YouTube"
+            >
+              <div className="baby-social-card-inner">
+                <div className="d-flex align-items-center justify-content-between mb-3">
+                  <div className="baby-social-icon-wrapper yt-wrapper">
+                    <YoutubeBrandIcon size={34} />
+                  </div>
+                  <span className="baby-social-tag">Official Channel</span>
+                </div>
+                <div className="baby-social-card-content">
+                  <h3 className="baby-social-card-title">Subscribe on YouTube</h3>
+                  <p className="baby-social-handle">@annafibabyshop</p>
+                  <p className="baby-social-desc">
+                    Explore baby haul walkthroughs, unboxing videos, nursery setups & parenting tips.
+                  </p>
+                </div>
+                <div className="baby-social-card-cta">
+                  <span>Visit Channel</span>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+
+{/* 7. Dedicated Footer */}
 
 
 
@@ -14938,453 +15056,40 @@ const [activeTab, setActiveTab] = useState('featured');
 
 
               <h6 className="fw-bold fs-7 text-dark mb-2">Connect with Us</h6>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
               <div className="d-flex gap-2">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                <span className="baby-trust-icon-wrap" style={{ width: '36px', height: '36px', margin: 0, cursor: 'pointer' }}>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  <InstagramIcon />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                </span>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                <span className="baby-trust-icon-wrap" style={{ width: '36px', height: '36px', margin: 0, cursor: 'pointer' }}>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  <FacebookIcon />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                </span>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                <span className="baby-trust-icon-wrap" style={{ width: '36px', height: '36px', margin: 0, cursor: 'pointer' }}>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                <a
+                  href="https://www.instagram.com/reel/Deo5m0STF5C/?rpxt=MWlhcXFjNnlzMmtuNw=="
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="baby-trust-icon-wrap baby-social-footer-btn baby-footer-ig"
+                  aria-label="Watch our Reel on Instagram"
+                  title="Watch our Reel on Instagram"
+                >
+                  <InstagramBrandIcon size={20} />
+                </a>
+                <a
+                  href="https://youtube.com/@annafibabyshop?si=OFSQsn8utiz3dNZ2"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="baby-trust-icon-wrap baby-social-footer-btn baby-footer-yt"
+                  aria-label="AN' NAFI Baby Shop on YouTube"
+                  title="AN' NAFI Baby Shop on YouTube"
+                >
+                  <YoutubeBrandIcon size={20} />
+                </a>
+                <a
+                  href="https://www.facebook.com/share/18ufVG9wK4/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="baby-trust-icon-wrap baby-social-footer-btn baby-footer-fb"
+                  aria-label="AN' NAFI Baby Shop on Facebook"
+                  title="AN' NAFI Baby Shop on Facebook"
+                >
+                  <FacebookBrandIcon size={20} />
+                </a>
+                <span className="baby-trust-icon-wrap" style={{ width: '36px', height: '36px', margin: 0, cursor: 'pointer' }} aria-label="Twitter">
                   <TwitterIcon />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 </span>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                <span className="baby-trust-icon-wrap" style={{ width: '36px', height: '36px', margin: 0, cursor: 'pointer' }}>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  <YoutubeIcon />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                </span>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
               </div>
 
 

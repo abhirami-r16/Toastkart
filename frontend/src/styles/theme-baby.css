@@ -3271,3 +3271,302 @@ body.theme-baby .storefront-home,
   box-shadow: 0 4px 12px rgba(212, 93, 126, 0.3) !important;
   transform: scale(1.04) !important;
 }
+
+/* ==========================================================================
+   AN' NAFI Baby Shop - Official Social Media Section & Footer Styles
+   ========================================================================== */
+
+.baby-social-section {
+  padding: 5rem 0 4rem;
+  background: linear-gradient(180deg, #FAF7F2 0%, #FFF5F8 50%, #FAF7F2 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.baby-social-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(224, 109, 140, 0.25), transparent);
+}
+
+.baby-social-header {
+  max-width: 680px;
+  margin: 0 auto 3rem;
+  padding: 0 1rem;
+}
+
+.baby-social-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #FFFFFF;
+  color: #D45D7E;
+  padding: 6px 18px;
+  border-radius: 999px;
+  font-family: var(--baby-font-heading);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  box-shadow: 0 2px 8px rgba(224, 109, 140, 0.12);
+  border: 1px solid rgba(224, 109, 140, 0.2);
+  margin-bottom: 1.25rem;
+}
+
+.baby-social-badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #E06D8C;
+  animation: babySocialPulse 2s infinite ease-in-out;
+}
+
+@keyframes babySocialPulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(224, 109, 140, 0.6); }
+  70% { transform: scale(1.15); box-shadow: 0 0 0 6px rgba(224, 109, 140, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(224, 109, 140, 0); }
+}
+
+.baby-social-heading {
+  font-family: var(--baby-font-heading);
+  font-size: 2.35rem;
+  font-weight: 800;
+  color: #2D3748;
+  margin-bottom: 0.85rem;
+  letter-spacing: -0.02em;
+}
+
+.baby-social-subtitle {
+  font-family: var(--baby-font-body);
+  font-size: 1.05rem;
+  color: #718096;
+  line-height: 1.6;
+  margin: 0 auto;
+}
+
+.baby-social-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.baby-social-card {
+  position: relative;
+  display: block;
+  text-decoration: none !important;
+  background: #FFFFFF;
+  border-radius: 24px;
+  padding: 2.25rem 2rem;
+  border: 1.5px solid rgba(235, 230, 224, 0.85);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  color: inherit;
+}
+
+.baby-social-card:hover {
+  transform: translateY(-6px);
+  border-color: transparent;
+}
+
+.baby-social-card-instagram:hover {
+  border-color: rgba(225, 48, 108, 0.25);
+  box-shadow: 0 20px 45px rgba(225, 48, 108, 0.16);
+}
+
+.baby-social-card-youtube:hover {
+  border-color: rgba(255, 0, 0, 0.25);
+  box-shadow: 0 20px 45px rgba(255, 0, 0, 0.15);
+}
+
+.baby-social-card-inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.baby-social-icon-wrapper {
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.35s ease;
+}
+
+.baby-social-card:hover .baby-social-icon-wrapper {
+  transform: scale(1.08) rotate(3deg);
+}
+
+.baby-social-icon-wrapper.ig-wrapper {
+  background: linear-gradient(135deg, rgba(253, 244, 151, 0.25), rgba(225, 48, 108, 0.15), rgba(64, 93, 230, 0.18));
+  border: 1px solid rgba(225, 48, 108, 0.2);
+}
+
+.baby-social-icon-wrapper.yt-wrapper {
+  background: rgba(255, 0, 0, 0.08);
+  border: 1px solid rgba(255, 0, 0, 0.2);
+}
+
+.baby-social-tag {
+  display: inline-block;
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 4px 12px;
+  border-radius: 999px;
+  width: fit-content;
+}
+
+.baby-social-card-instagram .baby-social-tag {
+  background: #FCE8EE;
+  color: #C13584;
+}
+
+.baby-social-card-youtube .baby-social-tag {
+  background: #FFE8E8;
+  color: #CC0000;
+}
+
+.baby-social-card-title {
+  font-family: var(--baby-font-heading);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #1A202C;
+  margin-bottom: 0.25rem;
+  transition: color 0.25s ease;
+}
+
+.baby-social-card-instagram:hover .baby-social-card-title {
+  color: #C13584;
+}
+
+.baby-social-card-youtube:hover .baby-social-card-title {
+  color: #CC0000;
+}
+
+.baby-social-handle {
+  font-family: var(--baby-font-heading);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #8C6D77;
+  margin-bottom: 0.75rem;
+}
+
+.baby-social-desc {
+  font-family: var(--baby-font-body);
+  font-size: 0.92rem;
+  color: #64748B;
+  line-height: 1.55;
+  margin-bottom: 1.75rem;
+  flex-grow: 1;
+}
+
+.baby-social-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--baby-font-heading);
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 10px 22px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  width: fit-content;
+}
+
+.baby-social-card-instagram .baby-social-card-cta {
+  background: linear-gradient(135deg, #E1306C 0%, #C13584 100%);
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px rgba(225, 48, 108, 0.28);
+}
+
+.baby-social-card-youtube .baby-social-card-cta {
+  background: #FF0000;
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px rgba(255, 0, 0, 0.28);
+}
+
+.baby-social-card:hover .baby-social-card-cta {
+  transform: translateX(4px);
+}
+
+.baby-social-card-instagram:hover .baby-social-card-cta {
+  box-shadow: 0 6px 20px rgba(225, 48, 108, 0.42);
+}
+
+.baby-social-card-youtube:hover .baby-social-card-cta {
+  box-shadow: 0 6px 20px rgba(255, 0, 0, 0.42);
+}
+
+/* Footer Social Icon Links */
+.baby-social-footer-btn {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 36px !important;
+  height: 36px !important;
+  margin: 0 !important;
+  cursor: pointer;
+  border-radius: 50%;
+  background: #FAF7F2 !important;
+  border: 1px solid rgba(224, 109, 140, 0.15) !important;
+  text-decoration: none !important;
+  transition: all 0.25s ease !important;
+}
+
+.baby-social-footer-btn:hover {
+  transform: translateY(-2px) scale(1.08) !important;
+}
+
+.baby-social-footer-btn.baby-footer-ig:hover {
+  background: #FCE8EE !important;
+  border-color: rgba(225, 48, 108, 0.3) !important;
+  box-shadow: 0 4px 10px rgba(225, 48, 108, 0.25) !important;
+}
+
+.baby-social-footer-btn.baby-footer-yt:hover {
+  background: #FFE8E8 !important;
+  border-color: rgba(255, 0, 0, 0.3) !important;
+  box-shadow: 0 4px 10px rgba(255, 0, 0, 0.25) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .baby-social-section {
+    padding: 3rem 0 2.5rem;
+  }
+
+  .baby-social-heading {
+    font-size: 1.75rem;
+  }
+
+  .baby-social-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .baby-social-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .baby-social-card {
+    padding: 1.75rem 1.5rem;
+  }
+}
+
+.baby-social-footer-btn.baby-footer-fb:hover {
+  background: #EBF3FF !important;
+  border-color: rgba(24, 119, 242, 0.3) !important;
+  box-shadow: 0 4px 10px rgba(24, 119, 242, 0.25) !important;
+}
