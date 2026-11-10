@@ -17,6 +17,8 @@ class User extends Authenticatable
         'password',
         'role',
         'phone',
+        'subscription_bypass',
+        'subscription_bypass_at',
     ];
 
     protected $hidden = [
@@ -29,6 +31,8 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'subscription_bypass' => 'boolean',
+            'subscription_bypass_at' => 'datetime',
         ];
     }
 
@@ -39,12 +43,25 @@ class User extends Authenticatable
 
     public function hasSubscriptionBypass(): bool
     {
-        return true;
+        if (!empty($this->attributes['subscription_bypass'])) {
+            return true;
+        }
+
+        $bypassEmail = strtolower(trim(config('auth.special_bypass_owner_email', env('SPECIAL_BYPASS_OWNER_EMAIL', 'emvithaofficial@gmail.com'))));
+        return !empty($this->email) && strtolower(trim($this->email)) === $bypassEmail;
     }
 
     public function hasActiveSubscriptionOrBypass(): bool
     {
-        return true;
+        if ($this->role === 'admin' || $this->email === 'admin@gmail.com' || $this->email === 'admin@toastkart.local') {
+            return true;
+        }
+
+        if ($this->hasSubscriptionBypass()) {
+            return true;
+        }
+
+        return $this->activeSubscription()->exists();
     }
 
     public function getSubscriptionBypassAttribute(): bool

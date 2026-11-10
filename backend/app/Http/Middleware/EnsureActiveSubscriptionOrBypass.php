@@ -23,6 +23,13 @@ class EnsureActiveSubscriptionOrBypass
             ], 401);
         }
 
-        return $next($request);
+        if ($user->hasActiveSubscriptionOrBypass()) {
+            return $next($request);
+        }
+
+        return response()->json([
+            'message' => 'Active subscription required to access this resource.',
+            'subscription_required' => true,
+        ], 403);
     }
 }

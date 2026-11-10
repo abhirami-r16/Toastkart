@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
-import { fetchStores, fetchStoreOwners, fetchUsers, fetchProducts, fetchCategories, fetchOrders, fetchInventory } from "../api/admin";
+import { fetchStores, fetchStoreOwners, fetchUsers, fetchProducts, fetchCategories, fetchOrders, fetchInventory, toggleUserSubscriptionBypass } from "../api/admin";
 import {
   AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell,
 } from "recharts";
@@ -9,7 +9,8 @@ import {
   LayoutDashboard, Store, Users, Boxes, Tag, CreditCard, FileText,
   Settings, Bell, Search, TrendingUp, TrendingDown, DollarSign,
   Clock, LogOut, Crown, Activity, Package, CheckCircle, AlertTriangle,
-  Server, Zap, Globe, Sliders
+  Server, Zap, Globe, Sliders, ShieldCheck, ShieldAlert, Check, X,
+  Filter, Loader2, RefreshCw, UserCheck, UserX, Info
 } from "lucide-react";
 import ToastKartLogo from "../components/ToastKartLogo";
 import { formatINR } from "../utils/currency";
@@ -24,6 +25,7 @@ const adminLinks = [
   { key: "dashboard", label: "Overview", icon: LayoutDashboard },
   { key: "stores", label: "Stores", icon: Store },
   { key: "users", label: "Users", icon: Users },
+  { key: "subscription-bypass", label: "Subscription Bypass", icon: ShieldCheck },
   { key: "payments", label: "Payments", icon: CreditCard },
 ];
 
@@ -87,6 +89,84 @@ function AdminDashboardContent() {
   const [ordersList, setOrdersList] = useState([]);
   const [payoutsList, setPayoutsList] = useState([]);
   const [subscriptionsList, setSubscriptionsList] = useState([]);
+
+  // Subscription Bypass Management States
+  const [bypassSearchQuery, setBypassSearchQuery] = useState("");
+  const [bypassFilter, setBypassFilter] = useState("all"); // "all", "active", "standard"
+  const [updatingBypassUserId, setUpdatingBypassUserId] = useState(null);
+  const [isReloadingUsers, setIsReloadingUsers] = useState(false);
+  const [bypassNotification, setBypassNotification] = useState({ type: "", message: "" });
+
+  const reloadUsers = async () => {
+    setIsReloadingUsers(true);
+    try {
+      const res = await fetchUsers();
+      setUsersList(toArray(res?.data ?? res));
+    } catch (err) {
+      console.error("Error reloading users", err);
+    } finally {
+      setIsReloadingUsers(false);
+    }
+  };
+
+  const handleToggleBypass = async (userId, currentStatus, userName, userEmail) => {
+    const newBypass = !currentStatus;
+    const actionLabel = newBypass ? "GRANT subscription bypass to" : "REVOKE subscription bypass from";
+    const confirmed = window.confirm(
+      `Are you sure you want to ${actionLabel} ${userName || userEmail}?\n\n` +
+      (newBypass
+        ? "This user will immediately be able to access the Store Owner Dashboard without purchasing a subscription plan."
+        : "This user will immediately be required to have an active paid subscription plan to access the dashboard.")
+    );
+    if (!confirmed) return;
+
+    setUpdatingBypassUserId(userId);
+    setBypassNotification({ type: "", message: "" });
+
+    try {
+      const res = await toggleUserSubscriptionBypass(userId, newBypass);
+      const updatedUser = res.data?.user;
+
+      setUsersList((prev) =>
+        prev.map((u) => {
+          if (u.id === userId) {
+            return {
+              ...u,
+              subscription_bypass: updatedUser ? updatedUser.subscription_bypass : newBypass,
+              subscription_bypass_at: updatedUser ? updatedUser.subscription_bypass_at : (newBypass ? "Just now" : null),
+              has_active_subscription: updatedUser ? updatedUser.has_active_subscription : newBypass,
+            };
+          }
+          return u;
+        })
+      );
+
+      setBypassNotification({
+        type: "success",
+        message: res.data?.message || `Subscription bypass privilege ${newBypass ? "granted" : "revoked"} successfully.`
+      });
+    } catch (err) {
+      console.error("Failed to toggle subscription bypass:", err);
+      setBypassNotification({
+        type: "error",
+        message: err.response?.data?.message || "Failed to update subscription bypass status. Please ensure you are authorized as admin."
+      });
+    } finally {
+      setUpdatingBypassUserId(null);
+    }
+  };
+
+  const filteredBypassUsers = usersList.filter((u) => {
+    const name = String(u.name || "").toLowerCase();
+    const email = String(u.email || "").toLowerCase();
+    const q = bypassSearchQuery.trim().toLowerCase();
+    const matchesSearch = !q || name.includes(q) || email.includes(q);
+
+    if (!matchesSearch) return false;
+    if (bypassFilter === "active") return Boolean(u.subscription_bypass);
+    if (bypassFilter === "standard") return !u.subscription_bypass;
+    return true;
+  });
 
   // Modals
   // Fetch data from API on mount
@@ -849,9 +929,21 @@ function AdminDashboardContent() {
           {/* MODULE 5: USERS */}
           {active === "users" && (
             <div className="d-flex flex-column gap-3">
-              <div className="d-flex align-items-center justify-content-between">
-                <h2 className="fs-4 font-bold text-dark mb-0">Platform User Accounts</h2>
-                <span className="badge bg-warning text-dark">{usersList.length} Registered Users</span>
+              <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2">
+                <div>
+                  <h2 className="fs-4 font-bold text-dark mb-0">Platform User Accounts</h2>
+                  <p className="fs-8 text-secondary mb-0">Manage registered user credentials, platform roles, and subscription privileges.</p>
+                </div>
+                <div className="d-flex gap-2 align-items-center">
+                  <span className="badge bg-warning text-dark">{usersList.length} Registered Users</span>
+                  <button
+                    type="button"
+                    onClick={() => setActive("subscription-bypass")}
+                    className="btn btn-sm btn-outline-success fs-8 d-flex align-items-center gap-1"
+                  >
+                    <ShieldCheck size={14} /> Subscription Bypass Management
+                  </button>
+                </div>
               </div>
               <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", padding: "20px", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
                 <div className="table-responsive">
@@ -862,8 +954,10 @@ function AdminDashboardContent() {
                         <th>Name</th>
                         <th>Email</th>
                         <th>Role</th>
+                        <th>Subscription Bypass</th>
                         <th>Registered Date</th>
                         <th>Status</th>
+                        <th className="text-end">Quick Action</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -874,20 +968,368 @@ function AdminDashboardContent() {
                           </td>
                         </tr>
                       ) : (
-                        usersList.map((u) => (
-                          <tr key={u.id}>
-                            <td className="fs-8 text-secondary">#{u.id}</td>
-                            <td className="fw-bold text-dark">{u.name}</td>
-                            <td className="fs-8">{u.email}</td>
-                            <td>
-                              <span className={u.role === "Admin" ? "gold-badge-blue" : u.role === "Owner" ? "badge bg-warning text-dark" : "badge bg-success text-white"}>
-                                {u.role}
-                              </span>
-                            </td>
-                            <td className="fs-8 text-secondary">{u.registered || "—"}</td>
-                            <td><span className={u.status === "Active" ? "badge bg-success text-white" : "badge bg-danger text-white"}>{u.status}</span></td>
-                          </tr>
-                        ))
+                        usersList.map((u) => {
+                          const isUpdating = updatingBypassUserId === u.id;
+                          const hasBypass = Boolean(u.subscription_bypass);
+                          return (
+                            <tr key={u.id}>
+                              <td className="fs-8 text-secondary">#{u.id}</td>
+                              <td className="fw-bold text-dark">{u.name}</td>
+                              <td className="fs-8">{u.email}</td>
+                              <td>
+                                <span className={u.role === "Admin" ? "gold-badge-blue" : u.role === "Owner" ? "badge bg-warning text-dark" : "badge bg-success text-white"}>
+                                  {u.role}
+                                </span>
+                              </td>
+                              <td>
+                                {hasBypass ? (
+                                  <span className="badge bg-success text-white d-inline-flex align-items-center gap-1 fs-8">
+                                    <ShieldCheck size={12} /> Bypass Active
+                                  </span>
+                                ) : (
+                                  <span className="badge bg-light text-secondary border fs-8">Standard</span>
+                                )}
+                              </td>
+                              <td className="fs-8 text-secondary">{u.registered || "—"}</td>
+                              <td><span className={u.status === "Active" ? "badge bg-success text-white" : "badge bg-danger text-white"}>{u.status}</span></td>
+                              <td className="text-end">
+                                <button
+                                  type="button"
+                                  disabled={isUpdating}
+                                  onClick={() => handleToggleBypass(u.id, hasBypass, u.name, u.email)}
+                                  className={`btn btn-sm fs-8 py-1 px-2 d-inline-flex align-items-center gap-1 ${
+                                    hasBypass ? "btn-outline-danger" : "btn-outline-success"
+                                  }`}
+                                  title={hasBypass ? "Revoke subscription bypass" : "Grant subscription bypass"}
+                                >
+                                  {isUpdating ? (
+                                    <Loader2 size={12} className="spin" />
+                                  ) : hasBypass ? (
+                                    <>
+                                      <UserX size={12} /> Revoke
+                                    </>
+                                  ) : (
+                                    <>
+                                      <ShieldCheck size={12} /> Grant Bypass
+                                    </>
+                                  )}
+                                </button>
+                              </td>
+                            </tr>
+                          );
+                        })
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* MODULE: SUBSCRIPTION BYPASS MANAGEMENT */}
+          {active === "subscription-bypass" && (
+            <div className="d-flex flex-column gap-3">
+              {/* Header */}
+              <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+                <div>
+                  <div className="d-flex align-items-center gap-2 mb-1">
+                    <span className="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 fs-8 fw-semibold d-inline-flex align-items-center gap-1">
+                      <ShieldCheck size={13} /> Admin Privilege Control
+                    </span>
+                  </div>
+                  <h2 className="fs-4 font-bold text-dark mb-1">Subscription Bypass Management</h2>
+                  <p className="fs-8 text-secondary mb-0">
+                    Grant or revoke subscription-free Store Owner Dashboard access for existing registered users. Users with active bypass log in normally with their existing credentials and get unrestricted dashboard access without payment.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={reloadUsers}
+                  disabled={isReloadingUsers}
+                  className="btn btn-sm btn-outline-secondary d-flex align-items-center gap-2 fs-8 align-self-start align-self-md-auto"
+                >
+                  <RefreshCw size={14} className={isReloadingUsers ? "spin" : ""} />
+                  Refresh List
+                </button>
+              </div>
+
+              {/* Notification Banner */}
+              {bypassNotification.message && (
+                <div
+                  className={`alert ${
+                    bypassNotification.type === "success" ? "alert-success border-success" : "alert-danger border-danger"
+                  } d-flex align-items-center justify-content-between py-2 px-3 mb-0 fs-8`}
+                  role="alert"
+                >
+                  <div className="d-flex align-items-center gap-2">
+                    {bypassNotification.type === "success" ? <CheckCircle size={16} /> : <AlertTriangle size={16} />}
+                    <span>{bypassNotification.message}</span>
+                  </div>
+                  <button
+                    type="button"
+                    className="btn-close fs-8"
+                    onClick={() => setBypassNotification({ type: "", message: "" })}
+                    aria-label="Close"
+                  />
+                </div>
+              )}
+
+              {/* Quick Metrics */}
+              <div className="row g-3">
+                <div className="col-12 col-md-4">
+                  <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", padding: "16px" }}>
+                    <div className="d-flex align-items-center justify-content-between">
+                      <span className="fs-8 text-secondary text-uppercase fw-semibold">Total Registered Users</span>
+                      <Users size={18} className="text-secondary" />
+                    </div>
+                    <div className="fs-3 fw-bold text-dark mt-2">{usersList.length}</div>
+                    <div className="fs-8 text-muted mt-1">Platform user accounts</div>
+                  </div>
+                </div>
+
+                <div className="col-12 col-md-4">
+                  <div style={{ background: "#ffffff", border: "1px solid #d4edda", borderRadius: "8px", padding: "16px" }}>
+                    <div className="d-flex align-items-center justify-content-between">
+                      <span className="fs-8 text-success text-uppercase fw-semibold">Bypass Privilege Active</span>
+                      <ShieldCheck size={18} className="text-success" />
+                    </div>
+                    <div className="fs-3 fw-bold text-success mt-2">
+                      {usersList.filter((u) => u.subscription_bypass).length}
+                    </div>
+                    <div className="fs-8 text-success-emphasis mt-1">Free dashboard access granted</div>
+                  </div>
+                </div>
+
+                <div className="col-12 col-md-4">
+                  <div style={{ background: "#ffffff", border: "1px solid #dfe3e8", borderRadius: "8px", padding: "16px" }}>
+                    <div className="d-flex align-items-center justify-content-between">
+                      <span className="fs-8 text-secondary text-uppercase fw-semibold">Standard Plan Required</span>
+                      <CreditCard size={18} className="text-secondary" />
+                    </div>
+                    <div className="fs-3 fw-bold text-dark mt-2">
+                      {usersList.filter((u) => !u.subscription_bypass).length}
+                    </div>
+                    <div className="fs-8 text-muted mt-1">Requires paid subscription</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Informative Guidance Card */}
+              <div
+                style={{
+                  background: "#f8f9fa",
+                  borderLeft: "4px solid #198754",
+                  borderRadius: "6px",
+                  padding: "12px 16px",
+                }}
+                className="d-flex align-items-start gap-2 fs-8 text-secondary"
+              >
+                <Info size={18} className="text-success flex-shrink-0 mt-0.5" />
+                <div>
+                  <strong className="text-dark">How Subscription Bypass Works:</strong> When bypass is enabled, the user
+                  logs in with their normal email and password. Toastkart will skip the subscription paywall, allow instant
+                  access to the Store Owner Dashboard, and permit full store management without purchasing a Razorpay plan.
+                  Revoking bypass instantly restores standard subscription validation on the next request.
+                </div>
+              </div>
+
+              {/* Search & Filter Toolbar */}
+              <div
+                style={{
+                  background: "#ffffff",
+                  border: "1px solid #dfe3e8",
+                  borderRadius: "8px",
+                  padding: "16px",
+                }}
+              >
+                <div className="row g-2 align-items-center justify-content-between mb-3">
+                  <div className="col-12 col-md-6 col-lg-5">
+                    <div className="input-group input-group-sm">
+                      <span className="input-group-text bg-white border-end-0">
+                        <Search size={14} className="text-secondary" />
+                      </span>
+                      <input
+                        type="text"
+                        className="form-control border-start-0"
+                        placeholder="Search by name or email..."
+                        value={bypassSearchQuery}
+                        onChange={(e) => setBypassSearchQuery(e.target.value)}
+                      />
+                      {bypassSearchQuery && (
+                        <button
+                          className="btn btn-outline-secondary border-start-0"
+                          type="button"
+                          onClick={() => setBypassSearchQuery("")}
+                        >
+                          <X size={14} />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="col-12 col-md-6 col-lg-6 d-flex flex-wrap gap-2 justify-content-md-end">
+                    <button
+                      type="button"
+                      onClick={() => setBypassFilter("all")}
+                      className={`btn btn-sm px-3 py-1 rounded-pill fs-8 ${
+                        bypassFilter === "all" ? "btn-dark font-bold" : "btn-outline-secondary"
+                      }`}
+                    >
+                      All ({usersList.length})
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setBypassFilter("active")}
+                      className={`btn btn-sm px-3 py-1 rounded-pill fs-8 ${
+                        bypassFilter === "active" ? "btn-success text-white font-bold" : "btn-outline-success"
+                      }`}
+                    >
+                      Bypass Active ({usersList.filter((u) => u.subscription_bypass).length})
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setBypassFilter("standard")}
+                      className={`btn btn-sm px-3 py-1 rounded-pill fs-8 ${
+                        bypassFilter === "standard" ? "btn-secondary text-white font-bold" : "btn-outline-secondary"
+                      }`}
+                    >
+                      Standard Plan ({usersList.filter((u) => !u.subscription_bypass).length})
+                    </button>
+                  </div>
+                </div>
+
+                {/* Table */}
+                <div className="table-responsive">
+                  <table className="table table-hover align-middle mb-0">
+                    <thead className="table-light">
+                      <tr className="text-secondary fs-8">
+                        <th>User</th>
+                        <th>Role</th>
+                        <th>Store(s)</th>
+                        <th>Bypass Status</th>
+                        <th>Privilege Granted</th>
+                        <th className="text-end">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredBypassUsers.length === 0 ? (
+                        <tr>
+                          <td colSpan={6} className="text-center text-secondary py-5 fs-8">
+                            <ShieldAlert size={32} className="text-muted mb-2 d-block mx-auto" />
+                            No registered users match your search criteria.
+                          </td>
+                        </tr>
+                      ) : (
+                        filteredBypassUsers.map((u) => {
+                          const isUpdating = updatingBypassUserId === u.id;
+                          const hasBypass = Boolean(u.subscription_bypass);
+
+                          return (
+                            <tr key={u.id}>
+                              <td>
+                                <div className="d-flex align-items-center gap-2">
+                                  <div
+                                    className="d-flex align-items-center justify-content-center rounded-circle fw-bold text-white fs-8"
+                                    style={{
+                                      width: 34,
+                                      height: 34,
+                                      background: hasBypass ? "#198754" : "#6c757d",
+                                      flexShrink: 0,
+                                    }}
+                                  >
+                                    {u.name ? u.name.charAt(0).toUpperCase() : "U"}
+                                  </div>
+                                  <div>
+                                    <div className="fw-bold text-dark">{u.name || "Unnamed User"}</div>
+                                    <div className="fs-8 text-secondary">{u.email}</div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <span
+                                  className={
+                                    u.role === "Admin"
+                                      ? "gold-badge-blue"
+                                      : u.role === "Owner"
+                                      ? "badge bg-warning text-dark"
+                                      : "badge bg-secondary text-white"
+                                  }
+                                >
+                                  {u.role}
+                                </span>
+                              </td>
+                              <td>
+                                {u.stores && u.stores.length > 0 ? (
+                                  <div className="d-flex flex-wrap gap-1">
+                                    {u.stores.map((s) => (
+                                      <span key={s.id} className="badge bg-light text-dark border fs-8">
+                                        {s.name}
+                                      </span>
+                                    ))}
+                                  </div>
+                                ) : (
+                                  <span className="fs-8 text-muted">No stores</span>
+                                )}
+                              </td>
+                              <td>
+                                {hasBypass ? (
+                                  <span className="badge bg-success text-white d-inline-flex align-items-center gap-1 py-1 px-2">
+                                    <ShieldCheck size={13} /> Bypass Active
+                                  </span>
+                                ) : (
+                                  <span className="badge bg-light text-secondary border d-inline-flex align-items-center gap-1 py-1 px-2">
+                                    Standard Plan Required
+                                  </span>
+                                )}
+                              </td>
+                              <td>
+                                <span className="fs-8 text-secondary">
+                                  {hasBypass ? u.subscription_bypass_at || "Enabled" : "—"}
+                                </span>
+                              </td>
+                              <td className="text-end">
+                                {hasBypass ? (
+                                  <button
+                                    type="button"
+                                    disabled={isUpdating}
+                                    onClick={() => handleToggleBypass(u.id, true, u.name, u.email)}
+                                    className="btn btn-sm btn-outline-danger fs-8 py-1 px-3 d-inline-flex align-items-center gap-1"
+                                    title="Revoke subscription bypass and require paid plan"
+                                  >
+                                    {isUpdating ? (
+                                      <>
+                                        <Loader2 size={13} className="spin" /> Updating...
+                                      </>
+                                    ) : (
+                                      <>
+                                        <UserX size={13} /> Revoke Bypass
+                                      </>
+                                    )}
+                                  </button>
+                                ) : (
+                                  <button
+                                    type="button"
+                                    disabled={isUpdating}
+                                    onClick={() => handleToggleBypass(u.id, false, u.name, u.email)}
+                                    className="btn btn-sm btn-success text-white fs-8 py-1 px-3 d-inline-flex align-items-center gap-1"
+                                    style={{ background: "#198754", borderColor: "#198754" }}
+                                    title="Grant free subscription-free Store Owner Dashboard access"
+                                  >
+                                    {isUpdating ? (
+                                      <>
+                                        <Loader2 size={13} className="spin" /> Updating...
+                                      </>
+                                    ) : (
+                                      <>
+                                        <ShieldCheck size={13} /> Grant Bypass
+                                      </>
+                                    )}
+                                  </button>
+                                )}
+                              </td>
+                            </tr>
+                          );
+                        })
                       )}
                     </tbody>
                   </table>

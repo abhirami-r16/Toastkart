@@ -40,6 +40,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['au
 // Users (Admin)
 Route::get('/users', [UserController::class, 'index']);
 Route::get('/users/{id}', [UserController::class, 'show']);
+Route::post('/admin/users/{id}/subscription-bypass', [UserController::class, 'toggleSubscriptionBypass'])->middleware('auth:sanctum');
 
 // Stores
 Route::get('/stores', [StoreController::class, 'index']);
