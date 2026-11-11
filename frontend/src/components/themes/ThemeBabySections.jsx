@@ -12752,11 +12752,11 @@ const [activeTab, setActiveTab] = useState('featured');
           <div className="baby-social-grid">
             {/* Instagram Card */}
             <a
-              href="https://www.instagram.com/reel/Deo5m0STF5C/?rpxt=MWlhcXFjNnlzMmtuNw=="
+              href="https://www.instagram.com/an_nafi_baby_shop"
               target="_blank"
               rel="noopener noreferrer"
               className="baby-social-card baby-social-card-instagram"
-              aria-label="Watch our Reel on Instagram"
+              aria-label="Follow AN' NAFI Baby Shop on Instagram"
             >
               <div className="baby-social-card-inner">
                 <div className="d-flex align-items-center justify-content-between mb-3">
@@ -12766,7 +12766,7 @@ const [activeTab, setActiveTab] = useState('featured');
                 </div>
                 <div className="baby-social-card-content">
                   <h3 className="baby-social-card-title">Watch on Instagram</h3>
-                  <p className="baby-social-handle">@annafibabyshop</p>
+                  <p className="baby-social-handle">@an_nafi_baby_shop</p>
                   <p className="baby-social-desc">
                     Catch our cutest baby styles, styling ideas & adorable milestone reels in action.
                   </p>
@@ -15058,12 +15058,12 @@ const [activeTab, setActiveTab] = useState('featured');
               <h6 className="fw-bold fs-7 text-dark mb-2">Connect with Us</h6>
               <div className="d-flex gap-2">
                 <a
-                  href="https://www.instagram.com/reel/Deo5m0STF5C/?rpxt=MWlhcXFjNnlzMmtuNw=="
+                  href="https://www.instagram.com/an_nafi_baby_shop"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="baby-trust-icon-wrap baby-social-footer-btn baby-footer-ig"
-                  aria-label="Watch our Reel on Instagram"
-                  title="Watch our Reel on Instagram"
+                  aria-label="Follow AN' NAFI Baby Shop on Instagram"
+                  title="Follow AN' NAFI Baby Shop on Instagram"
                 >
                   <InstagramBrandIcon size={20} />
                 </a>
