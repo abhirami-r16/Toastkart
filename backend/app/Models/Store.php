@@ -22,6 +22,15 @@ class Store extends Model
         'category',
     ];
 
+    protected $appends = [
+        'phone',
+    ];
+
+    public function getPhoneAttribute()
+    {
+        return $this->user?->phone ?? ($this->slug === 'an-nafi' ? '7356997225' : null);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -3570,3 +3570,47 @@ body.theme-baby .storefront-home,
   border-color: rgba(24, 119, 242, 0.3) !important;
   box-shadow: 0 4px 10px rgba(24, 119, 242, 0.25) !important;
 }
+
+.baby-social-footer-btn.baby-footer-wa:hover {
+  background: #E8F9EE !important;
+  border-color: rgba(37, 211, 102, 0.3) !important;
+  box-shadow: 0 4px 10px rgba(37, 211, 102, 0.25) !important;
+}
+
+/* Floating WhatsApp Order Button */
+.baby-whatsapp-float {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background-color: #25D366;
+  color: #fff !important;
+  border-radius: 50px;
+  padding: 10px 18px 10px 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 18px rgba(37, 211, 102, 0.45);
+  z-index: 1050;
+  text-decoration: none !important;
+  font-weight: 700;
+  font-size: 14px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.baby-whatsapp-float:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 24px rgba(37, 211, 102, 0.6);
+  color: #fff !important;
+}
+
+@media (max-width: 768px) {
+  .baby-whatsapp-float {
+    bottom: 20px;
+    right: 20px;
+    padding: 12px;
+    border-radius: 50%;
+  }
+  .baby-whatsapp-float .baby-whatsapp-float-label {
+    display: none;
+  }
+}

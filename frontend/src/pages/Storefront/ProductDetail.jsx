@@ -429,7 +429,10 @@ export default function ProductDetail({ storeData, products }) {
                   const sizeStr = selectedSize ? ` (Size: ${selectedSize})` : '';
                   const colorStr = selectedColor ? ` (Color: ${selectedColor})` : '';
                   const text = encodeURIComponent(`Hi, I would like to place an order for:\n- ${quantity}x ${product.name}${sizeStr}${colorStr}\nTotal: ₹${(price * quantity).toFixed(2)}`);
-                  window.open(`https://wa.me/1234567890?text=${text}`, '_blank');
+                  const rawPhone = storeData?.phone || '7356997225';
+                  const digits = String(rawPhone).replace(/[^0-9]/g, '');
+                  const waNumber = digits.length === 10 ? `91${digits}` : (digits.startsWith('91') ? digits : `91${digits.slice(-10)}`);
+                  window.open(`https://wa.me/${waNumber}?text=${text}`, '_blank');
                 }}
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

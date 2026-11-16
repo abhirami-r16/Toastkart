@@ -26,7 +26,7 @@ class StoreController extends Controller
     }
     public function index(Request $request)
     {
-        $query = Store::with(['user:id,name,email', 'aiConfigurations'])
+        $query = Store::with(['user:id,name,email,phone', 'aiConfigurations'])
             ->withCount(['products', 'categories', 'orders']);
 
         // Filter by user_id if provided
@@ -279,6 +279,7 @@ Output ONLY a JSON object (no markdown) with this structure:
     public function show($idOrSlug)
     {
         $store = Store::with([
+            'user:id,name,email,phone',
             'categories:id,store_id,name,slug',
             'products' => function ($query) {
                 $query->where('is_active', true)

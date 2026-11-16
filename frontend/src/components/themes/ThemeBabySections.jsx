@@ -771,6 +771,16 @@ const FacebookBrandIcon = ({ size = 20, className = "" }) => (
   </svg>
 );
 
+const WhatsAppBrandIcon = ({ size = 20, className = "" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+    <circle cx="12" cy="12" r="11" fill="#25D366" />
+    <path
+      d="M17.5 14.3c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-.9 1.2-.2.2-.4.2-.7.1-.3-.2-1.3-.5-2.5-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.7.1-.1.3-.4.5-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.2-.7-1.7-.9-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.4-1.2 1.2-1.2 2.9s1.2 3.4 1.4 3.6c.2.2 2.4 3.7 5.8 5.1.8.3 1.4.6 1.9.7.8.3 1.6.2 2.2.1.7-.1 2.1-.9 2.4-1.7.3-.8.3-1.5.2-1.7-.1-.1-.3-.2-.6-.4z"
+      fill="#FFFFFF"
+    />
+  </svg>
+);
+
 const InstagramIcon = () => (
 
 
@@ -13520,167 +13530,28 @@ const [activeTab, setActiveTab] = useState('featured');
 
 
 
-                {storeData?.phone && (
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  <div className="d-flex align-items-center gap-2">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    <Phone size={15} color="#E06D8C" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    <span>{storeData.phone}</span>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                )}
+                <div className="d-flex align-items-center gap-2">
+                  <Phone size={15} color="#E06D8C" />
+                  <a
+                    href={`tel:+91${(storeData?.phone || '7356997225').replace(/[^0-9]/g, '').slice(-10)}`}
+                    className="text-decoration-none"
+                    style={{ color: 'inherit' }}
+                  >
+                    +91 {(storeData?.phone || '7356997225').replace(/[^0-9]/g, '').slice(-10)}
+                  </a>
+                </div>
+                <div className="d-flex align-items-center gap-2">
+                  <WhatsAppBrandIcon size={16} />
+                  <a
+                    href={`https://wa.me/91${(storeData?.phone || '7356997225').replace(/[^0-9]/g, '').slice(-10)}?text=${encodeURIComponent("Hi AN' NAFI Baby Shop, I would like to place an order.")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-decoration-none"
+                    style={{ color: '#25D366', fontWeight: 600 }}
+                  >
+                    WhatsApp: +91 {(storeData?.phone || '7356997225').replace(/[^0-9]/g, '').slice(-10)}
+                  </a>
+                </div>
 
 
 
@@ -14479,6 +14350,22 @@ const [activeTab, setActiveTab] = useState('featured');
 
 
 
+                <li>
+                  <a href={`tel:+91${(storeData?.phone || '7356997225').replace(/[^0-9]/g, '').slice(-10)}`} className="text-decoration-none d-flex align-items-center gap-1.5" style={{ color: 'inherit' }}>
+                    <Phone size={13} color="#E06D8C" /> +91 {(storeData?.phone || '7356997225').replace(/[^0-9]/g, '').slice(-10)}
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href={`https://wa.me/91${(storeData?.phone || '7356997225').replace(/[^0-9]/g, '').slice(-10)}?text=${encodeURIComponent("Hi AN' NAFI Baby Shop, I would like to place an order.")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-decoration-none d-flex align-items-center gap-1.5"
+                    style={{ color: '#25D366', fontWeight: 600 }}
+                  >
+                    <WhatsAppBrandIcon size={14} /> WhatsApp Order
+                  </a>
+                </li>
                 <li><Link to={`${basePath}/orders`}>Track Order</Link></li>
 
 
@@ -15086,6 +14973,16 @@ const [activeTab, setActiveTab] = useState('featured');
                   title="AN' NAFI Baby Shop on Facebook"
                 >
                   <FacebookBrandIcon size={20} />
+                </a>
+                <a
+                  href={`https://wa.me/91${(storeData?.phone || '7356997225').replace(/[^0-9]/g, '').slice(-10)}?text=${encodeURIComponent("Hi AN' NAFI Baby Shop, I would like to place an order.")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="baby-trust-icon-wrap baby-social-footer-btn baby-footer-wa"
+                  aria-label="Order via WhatsApp from AN' NAFI Baby Shop"
+                  title="Order via WhatsApp (+91 7356997225)"
+                >
+                  <WhatsAppBrandIcon size={20} />
                 </a>
                 <span className="baby-trust-icon-wrap" style={{ width: '36px', height: '36px', margin: 0, cursor: 'pointer' }} aria-label="Twitter">
                   <TwitterIcon />
@@ -15698,7 +15595,20 @@ const [activeTab, setActiveTab] = useState('featured');
 
 
 
-    </div>
+    
+      {/* Floating WhatsApp Order Button */}
+      <a
+        href={`https://wa.me/91${(storeData?.phone || '7356997225').replace(/[^0-9]/g, '').slice(-10)}?text=${encodeURIComponent("Hi AN' NAFI Baby Shop, I would like to place an order.")}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="baby-whatsapp-float"
+        aria-label="Order on WhatsApp"
+        title="Order via WhatsApp: +91 7356997225"
+      >
+        <WhatsAppBrandIcon size={26} />
+        <span className="baby-whatsapp-float-label">Order on WhatsApp</span>
+      </a>
+      </div>
 
 
 
