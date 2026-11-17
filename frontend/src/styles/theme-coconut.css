@@ -14,16 +14,26 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Outfit:wght@400;500;600;700&display=swap');
 
 .theme-coconut {
-  --coco-primary: #14271C;       /* Forest Green: Primary CTA Button */
-  --coco-primary-dark: #0d1a13;  /* Deep Forest Shadow */
-  --coco-primary-light: #1f3b2b; /* Forest Green Light / Hover */
-  --coco-amber: #C2844E;         /* Husk Amber: Badge & Price Highlight */
-  --coco-cream: #FDFBF7;         /* Organic Eggshell: Main Page Canvas */
-  --coco-surface: #FFFFFF;       /* Pure Coconut White: Product Card Background */
-  --coco-mint: #E8EFE9;          /* Sage Mint: Category Filter Pill */
-  --coco-text-primary: #2D3748;  /* Dark Charcoal: Body Text, Headlines, Specs */
-  --coco-text-secondary: #4A5568;/* Slate Charcoal: Subtitles & Descriptions */
-  --coco-border: #E2E8F0;        /* Subtle Border */
+  --coco-primary: #14271C;
+  /* Forest Green: Primary CTA Button */
+  --coco-primary-dark: #0d1a13;
+  /* Deep Forest Shadow */
+  --coco-primary-light: #1f3b2b;
+  /* Forest Green Light / Hover */
+  --coco-amber: #C2844E;
+  /* Husk Amber: Badge & Price Highlight */
+  --coco-cream: #FDFBF7;
+  /* Organic Eggshell: Main Page Canvas */
+  --coco-surface: #FFFFFF;
+  /* Pure Coconut White: Product Card Background */
+  --coco-mint: #E8EFE9;
+  /* Sage Mint: Category Filter Pill */
+  --coco-text-primary: #2D3748;
+  /* Dark Charcoal: Body Text, Headlines, Specs */
+  --coco-text-secondary: #4A5568;
+  /* Slate Charcoal: Subtitles & Descriptions */
+  --coco-border: #E2E8F0;
+  /* Subtle Border */
   --coco-shadow: 0 10px 30px rgba(20, 39, 28, 0.06);
 
   --coco-font-heading: 'Playfair Display', Georgia, serif;
@@ -35,8 +45,10 @@
 .theme-coconut.storefront-body,
 .theme-coconut .storefront-main-content,
 .theme-coconut .storefront-body.is-home {
-  background-color: var(--coco-cream) !important; /* Organic Eggshell #FDFBF7 */
-  color: var(--coco-text-primary) !important;      /* Dark Charcoal #2D3748 */
+  background-color: var(--coco-cream) !important;
+  /* Organic Eggshell #FDFBF7 */
+  color: var(--coco-text-primary) !important;
+  /* Dark Charcoal #2D3748 */
   font-family: var(--coco-font-body);
   min-height: 100vh;
   letter-spacing: -0.01em;
@@ -60,7 +72,8 @@
 .theme-coconut .coconut-category-title,
 .theme-coconut .storefront-logo-text {
   font-family: var(--coco-font-heading);
-  color: var(--coco-text-primary) !important; /* #2D3748 */
+  color: var(--coco-text-primary) !important;
+  /* #2D3748 */
   letter-spacing: -0.02em;
 }
 
@@ -69,12 +82,14 @@
 .theme-coconut .coconut-category-desc,
 .theme-coconut .storefront-product-desc {
   font-family: var(--coco-font-body);
-  color: var(--coco-text-secondary) !important; /* #4A5568 */
+  color: var(--coco-text-secondary) !important;
+  /* #4A5568 */
 }
 
 /* Announcement Top Bar */
 .theme-coconut .coconut-top-bar {
-  background: var(--coco-primary) !important; /* Forest Green #14271C */
+  background: var(--coco-primary) !important;
+  /* Forest Green #14271C */
   color: #FDFBF7 !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
@@ -90,7 +105,8 @@
 
 /* Header & Navigation (Pure Coconut White #FFFFFF) */
 .theme-coconut .storefront-header {
-  background-color: var(--coco-surface) !important; /* Pure Coconut White #FFFFFF */
+  background-color: var(--coco-surface) !important;
+  /* Pure Coconut White #FFFFFF */
   border-bottom: 1px solid var(--coco-border);
   box-shadow: 0 4px 20px rgba(20, 39, 28, 0.04);
   height: 90px;
@@ -104,7 +120,8 @@
   font-family: var(--coco-font-heading);
   font-size: 1.45rem;
   font-weight: 700;
-  color: var(--coco-primary) !important; /* Forest Green #14271C */
+  color: var(--coco-primary) !important;
+  /* Forest Green #14271C */
   letter-spacing: -0.5px;
 }
 
@@ -125,7 +142,8 @@
   width: 44px;
   height: 44px;
   border-radius: 12px;
-  background: var(--coco-primary) !important; /* Forest Green #14271C */
+  background: var(--coco-primary) !important;
+  /* Forest Green #14271C */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -136,7 +154,8 @@
 
 .theme-coconut .storefront-nav-link,
 .theme-coconut .hexashop-nav-item {
-  color: var(--coco-text-primary) !important; /* Dark Charcoal #2D3748 */
+  color: var(--coco-text-primary) !important;
+  /* Dark Charcoal #2D3748 */
   font-size: 0.95rem;
   font-weight: 600;
   text-transform: capitalize;
@@ -149,7 +168,8 @@
 .theme-coconut .storefront-nav-link:hover,
 .theme-coconut .hexashop-nav-item:hover {
   color: var(--coco-primary) !important;
-  background-color: var(--coco-mint); /* Sage Mint #E8EFE9 */
+  background-color: var(--coco-mint);
+  /* Sage Mint #E8EFE9 */
 }
 
 .theme-coconut .hexashop-nav-item::after {
@@ -164,7 +184,8 @@
 
 .theme-coconut .hexashop-icon-btn:hover {
   transform: translateY(-2px);
-  color: var(--coco-amber) !important; /* Husk Amber #C2844E */
+  color: var(--coco-amber) !important;
+  /* Husk Amber #C2844E */
 }
 
 /* Hero Section */
@@ -249,7 +270,10 @@
 
 .theme-coconut .coconut-hero-slide {
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background-size: cover;
   background-position: center;
   transition: opacity 1.2s ease-in-out, transform 6s cubic-bezier(0.25, 1, 0.5, 1);
@@ -261,13 +285,14 @@
 
 .theme-coconut .coconut-hero-overlay {
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(253, 251, 247, 0.35) 0%,
-    rgba(253, 251, 247, 0.15) 50%,
-    rgba(253, 251, 247, 0) 100%
-  );
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg,
+      rgba(253, 251, 247, 0.35) 0%,
+      rgba(253, 251, 247, 0.15) 50%,
+      rgba(253, 251, 247, 0) 100%);
   z-index: 2;
   display: flex;
   align-items: flex-start;
@@ -336,7 +361,8 @@
 
 .theme-coconut .coconut-hero-dot.active {
   width: 32px;
-  background: var(--coco-primary); /* Forest Green #14271C */
+  background: var(--coco-primary);
+  /* Forest Green #14271C */
   box-shadow: 0 2px 8px rgba(20, 39, 28, 0.3);
 }
 
@@ -358,7 +384,8 @@
   display: inline-block;
   font-size: 0.92rem;
   font-weight: 700;
-  color: var(--coco-amber) !important; /* Husk Amber #C2844E */
+  color: var(--coco-amber) !important;
+  /* Husk Amber #C2844E */
   letter-spacing: 1px;
   margin-bottom: 0.6rem;
   background: transparent;
@@ -373,7 +400,8 @@
   font-size: 3.5rem;
   font-weight: 800;
   line-height: 1.15;
-  color: var(--coco-text-primary) !important; /* Dark Charcoal #2D3748 */
+  color: var(--coco-text-primary) !important;
+  /* Dark Charcoal #2D3748 */
   margin-bottom: 0.75rem;
   letter-spacing: -0.02em;
   text-shadow: 0 2px 14px rgba(253, 251, 247, 0.9) !important;
@@ -383,7 +411,8 @@
   font-family: var(--coco-font-body);
   font-size: 1.15rem;
   line-height: 1.6;
-  color: var(--coco-text-secondary) !important; /* Slate Charcoal #4A5568 */
+  color: var(--coco-text-secondary) !important;
+  /* Slate Charcoal #4A5568 */
   margin: 0 auto 1.5rem auto;
   max-width: 600px;
   text-shadow: 0 1px 10px rgba(253, 251, 247, 0.95) !important;
@@ -393,7 +422,8 @@
 /* Primary CTA Button: Forest Green #14271C ("Shop Collection", "Checkout", "Shop Now") */
 .theme-coconut .coconut-btn-thenga,
 .theme-coconut .coconut-btn-primary {
-  background: var(--coco-primary) !important; /* Forest Green #14271C */
+  background: var(--coco-primary) !important;
+  /* Forest Green #14271C */
   color: #FFFFFF !important;
   border: 1px solid var(--coco-primary) !important;
   padding: 14px 34px;
@@ -413,7 +443,8 @@
 
 .theme-coconut .coconut-btn-thenga:hover,
 .theme-coconut .coconut-btn-primary:hover {
-  background: var(--coco-primary-light) !important; /* #1f3b2b */
+  background: var(--coco-primary-light) !important;
+  /* #1f3b2b */
   color: #FFFFFF !important;
   border-color: var(--coco-primary-light) !important;
   transform: translateY(-2px);
@@ -458,8 +489,10 @@
 }
 
 .theme-coconut .coconut-filter-pill {
-  background-color: var(--coco-mint) !important; /* Sage Mint #E8EFE9 */
-  color: var(--coco-primary) !important;         /* Forest Green #14271C */
+  background-color: var(--coco-mint) !important;
+  /* Sage Mint #E8EFE9 */
+  color: var(--coco-primary) !important;
+  /* Forest Green #14271C */
   border: 1px solid rgba(20, 39, 28, 0.12) !important;
   padding: 9px 22px;
   border-radius: 50px;
@@ -476,7 +509,8 @@
 
 .theme-coconut .coconut-filter-pill:hover,
 .theme-coconut .coconut-filter-pill.active {
-  background-color: var(--coco-primary) !important; /* Forest Green #14271C */
+  background-color: var(--coco-primary) !important;
+  /* Forest Green #14271C */
   color: #FFFFFF !important;
   border-color: var(--coco-primary) !important;
   box-shadow: 0 4px 14px rgba(20, 39, 28, 0.25);
@@ -489,9 +523,11 @@
   align-items: center;
   gap: 6px;
   font-size: 0.74rem;
-  color: var(--coco-primary) !important;         /* Forest Green #14271C */
+  color: var(--coco-primary) !important;
+  /* Forest Green #14271C */
   font-weight: 600;
-  background-color: var(--coco-mint) !important; /* Sage Mint #E8EFE9 */
+  background-color: var(--coco-mint) !important;
+  /* Sage Mint #E8EFE9 */
   border: 1px solid rgba(20, 39, 28, 0.12) !important;
   padding: 5px 12px;
   border-radius: 50px;
@@ -513,7 +549,8 @@
   font-weight: 800;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: var(--coco-amber) !important; /* Husk Amber #C2844E */
+  color: var(--coco-amber) !important;
+  /* Husk Amber #C2844E */
   background: rgba(194, 132, 78, 0.12) !important;
   border: 1px solid rgba(194, 132, 78, 0.25);
   padding: 5px 14px;
@@ -525,7 +562,8 @@
   font-family: var(--coco-font-heading);
   font-size: 2.5rem;
   font-weight: 700;
-  color: var(--coco-text-primary) !important; /* Dark Charcoal #2D3748 */
+  color: var(--coco-text-primary) !important;
+  /* Dark Charcoal #2D3748 */
   margin-bottom: 0.5rem;
 }
 
@@ -551,23 +589,22 @@
 
 .theme-coconut .coconut-category-overlay {
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(13, 26, 19, 0.05) 0%,
-    rgba(13, 26, 19, 0.45) 50%,
-    rgba(13, 26, 19, 0.92) 100%
-  );
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg,
+      rgba(13, 26, 19, 0.05) 0%,
+      rgba(13, 26, 19, 0.45) 50%,
+      rgba(13, 26, 19, 0.92) 100%);
   transition: all 0.4s ease;
 }
 
 .theme-coconut .coconut-category-card:hover .coconut-category-overlay {
-  background: linear-gradient(
-    180deg,
-    rgba(13, 26, 19, 0.1) 0%,
-    rgba(13, 26, 19, 0.55) 40%,
-    rgba(13, 26, 19, 0.96) 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(13, 26, 19, 0.1) 0%,
+      rgba(13, 26, 19, 0.55) 40%,
+      rgba(13, 26, 19, 0.96) 100%);
 }
 
 .theme-coconut .coconut-category-content {
@@ -596,7 +633,8 @@
 .theme-coconut .coconut-category-link {
   font-size: 0.82rem;
   font-weight: 700;
-  color: var(--coco-amber) !important; /* Husk Amber #C2844E */
+  color: var(--coco-amber) !important;
+  /* Husk Amber #C2844E */
   text-transform: uppercase;
   letter-spacing: 1px;
   display: inline-flex;
@@ -613,14 +651,16 @@
 }
 
 .theme-coconut .coconut-highlight {
-  color: var(--coco-amber) !important; /* Husk Amber #C2844E */
+  color: var(--coco-amber) !important;
+  /* Husk Amber #C2844E */
   position: relative;
   font-style: italic;
 }
 
 .theme-coconut .storefront-view-all-btn {
   background: transparent;
-  color: var(--coco-primary) !important; /* Forest Green #14271C */
+  color: var(--coco-primary) !important;
+  /* Forest Green #14271C */
   border: 1.5px solid var(--coco-primary) !important;
   padding: 8px 20px;
   border-radius: 30px;
@@ -657,13 +697,15 @@
 .theme-coconut .storefront-product-slider::-webkit-scrollbar {
   height: 6px;
 }
+
 .theme-coconut .storefront-product-slider::-webkit-scrollbar-thumb {
   background: var(--coco-mint);
   border-radius: 10px;
 }
 
 .theme-coconut .storefront-product-card {
-  background: var(--coco-surface) !important; /* Pure Coconut White #FFFFFF */
+  background: var(--coco-surface) !important;
+  /* Pure Coconut White #FFFFFF */
   border: 1px solid #E8E5DD !important;
   border-radius: 18px;
   overflow: hidden;
@@ -675,7 +717,7 @@
   height: 100%;
 }
 
-.theme-coconut .storefront-product-card > a {
+.theme-coconut .storefront-product-card>a {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -721,7 +763,8 @@
   position: absolute;
   top: 12px;
   left: 12px;
-  background: var(--coco-amber) !important; /* Husk Amber #C2844E */
+  background: var(--coco-amber) !important;
+  /* Husk Amber #C2844E */
   color: #ffffff !important;
   font-size: 0.72rem;
   font-weight: 800;
@@ -743,7 +786,8 @@
   display: inline-flex !important;
   align-items: center;
   justify-content: center;
-  background: var(--coco-amber, #C2844E) !important; /* Husk Amber #C2844E */
+  background: var(--coco-amber, #C2844E) !important;
+  /* Husk Amber #C2844E */
   color: #ffffff !important;
   font-size: 0.68rem;
   font-weight: 800;
@@ -769,7 +813,8 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  background: var(--coco-surface) !important; /* Pure Coconut White #FFFFFF */
+  background: var(--coco-surface) !important;
+  /* Pure Coconut White #FFFFFF */
 }
 
 .theme-coconut .storefront-product-category {
@@ -777,7 +822,8 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1.2px;
-  color: var(--coco-amber) !important; /* Husk Amber #C2844E */
+  color: var(--coco-amber) !important;
+  /* Husk Amber #C2844E */
   margin-bottom: 0.35rem;
   white-space: nowrap;
   overflow: hidden;
@@ -789,7 +835,8 @@
   font-family: var(--coco-font-heading);
   font-size: 1.05rem;
   font-weight: 700;
-  color: var(--coco-text-primary) !important; /* Dark Charcoal #2D3748 */
+  color: var(--coco-text-primary) !important;
+  /* Dark Charcoal #2D3748 */
   margin-bottom: 0.4rem;
   line-height: 1.35;
   display: -webkit-box;
@@ -817,7 +864,8 @@
   font-family: var(--coco-font-body);
   font-size: 1.22rem;
   font-weight: 800;
-  color: var(--coco-amber) !important; /* Husk Amber #C2844E */
+  color: var(--coco-amber) !important;
+  /* Husk Amber #C2844E */
 }
 
 .theme-coconut .storefront-product-original-price {
@@ -908,7 +956,8 @@
 
 /* Primary CTA Button: Forest Green #14271C ("Add to Cart", "Checkout") */
 .theme-coconut .coconut-cart-btn {
-  background: var(--coco-primary) !important; /* Forest Green #14271C */
+  background: var(--coco-primary) !important;
+  /* Forest Green #14271C */
   color: #ffffff !important;
   border: 1px solid rgba(255, 255, 255, 0.15) !important;
   border-radius: 50px;
@@ -929,7 +978,8 @@
 }
 
 .theme-coconut .coconut-cart-btn:hover {
-  background: var(--coco-primary-light) !important; /* #1f3b2b */
+  background: var(--coco-primary-light) !important;
+  /* #1f3b2b */
   color: #ffffff !important;
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(20, 39, 28, 0.3);
@@ -949,7 +999,8 @@
 .theme-coconut .btn[style*="background-color: #fb641b"],
 .theme-coconut .btn[style*="background-color: rgb(255, 159, 0)"],
 .theme-coconut .btn[style*="background-color: #ff9f00"] {
-  background-color: var(--coco-primary) !important; /* Forest Green #14271C */
+  background-color: var(--coco-primary) !important;
+  /* Forest Green #14271C */
   border-color: var(--coco-primary) !important;
   color: #FFFFFF !important;
 }
@@ -957,7 +1008,8 @@
 .theme-coconut .checkout-btn:hover,
 .theme-coconut button[onClick*="handleCheckout"]:hover,
 .theme-coconut .btn-checkout:hover {
-  background-color: var(--coco-primary-light) !important; /* #1f3b2b */
+  background-color: var(--coco-primary-light) !important;
+  /* #1f3b2b */
   border-color: var(--coco-primary-light) !important;
   color: #FFFFFF !important;
 }
@@ -966,7 +1018,8 @@
 .theme-coconut .coconut-heritage-section {
   margin-top: 5rem;
   margin-bottom: 5rem;
-  background: var(--coco-surface) !important; /* Pure Coconut White #FFFFFF */
+  background: var(--coco-surface) !important;
+  /* Pure Coconut White #FFFFFF */
   border-radius: 28px;
   border: 1px solid var(--coco-border);
   box-shadow: 0 12px 40px rgba(20, 39, 28, 0.05);
@@ -997,12 +1050,14 @@
   font-size: 2.8rem;
   font-weight: 700;
   line-height: 1.15;
-  color: var(--coco-text-primary) !important; /* Dark Charcoal #2D3748 */
+  color: var(--coco-text-primary) !important;
+  /* Dark Charcoal #2D3748 */
   margin-bottom: 1.5rem;
 }
 
 .theme-coconut .coconut-heritage-text {
-  color: var(--coco-text-secondary) !important; /* Slate Charcoal #4A5568 */
+  color: var(--coco-text-secondary) !important;
+  /* Slate Charcoal #4A5568 */
   font-size: 1.05rem;
   line-height: 1.8;
   margin-bottom: 2rem;
@@ -1019,8 +1074,10 @@
   width: 40px;
   height: 40px;
   border-radius: 12px;
-  background: var(--coco-mint) !important; /* Sage Mint #E8EFE9 */
-  color: var(--coco-primary) !important;   /* Forest Green #14271C */
+  background: var(--coco-mint) !important;
+  /* Sage Mint #E8EFE9 */
+  color: var(--coco-primary) !important;
+  /* Forest Green #14271C */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1029,7 +1086,8 @@
 
 /* Trust Badges Banner */
 .theme-coconut .coconut-trust-banner {
-  background: var(--coco-primary) !important; /* Forest Green #14271C */
+  background: var(--coco-primary) !important;
+  /* Forest Green #14271C */
   color: #ffffff;
   padding: 3.5rem 2rem;
   margin-top: 4rem;
@@ -1053,7 +1111,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--coco-amber) !important; /* Husk Amber #C2844E */
+  color: var(--coco-amber) !important;
+  /* Husk Amber #C2844E */
 }
 
 .theme-coconut .coconut-trust-title {
@@ -1073,13 +1132,16 @@
 
 /* Footer overrides */
 .theme-coconut .storefront-footer {
-  background: var(--coco-primary) !important; /* Forest Green #14271C */
-  color: #E8EFE9 !important;                  /* Sage Mint #E8EFE9 */
+  background: var(--coco-primary) !important;
+  /* Forest Green #14271C */
+  color: #E8EFE9 !important;
+  /* Sage Mint #E8EFE9 */
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .theme-coconut .storefront-footer h4 {
-  color: var(--coco-amber) !important;        /* Husk Amber #C2844E */
+  color: var(--coco-amber) !important;
+  /* Husk Amber #C2844E */
   font-family: var(--coco-font-heading);
   letter-spacing: 1px;
 }
@@ -1088,14 +1150,189 @@
   color: #cbd5e1 !important;
 }
 
+/* Dedicated Coconut Store Footer (.coconut-store-footer) */
+.theme-coconut .coconut-store-footer,
+.coconut-store-footer {
+  background-color: #14271C !important;
+  color: #FDFBF7 !important;
+  border-top: 3px solid #C2844E !important;
+}
+
+.theme-coconut .coconut-store-footer h4,
+.theme-coconut .coconut-store-footer h5,
+.theme-coconut .coconut-store-footer h6,
+.coconut-store-footer h4,
+.coconut-store-footer h5,
+.coconut-store-footer h6,
+.coconut-footer-heading,
+.coconut-footer-brand {
+  color: #C2844E !important;
+  font-family: var(--coco-font-heading) !important;
+  letter-spacing: 0.8px !important;
+}
+
+.theme-coconut .coconut-store-footer p,
+.coconut-store-footer p,
+.coconut-footer-text {
+  color: #E8F0EA !important;
+  font-family: var(--coco-font-body) !important;
+}
+
+.theme-coconut .coconut-store-footer a,
+.coconut-store-footer a,
+.coconut-footer-link {
+  color: #E8F0EA !important;
+  text-decoration: none !important;
+  transition: color 0.2s ease;
+}
+
+.theme-coconut .coconut-store-footer a:hover,
+.coconut-store-footer a:hover,
+.coconut-footer-link:hover {
+  color: #C2844E !important;
+}
+
+.theme-coconut .coconut-store-footer strong,
+.coconut-store-footer strong,
+.coconut-footer-label {
+  color: #FFFFFF !important;
+}
+
+.theme-coconut .coconut-store-footer .badge,
+.coconut-store-footer .badge {
+  color: #14271C !important;
+  background-color: #C2844E !important;
+}
+
+.coconut-footer-logo-badge {
+  background-color: #FDFBF7 !important;
+  border: 1.5px solid #C2844E !important;
+  border-radius: 10px !important;
+  padding: 6px 14px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Professional Brand Name Pill in Coconut Store Header */
+.theme-coconut .coconut-header-brand-badge,
+.coconut-header-brand-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  background-color: #14271C !important;
+  color: #FFFFFF !important;
+  border: 1.5px solid #C2844E !important;
+  border-radius: 50px !important;
+  padding: 5px 15px !important;
+  box-shadow: 0 2px 8px rgba(20, 39, 28, 0.15) !important;
+  letter-spacing: 2px !important;
+  text-decoration: none !important;
+}
+
+.theme-coconut .coconut-header-brand-badge .badge-emblem,
+.coconut-header-brand-badge .badge-emblem {
+  color: #C2844E !important;
+  font-size: 0.75rem !important;
+  line-height: 1 !important;
+}
+
+.theme-coconut .coconut-header-brand-badge .badge-title,
+.coconut-header-brand-badge .badge-title {
+  font-family: 'Playfair Display', Georgia, serif !important;
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 2.2px !important;
+  color: #FFFFFF !important;
+  text-transform: uppercase !important;
+  line-height: 1 !important;
+}
+
+.theme-coconut .coconut-store-footer .btn,
+.coconut-store-footer .btn {
+  color: #FFFFFF !important;
+}
+
+.theme-coconut .coconut-store-footer span,
+.coconut-store-footer span {
+  color: inherit;
+}
+
+.theme-coconut .coconut-store-footer .text-muted,
+.coconut-store-footer .text-muted {
+  color: #A3B899 !important;
+}
+
+.theme-coconut .coconut-store-footer .border-secondary,
+.coconut-store-footer .border-secondary {
+  border-color: rgba(194, 132, 78, 0.25) !important;
+}
+
+/* Dedicated styles for Dark Cards inside Content Pages */
+.theme-coconut .coconut-dark-card,
+.coconut-dark-card {
+  background-color: #14271C !important;
+  color: #FDFBF7 !important;
+}
+
+.theme-coconut .coconut-dark-card h1,
+.theme-coconut .coconut-dark-card h2,
+.theme-coconut .coconut-dark-card h3,
+.theme-coconut .coconut-dark-card h4,
+.theme-coconut .coconut-dark-card h5,
+.theme-coconut .coconut-dark-card h6,
+.coconut-dark-card h1,
+.coconut-dark-card h2,
+.coconut-dark-card h3,
+.coconut-dark-card h4,
+.coconut-dark-card h5,
+.coconut-dark-card h6 {
+  color: #FFFFFF !important;
+}
+
+.theme-coconut .coconut-dark-card p,
+.theme-coconut .coconut-dark-card li,
+.coconut-dark-card p,
+.coconut-dark-card li {
+  color: #E8F0EA !important;
+}
+
+.theme-coconut .coconut-dark-card strong,
+.coconut-dark-card strong {
+  color: #C2844E !important;
+}
+
+.theme-coconut .coconut-dark-card a,
+.coconut-dark-card a {
+  color: #C2844E !important;
+}
+
+/* Golden Headings for Coconut Theme Content Pages */
+.theme-coconut .coconut-page-container>.text-center h1,
+.theme-coconut .coconut-page-container .coconut-gold-heading,
+.theme-coconut .coconut-gold-heading,
+.coconut-page-container>.text-center h1,
+.coconut-gold-heading {
+  color: #C2844E !important;
+  font-family: 'Playfair Display', Georgia, serif !important;
+}
+
+.theme-coconut .coconut-page-container .coconut-subtitle-gold,
+.theme-coconut .coconut-subtitle-gold,
+.coconut-subtitle-gold {
+  color: #C2844E !important;
+}
+
 /* Mobile responsiveness */
 @media (max-width: 991px) {
   .theme-coconut .coconut-hero-title {
     font-size: 2.8rem;
   }
+
   .theme-coconut .coconut-heritage-content {
     padding: 2.5rem 1.5rem;
   }
+
   .theme-coconut .coconut-heritage-img-wrapper {
     min-height: 340px;
   }
@@ -1107,42 +1344,54 @@
     min-height: 500px;
     padding: 3rem 0;
   }
+
   .theme-coconut .coconut-hero-title {
     font-size: 2.2rem;
   }
+
   .theme-coconut .coconut-hero-subtitle {
     font-size: 1rem;
   }
+
   .theme-coconut .coconut-hero-content {
     padding: 1.5rem;
   }
+
   .theme-coconut .coconut-section-heading {
     font-size: 1.85rem;
   }
+
   .theme-coconut .storefront-product-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
     gap: 12px !important;
   }
+
   .theme-coconut .storefront-product-slider .storefront-product-card {
     flex: 0 0 250px;
   }
+
   .theme-coconut .coconut-card-details {
     padding: 0.75rem 0.85rem 0.35rem !important;
   }
+
   .theme-coconut .coconut-cart-wrapper {
     padding: 0 0.85rem 0.85rem !important;
   }
+
   .theme-coconut .storefront-product-title {
     font-size: 0.95rem !important;
     min-height: 2.6em !important;
   }
+
   .theme-coconut .storefront-product-price {
     font-size: 1.08rem !important;
   }
+
   .theme-coconut .coconut-cart-btn {
     padding: 8px 12px !important;
     font-size: 0.78rem !important;
   }
+
   .theme-coconut .coconut-hero-features {
     flex-direction: column;
     gap: 10px;
@@ -1155,26 +1404,32 @@
     padding-top: 2rem !important;
     padding-bottom: 1.5rem !important;
   }
+
   .theme-coconut .storefront-product-grid,
   .theme-coconut .storefront-product-slider {
     display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 8px !important;
   }
+
   .theme-coconut .storefront-product-card {
     border-radius: 12px !important;
     box-shadow: 0 2px 10px rgba(20, 39, 28, 0.05) !important;
   }
+
   .theme-coconut .storefront-product-image-container {
     aspect-ratio: 1 / 1 !important;
     height: auto !important;
   }
+
   .theme-coconut .coconut-card-details {
     padding: 0.5rem 0.55rem 0.25rem !important;
   }
+
   .theme-coconut .coconut-cart-wrapper {
     padding: 0 0.55rem 0.55rem !important;
   }
+
   .theme-coconut .storefront-product-category {
     font-size: 0.62rem !important;
     letter-spacing: 0.4px !important;
@@ -1183,6 +1438,7 @@
     overflow: hidden !important;
     text-overflow: ellipsis !important;
   }
+
   .theme-coconut .storefront-product-title {
     font-size: 0.8rem !important;
     line-height: 1.25 !important;
@@ -1197,6 +1453,7 @@
     white-space: normal !important;
     word-break: break-word !important;
   }
+
   .theme-coconut .storefront-product-price-row {
     gap: 2px 5px !important;
     margin-top: 2px !important;
@@ -1204,15 +1461,18 @@
     flex-wrap: wrap !important;
     align-items: baseline !important;
   }
+
   .theme-coconut .storefront-product-price {
     font-size: 0.94rem !important;
     font-weight: 800 !important;
     line-height: 1.15 !important;
   }
+
   .theme-coconut .storefront-product-original-price {
     font-size: 0.72rem !important;
     line-height: 1.15 !important;
   }
+
   .theme-coconut .coconut-variants {
     gap: 3px !important;
     margin-bottom: 5px !important;
@@ -1220,6 +1480,7 @@
     overflow: hidden !important;
     flex-wrap: nowrap !important;
   }
+
   .theme-coconut .coconut-variant-badge {
     font-size: 0.6rem !important;
     padding: 2px 6px !important;
@@ -1228,6 +1489,7 @@
     line-height: 1.2 !important;
     flex-shrink: 0 !important;
   }
+
   .theme-coconut .coconut-cart-btn {
     padding: 7px 10px !important;
     font-size: 0.76rem !important;
@@ -1240,6 +1502,7 @@
     white-space: nowrap !important;
     box-shadow: 0 2px 8px rgba(20, 39, 28, 0.18) !important;
   }
+
   .theme-coconut .coconut-cart-btn svg {
     width: 13px !important;
     height: 13px !important;
@@ -1247,6 +1510,7 @@
     flex-shrink: 0 !important;
     color: #ffffff !important;
   }
+
   .theme-coconut .coconut-cart-btn-text {
     font-size: 0.76rem !important;
     font-weight: 700 !important;
@@ -1254,6 +1518,7 @@
     color: #ffffff !important;
     line-height: 1 !important;
   }
+
   .theme-coconut .storefront-discount-badge {
     top: 5px !important;
     left: 5px !important;
@@ -1270,6 +1535,7 @@
     grid-template-columns: 1fr !important;
     width: 100% !important;
   }
+
   .theme-coconut .is-single-product .storefront-product-card,
   .theme-coconut .storefront-product-card.is-single-card,
   .theme-coconut .storefront-product-card:only-child {
@@ -1278,32 +1544,78 @@
     max-width: 100% !important;
     flex: 1 1 100% !important;
   }
+
   .theme-coconut .is-single-product .storefront-product-image-container,
   .theme-coconut .storefront-product-card.is-single-card .storefront-product-image-container {
     aspect-ratio: 16 / 11 !important;
     max-height: 200px !important;
   }
+
   .theme-coconut .is-single-product .storefront-product-image,
   .theme-coconut .storefront-product-card.is-single-card .storefront-product-image {
     object-fit: contain !important;
     padding: 10px;
   }
+
   .theme-coconut .is-single-product .storefront-product-title,
   .theme-coconut .storefront-product-card.is-single-card .storefront-product-title {
     font-size: 0.92rem !important;
     min-height: auto !important;
   }
+
   .theme-coconut .is-single-product .coconut-card-details,
   .theme-coconut .storefront-product-card.is-single-card .coconut-card-details {
     padding: 0.65rem 0.75rem 0.35rem !important;
   }
+
   .theme-coconut .is-single-product .coconut-cart-wrapper,
   .theme-coconut .storefront-product-card.is-single-card .coconut-cart-wrapper {
     padding: 0 0.75rem 0.75rem !important;
   }
+
   .theme-coconut .is-single-product .coconut-cart-btn,
   .theme-coconut .storefront-product-card.is-single-card .coconut-cart-btn {
     padding: 8px 14px !important;
     font-size: 0.76rem !important;
+  }
+}
+
+/* ==========================================================
+   FLOATING WHATSAPP BUTTON (AMIORA COCONUT)
+   ========================================================== */
+
+/* Floating WhatsApp Circular Action Button for Coconut Theme */
+.coconut-floating-whatsapp {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 9995;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 50% !important;
+  background-color: #25D366;
+  color: #FFFFFF !important;
+  padding: 0;
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.45);
+  text-decoration: none !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.coconut-floating-whatsapp:hover {
+  background-color: #1EBE5D;
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 0 10px 28px rgba(37, 211, 102, 0.6);
+  color: #FFFFFF !important;
+}
+
+@media (max-width: 768px) {
+  .coconut-floating-whatsapp {
+    bottom: 20px;
+    right: 20px;
+    width: 52px;
+    height: 52px;
   }
 }

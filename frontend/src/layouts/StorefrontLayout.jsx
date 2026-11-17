@@ -6,7 +6,7 @@ import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 
 
 
-import { Search, ShoppingCart, ChevronDown, User, LogOut, Heart, Package, Menu, X } from 'lucide-react';
+import { Search, ShoppingCart, ChevronDown, User, LogOut, Heart, Package, Menu, X, Phone, Mail, MapPin, MessageCircle, ExternalLink } from 'lucide-react';
 
 
 
@@ -1169,7 +1169,11 @@ export default function StorefrontLayout({ storeData, categories = [], products 
 
 
 
-                <span className="mx-5">🌴 100% Organic & Cold-Pressed Kerala Coconut Treasures</span>
+                <span className="mx-5">🌴 LA EMVITHA – AMIORA: 100% Organic & Cold-Pressed Kerala Coconut Treasures</span>
+
+
+
+                <span className="mx-5">📞 Phone & WhatsApp Orders: +91 8289988076</span>
 
 
 
@@ -1177,11 +1181,7 @@ export default function StorefrontLayout({ storeData, categories = [], products 
 
 
 
-                <span className="mx-5">✨ Zero Chemical Refining • Traditional Wood Extraction</span>
-
-
-
-                <span className="mx-5">🌿 Sustainable Artisanal Living from God's Own Country</span>
+                <span className="mx-5">✨ Zero Chemical Refining • Sustainable Artisanal Living from God's Own Country</span>
 
 
 
@@ -1257,58 +1257,23 @@ export default function StorefrontLayout({ storeData, categories = [], products 
 
 
 
-                    <div className="d-flex align-items-center" style={{ maxHeight: '65px' }}>
-
-
-
+                    <div className="d-flex align-items-center" style={{ maxHeight: '65px', gap: '14px' }}>
                       <img
-
-
-
                         src="/images/amiora-logo.png"
-
-
-
                         alt={storeData?.name || "AMIORA"}
-
-
-
                         className="coconut-brand-logo"
-
-
-
                         style={{
-
-
-
-                          height: '52px',
-
-
-
-                          maxWidth: '220px',
-
-
-
+                          height: '48px',
+                          maxWidth: '190px',
                           width: 'auto',
-
-
-
                           objectFit: 'contain',
-
-
-
                           display: 'block'
-
-
-
                         }}
-
-
-
                       />
-
-
-
+                      <div className="coconut-header-brand-badge d-none d-sm-inline-flex">
+                        <span className="badge-emblem">✦</span>
+                        <span className="badge-title">LA EMVITHA</span>
+                      </div>
                     </div>
 
 
@@ -1880,7 +1845,7 @@ export default function StorefrontLayout({ storeData, categories = [], products 
 
 
 
-                {theme !== 'theme-baby' && (
+                {theme !== 'theme-baby' && theme !== 'theme-coconut' && (
 
                   <a
 
@@ -2527,130 +2492,225 @@ export default function StorefrontLayout({ storeData, categories = [], products 
 
 
 
-      {theme !== 'theme-baby' && (
+      {theme === 'theme-coconut' ? (
+        <footer className="coconut-store-footer text-white" style={{ backgroundColor: '#14271C', borderTop: '3px solid #C2844E', paddingTop: '4rem', paddingBottom: '2.5rem' }}>
+          <div className="container">
+            <div className="row g-4 g-lg-5 pb-4 border-bottom border-secondary">
+              {/* Brand Col */}
+              <div className="col-lg-4 col-md-6">
+                <div className="d-flex align-items-center gap-2 mb-3">
+                  <div
+                    className="coconut-footer-logo-badge d-inline-flex align-items-center justify-content-center shadow-sm"
+                    style={{
+                      backgroundColor: '#FDFBF7',
+                      border: '1.5px solid #C2844E',
+                      borderRadius: '10px'
+                    }}
+                  >
+                    <img
+                      src="/images/amiora-logo.png"
+                      alt="AMIORA"
+                      style={{
+                        height: '42px',
+                        maxWidth: '170px',
+                        width: 'auto',
+                        objectFit: 'contain',
+                        display: 'block'
+                      }}
+                    />
+                  </div>
+                </div>
+                <h5 className="coconut-footer-brand fw-bold mb-2">LA EMVITHA – AMIORA</h5>
+                <p className="coconut-footer-text mb-3" style={{ fontSize: '0.94rem', lineHeight: '1.7' }}>
+                  Crafted with Care, Loved Everywhere. Bringing pure, authentic wood-pressed Kerala coconut treasures straight from farm groves to your home.
+                </p>
+                <div className="d-flex flex-wrap gap-2 mt-3" style={{ fontSize: '0.82rem', color: '#C2844E' }}>
+                  <span>✓ 100% Cold-Pressed</span>
+                  <span>•</span>
+                  <span>✓ Zero Chemicals</span>
+                  <span>•</span>
+                  <span>✓ Women-Led</span>
+                  <span>•</span>
+                  <span>✓ Farmer Direct</span>
+                </div>
+              </div>
 
+              {/* Navigation Links Col 1: About & Info */}
+              <div className="col-lg-2 col-md-6 col-6">
+                <h6 className="coconut-footer-heading fw-bold text-uppercase mb-3">
+                  About AMIORA
+                </h6>
+                <ul className="list-unstyled d-flex flex-column gap-2 mb-0" style={{ fontSize: '0.92rem' }}>
+                  <li>
+                    <Link to={`${basePath}/about`} className="coconut-footer-link">
+                      About Us
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to={`${basePath}/contact`} className="coconut-footer-link">
+                      Contact Us
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to={`${basePath}/careers`} className="coconut-footer-link">
+                      Careers at AMIORA
+                    </Link>
+                  </li>
+                </ul>
+              </div>
 
+              {/* Navigation Links Col 2: Customer Care & Policies */}
+              <div className="col-lg-3 col-md-6 col-6">
+                <h6 className="coconut-footer-heading fw-bold text-uppercase mb-3">
+                  Customer Care & Policies
+                </h6>
+                <ul className="list-unstyled d-flex flex-column gap-2 mb-0" style={{ fontSize: '0.92rem' }}>
+                  <li>
+                    <Link to={`${basePath}/payment-info`} className="coconut-footer-link">
+                      Payment Information
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to={`${basePath}/shipping-policy`} className="coconut-footer-link">
+                      Shipping Policy
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to={`${basePath}/terms`} className="coconut-footer-link">
+                      Terms of Service
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to={`${basePath}/refund-policy`} className="coconut-footer-link">
+                      Refund Policy
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to={`${basePath}/privacy-policy`} className="coconut-footer-link">
+                      Privacy Policy
+                    </Link>
+                  </li>
+                </ul>
+              </div>
 
-        <footer className="storefront-footer">
-
-
-
-          <div className="storefront-footer-content">
-
-
-
-            <div className="footer-col">
-
-
-
-              <h4>ABOUT</h4>
-
-
-
-              <p>Contact Us</p>
-
-
-
-              <p>About Us</p>
-
-
-
-              <p>Careers</p>
-
-
-
+              {/* Contact Information Col */}
+              <div className="col-lg-3 col-md-6">
+                <h6 className="coconut-footer-heading fw-bold text-uppercase mb-3">
+                  Contact Information
+                </h6>
+                <div className="d-flex flex-column gap-2" style={{ fontSize: '0.9rem' }}>
+                  <p className="coconut-footer-text mb-2" style={{ lineHeight: '1.6' }}>
+                    14/97, Cherukunnam, Asamannoor P.O.,<br />
+                    Perumbavoor, Ernakulam District,<br />
+                    Kerala – 683549, India.
+                  </p>
+                  <div>
+                    <span className="coconut-footer-label d-block fw-bold mb-1">Phone / WhatsApp:</span>
+                    <a href="tel:+918289988076" className="coconut-footer-link fw-bold" style={{ color: '#C2844E !important', fontSize: '1.05rem' }}>
+                      +91 8289988076
+                    </a>
+                  </div>
+                  <div>
+                    <a
+                      href="https://wa.me/918289988076"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-sm rounded-pill fw-semibold px-3 py-1 text-white d-inline-flex align-items-center gap-1 mt-1"
+                      style={{ backgroundColor: '#25D366' }}
+                    >
+                      <MessageCircle size={14} />
+                      WhatsApp Us
+                    </a>
+                  </div>
+                  <div className="mt-2">
+                    <span className="coconut-footer-label d-block fw-bold mb-1">Email:</span>
+                    <a href="mailto:business@amiora.in" className="coconut-footer-link d-block">
+                      business@amiora.in
+                    </a>
+                    <a href="mailto:lamvitha@gmail.com" className="coconut-footer-link d-block">
+                      lamvitha@gmail.com
+                    </a>
+                  </div>
+                  <div className="mt-2">
+                    <span className="coconut-footer-label d-block fw-bold mb-1">Website:</span>
+                    <a href="https://cocoamiora.com" target="_blank" rel="noopener noreferrer" className="coconut-footer-link" style={{ color: '#C2844E !important' }}>
+                      https://cocoamiora.com
+                    </a>
+                  </div>
+                </div>
+              </div>
             </div>
 
-
-
-            <div className="footer-col">
-
-
-
-              <h4>HELP</h4>
-
-
-
-              <p>Payments</p>
-
-
-
-              <p>Shipping</p>
-
-
-
-              <p>Cancellation & Returns</p>
-
-
-
+            {/* Bottom Strip */}
+            <div className="pt-4 d-flex flex-wrap align-items-center justify-content-between gap-3" style={{ fontSize: '0.88rem', color: '#D1DCD3' }}>
+              <div>
+                © {new Date().getFullYear()} <strong style={{ color: '#FFFFFF' }}>LA EMVITHA – AMIORA</strong>. All Rights Reserved. Kerala, India.
+              </div>
+              <div className="d-flex gap-3">
+                <Link to={`${basePath}/terms`} className="coconut-footer-link" style={{ color: '#D1DCD3 !important' }}>Terms</Link>
+                <span>•</span>
+                <Link to={`${basePath}/privacy-policy`} className="coconut-footer-link" style={{ color: '#D1DCD3 !important' }}>Privacy</Link>
+                <span>•</span>
+                <Link to={`${basePath}/refund-policy`} className="coconut-footer-link" style={{ color: '#D1DCD3 !important' }}>Refunds</Link>
+                <span>•</span>
+                <Link to={`${basePath}/contact`} className="coconut-footer-link" style={{ color: '#D1DCD3 !important' }}>Support</Link>
+              </div>
             </div>
-
-
-
-            <div className="footer-col">
-
-
-
-              <h4>POLICY</h4>
-
-
-
-              <p>Return Policy</p>
-
-
-
-              <p>Terms Of Use</p>
-
-
-
-              <p>Security</p>
-
-
-
-            </div>
-
-
-
-            <div className="footer-col border-left">
-
-
-
-              <h4>Mail Us:</h4>
-
-
-
-              <p>{storeData.name} Internet Private Limited,</p>
-
-
-
-              <p>Buildings Alyssa, Begonia &</p>
-
-
-
-              <p>Clove Embassy Tech Village,</p>
-
-
-
-              <p>Bengaluru, 560103,</p>
-
-
-
-              <p>Karnataka, India</p>
-
-
-
-            </div>
-
-
-
           </div>
-
-
-
         </footer>
+      ) : theme !== 'theme-baby' && (
+        <footer className="storefront-footer">
+          <div className="storefront-footer-content">
+            <div className="footer-col">
+              <h4>ABOUT</h4>
+              <p>Contact Us</p>
+              <p>About Us</p>
+              <p>Careers</p>
+            </div>
+            <div className="footer-col">
+              <h4>HELP</h4>
+              <p>Payments</p>
+              <p>Shipping</p>
+              <p>Cancellation & Returns</p>
+            </div>
+            <div className="footer-col">
+              <h4>POLICY</h4>
+              <p>Return Policy</p>
+              <p>Terms Of Use</p>
+              <p>Security</p>
+            </div>
+            <div className="footer-col border-left">
+              <h4>Mail Us:</h4>
+              <p>{storeData.name} Internet Private Limited,</p>
+              <p>Buildings Alyssa, Begonia &</p>
+              <p>Clove Embassy Tech Village,</p>
+              <p>Bengaluru, 560103,</p>
+              <p>Karnataka, India</p>
+            </div>
+          </div>
+        </footer>
+      )}
 
-
-
+      {/* Floating WhatsApp Button for AMIORA (Coconut Theme) */}
+      {theme === 'theme-coconut' && (
+        <a
+          href="https://wa.me/918289988076?text=Hi%20AMIORA%2C%20I%20would%20like%20to%20place%20an%20order%20or%20make%20an%20inquiry."
+          target="_blank"
+          rel="noopener noreferrer"
+          className="coconut-floating-whatsapp"
+          aria-label="WhatsApp"
+          title="WhatsApp: +91 8289988076"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="30"
+            height="30"
+            fill="currentColor"
+            viewBox="0 0 16 16"
+          >
+            <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
+          </svg>
+        </a>
       )}
 
 

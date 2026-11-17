@@ -5,12 +5,24 @@ export default function ThemeCoconutHero() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const slides = [
     {
-      img: '/images/cocoamiora-hero-slide-1-v6.jpg',
+      img: '/images/cocoamiora-hero-handcrafted-v3.jpg',
+      alt: 'Welcome to the world of AMIORA - Handcrafted coconut shell tableware, artisan bowls, cups & sustainable kitchen essentials.',
+    },
+    {
+      img: '/images/cocoamiora-hero-purest-goodness.jpg',
       alt: "Bring the Purest Goodness to Your Home - Experience 100% natural, hand-sourced coconut products from Kerala's heritage groves.",
     },
     {
-      img: '/images/cocoamiora-hero-slide-2-v6.jpg',
-      alt: 'Authentic Coconut Goodness, Sourced from Kerala - Cold-pressed, pure oil and natural desiccated powder.',
+      img: '/images/cocoamiora-hero-fresh-coconuts-v3.jpg',
+      alt: 'Fresh From Kerala Groves - 100% Pure & organic coconuts, tender coconut water, cold-pressed virgin oil & desiccated flakes.',
+    },
+    {
+      img: '/images/cocoamiora-hero-flatlay-v5.jpg',
+      alt: 'Pure Kerala Coconut Treasures - Split white coconuts, fresh flakes, and pure cold-pressed elixirs.',
+    },
+    {
+      img: '/images/cocoamiora-hero-slide-1-v6.jpg',
+      alt: 'Authentic Kerala Coconut Goodness - Cold-pressed virgin oil and natural desiccated coconut.',
     },
     {
       img: '/images/cocoamiora-hero-slide-3-v6.jpg',
@@ -18,7 +30,7 @@ export default function ThemeCoconutHero() {
     },
   ];
 
-  // Automatically transition between the 3 images every 5 seconds
+  // Automatically transition between the rotating hero slides every 5 seconds
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
@@ -41,8 +53,9 @@ export default function ThemeCoconutHero() {
     <>
       {/* Preload hero images */}
       <link rel="preload" as="image" href={slides[0].img} fetchPriority="high" />
-      <link rel="preload" as="image" href={slides[1].img} />
-      <link rel="preload" as="image" href={slides[2].img} />
+      {slides.slice(1).map((s, idx) => (
+        <link key={idx} rel="preload" as="image" href={s.img} />
+      ))}
 
       <div className="storefront-hero-container">
         <div className="coconut-hero-slider-wrap">

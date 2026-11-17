@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Package, Clock, CheckCircle, Truck, Info, ArrowLeft } from 'lucide-react';
+import { Package, Clock, CheckCircle, Truck, Info, ArrowLeft, ExternalLink } from 'lucide-react';
 import { useStorefrontAuth } from '../../context/StorefrontAuthContext';
 import { useStorefrontCart } from '../../context/StorefrontCartContext';
 import api from '../../api/axios';
@@ -10,7 +10,7 @@ export default function MyOrders() {
   const { user } = useStorefrontAuth();
   const { storeId } = useStorefrontCart();
   const navigate = useNavigate();
-  
+
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -27,12 +27,12 @@ export default function MyOrders() {
       try {
         setLoading(true);
         let uniqueOrders = [];
-        
+
         if (user) {
           // Fetch from API for logged-in user
           const response = await api.get('/orders');
           let apiOrders = Array.isArray(response.data) ? response.data : (response.data?.data || []);
-          
+
           if (storeId) {
             apiOrders = apiOrders.filter(o => String(o.store_id) === String(storeId) || !o.store_id);
           }
@@ -41,7 +41,7 @@ export default function MyOrders() {
             const orderEmail = o.customer_email || o.email || o.customer?.email;
             return orderEmail && orderEmail.toLowerCase() === user.email.toLowerCase();
           });
-          
+
           let localOrders = [];
           try {
             const saved = JSON.parse(localStorage.getItem('aureum_owner_orders') || '[]');
@@ -51,7 +51,7 @@ export default function MyOrders() {
               return emailMatch && storeMatch;
             });
           } catch (e) {}
-          
+
           const combined = [...localOrders, ...apiOrders];
           uniqueOrders = Array.from(new Map(combined.map(o => [o.id, o])).values());
         } else {
@@ -61,7 +61,7 @@ export default function MyOrders() {
             uniqueOrders = saved.filter(o => !storeId || String(o.store_id) === String(storeId) || !o.store_id);
           } catch (e) {}
         }
-        
+
         // Sort by date descending
         uniqueOrders.sort((a, b) => new Date(b.created_at || b.date) - new Date(a.created_at || a.date));
         setOrders(uniqueOrders);
@@ -174,17 +174,17 @@ export default function MyOrders() {
                   </div>
                 </div>
               </div>
-              
+
               <div className="d-flex flex-column gap-3">
                 <h4 className="fs-7 fw-bold mb-2">Order Items</h4>
                 {order.items && Array.isArray(order.items) && order.items.length > 0 ? (
                   order.items.map((item, idx) => (
                     <div key={idx} className="d-flex align-items-center gap-3 bg-light p-2 rounded">
                       <div style={{ width: 40, height: 40 }} className="bg-white border rounded overflow-hidden flex-shrink-0">
-                        <img 
-                          src={item.product?.image || item.image_url || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80'} 
-                          alt={item.product?.name || item.name || 'Product'} 
-                          className="w-100 h-100 object-fit-cover" 
+                        <img
+                          src={item.product?.image || item.image_url || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80'}
+                          alt={item.product?.name || item.name || 'Product'}
+                          className="w-100 h-100 object-fit-cover"
                         />
                       </div>
                       <div>
@@ -200,6 +200,66 @@ export default function MyOrders() {
                   </div>
                 )}
               </div>
+
+              {/* Customer Order Tracking for AMIORA Store ID: 86 */}
+              {(String(order.store_id) === '86' || basePath.includes('amiora')) && (
+                <div className="mt-3 p-3 rounded-3" style={{ backgroundColor: '#F8FAF8', border: '1px solid #D5E2D8' }}>
+                  <div className="d-flex flex-wrap align-items-center justify-content-between mb-2 gap-2">
+                    <div className="d-flex align-items-center gap-2">
+                      <Truck size={16} className="text-success" />
+                      <span className="fw-bold fs-7 text-dark">AMIORA Shipment Tracking</span>
+                      {order.shiprocket_shipment?.courier_name && (
+                        <span className="badge bg-white text-dark border fs-8">
+                          {order.shiprocket_shipment.courier_name}
+                        </span>
+                      )}
+                    </div>
+                    {order.shiprocket_shipment?.awb_code && (
+                      <span className="fs-8 text-secondary">
+                        AWB: <strong className="text-dark">{order.shiprocket_shipment.awb_code}</strong>
+                      </span>
+                    )}
+                  </div>
+
+                  {/* 7-Milestone Timeline */}
+                  <div className="d-flex flex-wrap justify-content-between align-items-center position-relative my-3 gap-2">
+                    {(order.shiprocket_shipment?.milestones || [
+                      { step: 1, label: 'Order Confirmed', completed: true },
+                      { step: 2, label: 'Shipment Created', completed: order.status === 'Shipped' || order.status === 'Completed' },
+                      { step: 3, label: 'Courier Assigned', completed: order.status === 'Shipped' || order.status === 'Completed' },
+                      { step: 4, label: 'Picked Up', completed: order.status === 'Shipped' || order.status === 'Completed' },
+                      { step: 5, label: 'In Transit', completed: order.status === 'Shipped' || order.status === 'Completed' },
+                      { step: 6, label: 'Out for Delivery', completed: order.status === 'Completed' },
+                      { step: 7, label: 'Delivered', completed: order.status === 'Completed' },
+                    ]).map((m) => (
+                      <div key={m.step} className="text-center" style={{ flex: '1 1 0px', minWidth: '70px' }}>
+                        <div
+                          className={`rounded-circle mx-auto d-flex align-items-center justify-content-center mb-1 ${m.completed ? 'bg-success text-white' : 'bg-white text-muted border'}`}
+                          style={{ width: '28px', height: '28px' }}
+                        >
+                          {m.completed ? <CheckCircle size={14} /> : <span style={{ fontSize: '11px' }}>{m.step}</span>}
+                        </div>
+                        <div className="fs-8" style={{ fontWeight: m.completed ? '600' : '400', color: m.completed ? '#14271C' : '#6c757d', fontSize: '0.72rem' }}>
+                          {m.label}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {order.shiprocket_shipment?.tracking_url && (
+                    <div className="text-end pt-1">
+                      <a
+                        href={order.shiprocket_shipment.tracking_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-sm btn-outline-success d-inline-flex align-items-center gap-1 rounded-pill px-3 py-1 fs-8"
+                      >
+                        Track on Courier Portal <ExternalLink size={12} />
+                      </a>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           ))}
         </div>

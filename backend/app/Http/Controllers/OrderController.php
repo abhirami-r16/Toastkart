@@ -14,7 +14,7 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Order::with(['items.product.meeshoProduct', 'meeshoOrders.meeshoProduct', 'customer', 'store']);
+        $query = Order::with(['items.product.meeshoProduct', 'meeshoOrders.meeshoProduct', 'customer', 'store', 'shiprocketShipment']);
 
         if ($request->has('store_id') && $request->store_id) {
             $query->where(function ($q) use ($request) {
@@ -169,7 +169,7 @@ class OrderController extends Controller
 
     public function show($id)
     {
-        $order = Order::with(['items.product.meeshoProduct', 'meeshoOrders.meeshoProduct', 'customer', 'store'])->findOrFail($id);
+        $order = Order::with(['items.product.meeshoProduct', 'meeshoOrders.meeshoProduct', 'customer', 'store', 'shiprocketShipment'])->findOrFail($id);
         return response()->json($order);
     }
 

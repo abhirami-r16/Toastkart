@@ -143,7 +143,16 @@ export default function Orders() {
                 ) : (
                   orders.map(order => (
                     <tr key={order.id}>
-                      <td className="fw-bold text-dark">{order.order_number}</td>
+                      <td className="fw-bold text-dark">
+                        {order.order_number}
+                        {(String(order.store_id) === '86' || String(activeStore?.id) === '86') && (
+                          <div className="mt-1">
+                            <span className="badge rounded-pill bg-success bg-opacity-10 text-success border border-success border-opacity-25" style={{ fontSize: '10px' }}>
+                              Shiprocket {order.shiprocket_shipment?.awb_code ? `• ${order.shiprocket_shipment.awb_code}` : (order.shiprocket_shipment ? '• Synced' : '')}
+                            </span>
+                          </div>
+                        )}
+                      </td>
                       <td>
                         <div className="fw-bold">{order.customer_name}</div>
                         <div className="fs-8 text-muted">{order.customer_email}</div>
@@ -222,6 +231,68 @@ export default function Orders() {
                     </div>
                   </div>
                 </div>
+
+                {/* Shiprocket Shipping Section (AMIORA Store ID: 86) */}
+                {(String(selectedOrder.store_id) === '86' || String(activeStore?.id) === '86') && (
+                  <div className="p-3 bg-light rounded border mb-4">
+                    <div className="d-flex align-items-center justify-content-between mb-2">
+                      <div className="d-flex align-items-center gap-2">
+                        <span className="fw-bold fs-7 text-dark">🚀 Shiprocket Shipping (AMIORA)</span>
+                        <span className="badge bg-success text-white" style={{ fontSize: '11px' }}>
+                          {selectedOrder.shiprocket_shipment?.sync_status || 'Ready to Sync'}
+                        </span>
+                      </div>
+                      {selectedOrder.shiprocket_shipment?.tracking_url && (
+                        <a
+                          href={selectedOrder.shiprocket_shipment.tracking_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn btn-xs btn-outline-success fs-8 py-0 px-2"
+                        >
+                          Courier Tracking ↗
+                        </a>
+                      )}
+                    </div>
+
+                    <div className="row g-2 fs-8 text-secondary">
+                      <div className="col-6 col-md-3">
+                        <div><strong>Shiprocket ID:</strong> {selectedOrder.shiprocket_shipment?.shiprocket_order_id || '—'}</div>
+                      </div>
+                      <div className="col-6 col-md-3">
+                        <div><strong>Shipment ID:</strong> {selectedOrder.shiprocket_shipment?.shipment_id || '—'}</div>
+                      </div>
+                      <div className="col-6 col-md-3">
+                        <div><strong>AWB Number:</strong> {selectedOrder.shiprocket_shipment?.awb_code || '—'}</div>
+                      </div>
+                      <div className="col-6 col-md-3">
+                        <div><strong>Assigned Courier:</strong> {selectedOrder.shiprocket_shipment?.courier_name || '—'}</div>
+                      </div>
+                    </div>
+
+                    {selectedOrder.shiprocket_shipment?.label_url && (
+                      <div className="mt-2 pt-2 border-top d-flex gap-2">
+                        <a
+                          href={selectedOrder.shiprocket_shipment.label_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn btn-sm btn-outline-primary py-0 px-2 fs-8"
+                        >
+                          📄 Download Shipping Label
+                        </a>
+                        {selectedOrder.shiprocket_shipment?.manifest_url && (
+                          <a
+                            href={selectedOrder.shiprocket_shipment.manifest_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn btn-sm btn-outline-secondary py-0 px-2 fs-8"
+                          >
+                            📋 Download Manifest
+                          </a>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 {/* Line Items Table */}
                 <h6 className="fw-bold text-dark mb-2">📦 Order Line Items</h6>

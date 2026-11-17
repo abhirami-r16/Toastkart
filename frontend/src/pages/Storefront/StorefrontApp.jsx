@@ -13,6 +13,7 @@ const Checkout = React.lazy(() => import('./Checkout'));
 const PaymentGateway = React.lazy(() => import('./PaymentGateway'));
 const Wishlist = React.lazy(() => import('./Wishlist'));
 const MyOrders = React.lazy(() => import('./MyOrders'));
+const ThemeCoconutContentPages = React.lazy(() => import('../../components/themes/ThemeCoconutContentPages'));
 import '../../styles/storefront.css';
 
 export default function StorefrontApp({ subdomain }) {
@@ -395,7 +396,20 @@ if (!foundStore) {
               <Route path="payment" element={<PaymentGateway />} />
               <Route path="wishlist" element={<Wishlist />} />
               <Route path="orders" element={<MyOrders />} />
-              {/* Additional routes such as /product/:id can be added here */}
+              {/* AMIORA Coconut Store 8 Content & Policy Routes */}
+              <Route path="contact" element={<ThemeCoconutContentPages page="contact" storeData={storeData} />} />
+              <Route path="about" element={<ThemeCoconutContentPages page="about" storeData={storeData} />} />
+              <Route path="careers" element={<ThemeCoconutContentPages page="careers" storeData={storeData} />} />
+              <Route path="payment-info" element={<ThemeCoconutContentPages page="payment-info" storeData={storeData} />} />
+              <Route path="payments" element={<ThemeCoconutContentPages page="payment-info" storeData={storeData} />} />
+              <Route path="shipping" element={<ThemeCoconutContentPages page="shipping-policy" storeData={storeData} />} />
+              <Route path="shipping-policy" element={<ThemeCoconutContentPages page="shipping-policy" storeData={storeData} />} />
+              <Route path="terms" element={<ThemeCoconutContentPages page="terms" storeData={storeData} />} />
+              <Route path="terms-of-service" element={<ThemeCoconutContentPages page="terms" storeData={storeData} />} />
+              <Route path="refunds" element={<ThemeCoconutContentPages page="refund-policy" storeData={storeData} />} />
+              <Route path="refund-policy" element={<ThemeCoconutContentPages page="refund-policy" storeData={storeData} />} />
+              <Route path="privacy" element={<ThemeCoconutContentPages page="privacy-policy" storeData={storeData} />} />
+              <Route path="privacy-policy" element={<ThemeCoconutContentPages page="privacy-policy" storeData={storeData} />} />
               <Route path="*" element={<Navigate to={basePath} replace />} />
               </Route>
             </Routes>

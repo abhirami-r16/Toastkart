@@ -942,8 +942,6 @@ export default function StorefrontHome({ storeData, products, categories = [], l
         </React.Suspense>
       )}
 
-
-
       {/* Category Filter Pills (Sage Mint #E8EFE9: "Virgin Oils", "Zero Waste Bowls") */}
       {theme === 'theme-coconut' && !searchQuery && filteredProducts.length > 0 && categoriesToRender.length > 0 && (
         <div className="coconut-filter-container container text-center my-4" id="shop">
@@ -1424,12 +1422,12 @@ export default function StorefrontHome({ storeData, products, categories = [], l
               </div>
               <div className="col-lg-6">
                 <div className="coconut-heritage-content">
-                  <span className="coconut-section-badge">🌴 OUR LIVING HERITAGE</span>
+                  <span className="coconut-section-badge">🌴 LA EMVITHA – AMIORA</span>
                   <h2 className="coconut-heritage-title">
                     Rooted in the Soil of God's Own Country
                   </h2>
                   <p className="coconut-heritage-text">
-                    For generations, Kerala’s lush coastal climate and mineral-rich backwater soils have cultivated India’s most nourishing coconuts. We partner directly with local farming families, using centuries-old traditional wood-pressed (Mara Chekku) extraction to bring unadulterated purity from tree to your home.
+                    For generations, Kerala’s lush coastal climate and mineral-rich backwater soils have cultivated India’s most nourishing coconuts. LA EMVITHA brings you AMIORA — 100% natural, hand-crafted coconut products directly from Perumbavoor, Kerala to your doorstep, using centuries-old traditional wood-pressed (Mara Chekku) extraction to bring unadulterated purity from tree to your home.
                   </p>
 
                   <div className="coconut-benefit-item">

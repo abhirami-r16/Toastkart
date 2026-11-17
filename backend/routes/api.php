@@ -105,6 +105,23 @@ Route::post('/subscriptions/autopay/cancel', [\App\Http\Controllers\Subscription
 // Webhook
 Route::post('/webhooks/razorpay', [\App\Http\Controllers\RazorpayWebhookController::class, 'handleWebhook']);
 Route::post('/webhooks/meesho-tracking', [\App\Http\Controllers\MeeshoController::class, 'handleTrackingWebhook']);
+Route::post('/webhooks/shiprocket', [\App\Http\Controllers\ShiprocketController::class, 'handleWebhook']);
+
+// Customer Shipment Tracking (Storefront Public - AMIORA Store ID: 86)
+Route::get('/storefront/orders/{orderNumber}/tracking', [\App\Http\Controllers\ShiprocketController::class, 'getCustomerTracking']);
+
+// Shiprocket Shipping Routes (Exclusively for AMIORA Store ID: 86)
+Route::prefix('shiprocket')->middleware(['auth:sanctum'])->group(function () {
+    Route::get('/status', [\App\Http\Controllers\ShiprocketController::class, 'getStatus']);
+    Route::get('/orders', [\App\Http\Controllers\ShiprocketController::class, 'getOrders']);
+    Route::post('/orders/{id}/sync', [\App\Http\Controllers\ShiprocketController::class, 'syncOrder']);
+    Route::post('/orders/{id}/serviceability', [\App\Http\Controllers\ShiprocketController::class, 'checkServiceability']);
+    Route::post('/orders/{id}/generate-awb', [\App\Http\Controllers\ShiprocketController::class, 'generateAwb']);
+    Route::get('/orders/{id}/label', [\App\Http\Controllers\ShiprocketController::class, 'getLabel']);
+    Route::get('/orders/{id}/manifest', [\App\Http\Controllers\ShiprocketController::class, 'getManifest']);
+    Route::get('/orders/{id}/track', [\App\Http\Controllers\ShiprocketController::class, 'track']);
+    Route::post('/orders/{id}/cancel', [\App\Http\Controllers\ShiprocketController::class, 'cancel']);
+});
 
 // Meesho Dropshipping & Reselling Routes (Authenticated Store Owner with active subscription / bypass)
 Route::prefix('meesho')->middleware(['auth:sanctum', 'subscription.active'])->group(function () {

@@ -51,6 +51,11 @@ class Order extends Model
         return $this->hasMany(MeeshoOrder::class);
     }
 
+    public function shiprocketShipment()
+    {
+        return $this->hasOne(ShiprocketShipment::class, 'order_id');
+    }
+
     public function getMeeshoProductsListAttribute()
     {
         $list = [];

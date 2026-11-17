@@ -15,6 +15,7 @@ import {
 import ToastKartLogo from "../components/ToastKartLogo";
 import AIStoreBuilder from "../components/AIStoreBuilder";
 import MeeshoDropshippingView from "../components/meesho/MeeshoDropshippingView";
+import ShiprocketDashboardView from "../components/shiprocket/ShiprocketDashboardView";
 import { formatINR, parseNumeric } from "../utils/currency";
 import "../styles/dashboard-premium.css";
 
@@ -1743,7 +1744,14 @@ export default function StoreOwnerDashboard() {
 
           {/* Nav List */}
           <nav className="d-flex flex-column gap-1">
-            {ownerLinks.map((item) => {
+            {(String(activeStore?.id) === '86' || String(activeStore?.slug || '').toLowerCase() === 'amiora'
+              ? [
+                  ...ownerLinks.slice(0, 6),
+                  { key: "shiprocket", label: "Shiprocket Shipping", icon: Truck },
+                  ...ownerLinks.slice(6)
+                ]
+              : ownerLinks
+            ).map((item) => {
               const Icon = item.icon;
               const isActive = active === item.key;
               const handleClick = () => {
@@ -3885,6 +3893,10 @@ export default function StoreOwnerDashboard() {
               setActive("products");
               setProductReloadVersion((version) => version + 1);
             }} />
+          )}
+
+          {active === "shiprocket" && (
+            <ShiprocketDashboardView activeStore={activeStore} />
           )}
 
           {/* MODULE: SUBSCRIPTION & BILLING */}

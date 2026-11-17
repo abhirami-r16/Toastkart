@@ -429,7 +429,7 @@ export default function ProductDetail({ storeData, products }) {
                   const sizeStr = selectedSize ? ` (Size: ${selectedSize})` : '';
                   const colorStr = selectedColor ? ` (Color: ${selectedColor})` : '';
                   const text = encodeURIComponent(`Hi, I would like to place an order for:\n- ${quantity}x ${product.name}${sizeStr}${colorStr}\nTotal: ₹${(price * quantity).toFixed(2)}`);
-                  const rawPhone = storeData?.phone || '7356997225';
+                  const rawPhone = isCoconutTheme ? (storeData?.phone || '8289988076') : (storeData?.phone || '7356997225');
                   const digits = String(rawPhone).replace(/[^0-9]/g, '');
                   const waNumber = digits.length === 10 ? `91${digits}` : (digits.startsWith('91') ? digits : `91${digits.slice(-10)}`);
                   window.open(`https://wa.me/${waNumber}?text=${text}`, '_blank');

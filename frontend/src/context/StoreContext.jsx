@@ -55,7 +55,7 @@ const INITIAL_DEMO_STORES = [
     logo: '',
     banner: '/images/coconut-hero-slide-1.jpg',
     currency: 'INR',
-    description: '100% Mara Chekku cold-pressed virgin coconut oil, roasted coconut chips, and sustainable Kerala artisanal crafts.',
+    description: '100% Pure cold-pressed virgin coconut oil, roasted coconut chips, and sustainable Kerala artisanal crafts.',
     status: 'Active',
     email: 'harvest@kerapure.com',
     phone: '+91 98470 12345',

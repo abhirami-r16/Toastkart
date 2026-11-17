@@ -56,6 +56,11 @@ class Store extends Model
         return $this->hasMany(Order::class);
     }
 
+    public function shiprocketShipments()
+    {
+        return $this->hasMany(ShiprocketShipment::class);
+    }
+
     public function aiConfigurations()
     {
         return $this->hasMany(AiStoreConfiguration::class)->orderBy('id', 'desc');

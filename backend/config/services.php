@@ -73,4 +73,16 @@ return [
         'webhook_secret' => env('MEESHO_WEBHOOK_SECRET', null),
         'timeout' => (int) env('MEESHO_API_TIMEOUT', 15),
     ],
+    'shiprocket' => [
+        'base_url' => env('SHIPROCKET_BASE_URL', 'https://apiv2.shiprocket.in/v1/external'),
+        'email' => env('SHIPROCKET_EMAIL'),
+        'password' => env('SHIPROCKET_PASSWORD'),
+        'api_token' => env('SHIPROCKET_API_TOKEN'),
+        'pickup_location' => env('SHIPROCKET_PICKUP_LOCATION', 'Primary'),
+        'pickup_pincode' => env('SHIPROCKET_PICKUP_PINCODE', '683549'),
+        'channel_id' => env('SHIPROCKET_CHANNEL_ID'),
+        'webhook_token' => env('SHIPROCKET_WEBHOOK_TOKEN'),
+        'sandbox_mode' => (bool) env('SHIPROCKET_SANDBOX_MODE', false),
+        'timeout' => (int) env('SHIPROCKET_TIMEOUT', 15),
+    ],
 ];
