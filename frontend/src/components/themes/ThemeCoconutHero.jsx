@@ -5,28 +5,12 @@ export default function ThemeCoconutHero() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const slides = [
     {
-      img: '/images/cocoamiora-hero-handcrafted-v3.jpg',
-      alt: 'Welcome to the world of AMIORA - Handcrafted coconut shell tableware, artisan bowls, cups & sustainable kitchen essentials.',
+      img: '/images/cocoamiora-hero-range-v1.jpg',
+      alt: 'AMIORA - Handcrafted & Organic Coconut Essentials. Complete range of Cold-Pressed Virgin Oils, Flakes & Coconut Milk.',
     },
     {
-      img: '/images/cocoamiora-hero-purest-goodness.jpg',
-      alt: "Bring the Purest Goodness to Your Home - Experience 100% natural, hand-sourced coconut products from Kerala's heritage groves.",
-    },
-    {
-      img: '/images/cocoamiora-hero-fresh-coconuts-v3.jpg',
-      alt: 'Fresh From Kerala Groves - 100% Pure & organic coconuts, tender coconut water, cold-pressed virgin oil & desiccated flakes.',
-    },
-    {
-      img: '/images/cocoamiora-hero-flatlay-v5.jpg',
-      alt: 'Pure Kerala Coconut Treasures - Split white coconuts, fresh flakes, and pure cold-pressed elixirs.',
-    },
-    {
-      img: '/images/cocoamiora-hero-slide-1-v6.jpg',
-      alt: 'Authentic Kerala Coconut Goodness - Cold-pressed virgin oil and natural desiccated coconut.',
-    },
-    {
-      img: '/images/cocoamiora-hero-slide-3-v6.jpg',
-      alt: 'Authentic Kerala Goodness, Straight from the Grove - Experience 100% natural, hand-harvested coconuts and premium products.',
+      img: '/images/cocoamiora-hero-kitchen-v1.jpg',
+      alt: 'AMIORA - 100% Pure Kerala Coconut Oil for Authentic Traditional Cooking.',
     },
   ];
 
